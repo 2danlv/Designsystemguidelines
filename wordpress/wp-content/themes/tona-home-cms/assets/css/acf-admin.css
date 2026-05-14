@@ -1,0 +1,226 @@
+.acf-postbox[data-key="group_tona_members_page"] {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] > .postbox-header {
+    background: #002d17;
+    border: 0;
+    color: #fff;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] > .postbox-header .hndle {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .inside {
+    border: 1px solid #d8e0dc;
+    border-top: 0;
+    padding: 0;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-tab-wrap {
+    background: #f4f7f5;
+    border-bottom: 1px solid #d8e0dc;
+    padding: 12px 16px 0;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-tab-group li a {
+    border-radius: 8px 8px 0 0;
+    color: #002d17;
+    font-weight: 700;
+    padding: 10px 16px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-tab-group li.active a {
+    background: #002d17;
+    border-color: #002d17;
+    color: #fff;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field {
+    border-color: #e5ece8;
+    padding: 18px 20px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-label label {
+    color: #002d17;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .description {
+    color: #5b6f65;
+    font-size: 12px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_breadcrumb_label"]::before,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"]::before,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values_title"]::before,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_title"]::before {
+    background: #002d17;
+    border-left: 6px solid #f4aa1f;
+    color: rgba(255, 255, 255, .78);
+    display: block;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: -18px -20px 18px;
+    padding: 18px 22px;
+    white-space: pre-line;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_breadcrumb_label"]::before {
+    content: "01. HERO\A Khu vực nền xanh đầu trang: breadcrumb, tiêu đề lớn và mô tả.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"]::before {
+    content: "02. CARDS LÃNH ĐẠO\A Các card chân dung ngay dưới Hero. Mỗi dòng là một card.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values_title"]::before {
+    content: "03. GIÁ TRỊ\A Section nền xanh ở giữa trang. Mỗi dòng là một ô trong grid.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_title"]::before {
+    content: "04. CTA CUỐI TRANG\A Block nền trắng cuối trang: tiêu đề, mô tả và nút.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_title"],
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_description"],
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_label"],
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_url"] {
+    background: #fff;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_title"] {
+    border-left: 1px solid #e5ece8;
+    padding-left: 24px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_title"] .acf-input input {
+    color: #002d17;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0;
+    min-height: 48px;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_description"] {
+    border-left: 1px solid #e5ece8;
+    padding-left: 24px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_description"] textarea {
+    color: rgba(0, 45, 23, .72);
+    font-size: 14px;
+    line-height: 1.55;
+    min-height: 128px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_label"],
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_url"] {
+    background: #f9f9f7;
+    border-left: 1px solid #e5ece8;
+    padding-left: 24px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_label"] .acf-input::before {
+    background: #002d17;
+    border-radius: 8px 8px 0 0;
+    color: #fff;
+    content: "Nút CTA bên phải";
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    padding: 12px 16px;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_label"] input {
+    background: #002d17;
+    border-color: #002d17;
+    border-radius: 0 0 8px 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    min-height: 46px;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_label"] input::placeholder {
+    color: rgba(255, 255, 255, .7);
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_breadcrumb_label"] input,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_hero_title"] textarea,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_hero_description"] textarea {
+    border-left: 4px solid #f4aa1f;
+    font-size: 15px;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"] > .acf-input > .acf-repeater > .acf-table {
+    border: 0;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"] .acf-row:not(.acf-clone) > .acf-row-handle.order {
+    background: #002d17;
+    color: #f4aa1f;
+    font-weight: 800;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"] .acf-row:not(.acf-clone) > .acf-fields {
+    background: #f9f9f7;
+    border: 1px solid #d8e0dc;
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(0, 45, 23, .08);
+    margin: 16px 0;
+    overflow: hidden;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"] .acf-image-uploader .image-wrap img {
+    max-height: 220px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values"] .acf-row:not(.acf-clone) > .acf-fields {
+    background: #002d17;
+    border-radius: 8px;
+    margin: 14px 0;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values"] .acf-row:not(.acf-clone) > .acf-fields > .acf-field {
+    border-color: rgba(255, 255, 255, .12);
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values"] .acf-row:not(.acf-clone) .acf-label label,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values"] .acf-row:not(.acf-clone) .description {
+    color: #fff;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values"] .acf-row:not(.acf-clone) input,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values"] .acf-row:not(.acf-clone) textarea,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values"] .acf-row:not(.acf-clone) select {
+    border-color: rgba(255, 255, 255, .25);
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_title"] input,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_description"] textarea,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_label"] input,
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_url"] input {
+    border-left: 4px solid #46aa85;
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-button,
+.acf-postbox[data-key="group_tona_members_page"] .button-primary {
+    background: #002d17;
+    border-color: #002d17;
+    color: #fff;
+    font-weight: 700;
+}
