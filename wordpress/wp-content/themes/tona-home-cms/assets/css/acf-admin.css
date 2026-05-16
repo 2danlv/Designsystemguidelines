@@ -224,3 +224,198 @@
     color: #fff;
     font-weight: 700;
 }
+
+.acf-postbox[data-key="group_tona_about_page"] {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] > .postbox-header {
+    background: #002d17;
+    border: 0;
+    color: #fff;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] > .postbox-header .hndle {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .inside {
+    border: 1px solid #d8e0dc;
+    border-top: 0;
+    padding: 0;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-tab-wrap {
+    background: #f4f7f5;
+    border-bottom: 1px solid #d8e0dc;
+    padding: 12px 16px 0;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-tab-group li a {
+    border-radius: 8px 8px 0 0;
+    color: #002d17;
+    font-weight: 700;
+    padding: 10px 16px;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-tab-group li.active a {
+    background: #002d17;
+    border-color: #002d17;
+    color: #fff;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field {
+    border-color: #e5ece8;
+    padding: 18px 20px;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-label label {
+    color: #002d17;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .description {
+    color: #5b6f65;
+    font-size: 12px;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field[data-key="field_tona_about_cta_background"]::before {
+    background: #fff;
+    border: 1px solid #d8e0dc;
+    border-bottom: 0;
+    border-left: 6px solid #f4aa1f;
+    color: #002d17;
+    content: "06. CTA CUOI TRANG\A Bo cuc giong giao dien: ben trai la tieu de/mo ta, ben phai la hai nut dieu huong.";
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.5;
+    margin: -18px -20px 18px;
+    padding: 18px 22px;
+    white-space: pre-line;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field[data-key="field_tona_about_cta_layout_note"] {
+    background: #fff;
+    border-left: 1px solid #d8e0dc;
+    border-right: 1px solid #d8e0dc;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field[data-key="field_tona_about_cta_layout_note"] .acf-input {
+    background: #f9f9f7;
+    border: 1px dashed #d8e0dc;
+    color: #5b6f65;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 12px 16px;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-title,
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-description {
+    background: #fff;
+    border-left: 1px solid #d8e0dc;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-title .acf-input input {
+    border-left: 4px solid #f4aa1f;
+    color: #002d17;
+    font-size: 24px;
+    font-weight: 800;
+    min-height: 52px;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-description textarea {
+    border-left: 4px solid #46aa85;
+    color: rgba(0, 45, 23, .72);
+    font-size: 14px;
+    line-height: 1.55;
+    min-height: 104px;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-background {
+    background: #fff;
+    border-left: 1px solid #d8e0dc;
+    border-right: 1px solid #d8e0dc;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-background .acf-input::before {
+    color: #5b6f65;
+    content: "Nen cua dai CTA mau trang";
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-button,
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-button-url {
+    background: #fff;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-primary,
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-secondary {
+    border-top: 1px solid #d8e0dc;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-button .acf-input input {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    min-height: 48px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-primary .acf-input input {
+    background: #fff;
+    border: 2px solid #002d17;
+    color: #002d17;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-secondary .acf-input input {
+    background: #f4aa1f;
+    border: 2px solid #f4aa1f;
+    color: #002d17;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-button-url .acf-input input {
+    border-left: 4px solid #002d17;
+    min-height: 42px;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-primary::before,
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-secondary::before {
+    color: #5b6f65;
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-primary::before {
+    content: "Nut vien";
+}
+
+.acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-secondary::before {
+    content: "Nut vang";
+}
+
+@media (max-width: 1200px) {
+    .acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-title,
+    .acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-description,
+    .acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-background,
+    .acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-button,
+    .acf-postbox[data-key="group_tona_about_page"] .acf-field.tona-about-cta-button-url {
+        width: 100% !important;
+    }
+}

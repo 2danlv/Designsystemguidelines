@@ -1,0 +1,463 @@
+{
+    "key": "group_tona_about_page",
+    "title": "About Page Content",
+    "fields": [
+        {
+            "key": "field_tona_about_tab_hero",
+            "label": "01. Hero",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_about_breadcrumb_label",
+            "label": "Breadcrumb Label",
+            "name": "about_breadcrumb_label",
+            "type": "text",
+            "default_value": "Gioi Thieu"
+        },
+        {
+            "key": "field_tona_about_hero_title",
+            "label": "Hero Title",
+            "name": "about_hero_title",
+            "type": "textarea",
+            "instructions": "Main heading at the top of the About page. Use a new line to split the heading.",
+            "rows": 2,
+            "default_value": "Ve Tona\nCorporation",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_about_hero_description",
+            "label": "Hero Description",
+            "name": "about_hero_description",
+            "type": "textarea",
+            "rows": 4,
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_about_hero_background",
+            "label": "Hero Background Color",
+            "name": "about_hero_background",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default dark green background.",
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_about_stats",
+            "label": "Hero Stats",
+            "name": "about_stats",
+            "type": "repeater",
+            "instructions": "The number cards on the right side of the hero.",
+            "layout": "table",
+            "button_label": "Add Stat",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_tona_about_stat_value",
+                    "label": "Value",
+                    "name": "value",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_stats"
+                },
+                {
+                    "key": "field_tona_about_stat_label",
+                    "label": "Label",
+                    "name": "label",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_stats"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_about_tab_mission",
+            "label": "02. Mission / Vision",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_about_mission_background_image",
+            "label": "Background Image",
+            "name": "about_mission_background_image",
+            "type": "image",
+            "instructions": "Image behind the Mission / Vision cards. Leave empty to keep the default artwork.",
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "mime_types": ""
+        },
+        {
+            "key": "field_tona_about_mission_eyebrow",
+            "label": "Mission Label",
+            "name": "about_mission_eyebrow",
+            "type": "text",
+            "default_value": "Su Menh",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_vision_eyebrow",
+            "label": "Vision Label",
+            "name": "about_vision_eyebrow",
+            "type": "text",
+            "default_value": "Tam Nhin",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_mission_text",
+            "label": "Mission Text",
+            "name": "about_mission_text",
+            "type": "textarea",
+            "rows": 4,
+            "new_lines": "",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_vision_text",
+            "label": "Vision Text",
+            "name": "about_vision_text",
+            "type": "textarea",
+            "rows": 4,
+            "new_lines": "",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_tab_values",
+            "label": "03. Core Values",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_about_values_title",
+            "label": "Section Title",
+            "name": "about_values_title",
+            "type": "text",
+            "default_value": "Gia Tri Cot Loi"
+        },
+        {
+            "key": "field_tona_about_values_background",
+            "label": "Section Background Color",
+            "name": "about_values_background",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default white background.",
+            "default_value": "#ffffff",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_about_values",
+            "label": "Core Value Cards",
+            "name": "about_values",
+            "type": "repeater",
+            "layout": "row",
+            "button_label": "Add Value",
+            "collapsed": "field_tona_about_value_title",
+            "sub_fields": [
+                {
+                    "key": "field_tona_about_value_icon",
+                    "label": "Icon",
+                    "name": "icon",
+                    "type": "select",
+                    "choices": {
+                        "Shield": "Shield",
+                        "Award": "Award",
+                        "TrendingUp": "Trending Up",
+                        "CheckCircle2": "Check Circle"
+                    },
+                    "default_value": "Shield",
+                    "return_format": "value",
+                    "ui": 1,
+                    "parent_repeater": "field_tona_about_values"
+                },
+                {
+                    "key": "field_tona_about_value_title",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_values"
+                },
+                {
+                    "key": "field_tona_about_value_description",
+                    "label": "Description",
+                    "name": "description",
+                    "type": "textarea",
+                    "rows": 3,
+                    "new_lines": "",
+                    "parent_repeater": "field_tona_about_values"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_about_tab_timeline",
+            "label": "04. Timeline",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_about_timeline_title",
+            "label": "Section Title",
+            "name": "about_timeline_title",
+            "type": "text",
+            "default_value": "Hanh Trinh Phat Trien"
+        },
+        {
+            "key": "field_tona_about_timeline_background",
+            "label": "Section Background Color",
+            "name": "about_timeline_background",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default light background.",
+            "default_value": "#f9f9f7",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_about_timeline",
+            "label": "Timeline Items",
+            "name": "about_timeline",
+            "type": "repeater",
+            "layout": "row",
+            "button_label": "Add Timeline Item",
+            "collapsed": "field_tona_about_timeline_year",
+            "sub_fields": [
+                {
+                    "key": "field_tona_about_timeline_year",
+                    "label": "Year",
+                    "name": "year",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_timeline"
+                },
+                {
+                    "key": "field_tona_about_timeline_item_title",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_timeline"
+                },
+                {
+                    "key": "field_tona_about_timeline_description",
+                    "label": "Description",
+                    "name": "description",
+                    "type": "textarea",
+                    "rows": 3,
+                    "new_lines": "",
+                    "parent_repeater": "field_tona_about_timeline"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_about_tab_certifications",
+            "label": "05. Certifications",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_about_certifications_title",
+            "label": "Section Title",
+            "name": "about_certifications_title",
+            "type": "text",
+            "default_value": "Chung Nhan Quoc Te"
+        },
+        {
+            "key": "field_tona_about_certifications_background",
+            "label": "Section Background Color",
+            "name": "about_certifications_background",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default dark green background.",
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_about_certifications",
+            "label": "Certification Cards",
+            "name": "about_certifications",
+            "type": "repeater",
+            "layout": "row",
+            "button_label": "Add Certification",
+            "collapsed": "field_tona_about_certification_code",
+            "sub_fields": [
+                {
+                    "key": "field_tona_about_certification_code",
+                    "label": "Code",
+                    "name": "code",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_certifications"
+                },
+                {
+                    "key": "field_tona_about_certification_title",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_certifications"
+                },
+                {
+                    "key": "field_tona_about_certification_org",
+                    "label": "Organization",
+                    "name": "org",
+                    "type": "text",
+                    "parent_repeater": "field_tona_about_certifications"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_about_tab_cta",
+            "label": "06. CTA",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_about_cta_background",
+            "label": "CTA Background Color",
+            "name": "about_cta_background",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default white background.",
+            "default_value": "#ffffff",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "wrapper": {
+                "width": "",
+                "class": "tona-about-cta-background",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_cta_layout_note",
+            "label": "CTA Layout",
+            "name": "",
+            "type": "message",
+            "message": "Layout mirrors the frontend: headline and description on the left, two buttons on the right.",
+            "new_lines": "wpautop",
+            "esc_html": 0
+        },
+        {
+            "key": "field_tona_about_cta_title",
+            "label": "CTA Title",
+            "name": "about_cta_title",
+            "type": "text",
+            "instructions": "Left headline in the white CTA band.",
+            "wrapper": {
+                "width": "60",
+                "class": "tona-about-cta-title",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_cta_primary_label",
+            "label": "Primary Button Label",
+            "name": "about_cta_primary_label",
+            "type": "text",
+            "wrapper": {
+                "width": "20",
+                "class": "tona-about-cta-button tona-about-cta-primary",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_cta_secondary_label",
+            "label": "Secondary Button Label",
+            "name": "about_cta_secondary_label",
+            "type": "text",
+            "wrapper": {
+                "width": "20",
+                "class": "tona-about-cta-button tona-about-cta-secondary",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_cta_description",
+            "label": "CTA Description",
+            "name": "about_cta_description",
+            "type": "textarea",
+            "instructions": "Short line below the CTA headline.",
+            "rows": 3,
+            "new_lines": "",
+            "wrapper": {
+                "width": "60",
+                "class": "tona-about-cta-description",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_cta_primary_url",
+            "label": "Primary Button URL",
+            "name": "about_cta_primary_url",
+            "type": "page_link",
+            "post_type": "",
+            "post_status": "",
+            "taxonomy": "",
+            "allow_archives": 1,
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "tona-about-cta-button-url tona-about-cta-primary-url",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_about_cta_secondary_url",
+            "label": "Secondary Button URL",
+            "name": "about_cta_secondary_url",
+            "type": "page_link",
+            "post_type": "",
+            "post_status": "",
+            "taxonomy": "",
+            "allow_archives": 1,
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "tona-about-cta-button-url tona-about-cta-secondary-url",
+                "id": ""
+            }
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_slug",
+                "operator": "==",
+                "value": "gioi-thieu-tona"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1,
+    "modified": 1778911200
+}

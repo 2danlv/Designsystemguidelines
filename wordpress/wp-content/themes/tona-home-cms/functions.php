@@ -14,21 +14,29 @@ function tona_cms_theme_setup() {
 add_action( 'after_setup_theme', 'tona_cms_theme_setup' );
 
 function tona_cms_create_default_pages() {
-    if ( get_page_by_path( 'doi-ngu', OBJECT, 'page' ) ) {
-        return;
-    }
-
-    wp_insert_post(
-        array(
-            'post_type'    => 'page',
-            'post_status'  => 'publish',
-            'post_title'   => 'Doi Ngu',
-            'post_name'    => 'doi-ngu',
-            'post_content' => '',
-        )
+    $pages = array(
+        'doi-ngu' => 'Doi Ngu',
+        'gioi-thieu-tona' => 'Gioi Thieu Tona',
     );
+
+    foreach ( $pages as $slug => $title ) {
+        if ( get_page_by_path( $slug, OBJECT, 'page' ) ) {
+            continue;
+        }
+
+        wp_insert_post(
+            array(
+                'post_type'    => 'page',
+                'post_status'  => 'publish',
+                'post_title'   => $title,
+                'post_name'    => $slug,
+                'post_content' => '',
+            )
+        );
+    }
 }
 add_action( 'after_switch_theme', 'tona_cms_create_default_pages' );
+add_action( 'init', 'tona_cms_create_default_pages' );
 
 function tona_cms_acf_json_save_path( $path ) {
     return get_stylesheet_directory() . '/acf-json';
@@ -40,6 +48,164 @@ function tona_cms_acf_json_load_paths( $paths ) {
     return $paths;
 }
 add_filter( 'acf/settings/load_json', 'tona_cms_acf_json_load_paths' );
+
+function tona_cms_acf_location_rule_types( $choices ) {
+    $choices['Post']['page_slug'] = 'Page Slug';
+    return $choices;
+}
+add_filter( 'acf/location/rule_types', 'tona_cms_acf_location_rule_types' );
+
+function tona_cms_acf_location_rule_values_page_slug( $choices ) {
+    $choices['doi-ngu'] = 'Doi Ngu';
+    $choices['gioi-thieu-tona'] = 'Gioi Thieu Tona';
+    return $choices;
+}
+add_filter( 'acf/location/rule_values/page_slug', 'tona_cms_acf_location_rule_values_page_slug' );
+
+function tona_cms_acf_location_rule_match_page_slug( $match, $rule, $options ) {
+    $post_id = isset( $options['post_id'] ) ? (int) $options['post_id'] : 0;
+    $post = $post_id ? get_post( $post_id ) : null;
+
+    if ( ! $post || 'page' !== $post->post_type ) {
+        return false;
+    }
+
+    $is_match = $post->post_name === $rule['value'];
+
+    return '==' === $rule['operator'] ? $is_match : ! $is_match;
+}
+add_filter( 'acf/location/rule_match/page_slug', 'tona_cms_acf_location_rule_match_page_slug', 10, 3 );
+
+function tona_cms_acf_color_field( $key, $label, $name, $default_value, $instructions = '', $wrapper_class = '' ) {
+    return array(
+        'ID'              => 0,
+        'key'             => $key,
+        'label'           => $label,
+        'name'            => $name,
+        'type'            => 'color_picker',
+        'value'           => null,
+        'instructions'    => $instructions,
+        'required'        => 0,
+        'conditional_logic' => 0,
+        'wrapper'         => array(
+            'width' => '',
+            'class' => $wrapper_class,
+            'id'    => '',
+        ),
+        'default_value'   => $default_value,
+        'enable_opacity'  => 0,
+        'return_format'   => 'string',
+    );
+}
+
+function tona_cms_acf_image_field( $key, $label, $name, $instructions = '' ) {
+    return array(
+        'ID'              => 0,
+        'key'             => $key,
+        'label'           => $label,
+        'name'            => $name,
+        'type'            => 'image',
+        'value'           => null,
+        'instructions'    => $instructions,
+        'required'        => 0,
+        'conditional_logic' => 0,
+        'wrapper'         => array(
+            'width' => '',
+            'class' => '',
+            'id'    => '',
+        ),
+        'return_format'   => 'array',
+        'preview_size'    => 'medium',
+        'library'         => 'all',
+        'min_width'       => 0,
+        'min_height'      => 0,
+        'min_size'        => 0,
+        'max_width'       => 0,
+        'max_height'      => 0,
+        'max_size'        => 0,
+        'mime_types'      => '',
+    );
+}
+
+function tona_cms_about_background_field_map() {
+    return array(
+        'field_tona_about_hero_description' => tona_cms_acf_color_field(
+            'field_tona_about_hero_background',
+            'Hero Background Color',
+            'about_hero_background',
+            '#002d17',
+            'Leave empty to use the default dark green background.'
+        ),
+        'field_tona_about_tab_mission' => tona_cms_acf_image_field(
+            'field_tona_about_mission_background_image',
+            'Background Image',
+            'about_mission_background_image',
+            'Image behind the Mission / Vision cards. Leave empty to keep the default artwork.'
+        ),
+        'field_tona_about_values_title' => tona_cms_acf_color_field(
+            'field_tona_about_values_background',
+            'Section Background Color',
+            'about_values_background',
+            '#ffffff',
+            'Leave empty to use the default white background.'
+        ),
+        'field_tona_about_timeline_title' => tona_cms_acf_color_field(
+            'field_tona_about_timeline_background',
+            'Section Background Color',
+            'about_timeline_background',
+            '#f9f9f7',
+            'Leave empty to use the default light background.'
+        ),
+        'field_tona_about_certifications_title' => tona_cms_acf_color_field(
+            'field_tona_about_certifications_background',
+            'Section Background Color',
+            'about_certifications_background',
+            '#002d17',
+            'Leave empty to use the default dark green background.'
+        ),
+        'field_tona_about_tab_cta' => tona_cms_acf_color_field(
+            'field_tona_about_cta_background',
+            'CTA Background Color',
+            'about_cta_background',
+            '#ffffff',
+            'Leave empty to use the default white background.',
+            'tona-about-cta-background'
+        ),
+    );
+}
+
+function tona_cms_insert_acf_field_after( $fields, $after_key, $field_to_insert ) {
+    foreach ( $fields as $existing_field ) {
+        if ( isset( $existing_field['key'] ) && $existing_field['key'] === $field_to_insert['key'] ) {
+            return $fields;
+        }
+    }
+
+    foreach ( $fields as $index => $existing_field ) {
+        if ( isset( $existing_field['key'] ) && $after_key === $existing_field['key'] ) {
+            array_splice( $fields, $index + 1, 0, array( $field_to_insert ) );
+            return $fields;
+        }
+    }
+
+    $fields[] = $field_to_insert;
+    return $fields;
+}
+
+function tona_cms_about_load_fields( $fields, $parent ) {
+    $parent_key = is_array( $parent ) && isset( $parent['key'] ) ? $parent['key'] : '';
+
+    if ( 'group_tona_about_page' !== $parent_key ) {
+        return $fields;
+    }
+
+    foreach ( tona_cms_about_background_field_map() as $after_key => $field ) {
+        $fields = tona_cms_insert_acf_field_after( $fields, $after_key, $field );
+    }
+
+    return $fields;
+}
+add_filter( 'acf/load_fields', 'tona_cms_about_load_fields', 20, 2 );
 
 function tona_cms_admin_assets( $hook_suffix ) {
     if ( ! in_array( $hook_suffix, array( 'post.php', 'post-new.php' ), true ) ) {
@@ -244,6 +410,97 @@ function tona_cms_members_payload( $page ) {
     );
 }
 
+function tona_cms_about_payload( $page ) {
+    $post_id = $page->ID;
+    $stats = function_exists( 'get_field' ) ? get_field( 'about_stats', $post_id ) : array();
+    $values = function_exists( 'get_field' ) ? get_field( 'about_values', $post_id ) : array();
+    $timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline', $post_id ) : array();
+    $certifications = function_exists( 'get_field' ) ? get_field( 'about_certifications', $post_id ) : array();
+
+    return array(
+        'id'        => $post_id,
+        'slug'      => $page->post_name,
+        'title'     => get_the_title( $page ),
+        'colors'    => array(
+            'heroBackground'           => tona_cms_text_field( $post_id, 'about_hero_background' ),
+            'valuesBackground'         => tona_cms_text_field( $post_id, 'about_values_background' ),
+            'timelineBackground'       => tona_cms_text_field( $post_id, 'about_timeline_background' ),
+            'certificationsBackground' => tona_cms_text_field( $post_id, 'about_certifications_background' ),
+            'ctaBackground'            => tona_cms_text_field( $post_id, 'about_cta_background' ),
+        ),
+        'hero'      => array(
+            'breadcrumbLabel' => tona_cms_text_field( $post_id, 'about_breadcrumb_label' ),
+            'title'           => tona_cms_text_field( $post_id, 'about_hero_title' ),
+            'description'     => tona_cms_text_field( $post_id, 'about_hero_description' ),
+        ),
+        'stats'     => array_values(
+            array_map(
+                function ( $stat ) {
+                    return array(
+                        'value' => $stat['value'] ?? '',
+                        'label' => $stat['label'] ?? '',
+                    );
+                },
+                is_array( $stats ) ? $stats : array()
+            )
+        ),
+        'missionVision' => array(
+            'backgroundImage' => tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'about_mission_background_image', $post_id ) : '' ),
+            'missionEyebrow' => tona_cms_text_field( $post_id, 'about_mission_eyebrow' ),
+            'missionText'    => tona_cms_text_field( $post_id, 'about_mission_text' ),
+            'visionEyebrow'  => tona_cms_text_field( $post_id, 'about_vision_eyebrow' ),
+            'visionText'     => tona_cms_text_field( $post_id, 'about_vision_text' ),
+        ),
+        'valuesTitle' => tona_cms_text_field( $post_id, 'about_values_title' ),
+        'values'      => array_values(
+            array_map(
+                function ( $value ) {
+                    return array(
+                        'icon'  => $value['icon'] ?? 'Shield',
+                        'title' => $value['title'] ?? '',
+                        'desc'  => $value['description'] ?? '',
+                    );
+                },
+                is_array( $values ) ? $values : array()
+            )
+        ),
+        'timelineTitle' => tona_cms_text_field( $post_id, 'about_timeline_title' ),
+        'timeline'      => array_values(
+            array_map(
+                function ( $item ) {
+                    return array(
+                        'year'  => $item['year'] ?? '',
+                        'title' => $item['title'] ?? '',
+                        'desc'  => $item['description'] ?? '',
+                    );
+                },
+                is_array( $timeline ) ? $timeline : array()
+            )
+        ),
+        'certificationsTitle' => tona_cms_text_field( $post_id, 'about_certifications_title' ),
+        'certifications'      => array_values(
+            array_map(
+                function ( $certification ) {
+                    return array(
+                        'code'  => $certification['code'] ?? '',
+                        'title' => $certification['title'] ?? '',
+                        'org'   => $certification['org'] ?? '',
+                    );
+                },
+                is_array( $certifications ) ? $certifications : array()
+            )
+        ),
+        'cta' => array(
+            'title'          => tona_cms_text_field( $post_id, 'about_cta_title' ),
+            'description'    => tona_cms_text_field( $post_id, 'about_cta_description' ),
+            'primaryLabel'   => tona_cms_text_field( $post_id, 'about_cta_primary_label' ),
+            'primaryUrl'     => tona_cms_text_field( $post_id, 'about_cta_primary_url' ),
+            'secondaryLabel' => tona_cms_text_field( $post_id, 'about_cta_secondary_label' ),
+            'secondaryUrl'   => tona_cms_text_field( $post_id, 'about_cta_secondary_url' ),
+        ),
+    );
+}
+
 function tona_cms_register_rest_routes() {
     register_rest_route(
         'tona/v1',
@@ -261,6 +518,10 @@ function tona_cms_register_rest_routes() {
 
                 if ( 'doi-ngu' === $page->post_name ) {
                     return rest_ensure_response( tona_cms_members_payload( $page ) );
+                }
+
+                if ( 'gioi-thieu-tona' === $page->post_name ) {
+                    return rest_ensure_response( tona_cms_about_payload( $page ) );
                 }
 
                 return rest_ensure_response(
