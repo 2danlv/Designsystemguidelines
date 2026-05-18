@@ -187,6 +187,81 @@ export type ServicesCmsData = {
   };
 };
 
+export type JobPost = {
+  id: number | string;
+  slug?: string;
+  categories?: Array<{
+    id?: number;
+    name?: string;
+    slug?: string;
+  }>;
+  categorySlugs?: string[];
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  level: string;
+  date: string;
+  salary?: string;
+  slots: number;
+  description: string;
+  requirements: string[];
+  skills: string[];
+  benefits: string[];
+};
+
+export type JobsCmsData = {
+  colors?: {
+    heroBackground?: string;
+    perksBackground?: string;
+    internsBackground?: string;
+    cultureBackground?: string;
+  };
+  hero?: {
+    breadcrumbLabel?: string;
+    title?: string;
+    description?: string;
+    decorativeText?: string;
+  };
+  perksEyebrow?: string;
+  perks?: Array<{
+    icon?: "TrendingUp" | "Star" | "Users" | "CheckCircle2";
+    iconImage?: string;
+    title?: string;
+    desc?: string;
+  }>;
+  jobsTitle?: string;
+  emptyJobsText?: string;
+  spontaneous?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    linkLabel?: string;
+    linkUrl?: string;
+  };
+  interns?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    seasonLabel?: string;
+    slotsValue?: string;
+    slotsLabel?: string;
+    majorsValue?: string;
+    majorsLabel?: string;
+    note?: string;
+    ctaTitle?: string;
+    ctaDescription?: string;
+    ctaLinkLabel?: string;
+    ctaLinkUrl?: string;
+  };
+  cultureTeaser?: {
+    title?: string;
+    description?: string;
+    linkLabel?: string;
+    linkUrl?: string;
+  };
+};
+
 const wordpressApiBase = (import.meta.env.VITE_WP_API_BASE || "/wp-json").replace(/\/$/, "");
 
 export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promise<T | null> {
@@ -204,5 +279,23 @@ export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promi
     }
 
     return null;
+  }
+}
+
+export async function fetchCmsJobs(signal?: AbortSignal): Promise<JobPost[]> {
+  try {
+    const response = await fetch(`${wordpressApiBase}/tona/v1/jobs`, { signal });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return (await response.json()) as JobPost[];
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return [];
   }
 }

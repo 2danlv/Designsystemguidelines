@@ -13,12 +13,147 @@ function tona_cms_theme_setup() {
 }
 add_action( 'after_setup_theme', 'tona_cms_theme_setup' );
 
+function tona_cms_register_job_post_type() {
+    register_post_type(
+        'tona_job',
+        array(
+            'labels'       => array(
+                'name'          => 'Jobs',
+                'singular_name' => 'Job',
+                'add_new_item'  => 'Add New Job',
+                'edit_item'     => 'Edit Job',
+            ),
+            'public'       => true,
+            'show_ui'      => true,
+            'show_in_menu' => true,
+            'show_in_rest' => true,
+            'menu_icon'    => 'dashicons-businessperson',
+            'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
+            'rewrite'      => array( 'slug' => 'jobs' ),
+        )
+    );
+
+    register_taxonomy(
+        'tona_job_category',
+        'tona_job',
+        array(
+            'labels'       => array(
+                'name'          => 'Job Categories',
+                'singular_name' => 'Job Category',
+                'add_new_item'  => 'Add New Job Category',
+                'edit_item'     => 'Edit Job Category',
+            ),
+            'hierarchical' => true,
+            'public'       => true,
+            'show_ui'      => true,
+            'show_in_rest' => true,
+            'meta_box_cb'  => 'tona_cms_job_category_radio_meta_box',
+            'rewrite'      => array( 'slug' => 'job-category' ),
+        )
+    );
+
+    $default_terms = array(
+        'tuyen-dung' => 'Tuyen Dung',
+        'thuc-tap'   => 'Thuc Tap',
+    );
+
+    foreach ( $default_terms as $slug => $name ) {
+        if ( ! term_exists( $slug, 'tona_job_category' ) ) {
+            wp_insert_term(
+                $name,
+                'tona_job_category',
+                array(
+                    'slug' => $slug,
+                )
+            );
+        }
+    }
+}
+add_action( 'init', 'tona_cms_register_job_post_type' );
+
+function tona_cms_job_category_radio_meta_box( $post, $box ) {
+    $taxonomy = $box['args']['taxonomy'];
+    $terms = get_terms(
+        array(
+            'taxonomy'   => $taxonomy,
+            'hide_empty' => false,
+        )
+    );
+
+    if ( is_wp_error( $terms ) || empty( $terms ) ) {
+        return;
+    }
+
+    $selected_terms = wp_get_object_terms(
+        $post->ID,
+        $taxonomy,
+        array(
+            'fields' => 'ids',
+        )
+    );
+    $selected_term_id = ! is_wp_error( $selected_terms ) && ! empty( $selected_terms ) ? (int) $selected_terms[0] : 0;
+
+    if ( ! $selected_term_id ) {
+        $default_term = get_term_by( 'slug', 'tuyen-dung', $taxonomy );
+        $selected_term_id = $default_term ? (int) $default_term->term_id : 0;
+    }
+
+    echo '<div id="taxonomy-' . esc_attr( $taxonomy ) . '" class="categorydiv">';
+    echo '<ul class="categorychecklist form-no-clear">';
+
+    foreach ( $terms as $term ) {
+        printf(
+            '<li><label class="selectit"><input type="radio" name="tax_input[%1$s][]" value="%2$d" %3$s> %4$s</label></li>',
+            esc_attr( $taxonomy ),
+            (int) $term->term_id,
+            checked( $selected_term_id, (int) $term->term_id, false ),
+            esc_html( $term->name )
+        );
+    }
+
+    echo '</ul>';
+    echo '<p class="description">Choose exactly one category. Tuyen Dung shows in the main jobs list, Thuc Tap shows in the internship section.</p>';
+    echo '</div>';
+}
+
+function tona_cms_job_category_single_term( $post_id ) {
+    if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
+        return;
+    }
+
+    $terms = wp_get_object_terms(
+        $post_id,
+        'tona_job_category',
+        array(
+            'fields' => 'ids',
+        )
+    );
+
+    if ( is_wp_error( $terms ) ) {
+        return;
+    }
+
+    if ( empty( $terms ) ) {
+        $default_term = get_term_by( 'slug', 'tuyen-dung', 'tona_job_category' );
+
+        if ( $default_term ) {
+            wp_set_object_terms( $post_id, array( (int) $default_term->term_id ), 'tona_job_category', false );
+        }
+
+        return;
+    }
+
+    wp_set_object_terms( $post_id, array( (int) $terms[0] ), 'tona_job_category', false );
+}
+add_action( 'save_post_tona_job', 'tona_cms_job_category_single_term', 20 );
+
 function tona_cms_create_default_pages() {
     $pages = array(
         'doi-ngu' => 'Doi Ngu',
         'gioi-thieu-tona' => 'Gioi Thieu Tona',
         'cuoc-song-tona' => 'Cuoc Song Tona',
         'dich-vu' => 'Dich Vu',
+        'nghe-nghiep' => 'Nghe Nghiep',
     );
 
     foreach ( $pages as $slug => $title ) {
@@ -62,6 +197,7 @@ function tona_cms_acf_location_rule_values_page_slug( $choices ) {
     $choices['gioi-thieu-tona'] = 'Gioi Thieu Tona';
     $choices['cuoc-song-tona'] = 'Cuoc Song Tona';
     $choices['dich-vu'] = 'Dich Vu';
+    $choices['nghe-nghiep'] = 'Nghe Nghiep';
     return $choices;
 }
 add_filter( 'acf/location/rule_values/page_slug', 'tona_cms_acf_location_rule_values_page_slug' );
@@ -758,7 +894,140 @@ function tona_cms_services_unique_featured_card( $value, $post_id, $field ) {
 }
 add_filter( 'acf/update_value/name=services_items', 'tona_cms_services_unique_featured_card', 20, 3 );
 
+function tona_cms_job_payload( $post ) {
+    $post_id = $post->ID;
+    $terms = get_the_terms( $post_id, 'tona_job_category' );
+    $terms = is_array( $terms ) ? $terms : array();
+
+    return array(
+        'id'           => $post_id,
+        'slug'         => $post->post_name,
+        'title'        => get_the_title( $post ),
+        'categories'   => array_values(
+            array_map(
+                function ( $term ) {
+                    return array(
+                        'id'   => $term->term_id,
+                        'name' => $term->name,
+                        'slug' => $term->slug,
+                    );
+                },
+                $terms
+            )
+        ),
+        'categorySlugs' => array_values( wp_list_pluck( $terms, 'slug' ) ),
+        'department'   => tona_cms_text_field( $post_id, 'job_department' ),
+        'location'     => tona_cms_text_field( $post_id, 'job_location' ),
+        'type'         => tona_cms_text_field( $post_id, 'job_type' ),
+        'level'        => tona_cms_text_field( $post_id, 'job_level' ),
+        'date'         => tona_cms_text_field( $post_id, 'job_date' ),
+        'salary'       => tona_cms_text_field( $post_id, 'job_salary' ),
+        'slots'        => (int) ( function_exists( 'get_field' ) ? get_field( 'job_slots', $post_id ) : 1 ),
+        'description'  => tona_cms_text_field( $post_id, 'job_description' ) ?: wp_strip_all_tags( get_the_content( null, false, $post ) ),
+        'requirements' => tona_cms_lines_field( $post_id, 'job_requirements' ),
+        'skills'       => tona_cms_lines_field( $post_id, 'job_skills' ),
+        'benefits'     => tona_cms_lines_field( $post_id, 'job_benefits' ),
+    );
+}
+
+function tona_cms_jobs_payload() {
+    $jobs = get_posts(
+        array(
+            'post_type'      => 'tona_job',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'orderby'        => array(
+                'menu_order' => 'ASC',
+                'date'       => 'DESC',
+            ),
+        )
+    );
+
+    return array_values(
+        array_map( 'tona_cms_job_payload', is_array( $jobs ) ? $jobs : array() )
+    );
+}
+
+function tona_cms_jobs_page_payload( $page ) {
+    $post_id = $page->ID;
+    $perks = function_exists( 'get_field' ) ? get_field( 'jobs_perks', $post_id ) : array();
+
+    return array(
+        'id'     => $post_id,
+        'slug'   => $page->post_name,
+        'title'  => get_the_title( $page ),
+        'colors' => array(
+            'heroBackground'    => tona_cms_text_field( $post_id, 'jobs_hero_background' ),
+            'perksBackground'   => tona_cms_text_field( $post_id, 'jobs_perks_background' ),
+            'internsBackground' => tona_cms_text_field( $post_id, 'jobs_interns_background' ),
+            'cultureBackground' => tona_cms_text_field( $post_id, 'jobs_culture_background' ),
+        ),
+        'hero'   => array(
+            'breadcrumbLabel' => tona_cms_text_field( $post_id, 'jobs_breadcrumb_label' ),
+            'title'           => tona_cms_text_field( $post_id, 'jobs_hero_title' ),
+            'description'     => tona_cms_text_field( $post_id, 'jobs_hero_description' ),
+            'decorativeText'  => tona_cms_text_field( $post_id, 'jobs_hero_decorative_text' ),
+        ),
+        'perksEyebrow' => tona_cms_text_field( $post_id, 'jobs_perks_eyebrow' ),
+        'perks'        => array_values(
+            array_map(
+                function ( $perk ) {
+                    return array(
+                        'icon'      => $perk['icon'] ?? 'TrendingUp',
+                        'iconImage' => tona_cms_image_url( $perk['icon_image'] ?? '' ),
+                        'title'     => $perk['title'] ?? '',
+                        'desc'      => $perk['description'] ?? '',
+                    );
+                },
+                is_array( $perks ) ? $perks : array()
+            )
+        ),
+        'jobsTitle'     => tona_cms_text_field( $post_id, 'jobs_list_title' ),
+        'emptyJobsText' => tona_cms_text_field( $post_id, 'jobs_empty_text' ),
+        'spontaneous'   => array(
+            'eyebrow'     => tona_cms_text_field( $post_id, 'jobs_spontaneous_eyebrow' ),
+            'title'       => tona_cms_text_field( $post_id, 'jobs_spontaneous_title' ),
+            'description' => tona_cms_text_field( $post_id, 'jobs_spontaneous_description' ),
+            'linkLabel'   => tona_cms_text_field( $post_id, 'jobs_spontaneous_link_label' ),
+            'linkUrl'     => tona_cms_text_field( $post_id, 'jobs_spontaneous_link_url' ),
+        ),
+        'interns'       => array(
+            'eyebrow'        => tona_cms_text_field( $post_id, 'jobs_interns_eyebrow' ),
+            'title'          => tona_cms_text_field( $post_id, 'jobs_interns_title' ),
+            'description'    => tona_cms_text_field( $post_id, 'jobs_interns_description' ),
+            'seasonLabel'    => tona_cms_text_field( $post_id, 'jobs_interns_season_label' ),
+            'slotsValue'     => tona_cms_text_field( $post_id, 'jobs_interns_slots_value' ),
+            'slotsLabel'     => tona_cms_text_field( $post_id, 'jobs_interns_slots_label' ),
+            'majorsValue'    => tona_cms_text_field( $post_id, 'jobs_interns_majors_value' ),
+            'majorsLabel'    => tona_cms_text_field( $post_id, 'jobs_interns_majors_label' ),
+            'note'           => tona_cms_text_field( $post_id, 'jobs_interns_note' ),
+            'ctaTitle'       => tona_cms_text_field( $post_id, 'jobs_interns_cta_title' ),
+            'ctaDescription' => tona_cms_text_field( $post_id, 'jobs_interns_cta_description' ),
+            'ctaLinkLabel'   => tona_cms_text_field( $post_id, 'jobs_interns_cta_link_label' ),
+            'ctaLinkUrl'     => tona_cms_text_field( $post_id, 'jobs_interns_cta_link_url' ),
+        ),
+        'cultureTeaser' => array(
+            'title'       => tona_cms_text_field( $post_id, 'jobs_culture_title' ),
+            'description' => tona_cms_text_field( $post_id, 'jobs_culture_description' ),
+            'linkLabel'   => tona_cms_text_field( $post_id, 'jobs_culture_link_label' ),
+            'linkUrl'     => tona_cms_text_field( $post_id, 'jobs_culture_link_url' ),
+        ),
+    );
+}
+
 function tona_cms_register_rest_routes() {
+    register_rest_route(
+        'tona/v1',
+        '/jobs',
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback'            => function () {
+                return rest_ensure_response( tona_cms_jobs_payload() );
+            },
+        )
+    );
+
     register_rest_route(
         'tona/v1',
         '/pages/(?P<slug>[a-z0-9-]+)',
@@ -787,6 +1056,10 @@ function tona_cms_register_rest_routes() {
 
                 if ( 'dich-vu' === $page->post_name ) {
                     return rest_ensure_response( tona_cms_services_payload( $page ) );
+                }
+
+                if ( 'nghe-nghiep' === $page->post_name ) {
+                    return rest_ensure_response( tona_cms_jobs_page_payload( $page ) );
                 }
 
                 return rest_ensure_response(

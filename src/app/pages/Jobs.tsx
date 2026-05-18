@@ -1,16 +1,45 @@
-import { useState } from "react";
-import { jobs } from "../data";
+import { useEffect, useMemo, useState } from "react";
+import { jobs as fallbackJobs } from "../data";
 import { Link } from "react-router";
 import {
   MapPin, Clock, Briefcase, ChevronRight, ArrowRight,
   CheckCircle2, Star, Users, TrendingUp, ChevronDown, ChevronUp, X,
-  GraduationCap, BookOpen, Lightbulb
+  GraduationCap, BookOpen, Lightbulb, type LucideIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { fetchCmsJobs, fetchCmsPage, type JobPost, type JobsCmsData } from "../lib/wordpress";
 
-const departments = ["Tất Cả", "Kỹ Thuật Công Trường", "Kỹ Thuật MEP", "Kiểm Soát Chất Lượng", "Quản Lý Dự Án"];
+type PerkItem = {
+  icon: LucideIcon;
+  iconImage?: string;
+  title: string;
+  desc: string;
+};
 
-const perks = [
+type InternPosition = {
+  id: string;
+  title: string;
+  subtitle: string;
+  department: string;
+  duration: string;
+  location: string;
+  slots: number;
+  icon: LucideIcon;
+  requirements: string[];
+  benefits: string[];
+  desc: string;
+};
+
+const allDepartmentsLabel = "Tất Cả";
+
+const perkIconMap = {
+  TrendingUp,
+  Star,
+  Users,
+  CheckCircle2,
+};
+
+const fallbackPerks: PerkItem[] = [
   { icon: TrendingUp, title: "Lộ trình thăng tiến rõ ràng", desc: "Xét thăng tiến 6 tháng/lần theo năng lực thực tế, không phụ thuộc thâm niên." },
   { icon: Star, title: "Lương & thưởng hấp dẫn", desc: "Gói lương cạnh tranh thị trường, thưởng hoàn thành dự án và thưởng cuối năm." },
   { icon: Users, title: "Môi trường quốc tế", desc: "Làm việc cùng các chuyên gia và đối tác từ Singapore, Nhật Bản, Đức, Mỹ." },
@@ -18,13 +47,14 @@ const perks = [
 ];
 
 // ─── INTERN DATA ─────────────────────────────────────────────────────────────
-const internPositions = [
+const fallbackInternPositions: InternPosition[] = [
   {
     id: "intern-civil",
     title: "Thực Tập Sinh Kỹ Thuật Xây Dựng",
     subtitle: "Civil Engineering Intern",
     department: "Kỹ Thuật Công Trường",
     duration: "3 — 6 tháng",
+    location: "TP.HCM / Bình Dương",
     slots: 5,
     icon: BookOpen,
     requirements: [
@@ -48,6 +78,7 @@ const internPositions = [
     subtitle: "MEP Engineering Intern",
     department: "Kỹ Thuật MEP",
     duration: "3 — 6 tháng",
+    location: "TP.HCM / Bình Dương",
     slots: 4,
     icon: Lightbulb,
     requirements: [
@@ -71,6 +102,7 @@ const internPositions = [
     subtitle: "Project Management Intern",
     department: "Quản Lý Dự Án",
     duration: "3 — 4 tháng",
+    location: "TP.HCM / Bình Dương",
     slots: 3,
     icon: GraduationCap,
     requirements: [
@@ -90,8 +122,42 @@ const internPositions = [
   },
 ];
 
+function renderLines(text: string) {
+  return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
+    <span key={`${line}-${index}`}>
+      {line}
+      {index < lines.length - 1 && <br />}
+    </span>
+  ));
+}
+
+function backgroundStyle(color?: string) {
+  return color ? { backgroundColor: color } : undefined;
+}
+
+function isInternshipJob(job: JobPost) {
+  const slugs = job.categorySlugs || job.categories?.map((category) => category.slug || "") || [];
+  return slugs.includes("thuc-tap") || slugs.includes("internship");
+}
+
+function internPositionFromJob(job: JobPost, index: number): InternPosition {
+  return {
+    id: String(job.id || job.slug || `intern-${index}`),
+    icon: BookOpen,
+    title: job.title,
+    subtitle: job.level || job.type || "",
+    department: job.department,
+    duration: job.type || job.date || "",
+    location: job.location || "TP.HCM / Bình Dương",
+    slots: job.slots || 1,
+    desc: job.description,
+    requirements: job.requirements || [],
+    benefits: job.benefits || [],
+  };
+}
+
 // ─── APPLY MODAL ─────────────────────────────────────────────────────────────
-function ApplyModal({ job, onClose }: { job: typeof jobs[0]; onClose: () => void }) {
+function ApplyModal({ job, onClose }: { job: JobPost; onClose: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -165,7 +231,7 @@ function ApplyModal({ job, onClose }: { job: typeof jobs[0]; onClose: () => void
 }
 
 // ─── INTERN APPLY MODAL ───────────────────────────────────────────────────────
-function InternApplyModal({ pos, onClose }: { pos: typeof internPositions[0]; onClose: () => void }) {
+function InternApplyModal({ pos, onClose }: { pos: InternPosition; onClose: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -237,7 +303,7 @@ function InternApplyModal({ pos, onClose }: { pos: typeof internPositions[0]; on
 }
 
 // ─── JOB CARD ────────────────────────────────────────────────────────────────
-function JobCard({ job }: { job: typeof jobs[0] }) {
+function JobCard({ job }: { job: JobPost }) {
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
 
@@ -384,7 +450,7 @@ function JobCard({ job }: { job: typeof jobs[0] }) {
 }
 
 // ─── INTERN CARD ─────────────────────────────────────────────────────────────
-function InternCard({ pos }: { pos: typeof internPositions[0] }) {
+function InternCard({ pos }: { pos: InternPosition }) {
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
   const Icon = pos.icon;
@@ -422,7 +488,7 @@ function InternCard({ pos }: { pos: typeof internPositions[0] }) {
                     <Clock size={11} className="text-[#f4aa1f]" /> {pos.duration}
                   </span>
                   <span className="flex items-center gap-1.5 text-[#002d17]/50 text-xs font-bold uppercase tracking-wider">
-                    <MapPin size={11} className="text-[#f4aa1f]" /> TP.HCM / Bình Dương
+                    <MapPin size={11} className="text-[#f4aa1f]" /> {pos.location}
                   </span>
                 </div>
                 <p className="text-[#002d17]/60 text-sm leading-relaxed font-medium">
@@ -495,46 +561,120 @@ function InternCard({ pos }: { pos: typeof internPositions[0] }) {
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export function Jobs() {
-  const [activeDept, setActiveDept] = useState("Tất Cả");
+  const [activeDept, setActiveDept] = useState(allDepartmentsLabel);
+  const [cmsPage, setCmsPage] = useState<JobsCmsData | null>(null);
+  const [cmsJobs, setCmsJobs] = useState<JobPost[]>([]);
 
-  const filteredJobs = activeDept === "Tất Cả"
-    ? jobs
-    : jobs.filter((j) => j.department === activeDept);
+  useEffect(() => {
+    const controller = new AbortController();
+
+    Promise.all([
+      fetchCmsPage<JobsCmsData>("nghe-nghiep", controller.signal),
+      fetchCmsJobs(controller.signal),
+    ]).then(([page, jobPosts]) => {
+      setCmsPage(page);
+      setCmsJobs(jobPosts);
+    });
+
+    return () => controller.abort();
+  }, []);
+
+  const jobItems = useMemo<JobPost[]>(() => (
+    cmsJobs.length ? cmsJobs : (fallbackJobs as JobPost[])
+  ), [cmsJobs]);
+
+  const recruitmentJobs = useMemo(() => (
+    cmsJobs.length ? jobItems.filter((job) => !isInternshipJob(job)) : jobItems
+  ), [cmsJobs.length, jobItems]);
+
+  const internshipJobs = useMemo(() => (
+    cmsJobs.length ? jobItems.filter(isInternshipJob) : []
+  ), [cmsJobs.length, jobItems]);
+
+  const departments = useMemo(() => {
+    const items = Array.from(new Set(recruitmentJobs.map((job) => job.department).filter(Boolean)));
+    return [allDepartmentsLabel, ...items];
+  }, [recruitmentJobs]);
+
+  const perks = useMemo<PerkItem[]>(() => {
+    if (!cmsPage?.perks?.length) {
+      return fallbackPerks;
+    }
+
+    return cmsPage.perks.map((perk) => ({
+      icon: perkIconMap[perk.icon || "TrendingUp"] || TrendingUp,
+      iconImage: perk.iconImage || "",
+      title: perk.title || "",
+      desc: perk.desc || "",
+    }));
+  }, [cmsPage]);
+
+  const internPositions = useMemo<InternPosition[]>(() => {
+    if (internshipJobs.length) {
+      return internshipJobs.map(internPositionFromJob);
+    }
+
+    if (!cmsJobs.length) {
+      return fallbackInternPositions;
+    }
+
+    return [];
+  }, [cmsJobs.length, internshipJobs]);
+
+  const filteredJobs = activeDept === allDepartmentsLabel
+    ? recruitmentJobs
+    : recruitmentJobs.filter((j) => j.department === activeDept);
+
+  const colors = cmsPage?.colors;
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Tuyển Dụng";
+  const heroTitle = cmsPage?.hero?.title || "Gia Nhập\nĐội Ngũ Tona";
+  const heroDescription = cmsPage?.hero?.description || "Môi trường làm việc chuyên nghiệp, dự án đỉnh cao, cơ hội thăng tiến rõ ràng - Tona đang tìm kiếm những tài năng cùng chúng tôi kiến tạo công trình thế kỷ.";
+  const heroDecorativeText = cmsPage?.hero?.decorativeText || "JOIN";
+  const perksEyebrow = cmsPage?.perksEyebrow || "Tại Sao Chọn Tona?";
+  const jobsTitle = cmsPage?.jobsTitle || "Vị Trí Đang Tuyển";
+  const emptyJobsText = cmsPage?.emptyJobsText || "Không có vị trí nào trong bộ phận này.";
+  const spontaneous = cmsPage?.spontaneous;
+  const interns = cmsPage?.interns;
+  const cultureTeaser = cmsPage?.cultureTeaser;
 
   return (
     <div className="w-full bg-white min-h-screen">
       {/* HERO */}
-      <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden">
+      <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
             <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
-            <span className="text-[#f4aa1f]">Tuyển Dụng</span>
+            <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
           <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
-            Gia Nhập<br />Đội Ngũ Tona
+            {renderLines(heroTitle)}
           </h1>
           <p className="text-white/50 text-base font-medium max-w-xl">
-            Môi trường làm việc chuyên nghiệp, dự án đỉnh cao, cơ hội thăng tiến rõ ràng — Tona đang tìm kiếm những tài năng cùng chúng tôi kiến tạo công trình thế kỷ.
+            {heroDescription}
           </p>
         </div>
         <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-extrabold text-white/5 uppercase leading-none select-none">
-          JOIN
+          {heroDecorativeText}
         </div>
       </div>
 
       {/* WHY TONA */}
-      <div className="bg-[#f9f9f7] border-b border-[#002d17]/10">
+      <div className="bg-[#f9f9f7] border-b border-[#002d17]/10" style={backgroundStyle(colors?.perksBackground)}>
         <div className="max-w-7xl mx-auto px-6 py-14">
-          <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">Tại Sao Chọn Tona?</p>
+          <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">{perksEyebrow}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {perks.map((perk, idx) => {
               const Icon = perk.icon;
               return (
                 <div key={idx} className="flex flex-col gap-3 group bg-white rounded-2xl p-6 border border-[#002d17]/8">
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center rounded-xl">
-                    <Icon size={20} className="text-[#f4aa1f]" />
+                    {perk.iconImage ? (
+                      <img src={perk.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden />
+                    ) : (
+                      <Icon size={20} className="text-[#f4aa1f]" />
+                    )}
                   </div>
                   <h3 className="font-extrabold text-[#002d17] uppercase text-sm tracking-tight">{perk.title}</h3>
                   <p className="text-[#002d17]/55 text-sm leading-relaxed font-medium">{perk.desc}</p>
@@ -552,7 +692,7 @@ export function Jobs() {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h2 className="text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Vị Trí Đang Tuyển ({filteredJobs.length})
+              {jobsTitle} ({filteredJobs.length})
             </h2>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -586,7 +726,7 @@ export function Jobs() {
           {filteredJobs.length === 0 && (
             <div className="py-20 text-center">
               <p className="text-[#002d17]/40 font-bold uppercase tracking-widest text-sm">
-                Không có vị trí nào trong bộ phận này.
+                {emptyJobsText}
               </p>
             </div>
           )}
@@ -595,23 +735,23 @@ export function Jobs() {
         {/* Spontaneous */}
         <div className="mt-12 bg-[#f9f9f7] border border-[#002d17]/10 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 rounded-2xl">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">Không thấy vị trí phù hợp?</p>
-            <h4 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">Ứng Tuyển Tự Do</h4>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{spontaneous?.eyebrow || "Không thấy vị trí phù hợp?"}</p>
+            <h4 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">{spontaneous?.title || "Ứng Tuyển Tự Do"}</h4>
             <p className="text-[#002d17]/55 text-sm mt-2 font-medium max-w-md">
-              Gửi hồ sơ của bạn cho chúng tôi — chúng tôi luôn tìm kiếm tài năng phù hợp với văn hóa Tona.
+              {spontaneous?.description || "Gửi hồ sơ của bạn cho chúng tôi - chúng tôi luôn tìm kiếm tài năng phù hợp với văn hóa Tona."}
             </p>
           </div>
           <a
-            href="mailto:hr@tonacorp.vn"
+            href={spontaneous?.linkUrl || "mailto:hr@tonacorp.vn"}
             className="shrink-0 flex items-center gap-2 bg-[#002d17] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg"
           >
-            Gửi CV <ArrowRight size={14} />
+            {spontaneous?.linkLabel || "Gửi CV"} <ArrowRight size={14} />
           </a>
         </div>
       </div>
 
       {/* ─── INTERN SECTION ──────────────────────────────────────────────────── */}
-      <div className="bg-[#f0faf6] border-y border-[#46aa85]/20 py-16">
+      <div className="bg-[#f0faf6] border-y border-[#46aa85]/20 py-16" style={backgroundStyle(colors?.internsBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -620,32 +760,31 @@ export function Jobs() {
                 <div className="w-10 h-10 rounded-xl bg-[#46aa85] flex items-center justify-center">
                   <GraduationCap size={20} className="text-white" />
                 </div>
-                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">Chương Trình Thực Tập</span>
+                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.eyebrow || "Chương Trình Thực Tập"}</span>
               </div>
               <div className="w-12 h-0.5 bg-[#46aa85] mb-4" />
               <h2 className="text-3xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight">
-                Sinh Viên Thực Tập<br />
-                <span className="text-[#46aa85]">Tona Internship Program</span>
+                {renderLines(interns?.title || "Sinh Viên Thực Tập\nTona Internship Program")}
               </h2>
               <p className="text-[#002d17]/60 text-sm font-medium mt-3 max-w-lg leading-relaxed">
-                Tona Corporation chào đón sinh viên năm 3 — 4 các ngành kỹ thuật tham gia chương trình thực tập thực tế tại công trường và văn phòng — nền tảng cho sự nghiệp xây dựng vững chắc.
+                {interns?.description || "Tona Corporation chào đón sinh viên năm 3 - 4 các ngành kỹ thuật tham gia chương trình thực tập thực tế tại công trường và văn phòng."}
               </p>
             </div>
             <div className="shrink-0 bg-white rounded-2xl px-6 py-5 border border-[#46aa85]/20 flex flex-col gap-3 min-w-[200px]">
-              <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">Tuyển dụng 2025 — 2026</p>
+              <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.seasonLabel || "Tuyển dụng 2025 - 2026"}</p>
               <div className="flex gap-4">
                 <div className="flex flex-col">
-                  <span className="text-[#002d17] font-extrabold text-2xl">12</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">chỉ tiêu</span>
+                  <span className="text-[#002d17] font-extrabold text-2xl">{interns?.slotsValue || "12"}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.slotsLabel || "chỉ tiêu"}</span>
                 </div>
                 <div className="w-px bg-[#002d17]/10" />
                 <div className="flex flex-col">
-                  <span className="text-[#002d17] font-extrabold text-2xl">3</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">chuyên ngành</span>
+                  <span className="text-[#002d17] font-extrabold text-2xl">{interns?.majorsValue || "3"}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || "chuyên ngành"}</span>
                 </div>
               </div>
               <div className="text-[#002d17]/50 text-xs font-medium leading-relaxed">
-                Nhận hồ sơ liên tục. Phỏng vấn rolling.
+                {interns?.note || "Nhận hồ sơ liên tục. Phỏng vấn rolling."}
               </div>
             </div>
           </div>
@@ -672,37 +811,37 @@ export function Jobs() {
                 <BookOpen size={18} className="text-[#46aa85]" />
               </div>
               <div>
-                <p className="font-extrabold text-[#002d17] text-sm uppercase tracking-tight">Ký Kết Hợp Tác Với Trường Đại Học</p>
+                <p className="font-extrabold text-[#002d17] text-sm uppercase tracking-tight">{interns?.ctaTitle || "Ký Kết Hợp Tác Với Trường Đại Học"}</p>
                 <p className="text-[#002d17]/55 text-sm font-medium mt-1 max-w-md">
-                  Tona Corporation hợp tác với ĐH Bách Khoa TP.HCM, ĐH Xây dựng Hà Nội và nhiều trường kỹ thuật. Sinh viên có thể đăng ký qua Phòng Quan hệ Doanh nghiệp của trường hoặc liên hệ trực tiếp Tona.
+                  {interns?.ctaDescription || "Tona Corporation hợp tác với nhiều trường kỹ thuật. Sinh viên có thể đăng ký qua Phòng Quan hệ Doanh nghiệp của trường hoặc liên hệ trực tiếp Tona."}
                 </p>
               </div>
             </div>
             <a
-              href="mailto:internship@tonacorp.vn"
+              href={interns?.ctaLinkUrl || "mailto:internship@tonacorp.vn"}
               className="shrink-0 flex items-center gap-2 bg-[#46aa85] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] transition-colors rounded-lg"
             >
-              Email Thực Tập <ArrowRight size={14} />
+              {interns?.ctaLinkLabel || "Email Thực Tập"} <ArrowRight size={14} />
             </a>
           </div>
         </div>
       </div>
 
       {/* CULTURE TEASER */}
-      <div className="bg-[#002d17] py-14">
+      <div className="bg-[#002d17] py-14" style={backgroundStyle(colors?.cultureBackground)}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h3 className="text-2xl font-extrabold text-white uppercase tracking-tight">
-              Trải Nghiệm Văn Hóa Tona
+              {cultureTeaser?.title || "Trải Nghiệm Văn Hóa Tona"}
             </h3>
-            <p className="text-white/50 mt-2 text-sm">Khám phá những gì làm nên sự khác biệt khi làm việc tại Tona.</p>
+            <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || "Khám phá những gì làm nên sự khác biệt khi làm việc tại Tona."}</p>
           </div>
           <Link
-            to="/vi/cuoc-song-tona"
+            to={cultureTeaser?.linkUrl || "/vi/cuoc-song-tona"}
             className="shrink-0 flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
           >
-            Cuộc Sống Tona <ArrowRight size={14} />
+            {cultureTeaser?.linkLabel || "Cuộc Sống Tona"} <ArrowRight size={14} />
           </Link>
         </div>
       </div>
