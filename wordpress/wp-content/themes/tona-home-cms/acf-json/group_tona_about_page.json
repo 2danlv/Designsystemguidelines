@@ -191,6 +191,17 @@
                     "parent_repeater": "field_tona_about_values"
                 },
                 {
+                    "key": "field_tona_about_value_icon_image",
+                    "label": "Custom Icon Image",
+                    "name": "icon_image",
+                    "type": "image",
+                    "instructions": "Optional. Upload an icon image to override the selected icon.",
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "parent_repeater": "field_tona_about_values"
+                },
+                {
                     "key": "field_tona_about_value_title",
                     "label": "Title",
                     "name": "title",

@@ -1,0 +1,714 @@
+{
+    "key": "group_tona_services_page",
+    "title": "Services Page Content",
+    "fields": [
+        {
+            "key": "field_tona_services_tab_hero",
+            "label": "01. Hero",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_services_breadcrumb_label",
+            "label": "Breadcrumb Label",
+            "name": "services_breadcrumb_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Small label in the hero breadcrumb.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Dich Vu",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_services_hero_background",
+            "label": "Hero Background Color",
+            "name": "services_hero_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default dark green background.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_services_hero_title",
+            "label": "Hero Title",
+            "name": "services_hero_title",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Use line breaks to match the large heading.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Giai Phap\nXay Dung Toan Dien",
+            "rows": 3,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_services_hero_description",
+            "label": "Hero Description",
+            "name": "services_hero_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Short paragraph below the hero title.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Tu tong thau EPC den cai tao khong dung san xuat, Tona Corporation cung cap giai phap xay dung dap ung moi yeu cau khat khe nhat cua cong nghiep hien dai.",
+            "rows": 4,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_services_tab_services",
+            "label": "02. Services",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_services_services_background",
+            "label": "Services Background Color",
+            "name": "services_services_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Background behind the featured service section.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#ffffff",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_services_items",
+            "label": "Service Cards",
+            "name": "services_items",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Add one service per card. Only one card can be marked as Featured for the large top layout.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "tona-acf-section",
+                "id": ""
+            },
+            "collapsed": "field_tona_services_item_title",
+            "min": 0,
+            "max": 0,
+            "layout": "block",
+            "button_label": "Add Service",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_services_item_icon",
+                    "label": "Fallback Icon",
+                    "name": "icon",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Used only when Icon Image is empty.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "Wrench": "Wrench",
+                        "PenTool": "Pen Tool",
+                        "Building2": "Building",
+                        "Zap": "Zap"
+                    },
+                    "default_value": "Wrench",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 1,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0,
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_icon_image",
+                    "label": "Icon Image",
+                    "name": "icon_image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Optional custom icon uploaded from WP.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_number",
+                    "label": "Number",
+                    "name": "number",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "01",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_featured",
+                    "label": "Featured Card",
+                    "name": "featured",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Only one service can be featured. Turning this on will make the other service cards normal.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui": 1,
+                    "ui_on_text": "Featured",
+                    "ui_off_text": "Normal",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_tag",
+                    "label": "Featured Badge",
+                    "name": "tag",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Yellow pill at the top-right of the featured card, for example: The Manh Hang Dau.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "The Manh Hang Dau",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_subtitle",
+                    "label": "Tag",
+                    "name": "subtitle",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Small orange label above the service title, for example: Renovation & Upgrade.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "Renovation & Upgrade",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_title",
+                    "label": "Title",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "rows": 2,
+                    "new_lines": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_description",
+                    "label": "Description",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "rows": 4,
+                    "new_lines": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_features",
+                    "label": "Features",
+                    "name": "features",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "One feature per line.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "rows": 5,
+                    "new_lines": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_image",
+                    "label": "Service Image",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Main image for this service card.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "medium",
+                    "library": "all",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_link_label",
+                    "label": "Button Label",
+                    "name": "link_label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Xem Du An",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_link_url",
+                    "label": "Button URL",
+                    "name": "link_url",
+                    "aria-label": "",
+                    "type": "page_link",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "post_type": "",
+                    "post_status": "",
+                    "taxonomy": "",
+                    "allow_archives": 1,
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_tona_services_items"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_services_tab_process",
+            "label": "03. Process",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_services_process_background",
+            "label": "Process Background Color",
+            "name": "services_process_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Background for the process band.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_services_process_title",
+            "label": "Process Title",
+            "name": "services_process_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Quy Trinh Trien Khai",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_services_process_steps",
+            "label": "Process Steps",
+            "name": "services_process_steps",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Cards in the dark process section.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "tona-acf-section",
+                "id": ""
+            },
+            "collapsed": "field_tona_services_process_step_title",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Add Step",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_services_process_step_number",
+                    "label": "Step",
+                    "name": "step",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "15",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "01",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_process_steps"
+                },
+                {
+                    "key": "field_tona_services_process_step_title",
+                    "label": "Title",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "35",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_process_steps"
+                },
+                {
+                    "key": "field_tona_services_process_step_description",
+                    "label": "Description",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "rows": 3,
+                    "new_lines": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_tona_services_process_steps"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_services_tab_cta",
+            "label": "04. CTA",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_services_cta_background",
+            "label": "CTA Background Color",
+            "name": "services_cta_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Background for the final CTA band.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f4aa1f",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_services_cta_title",
+            "label": "CTA Title",
+            "name": "services_cta_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "San sang bat dau du an?",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_services_cta_description",
+            "label": "CTA Description",
+            "name": "services_cta_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Lien he de duoc tu van mien phi ve giai phap phu hop.",
+            "rows": 3,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_services_cta_link_label",
+            "label": "CTA Button Label",
+            "name": "services_cta_link_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Lien He Tu Van",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_services_cta_link_url",
+            "label": "CTA Button URL",
+            "name": "services_cta_link_url",
+            "aria-label": "",
+            "type": "page_link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "",
+            "post_status": "",
+            "taxonomy": "",
+            "allow_archives": 1,
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_slug",
+                "operator": "==",
+                "value": "dich-vu"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1,
+    "modified": 1779124263
+}

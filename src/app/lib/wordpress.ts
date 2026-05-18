@@ -16,6 +16,7 @@ export type MembersCmsData = {
   valuesTitle?: string;
   values?: Array<{
     icon?: "Shield" | "Award" | "TrendingUp" | "Users";
+    iconImage?: string;
     title?: string;
     desc?: string;
   }>;
@@ -54,6 +55,7 @@ export type AboutCmsData = {
   valuesTitle?: string;
   values?: Array<{
     icon?: "Shield" | "Award" | "TrendingUp" | "CheckCircle2";
+    iconImage?: string;
     title?: string;
     desc?: string;
   }>;
@@ -76,6 +78,112 @@ export type AboutCmsData = {
     primaryUrl?: string;
     secondaryLabel?: string;
     secondaryUrl?: string;
+  };
+};
+
+export type CultureCmsData = {
+  colors?: {
+    heroBackground?: string;
+    statsBackground?: string;
+    themesBackground?: string;
+    activitiesBackground?: string;
+    academyBackground?: string;
+    galleryBackground?: string;
+    ctaBackground?: string;
+  };
+  hero?: {
+    breadcrumbLabel?: string;
+    title?: string;
+    description?: string;
+    decorativeText?: string;
+  };
+  stats?: Array<{
+    value?: string;
+    label?: string;
+  }>;
+  themesTitle?: string;
+  themesDescription?: string;
+  yearlyThemes?: Array<{
+    year?: string;
+    theme?: string;
+    color?: string;
+    description?: string;
+    milestones?: string[];
+    active?: boolean;
+  }>;
+  activitiesTitle?: string;
+  activities?: Array<{
+    icon?: "Heart" | "Users" | "Trophy" | "Zap";
+    iconImage?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    image?: string;
+    color?: string;
+  }>;
+  academy?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    image?: string;
+    linkLabel?: string;
+    linkUrl?: string;
+    stats?: Array<{
+      value?: string;
+      label?: string;
+    }>;
+  };
+  gallery?: {
+    title?: string;
+    photos?: string[];
+  };
+  cta?: {
+    title?: string;
+    description?: string;
+    linkLabel?: string;
+    linkUrl?: string;
+  };
+};
+
+export type ServicesCmsData = {
+  colors?: {
+    heroBackground?: string;
+    servicesBackground?: string;
+    processBackground?: string;
+    ctaBackground?: string;
+  };
+  hero?: {
+    breadcrumbLabel?: string;
+    title?: string;
+    description?: string;
+  };
+  services?: Array<{
+    icon?: "PenTool" | "Wrench" | "Building2" | "Zap";
+    iconImage?: string;
+    number?: string;
+    tag?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    features?: string[];
+    image?: string;
+    featured?: boolean;
+    linkLabel?: string;
+    linkUrl?: string;
+  }>;
+  process?: {
+    title?: string;
+    steps?: Array<{
+      step?: string;
+      title?: string;
+      description?: string;
+    }>;
+  };
+  cta?: {
+    title?: string;
+    description?: string;
+    linkLabel?: string;
+    linkUrl?: string;
   };
 };
 

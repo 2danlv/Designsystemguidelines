@@ -1,19 +1,51 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
-import { ChevronRight, Heart, Users, Trophy, Zap, ArrowRight } from "lucide-react";
+import { ChevronRight, Heart, Users, Trophy, Zap, ArrowRight, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import { fetchCmsPage, type CultureCmsData } from "../lib/wordpress";
 
-// ─── DATA ────────────────────────────────────────────────────────────────────
-const yearlyThemes = [
+type StatItem = {
+  value: string;
+  label: string;
+};
+
+type YearlyTheme = {
+  year: string;
+  theme: string;
+  color: string;
+  desc: string;
+  milestones: string[];
+  active: boolean;
+};
+
+type CultureActivity = {
+  title: string;
+  subtitle: string;
+  desc: string;
+  image: string;
+  icon: LucideIcon;
+  iconImage?: string;
+  color: string;
+};
+
+const iconMap: Record<string, LucideIcon> = {
+  Heart,
+  Users,
+  Trophy,
+  Zap,
+};
+
+const fallbackThemes: YearlyTheme[] = [
   {
     year: "2025",
     theme: "BEYOND LIMITS",
     color: "#f4aa1f",
-    desc: "Vượt qua giới hạn bản thân và tổ chức — chinh phục những dự án lớn hơn, phức tạp hơn, và tạo ra những chuẩn mực mới cho ngành xây dựng Việt Nam.",
+    desc: "Vuot qua gioi han ban than va to chuc, chinh phuc nhung du an lon hon, phuc tap hon, va tao ra nhung chuan muc moi cho nganh xay dung Viet Nam.",
     milestones: [
-      "Spartronics 2 — Nhà máy cleanroom ISO 6 lớn nhất",
-      "Ra mắt bộ phận Solar & Green Energy",
-      "Chứng nhận ISO 45001:2018 toàn hệ thống",
+      "Spartronics 2 - Nha may cleanroom ISO 6 lon nhat",
+      "Ra mat bo phan Solar va Green Energy",
+      "Chung nhan ISO 45001:2018 toan he thong",
     ],
     active: true,
   },
@@ -21,11 +53,11 @@ const yearlyThemes = [
     year: "2024",
     theme: "BUILD FORWARD",
     color: "#46aa85",
-    desc: "Tiến về phía trước — tập trung vào đổi mới quy trình, ứng dụng công nghệ BIM và mở rộng năng lực MEP trong lĩnh vực năng lượng sạch.",
+    desc: "Tien ve phia truoc, tap trung vao doi moi quy trinh, ung dung cong nghe BIM va mo rong nang luc MEP trong linh vuc nang luong sach.",
     milestones: [
-      "Hoàn thành Phoenix Contact 171 ngày zero downtime",
+      "Hoan thanh Phoenix Contact 171 ngay zero downtime",
       "15 MWp Solar Rooftop cho SV Group",
-      "Vào top 10 nhà thầu MEP uy tín miền Nam",
+      "Vao top 10 nha thau MEP uy tin mien Nam",
     ],
     active: false,
   },
@@ -33,29 +65,29 @@ const yearlyThemes = [
     year: "2023",
     theme: "TOGETHER WE RISE",
     color: "#002d17",
-    desc: "Cùng nhau vươn cao — phát triển văn hóa đội nhóm, nâng cao phúc lợi nhân viên và mở rộng mạng lưới đối tác chiến lược.",
+    desc: "Cung nhau vuon cao, phat trien van hoa doi nhom, nang cao phuc loi nhan vien va mo rong mang luoi doi tac chien luoc.",
     milestones: [
-      "Hoàn thành GO! Đồng Nai 46,100 m²",
-      "Ra mắt chương trình TONA Academy",
-      "Đội ngũ tăng từ 500 lên 800+ nhân sự",
+      "Hoan thanh GO! Dong Nai 46,100 m2",
+      "Ra mat chuong trinh TONA Academy",
+      "Doi ngu tang tu 500 len 800+ nhan su",
     ],
     active: false,
   },
 ];
 
-const cultureActivities = [
+const fallbackActivities: CultureActivity[] = [
   {
-    title: "Tiệc Tất Niên",
+    title: "Tiec Tat Nien",
     subtitle: "Year-End Gala",
-    desc: "Sự kiện hoành tráng cuối năm — vinh danh thành tích, tri ân nhân viên và kết nối cộng đồng Tona trong không khí ấm áp.",
+    desc: "Su kien cuoi nam vinh danh thanh tich, tri an nhan vien va ket noi cong dong Tona trong khong khi am ap.",
     image: "https://images.unsplash.com/photo-1768508948835-7dbab7ca6d58?w=800&q=80",
     icon: Trophy,
     color: "#f4aa1f",
   },
   {
-    title: "Ngày Hội Thể Thao",
+    title: "Ngay Hoi The Thao",
     subtitle: "Sports Day",
-    desc: "Giải thi đấu thể thao nội bộ hàng năm — nơi tinh thần đồng đội được rèn luyện và mỗi cá nhân tìm thấy năng lượng mới.",
+    desc: "Giai thi dau the thao noi bo hang nam, noi tinh than dong doi duoc ren luyen va moi ca nhan tim thay nang luong moi.",
     image: "https://images.unsplash.com/photo-1678893049430-d9087867e775?w=800&q=80",
     icon: Zap,
     color: "#46aa85",
@@ -63,22 +95,22 @@ const cultureActivities = [
   {
     title: "Team Building",
     subtitle: "Quarterly Retreat",
-    desc: "Chuyến du lịch và hoạt động gắn kết đội nhóm định kỳ — tạo dựng niềm tin và tình đồng nghiệp vượt ra ngoài công trường.",
+    desc: "Chuyen du lich va hoat dong gan ket doi nhom dinh ky, tao dung niem tin va tinh dong nghiep vuot ra ngoai cong truong.",
     image: "https://images.unsplash.com/photo-1774599661355-327e322f53c2?w=800&q=80",
     icon: Users,
     color: "#002d17",
   },
   {
-    title: "CSR & Thiện Nguyện",
+    title: "CSR va Thien Nguyen",
     subtitle: "Community Care",
-    desc: "Tona đồng hành cùng cộng đồng — từ xây dựng trường học vùng sâu đến hỗ trợ các gia đình khó khăn tại vùng dự án.",
+    desc: "Tona dong hanh cung cong dong, tu xay dung truong hoc vung sau den ho tro cac gia dinh kho khan tai vung du an.",
     image: "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=800&q=80",
     icon: Heart,
     color: "#f4aa1f",
   },
 ];
 
-const galleryPhotos = [
+const fallbackGallery = [
   "https://images.unsplash.com/photo-1768508948835-7dbab7ca6d58?w=800&q=80",
   "https://images.unsplash.com/photo-1678893049430-d9087867e775?w=800&q=80",
   "https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80",
@@ -87,72 +119,174 @@ const galleryPhotos = [
   "https://images.unsplash.com/photo-1758691737605-69a0e78bd193?w=800&q=80",
 ];
 
-const toneOfVoice = [
-  { stat: "800+", label: "Nhân Sự" },
-  { stat: "15+", label: "Năm Kinh Nghiệm" },
-  { stat: "100%", label: "Đóng Bảo Hiểm" },
-  { stat: "4.8/5", label: "Đánh Giá Nội Bộ" },
+const fallbackStats: StatItem[] = [
+  { value: "800+", label: "Nhan Su" },
+  { value: "15+", label: "Nam Kinh Nghiem" },
+  { value: "100%", label: "Dong Bao Hiem" },
+  { value: "4.8/5", label: "Danh Gia Noi Bo" },
 ];
 
-// ─── COMPONENT ────────────────────────────────────────────────────────────────
+const fallbackAcademyStats: StatItem[] = [
+  { value: "200+", label: "Hoc vien/nam" },
+  { value: "50+", label: "Chuong trinh" },
+  { value: "15", label: "Doi tac dao tao" },
+  { value: "98%", label: "Hai long" },
+];
+
+function backgroundStyle(color?: string) {
+  return color ? { backgroundColor: color } : undefined;
+}
+
+function renderLines(text: string) {
+  return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
+    <span key={`${line}-${index}`}>
+      {line}
+      {index < lines.length - 1 && <br />}
+    </span>
+  ));
+}
+
 export function Culture() {
+  const [cmsPage, setCmsPage] = useState<CultureCmsData | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetchCmsPage<CultureCmsData>("cuoc-song-tona", controller.signal).then(setCmsPage);
+
+    return () => controller.abort();
+  }, []);
+
+  const stats = useMemo<StatItem[]>(() => {
+    if (!cmsPage?.stats?.length) {
+      return fallbackStats;
+    }
+
+    return cmsPage.stats.map((item) => ({
+      value: item.value || "",
+      label: item.label || "",
+    }));
+  }, [cmsPage]);
+
+  const yearlyThemes = useMemo<YearlyTheme[]>(() => {
+    if (!cmsPage?.yearlyThemes?.length) {
+      return fallbackThemes;
+    }
+
+    return cmsPage.yearlyThemes.map((item) => ({
+      year: item.year || "",
+      theme: item.theme || "",
+      color: item.color || "#f4aa1f",
+      desc: item.description || "",
+      milestones: item.milestones?.length ? item.milestones : [],
+      active: Boolean(item.active),
+    }));
+  }, [cmsPage]);
+
+  const activities = useMemo<CultureActivity[]>(() => {
+    if (!cmsPage?.activities?.length) {
+      return fallbackActivities;
+    }
+
+    return cmsPage.activities.map((item) => ({
+      title: item.title || "",
+      subtitle: item.subtitle || "",
+      desc: item.description || "",
+      image: item.image || "",
+      icon: iconMap[item.icon || "Heart"] || Heart,
+      iconImage: item.iconImage || "",
+      color: item.color || "#f4aa1f",
+    }));
+  }, [cmsPage]);
+
+  const academyStats = useMemo<StatItem[]>(() => {
+    if (!cmsPage?.academy?.stats?.length) {
+      return fallbackAcademyStats;
+    }
+
+    return cmsPage.academy.stats.map((item) => ({
+      value: item.value || "",
+      label: item.label || "",
+    }));
+  }, [cmsPage]);
+
+  const galleryPhotos = cmsPage?.gallery?.photos?.length ? cmsPage.gallery.photos : fallbackGallery;
+  const colors = cmsPage?.colors;
+  const heroTitle = cmsPage?.hero?.title || "Tona -\nHon Ca\nMot Noi Lam Viec";
+  const heroDescription = cmsPage?.hero?.description || "Tai Tona, moi thanh vien duoc ton trong, gan ket va cung nhau phat trien qua nhung hoat dong van hoa noi bo soi noi va y nghia.";
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Cuoc Song Tona";
+  const decorativeText = cmsPage?.hero?.decorativeText || "TONA";
+  const themesTitle = cmsPage?.themesTitle || "Chu De Nam";
+  const themesDescription = cmsPage?.themesDescription || "Moi nam Tona lua chon mot chu de chien luoc, dinh huong tinh than va hanh dong cho toan bo to chuc.";
+  const activitiesTitle = cmsPage?.activitiesTitle || "Hoat Dong Van Hoa";
+  const academyEyebrow = cmsPage?.academy?.eyebrow || "Phat Trien Con Nguoi";
+  const academyTitle = cmsPage?.academy?.title || "TONA Academy -\nHoc De Vuon Xa";
+  const academyDescription = cmsPage?.academy?.description || "TONA Academy la chuong trinh dao tao noi bo toan dien, tu ky nang ky thuat chuyen sau den nang luc lanh dao va quan ly du an.";
+  const academyImage = cmsPage?.academy?.image || "https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80";
+  const academyLinkLabel = cmsPage?.academy?.linkLabel || "Gia Nhap Tona";
+  const academyLinkUrl = cmsPage?.academy?.linkUrl || "/vi/nghe-nghiep";
+  const galleryTitle = cmsPage?.gallery?.title || "Khoanh Khac Tona";
+  const ctaTitle = cmsPage?.cta?.title || "Muon tro thanh mot phan cua Tona?";
+  const ctaDescription = cmsPage?.cta?.description || "Chung toi luon tim kiem nhung tai nang chia se cung gia tri va dam me.";
+  const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Xem Co Hoi Nghe Nghiep";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/vi/nghe-nghiep";
+
   return (
     <div className="w-full bg-white min-h-screen">
       {/* HERO */}
-      <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden">
+      <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
             <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
-            <span className="text-[#f4aa1f]">Cuộc Sống Tona</span>
+            <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
           <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
-            Tona —<br />Hơn Cả<br />Một Nơi Làm Việc
+            {renderLines(heroTitle)}
           </h1>
           <p className="text-white/50 text-base font-medium max-w-xl mt-4">
-            Tại Tona, mỗi thành viên được tôn trọng, gắn kết và cùng nhau phát triển qua những hoạt động văn hóa nội bộ sôi nổi và ý nghĩa.
+            {heroDescription}
           </p>
         </div>
-        {/* Large decorative text */}
         <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[200px] font-extrabold text-white/5 uppercase leading-none select-none pointer-events-none">
-          TONA
+          {decorativeText}
         </div>
       </div>
 
       {/* PEOPLE STATS */}
-      <div className="bg-[#f4aa1f]">
+      <div className="bg-[#f4aa1f]" style={backgroundStyle(colors?.statsBackground)}>
         <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-[#002d17]/20">
-          {toneOfVoice.map((t) => (
-            <div key={t.label} className="flex flex-col items-center py-2">
-              <span className="font-extrabold text-[#002d17] text-3xl tracking-tight">{t.stat}</span>
-              <span className="text-[#002d17]/70 font-bold text-xs uppercase tracking-widest mt-1">{t.label}</span>
+          {stats.map((item) => (
+            <div key={item.label} className="flex flex-col items-center py-2">
+              <span className="font-extrabold text-[#002d17] text-3xl tracking-tight">{item.value}</span>
+              <span className="text-[#002d17]/70 font-bold text-xs uppercase tracking-widest mt-1">{item.label}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* YEARLY THEME SECTION */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="py-20 md:py-28 bg-white" style={backgroundStyle(colors?.themesBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Chủ Đề Năm
+              {themesTitle}
             </h2>
             <p className="text-[#002d17]/50 mt-3 text-sm font-medium">
-              Mỗi năm Tona lựa chọn một chủ đề chiến lược — định hướng tinh thần và hành động cho toàn bộ tổ chức.
+              {themesDescription}
             </p>
           </div>
 
           <div className="flex flex-col gap-4">
-            {yearlyThemes.map((theme, idx) => (
+            {yearlyThemes.map((theme, index) => (
               <motion.div
-                key={theme.year}
+                key={`${theme.year}-${index}`}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
+                transition={{ delay: index * 0.1 }}
                 className={`group relative overflow-hidden transition-all duration-300 ${
                   theme.active
                     ? "bg-[#002d17] cursor-default"
@@ -160,52 +294,35 @@ export function Culture() {
                 }`}
               >
                 <div className="flex flex-col md:flex-row md:items-start gap-6 p-8 md:p-10">
-                  {/* Year */}
                   <div className="shrink-0">
-                    <div
-                      className="w-16 h-1 mb-3"
-                      style={{ backgroundColor: theme.color }}
-                    />
-                    <span
-                      className={`font-extrabold text-4xl tracking-tight ${theme.active ? "text-white" : "text-[#002d17]/30"}`}
-                    >
+                    <div className="w-16 h-1 mb-3" style={{ backgroundColor: theme.color }} />
+                    <span className={`font-extrabold text-4xl tracking-tight ${theme.active ? "text-white" : "text-[#002d17]/30"}`}>
                       {theme.year}
                     </span>
                     {theme.active && (
                       <div className="mt-2 bg-[#f4aa1f] text-[#002d17] text-xs font-bold uppercase tracking-widest px-2 py-0.5 w-fit">
-                        Hiện Tại
+                        Hien Tai
                       </div>
                     )}
                   </div>
 
-                  {/* Theme name */}
                   <div className="flex-1">
-                    <h3
-                      className={`font-extrabold text-3xl md:text-4xl uppercase tracking-tight mb-4 ${
-                        theme.active ? "text-[#f4aa1f]" : "text-[#002d17]"
-                      }`}
-                    >
+                    <h3 className={`font-extrabold text-3xl md:text-4xl uppercase tracking-tight mb-4 ${theme.active ? "text-[#f4aa1f]" : "text-[#002d17]"}`}>
                       {theme.theme}
                     </h3>
-                    <p className={`text-sm leading-relaxed font-medium mb-6 max-w-xl ${
-                      theme.active ? "text-white/70" : "text-[#002d17]/60"
-                    }`}>
+                    <p className={`text-sm leading-relaxed font-medium mb-6 max-w-xl ${theme.active ? "text-white/70" : "text-[#002d17]/60"}`}>
                       {theme.desc}
                     </p>
-                    {/* Milestones */}
                     <ul className="flex flex-col gap-2">
-                      {theme.milestones.map((m, i) => (
-                        <li key={i} className={`flex items-start gap-3 text-sm font-medium ${
-                          theme.active ? "text-white/60" : "text-[#002d17]/50"
-                        }`}>
+                      {theme.milestones.map((milestone, milestoneIndex) => (
+                        <li key={milestoneIndex} className={`flex items-start gap-3 text-sm font-medium ${theme.active ? "text-white/60" : "text-[#002d17]/50"}`}>
                           <span className="w-1.5 h-1.5 rounded-full bg-[#f4aa1f] mt-1.5 shrink-0" />
-                          {m}
+                          {milestone}
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
-                {/* Decorative year bg */}
                 <div className={`absolute right-6 md:right-10 top-1/2 -translate-y-1/2 text-[80px] md:text-[120px] font-extrabold uppercase leading-none select-none pointer-events-none ${
                   theme.active ? "text-white/5" : "text-[#002d17]/5"
                 }`}>
@@ -218,42 +335,46 @@ export function Culture() {
       </section>
 
       {/* CULTURE ACTIVITIES */}
-      <section className="py-20 bg-[#f9f9f7]">
+      <section className="py-20 bg-[#f9f9f7]" style={backgroundStyle(colors?.activitiesBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Hoạt Động Văn Hóa
+              {activitiesTitle}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {cultureActivities.map((act, idx) => {
-              const Icon = act.icon;
+            {activities.map((activity, index) => {
+              const Icon = activity.icon;
               return (
                 <motion.div
-                  key={idx}
+                  key={`${activity.title}-${index}`}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
+                  transition={{ delay: index * 0.1 }}
                   className="group flex flex-col overflow-hidden rounded-2xl border border-[#002d17]/8"
                 >
                   <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#bcd8cb] rounded-xl">
                     <img
-                      src={act.image}
-                      alt={act.title}
+                      src={activity.image}
+                      alt={activity.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
                     <div className="absolute inset-0 bg-[#002d17]/30 group-hover:bg-[#002d17]/10 transition-colors" />
                     <div className="absolute top-4 left-4 flex items-center gap-2 bg-[#002d17]/70 px-3 py-2 rounded-xl">
-                      <Icon size={16} className="text-[#f4aa1f]" />
-                      <span className="text-white font-bold text-xs uppercase tracking-widest">{act.subtitle}</span>
+                      {activity.iconImage ? (
+                        <img src={activity.iconImage} alt="" className="w-4 h-4 object-contain" aria-hidden />
+                      ) : (
+                        <Icon size={16} className="text-[#f4aa1f]" />
+                      )}
+                      <span className="text-white font-bold text-xs uppercase tracking-widest">{activity.subtitle}</span>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 pt-5 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors bg-white px-4">
-                    <h3 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">{act.title}</h3>
-                    <p className="text-[#002d17]/60 text-sm leading-relaxed">{act.desc}</p>
+                    <h3 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">{activity.title}</h3>
+                    <p className="text-[#002d17]/60 text-sm leading-relaxed">{activity.desc}</p>
                   </div>
                 </motion.div>
               );
@@ -263,73 +384,57 @@ export function Culture() {
       </section>
 
       {/* TONA ACADEMY */}
-      <section className="py-20 bg-[#002d17]">
+      <section className="py-20 bg-[#002d17]" style={backgroundStyle(colors?.academyBackground)}>
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4 block">Phát Triển Con Người</span>
+            <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4 block">{academyEyebrow}</span>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight mb-6">
-              TONA Academy —<br />Học Để Vươn Xa
+              {renderLines(academyTitle)}
             </h2>
             <p className="text-white/60 text-base leading-relaxed font-medium mb-8">
-              TONA Academy là chương trình đào tạo nội bộ toàn diện — từ kỹ năng kỹ thuật chuyên sâu đến năng lực lãnh đạo và quản lý dự án. Mỗi năm, 200+ nhân sự được đào tạo và nâng cấp năng lực.
+              {academyDescription}
             </p>
             <div className="grid grid-cols-2 gap-4 mb-8">
-              {[
-                { val: "200+", label: "Học viên/năm" },
-                { val: "50+", label: "Chương trình" },
-                { val: "15", label: "Đối tác đào tạo" },
-                { val: "98%", label: "Hài lòng" },
-              ].map((s) => (
-                <div key={s.label} className="border border-white/10 p-4">
-                  <span className="font-extrabold text-[#f4aa1f] text-2xl">{s.val}</span>
-                  <p className="text-white/50 text-xs uppercase tracking-widest font-bold mt-1">{s.label}</p>
+              {academyStats.map((item) => (
+                <div key={item.label} className="border border-white/10 p-4">
+                  <span className="font-extrabold text-[#f4aa1f] text-2xl">{item.value}</span>
+                  <p className="text-white/50 text-xs uppercase tracking-widest font-bold mt-1">{item.label}</p>
                 </div>
               ))}
             </div>
-            <Link
-              to="/vi/nghe-nghiep"
-              className="inline-flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
-            >
-              Gia Nhập Tona <ArrowRight size={14} />
+            <Link to={academyLinkUrl} className="inline-flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors">
+              {academyLinkLabel} <ArrowRight size={14} />
             </Link>
           </div>
 
           <div>
-            <img
-              src="https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80"
-              alt="Tona Academy"
-              className="w-full aspect-[4/3] object-cover"
-            />
+            <img src={academyImage} alt="Tona Academy" className="w-full aspect-[4/3] object-cover" />
           </div>
         </div>
       </section>
 
       {/* PHOTO GALLERY */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" style={backgroundStyle(colors?.galleryBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Khoảnh Khắc Tona
+              {galleryTitle}
             </h2>
           </div>
           <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 650: 2, 900: 3 }}>
             <Masonry gutter="12px">
-              {galleryPhotos.map((src, i) => (
+              {galleryPhotos.map((src, index) => (
                 <motion.div
-                  key={i}
+                  key={`${src}-${index}`}
                   initial={{ opacity: 0, scale: 0.97 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
+                  transition={{ delay: index * 0.08 }}
                   className="overflow-hidden group cursor-pointer"
                 >
-                  <img
-                    src={src}
-                    alt="Tona Culture"
-                    className="w-full h-auto block group-hover:scale-105 transition-transform duration-500 ease-out"
-                  />
+                  <img src={src} alt="Tona Culture" className="w-full h-auto block group-hover:scale-105 transition-transform duration-500 ease-out" />
                 </motion.div>
               ))}
             </Masonry>
@@ -338,21 +443,18 @@ export function Culture() {
       </section>
 
       {/* BOTTOM CTA */}
-      <div className="bg-[#f4aa1f] py-14">
+      <div className="bg-[#f4aa1f] py-14" style={backgroundStyle(colors?.ctaBackground)}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Muốn trở thành một phần của Tona?
+              {ctaTitle}
             </h3>
             <p className="text-[#002d17]/60 mt-2 text-sm font-medium">
-              Chúng tôi luôn tìm kiếm những tài năng chia sẻ cùng giá trị và đam mê.
+              {ctaDescription}
             </p>
           </div>
-          <Link
-            to="/vi/nghe-nghiep"
-            className="shrink-0 bg-[#002d17] text-white px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg"
-          >
-            Xem Cơ Hội Nghề Nghiệp
+          <Link to={ctaLinkUrl} className="shrink-0 bg-[#002d17] text-white px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg">
+            {ctaLinkLabel}
           </Link>
         </div>
       </div>

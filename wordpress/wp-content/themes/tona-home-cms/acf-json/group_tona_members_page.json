@@ -361,6 +361,32 @@
                     "parent_repeater": "field_tona_members_values"
                 },
                 {
+                    "key": "field_tona_members_value_icon_image",
+                    "label": "Custom Icon Image",
+                    "name": "icon_image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Optional. Upload an icon image to override the selected icon.",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": "",
+                    "parent_repeater": "field_tona_members_values"
+                },
+                {
                     "key": "field_tona_members_value_title",
                     "label": "Title",
                     "name": "title",

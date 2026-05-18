@@ -17,6 +17,7 @@ type LeadershipMember = (typeof leadership)[number];
 
 type CoreValue = {
   icon: LucideIcon;
+  iconImage?: string;
   title: string;
   desc: string;
 };
@@ -69,6 +70,7 @@ export function Members() {
 
     return cmsPage.values.map((value) => ({
       icon: cmsIconMap[value.icon || "Shield"] || Shield,
+      iconImage: value.iconImage || "",
       title: value.title || "",
       desc: value.desc || "",
     }));
@@ -193,7 +195,11 @@ export function Members() {
                   className="bg-[#002d17] hover:bg-[#46aa85] transition-colors p-8 flex flex-col gap-4 group rounded-2xl"
                 >
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center group-hover:bg-[#f4aa1f] transition-colors">
-                    <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
+                    {val.iconImage ? (
+                      <img src={val.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden />
+                    ) : (
+                      <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
+                    )}
                   </div>
                   <h3 className="font-extrabold text-white text-base uppercase tracking-tight">{val.title}</h3>
                   <p className="text-white/50 text-sm leading-relaxed">{val.desc}</p>

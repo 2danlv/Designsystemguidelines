@@ -20,6 +20,7 @@ type StatItem = {
 
 type CoreValue = {
   icon: LucideIcon;
+  iconImage?: string;
   title: string;
   desc: string;
 };
@@ -114,6 +115,7 @@ export function About() {
 
     return cmsPage.values.map((value) => ({
       icon: cmsIconMap[value.icon || "Shield"] || Shield,
+      iconImage: value.iconImage || "",
       title: value.title || "",
       desc: value.desc || "",
     }));
@@ -248,7 +250,11 @@ export function About() {
                   className={`group p-8 hover:bg-[#f0faf6] transition-colors cursor-pointer ${index > 0 ? "border-l border-[#002d17]/10" : ""}`}
                 >
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center mb-5 group-hover:bg-[#f4aa1f] transition-colors">
-                    <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
+                    {value.iconImage ? (
+                      <img src={value.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden />
+                    ) : (
+                      <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
+                    )}
                   </div>
                   <h3 className="font-extrabold text-[#002d17] group-hover:text-[#46aa85] uppercase text-base tracking-tight mb-3 transition-colors">
                     {value.title}
