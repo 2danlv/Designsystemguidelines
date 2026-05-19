@@ -1,12 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, Link } from "react-router";
-import { projects } from "../data";
+import { projects as fallbackProjects } from "../data";
 import {
   ArrowLeft, ArrowRight, X, MapPin, Maximize2,
   Calendar, User, CheckCircle2, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
+import { fetchCmsProject, fetchCmsProjects, type ProjectPost } from "../lib/wordpress";
 
 // ─── LIGHTBOX ────────────────────────────────────────────────────────────────
 function Lightbox({
@@ -175,8 +176,31 @@ function ImageGallery({ images }: { images: string[] }) {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export function ProjectDetail() {
   const { slug } = useParams();
-  const project = projects.find((p) => p.slug === slug);
-  const relatedProjects = projects.filter((p) => p.slug !== slug).slice(0, 3);
+  const fallbackProject = fallbackProjects.find((p) => p.slug === slug) as ProjectPost | undefined;
+  const [cmsProject, setCmsProject] = useState<ProjectPost | null>(null);
+  const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
+
+  useEffect(() => {
+    if (!slug) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    Promise.all([
+      fetchCmsProject(slug, controller.signal),
+      fetchCmsProjects(controller.signal),
+    ]).then(([projectPost, projectPosts]) => {
+      setCmsProject(projectPost);
+      setCmsProjects(projectPosts);
+    });
+
+    return () => controller.abort();
+  }, [slug]);
+
+  const project = cmsProject || fallbackProject;
+  const relatedSource = cmsProjects.length ? cmsProjects : (fallbackProjects as ProjectPost[]);
+  const relatedProjects = relatedSource.filter((p) => p.slug !== slug).slice(0, 3);
 
   if (!project) {
     return (
@@ -223,7 +247,7 @@ export function ProjectDetail() {
             { label: "Khách Hàng", value: project.client, icon: User },
             { label: "Vị Trí", value: project.location, icon: MapPin },
             { label: "Diện Tích", value: project.area, icon: Maximize2 },
-            { label: "Thời Gian", value: project.duration || project.scale, icon: Calendar },
+            { label: "Thời Gian", value: project.duration, icon: Calendar },
             { label: "Trạng Thái", value: project.status, icon: CheckCircle2 },
           ].map((spec) => {
             const Icon = spec.icon;

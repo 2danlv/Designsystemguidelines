@@ -1,0 +1,260 @@
+{
+    "key": "group_tona_project_post",
+    "title": "Project Details",
+    "fields": [
+        {
+            "key": "field_tona_project_leed_gold",
+            "label": "LEED Gold",
+            "name": "project_leed_gold",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Show LEED Gold badge.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "15",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "Yes",
+            "ui_off_text": "No",
+            "ui": 1
+        },
+        {
+            "key": "field_tona_project_client",
+            "label": "Client",
+            "name": "project_client",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_project_location",
+            "label": "Location",
+            "name": "project_location",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_project_area",
+            "label": "Area",
+            "name": "project_area",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "25,000 m2",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_project_duration",
+            "label": "Duration",
+            "name": "project_duration",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "8 thang",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_project_status",
+            "label": "Status",
+            "name": "project_status",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Hoan thanh",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_project_year",
+            "label": "Year",
+            "name": "project_year",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": 2024,
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_project_renovation_items",
+            "label": "Construction Items",
+            "name": "project_renovation_items",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "One item per line.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 7,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_project_highlights",
+            "label": "Highlights",
+            "name": "project_highlights",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "One highlight per line.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 7,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_project_gallery",
+            "label": "Gallery Images",
+            "name": "project_gallery",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Images for the detail gallery and thumbnail strip.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "tona-acf-section",
+                "id": ""
+            },
+            "collapsed": "field_tona_project_gallery_image",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "Add Gallery Image",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_project_gallery_image",
+                    "label": "Image",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": "",
+                    "parent_repeater": "field_tona_project_gallery"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "tona_project"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1,
+    "modified": 1779129888
+}

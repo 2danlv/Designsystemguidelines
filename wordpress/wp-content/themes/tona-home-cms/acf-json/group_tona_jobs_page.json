@@ -1,840 +1,904 @@
 {
-    "key":  "group_tona_jobs_page",
-    "title":  "Jobs Page Content",
-    "fields":  [
-                   {
-                       "key":  "field_tona_jobs_tab_hero",
-                       "label":  "01. Hero",
-                       "name":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_jobs_breadcrumb_label",
-                       "label":  "Breadcrumb Label",
-                       "name":  "jobs_breadcrumb_label",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Tuyen Dung",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_hero_background",
-                       "label":  "Hero Background Color",
-                       "name":  "jobs_hero_background",
-                       "type":  "color_picker",
-                       "instructions":  "Leave empty to use the default dark green background.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#002d17",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_jobs_hero_title",
-                       "label":  "Hero Title",
-                       "name":  "jobs_hero_title",
-                       "type":  "textarea",
-                       "instructions":  "Use line breaks to match the large heading.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Gia Nhap\nDoi Ngu Tona",
-                       "rows":  3,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_hero_description",
-                       "label":  "Hero Description",
-                       "name":  "jobs_hero_description",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "",
-                       "rows":  4,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_hero_decorative_text",
-                       "label":  "Decorative Text",
-                       "name":  "jobs_hero_decorative_text",
-                       "type":  "text",
-                       "instructions":  "Large faded word on the right side.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "JOIN",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_tab_perks",
-                       "label":  "02. Why Tona",
-                       "name":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_jobs_perks_background",
-                       "label":  "Why Tona Background Color",
-                       "name":  "jobs_perks_background",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#f9f9f7",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_jobs_perks_eyebrow",
-                       "label":  "Section Label",
-                       "name":  "jobs_perks_eyebrow",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Tai Sao Chon Tona?",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_perks",
-                       "label":  "Benefit Cards",
-                       "name":  "jobs_perks",
-                       "type":  "repeater",
-                       "instructions":  "Cards in the Why Tona section.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "tona-acf-section",
-                                       "id":  ""
-                                   },
-                       "collapsed":  "field_tona_jobs_perk_title",
-                       "min":  0,
-                       "max":  0,
-                       "layout":  "block",
-                       "button_label":  "Add Benefit Card",
-                       "rows_per_page":  20,
-                       "sub_fields":  [
-                                          {
-                                              "key":  "field_tona_jobs_perk_icon",
-                                              "label":  "Fallback Icon",
-                                              "name":  "icon",
-                                              "type":  "select",
-                                              "instructions":  "Used when Icon Image is empty.",
-                                              "required":  0,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "25",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "choices":  {
-                                                              "TrendingUp":  "Trending Up",
-                                                              "Star":  "Star",
-                                                              "Users":  "Users",
-                                                              "CheckCircle2":  "Check Circle"
-                                                          },
-                                              "default_value":  "TrendingUp",
-                                              "return_format":  "value",
-                                              "multiple":  0,
-                                              "allow_null":  0,
-                                              "ui":  1,
-                                              "ajax":  0,
-                                              "placeholder":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_jobs_perk_icon_image",
-                                              "label":  "Icon Image",
-                                              "name":  "icon_image",
-                                              "type":  "image",
-                                              "instructions":  "Optional custom icon uploaded from WP.",
-                                              "required":  0,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "25",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "return_format":  "array",
-                                              "preview_size":  "thumbnail",
-                                              "library":  "all",
-                                              "min_width":  0,
-                                              "min_height":  0,
-                                              "min_size":  0,
-                                              "max_width":  0,
-                                              "max_height":  0,
-                                              "max_size":  0,
-                                              "mime_types":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_jobs_perk_title",
-                                              "label":  "Title",
-                                              "name":  "title",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  0,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "50",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_jobs_perk_description",
-                                              "label":  "Description",
-                                              "name":  "description",
-                                              "type":  "textarea",
-                                              "instructions":  "",
-                                              "required":  0,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "default_value":  "",
-                                              "rows":  3,
-                                              "new_lines":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  ""
-                                          }
-                                      ]
-                   },
-                   {
-                       "key":  "field_tona_jobs_tab_openings",
-                       "label":  "03. Job List",
-                       "name":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_jobs_list_title",
-                       "label":  "List Title",
-                       "name":  "jobs_list_title",
-                       "type":  "text",
-                       "instructions":  "Count will be added automatically on frontend.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Vi Tri Dang Tuyen",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_empty_text",
-                       "label":  "Empty Filter Text",
-                       "name":  "jobs_empty_text",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Khong co vi tri nao trong bo phan nay.",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_spontaneous_eyebrow",
-                       "label":  "Open Application Label",
-                       "name":  "jobs_spontaneous_eyebrow",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Khong thay vi tri phu hop?",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_spontaneous_title",
-                       "label":  "Open Application Title",
-                       "name":  "jobs_spontaneous_title",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Ung Tuyen Tu Do",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_spontaneous_description",
-                       "label":  "Open Application Description",
-                       "name":  "jobs_spontaneous_description",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "",
-                       "rows":  3,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_spontaneous_link_label",
-                       "label":  "Open Application Button Label",
-                       "name":  "jobs_spontaneous_link_label",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Gui CV",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_spontaneous_link_url",
-                       "label":  "Open Application Button URL",
-                       "name":  "jobs_spontaneous_link_url",
-                       "type":  "text",
-                       "instructions":  "Use mailto:hr@tonacorp.vn or a page URL.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "mailto:hr@tonacorp.vn",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_tab_interns",
-                       "label":  "04. Internship",
-                       "name":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_background",
-                       "label":  "Internship Background Color",
-                       "name":  "jobs_interns_background",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#f0faf6",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_eyebrow",
-                       "label":  "Section Label",
-                       "name":  "jobs_interns_eyebrow",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Chuong Trinh Thuc Tap",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_title",
-                       "label":  "Section Title",
-                       "name":  "jobs_interns_title",
-                       "type":  "textarea",
-                       "instructions":  "Use line breaks if needed.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Sinh Vien Thuc Tap\nTona Internship Program",
-                       "rows":  3,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_description",
-                       "label":  "Section Description",
-                       "name":  "jobs_interns_description",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "",
-                       "rows":  4,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_season_label",
-                       "label":  "Season Label",
-                       "name":  "jobs_interns_season_label",
-                       "type":  "text",
-                       "instructions":  "Text in the summary box on the right.",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Tuyen dung 2025 - 2026",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_slots_value",
-                       "label":  "Slots Value",
-                       "name":  "jobs_interns_slots_value",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "25",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "12",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_slots_label",
-                       "label":  "Slots Label",
-                       "name":  "jobs_interns_slots_label",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "25",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "chi tieu",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_majors_value",
-                       "label":  "Majors Value",
-                       "name":  "jobs_interns_majors_value",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "25",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "3",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_majors_label",
-                       "label":  "Majors Label",
-                       "name":  "jobs_interns_majors_label",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "25",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "chuyen nganh",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_note",
-                       "label":  "Summary Note",
-                       "name":  "jobs_interns_note",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Nhan ho so lien tuc. Phong van rolling.",
-                       "rows":  2,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_cta_title",
-                       "label":  "Intern CTA Title",
-                       "name":  "jobs_interns_cta_title",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Ky Ket Hop Tac Voi Truong Dai Hoc",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_cta_description",
-                       "label":  "Intern CTA Description",
-                       "name":  "jobs_interns_cta_description",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "",
-                       "rows":  3,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_cta_link_label",
-                       "label":  "Intern CTA Button Label",
-                       "name":  "jobs_interns_cta_link_label",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Email Thuc Tap",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_interns_cta_link_url",
-                       "label":  "Intern CTA Button URL",
-                       "name":  "jobs_interns_cta_link_url",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "mailto:internship@tonacorp.vn",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_tab_culture",
-                       "label":  "05. Culture CTA",
-                       "name":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_jobs_culture_background",
-                       "label":  "Culture CTA Background Color",
-                       "name":  "jobs_culture_background",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#002d17",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_jobs_culture_title",
-                       "label":  "Culture CTA Title",
-                       "name":  "jobs_culture_title",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Trai Nghiem Van Hoa Tona",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_culture_description",
-                       "label":  "Culture CTA Description",
-                       "name":  "jobs_culture_description",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "",
-                       "rows":  3,
-                       "new_lines":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_culture_link_label",
-                       "label":  "Culture CTA Button Label",
-                       "name":  "jobs_culture_link_label",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Cuoc Song Tona",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_jobs_culture_link_url",
-                       "label":  "Culture CTA Button URL",
-                       "name":  "jobs_culture_link_url",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "/vi/cuoc-song-tona",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   }
-               ],
-    "location":  [
-                     [
-                         {
-                             "param":  "page_slug",
-                             "operator":  "==",
-                             "value":  "nghe-nghiep"
-                         }
-                     ]
-                 ],
-    "menu_order":  0,
-    "position":  "acf_after_title",
-    "style":  "default",
-    "label_placement":  "top",
-    "instruction_placement":  "field",
-    "hide_on_screen":  "",
-    "active":  true,
-    "description":  "",
-    "show_in_rest":  1,
-    "modified":  1779181200
+    "key": "group_tona_jobs_page",
+    "title": "Jobs Page Content",
+    "fields": [
+        {
+            "key": "field_tona_jobs_tab_hero",
+            "label": "01. Hero",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_jobs_breadcrumb_label",
+            "label": "Breadcrumb Label",
+            "name": "jobs_breadcrumb_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Tuyen Dung",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_hero_background",
+            "label": "Hero Background Color",
+            "name": "jobs_hero_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default dark green background.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_jobs_hero_title",
+            "label": "Hero Title",
+            "name": "jobs_hero_title",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Use line breaks to match the large heading.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Gia Nhap\nDoi Ngu Tona",
+            "rows": 3,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_jobs_hero_description",
+            "label": "Hero Description",
+            "name": "jobs_hero_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 4,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_jobs_hero_decorative_text",
+            "label": "Decorative Text",
+            "name": "jobs_hero_decorative_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Large faded word on the right side.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "JOIN",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_tab_perks",
+            "label": "02. Why Tona",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_jobs_perks_background",
+            "label": "Why Tona Background Color",
+            "name": "jobs_perks_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f9f9f7",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_jobs_perks_eyebrow",
+            "label": "Section Label",
+            "name": "jobs_perks_eyebrow",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Tai Sao Chon Tona?",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_perks",
+            "label": "Benefit Cards",
+            "name": "jobs_perks",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Cards in the Why Tona section.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "tona-acf-section",
+                "id": ""
+            },
+            "collapsed": "field_tona_jobs_perk_title",
+            "min": 0,
+            "max": 0,
+            "layout": "block",
+            "button_label": "Add Benefit Card",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_jobs_perk_icon",
+                    "label": "Fallback Icon",
+                    "name": "icon",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Used when Icon Image is empty.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "TrendingUp": "Trending Up",
+                        "Star": "Star",
+                        "Users": "Users",
+                        "CheckCircle2": "Check Circle"
+                    },
+                    "default_value": "TrendingUp",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 1,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0,
+                    "parent_repeater": "field_tona_jobs_perks"
+                },
+                {
+                    "key": "field_tona_jobs_perk_icon_image",
+                    "label": "Icon Image",
+                    "name": "icon_image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Optional custom icon uploaded from WP.",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": "",
+                    "parent_repeater": "field_tona_jobs_perks"
+                },
+                {
+                    "key": "field_tona_jobs_perk_title",
+                    "label": "Title",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_jobs_perks"
+                },
+                {
+                    "key": "field_tona_jobs_perk_description",
+                    "label": "Description",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "rows": 3,
+                    "new_lines": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "parent_repeater": "field_tona_jobs_perks"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_jobs_tab_openings",
+            "label": "03. Job List",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_jobs_list_title",
+            "label": "List Title",
+            "name": "jobs_list_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Count will be added automatically on frontend.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Vi Tri Dang Tuyen",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_empty_text",
+            "label": "Empty Filter Text",
+            "name": "jobs_empty_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Khong co vi tri nao trong bo phan nay.",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_spontaneous_eyebrow",
+            "label": "Open Application Label",
+            "name": "jobs_spontaneous_eyebrow",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Khong thay vi tri phu hop?",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_spontaneous_title",
+            "label": "Open Application Title",
+            "name": "jobs_spontaneous_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Ung Tuyen Tu Do",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_spontaneous_description",
+            "label": "Open Application Description",
+            "name": "jobs_spontaneous_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 3,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_jobs_spontaneous_link_label",
+            "label": "Open Application Button Label",
+            "name": "jobs_spontaneous_link_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Gui CV",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_spontaneous_link_url",
+            "label": "Open Application Button URL",
+            "name": "jobs_spontaneous_link_url",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Use mailto:hr@tonacorp.vn or a page URL.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "mailto:hr@tonacorp.vn",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_tab_interns",
+            "label": "04. Internship",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_jobs_interns_background",
+            "label": "Internship Background Color",
+            "name": "jobs_interns_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f0faf6",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "allow_in_bindings": 1
+        },
+        {
+            "key": "field_tona_jobs_interns_eyebrow",
+            "label": "Section Label",
+            "name": "jobs_interns_eyebrow",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Chuong Trinh Thuc Tap",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_title",
+            "label": "Section Title",
+            "name": "jobs_interns_title",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Use line breaks if needed.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Sinh Vien Thuc Tap\r\nTona Internship Program",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "rows": 3,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_description",
+            "label": "Section Description",
+            "name": "jobs_interns_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "rows": 4,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_season_label",
+            "label": "Season Label",
+            "name": "jobs_interns_season_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Text in the summary box on the right.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Tuyen dung 2025 - 2026",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_slots_value",
+            "label": "Slots Value",
+            "name": "jobs_interns_slots_value",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 12,
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_majors_value",
+            "label": "Majors Value",
+            "name": "jobs_interns_majors_value",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 3,
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_slots_label",
+            "label": "Slots Label",
+            "name": "jobs_interns_slots_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "chi tieu",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_majors_label",
+            "label": "Majors Label",
+            "name": "jobs_interns_majors_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "chuyen nganh",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_note",
+            "label": "Summary Note",
+            "name": "jobs_interns_note",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Nhan ho so lien tuc. Phong van rolling.",
+            "rows": 2,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_cta_title",
+            "label": "Intern CTA Title",
+            "name": "jobs_interns_cta_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Ky Ket Hop Tac Voi Truong Dai Hoc",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_cta_link_label",
+            "label": "Intern CTA Button Label",
+            "name": "jobs_interns_cta_link_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Email Thuc Tap",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_cta_description",
+            "label": "Intern CTA Description",
+            "name": "jobs_interns_cta_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 3,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_jobs_interns_cta_link_url",
+            "label": "Intern CTA Button URL",
+            "name": "jobs_interns_cta_link_url",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "mailto:internship@tonacorp.vn",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_tab_culture",
+            "label": "05. Culture CTA",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_jobs_culture_background",
+            "label": "Culture CTA Background Color",
+            "name": "jobs_culture_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "allow_in_bindings": 1
+        },
+        {
+            "key": "field_tona_jobs_culture_title",
+            "label": "Culture CTA Title",
+            "name": "jobs_culture_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "78",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Trai Nghiem Van Hoa Tona",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_culture_description",
+            "label": "Culture CTA Description",
+            "name": "jobs_culture_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "rows": 3,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_jobs_culture_link_label",
+            "label": "Culture CTA Button Label",
+            "name": "jobs_culture_link_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Cuoc Song Tona",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_jobs_culture_link_url",
+            "label": "Culture CTA Button URL",
+            "name": "jobs_culture_link_url",
+            "aria-label": "",
+            "type": "page_link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "",
+            "post_status": "",
+            "taxonomy": "",
+            "allow_archives": 1,
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_slug",
+                "operator": "==",
+                "value": "nghe-nghiep"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1,
+    "modified": 1779131003
 }

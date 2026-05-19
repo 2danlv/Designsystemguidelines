@@ -262,6 +262,54 @@ export type JobsCmsData = {
   };
 };
 
+export type ProjectPost = {
+  id: number | string;
+  slug: string;
+  title: string;
+  category: string;
+  categorySlug?: string;
+  categories?: Array<{
+    id?: number;
+    name?: string;
+    slug?: string;
+  }>;
+  image: string;
+  images?: string[];
+  description: string;
+  location: string;
+  area: string;
+  client: string;
+  status: string;
+  year: string;
+  duration?: string;
+  renovationItems?: string[];
+  highlights?: string[];
+  leedGold?: boolean;
+};
+
+export type ProjectsCmsData = {
+  colors?: {
+    heroBackground?: string;
+    statsBackground?: string;
+    ctaBackground?: string;
+  };
+  hero?: {
+    breadcrumbLabel?: string;
+    title?: string;
+    description?: string;
+  };
+  stats?: Array<{
+    value?: string;
+    label?: string;
+  }>;
+  cta?: {
+    title?: string;
+    description?: string;
+    linkLabel?: string;
+    linkUrl?: string;
+  };
+};
+
 const wordpressApiBase = (import.meta.env.VITE_WP_API_BASE || "/wp-json").replace(/\/$/, "");
 
 export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promise<T | null> {
@@ -297,5 +345,41 @@ export async function fetchCmsJobs(signal?: AbortSignal): Promise<JobPost[]> {
     }
 
     return [];
+  }
+}
+
+export async function fetchCmsProjects(signal?: AbortSignal): Promise<ProjectPost[]> {
+  try {
+    const response = await fetch(`${wordpressApiBase}/tona/v1/projects`, { signal });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return (await response.json()) as ProjectPost[];
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return [];
+  }
+}
+
+export async function fetchCmsProject(slug: string, signal?: AbortSignal): Promise<ProjectPost | null> {
+  try {
+    const response = await fetch(`${wordpressApiBase}/tona/v1/projects/${slug}`, { signal });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as ProjectPost;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return null;
   }
 }

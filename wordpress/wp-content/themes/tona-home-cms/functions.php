@@ -147,6 +147,244 @@ function tona_cms_job_category_single_term( $post_id ) {
 }
 add_action( 'save_post_tona_job', 'tona_cms_job_category_single_term', 20 );
 
+function tona_cms_job_admin_columns( $columns ) {
+    $date_column = isset( $columns['date'] ) ? $columns['date'] : null;
+
+    if ( isset( $columns['date'] ) ) {
+        unset( $columns['date'] );
+    }
+
+    $columns['tona_job_category'] = 'Category';
+
+    if ( null !== $date_column ) {
+        $columns['date'] = $date_column;
+    }
+
+    return $columns;
+}
+add_filter( 'manage_tona_job_posts_columns', 'tona_cms_job_admin_columns' );
+
+function tona_cms_job_admin_column_content( $column, $post_id ) {
+    if ( 'tona_job_category' !== $column ) {
+        return;
+    }
+
+    $terms = get_the_terms( $post_id, 'tona_job_category' );
+
+    if ( is_wp_error( $terms ) || empty( $terms ) ) {
+        echo '&mdash;';
+        return;
+    }
+
+    echo esc_html( implode( ', ', wp_list_pluck( $terms, 'name' ) ) );
+}
+add_action( 'manage_tona_job_posts_custom_column', 'tona_cms_job_admin_column_content', 10, 2 );
+
+function tona_cms_job_admin_category_filter() {
+    $screen = get_current_screen();
+
+    if ( ! $screen || 'edit-tona_job' !== $screen->id ) {
+        return;
+    }
+
+    $selected = isset( $_GET['tona_job_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_job_category'] ) ) : '';
+
+    wp_dropdown_categories(
+        array(
+            'show_option_all' => 'All Job Categories',
+            'taxonomy'        => 'tona_job_category',
+            'name'            => 'tona_job_category',
+            'orderby'         => 'name',
+            'selected'        => $selected,
+            'hierarchical'    => true,
+            'depth'           => 0,
+            'show_count'      => false,
+            'hide_empty'      => false,
+            'value_field'     => 'slug',
+        )
+    );
+}
+add_action( 'restrict_manage_posts', 'tona_cms_job_admin_category_filter' );
+
+function tona_cms_job_admin_category_query( $query ) {
+    global $pagenow;
+
+    if ( ! is_admin() || 'edit.php' !== $pagenow || ! $query->is_main_query() ) {
+        return;
+    }
+
+    if ( 'tona_job' !== $query->get( 'post_type' ) ) {
+        return;
+    }
+
+    $category = isset( $_GET['tona_job_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_job_category'] ) ) : '';
+
+    if ( '' === $category || '0' === $category ) {
+        return;
+    }
+
+    $query->set(
+        'tax_query',
+        array(
+            array(
+                'taxonomy' => 'tona_job_category',
+                'field'    => 'slug',
+                'terms'    => $category,
+            ),
+        )
+    );
+}
+add_action( 'pre_get_posts', 'tona_cms_job_admin_category_query' );
+
+function tona_cms_register_project_post_type() {
+    register_post_type(
+        'tona_project',
+        array(
+            'labels'       => array(
+                'name'          => 'Projects',
+                'singular_name' => 'Project',
+                'add_new_item'  => 'Add New Project',
+                'edit_item'     => 'Edit Project',
+            ),
+            'public'       => true,
+            'show_ui'      => true,
+            'show_in_menu' => true,
+            'show_in_rest' => true,
+            'menu_icon'    => 'dashicons-building',
+            'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
+            'rewrite'      => array( 'slug' => 'projects' ),
+        )
+    );
+
+    register_taxonomy(
+        'tona_project_category',
+        'tona_project',
+        array(
+            'labels'       => array(
+                'name'          => 'Project Categories',
+                'singular_name' => 'Project Category',
+                'add_new_item'  => 'Add New Project Category',
+                'edit_item'     => 'Edit Project Category',
+            ),
+            'hierarchical' => true,
+            'public'       => true,
+            'show_ui'      => true,
+            'show_in_rest' => true,
+            'rewrite'      => array( 'slug' => 'project-category' ),
+        )
+    );
+
+    $default_terms = array(
+        'industrial'      => 'Industrial',
+        'commercial'      => 'Commercial',
+        'solar-rooftop'   => 'Solar Rooftop',
+        'hotels'          => 'Hotels',
+        'apartments'      => 'Apartments',
+    );
+
+    foreach ( $default_terms as $slug => $name ) {
+        if ( ! term_exists( $slug, 'tona_project_category' ) ) {
+            wp_insert_term(
+                $name,
+                'tona_project_category',
+                array(
+                    'slug' => $slug,
+                )
+            );
+        }
+    }
+}
+add_action( 'init', 'tona_cms_register_project_post_type' );
+
+function tona_cms_project_admin_columns( $columns ) {
+    $date_column = isset( $columns['date'] ) ? $columns['date'] : null;
+
+    if ( isset( $columns['date'] ) ) {
+        unset( $columns['date'] );
+    }
+
+    $columns['tona_project_category'] = 'Categories';
+
+    if ( null !== $date_column ) {
+        $columns['date'] = $date_column;
+    }
+
+    return $columns;
+}
+add_filter( 'manage_tona_project_posts_columns', 'tona_cms_project_admin_columns' );
+
+function tona_cms_project_admin_column_content( $column, $post_id ) {
+    if ( 'tona_project_category' !== $column ) {
+        return;
+    }
+
+    $terms = get_the_terms( $post_id, 'tona_project_category' );
+
+    if ( is_wp_error( $terms ) || empty( $terms ) ) {
+        echo '&mdash;';
+        return;
+    }
+
+    echo esc_html( implode( ', ', wp_list_pluck( $terms, 'name' ) ) );
+}
+add_action( 'manage_tona_project_posts_custom_column', 'tona_cms_project_admin_column_content', 10, 2 );
+
+function tona_cms_project_admin_category_filter() {
+    $screen = get_current_screen();
+
+    if ( ! $screen || 'edit-tona_project' !== $screen->id ) {
+        return;
+    }
+
+    $selected = isset( $_GET['tona_project_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_project_category'] ) ) : '';
+
+    wp_dropdown_categories(
+        array(
+            'show_option_all' => 'All Project Categories',
+            'taxonomy'        => 'tona_project_category',
+            'name'            => 'tona_project_category',
+            'orderby'         => 'name',
+            'selected'        => $selected,
+            'hierarchical'    => true,
+            'depth'           => 0,
+            'show_count'      => false,
+            'hide_empty'      => false,
+            'value_field'     => 'slug',
+        )
+    );
+}
+add_action( 'restrict_manage_posts', 'tona_cms_project_admin_category_filter' );
+
+function tona_cms_project_admin_category_query( $query ) {
+    global $pagenow;
+
+    if ( ! is_admin() || 'edit.php' !== $pagenow || ! $query->is_main_query() ) {
+        return;
+    }
+
+    if ( 'tona_project' !== $query->get( 'post_type' ) ) {
+        return;
+    }
+
+    $category = isset( $_GET['tona_project_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_project_category'] ) ) : '';
+
+    if ( '' === $category || '0' === $category ) {
+        return;
+    }
+
+    $query->set(
+        'tax_query',
+        array(
+            array(
+                'taxonomy' => 'tona_project_category',
+                'field'    => 'slug',
+                'terms'    => $category,
+            ),
+        )
+    );
+}
+add_action( 'pre_get_posts', 'tona_cms_project_admin_category_query' );
+
 function tona_cms_create_default_pages() {
     $pages = array(
         'doi-ngu' => 'Doi Ngu',
@@ -154,6 +392,7 @@ function tona_cms_create_default_pages() {
         'cuoc-song-tona' => 'Cuoc Song Tona',
         'dich-vu' => 'Dich Vu',
         'nghe-nghiep' => 'Nghe Nghiep',
+        'du-an-tona' => 'Du An Tona',
     );
 
     foreach ( $pages as $slug => $title ) {
@@ -198,6 +437,7 @@ function tona_cms_acf_location_rule_values_page_slug( $choices ) {
     $choices['cuoc-song-tona'] = 'Cuoc Song Tona';
     $choices['dich-vu'] = 'Dich Vu';
     $choices['nghe-nghiep'] = 'Nghe Nghiep';
+    $choices['du-an-tona'] = 'Du An Tona';
     return $choices;
 }
 add_filter( 'acf/location/rule_values/page_slug', 'tona_cms_acf_location_rule_values_page_slug' );
@@ -1015,7 +1255,167 @@ function tona_cms_jobs_page_payload( $page ) {
     );
 }
 
+function tona_cms_project_payload( $post ) {
+    $post_id = $post->ID;
+    $terms = get_the_terms( $post_id, 'tona_project_category' );
+    $terms = is_array( $terms ) ? $terms : array();
+    $gallery = function_exists( 'get_field' ) ? get_field( 'project_gallery', $post_id ) : array();
+    $main_image_url = has_post_thumbnail( $post_id ) ? get_the_post_thumbnail_url( $post_id, 'large' ) : '';
+
+    $gallery_images = array_values(
+        array_filter(
+            array_map(
+                function ( $item ) {
+                    return tona_cms_image_url( $item['image'] ?? '' );
+                },
+                is_array( $gallery ) ? $gallery : array()
+            )
+        )
+    );
+
+    $images = $gallery_images;
+
+    if ( $main_image_url && ! in_array( $main_image_url, $images, true ) ) {
+        array_unshift( $images, $main_image_url );
+    }
+
+    if ( ! $main_image_url && ! empty( $gallery_images ) ) {
+        $main_image_url = $gallery_images[0];
+    }
+
+    $category = ! empty( $terms ) ? $terms[0]->name : '';
+    $category_slug = ! empty( $terms ) ? $terms[0]->slug : '';
+
+    return array(
+        'id'              => $post_id,
+        'slug'            => $post->post_name,
+        'title'           => get_the_title( $post ),
+        'category'        => $category,
+        'categorySlug'    => $category_slug,
+        'categories'      => array_values(
+            array_map(
+                function ( $term ) {
+                    return array(
+                        'id'   => $term->term_id,
+                        'name' => $term->name,
+                        'slug' => $term->slug,
+                    );
+                },
+                $terms
+            )
+        ),
+        'image'           => $main_image_url,
+        'images'          => $images,
+        'description'     => wp_strip_all_tags( get_the_content( null, false, $post ) ),
+        'location'        => tona_cms_text_field( $post_id, 'project_location' ),
+        'area'            => tona_cms_text_field( $post_id, 'project_area' ),
+        'client'          => tona_cms_text_field( $post_id, 'project_client' ),
+        'status'          => tona_cms_text_field( $post_id, 'project_status' ),
+        'year'            => tona_cms_text_field( $post_id, 'project_year' ),
+        'duration'        => tona_cms_text_field( $post_id, 'project_duration' ),
+        'renovationItems' => tona_cms_lines_field( $post_id, 'project_renovation_items' ),
+        'highlights'      => tona_cms_lines_field( $post_id, 'project_highlights' ),
+        'leedGold'        => (bool) ( function_exists( 'get_field' ) ? get_field( 'project_leed_gold', $post_id ) : false ),
+    );
+}
+
+function tona_cms_projects_payload() {
+    $projects = get_posts(
+        array(
+            'post_type'      => 'tona_project',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'orderby'        => array(
+                'menu_order' => 'ASC',
+                'date'       => 'DESC',
+            ),
+        )
+    );
+
+    return array_values(
+        array_map( 'tona_cms_project_payload', is_array( $projects ) ? $projects : array() )
+    );
+}
+
+function tona_cms_project_by_slug_payload( $slug ) {
+    $project = get_page_by_path( sanitize_title( $slug ), OBJECT, 'tona_project' );
+
+    if ( ! $project || 'publish' !== $project->post_status ) {
+        return null;
+    }
+
+    return tona_cms_project_payload( $project );
+}
+
+function tona_cms_projects_page_payload( $page ) {
+    $post_id = $page->ID;
+    $stats = function_exists( 'get_field' ) ? get_field( 'projects_stats', $post_id ) : array();
+
+    return array(
+        'id'             => $post_id,
+        'slug'           => $page->post_name,
+        'title'          => get_the_title( $page ),
+        'colors'         => array(
+            'heroBackground'  => tona_cms_text_field( $post_id, 'projects_hero_background' ),
+            'statsBackground' => tona_cms_text_field( $post_id, 'projects_stats_background' ),
+            'ctaBackground'   => tona_cms_text_field( $post_id, 'projects_cta_background' ),
+        ),
+        'hero'           => array(
+            'breadcrumbLabel' => tona_cms_text_field( $post_id, 'projects_breadcrumb_label' ),
+            'title'           => tona_cms_text_field( $post_id, 'projects_hero_title' ),
+            'description'     => tona_cms_text_field( $post_id, 'projects_hero_description' ),
+        ),
+        'stats'          => array_values(
+            array_map(
+                function ( $stat ) {
+                    return array(
+                        'value' => $stat['value'] ?? '',
+                        'label' => $stat['label'] ?? '',
+                    );
+                },
+                is_array( $stats ) ? $stats : array()
+            )
+        ),
+        'cta'            => array(
+            'title'       => tona_cms_text_field( $post_id, 'projects_cta_title' ),
+            'description' => tona_cms_text_field( $post_id, 'projects_cta_description' ),
+            'linkLabel'   => tona_cms_text_field( $post_id, 'projects_cta_link_label' ),
+            'linkUrl'     => tona_cms_text_field( $post_id, 'projects_cta_link_url' ),
+        ),
+    );
+}
+
 function tona_cms_register_rest_routes() {
+    register_rest_route(
+        'tona/v1',
+        '/projects',
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback'            => function () {
+                return rest_ensure_response( tona_cms_projects_payload() );
+            },
+        )
+    );
+
+    register_rest_route(
+        'tona/v1',
+        '/projects/(?P<slug>[a-z0-9-]+)',
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback'            => function ( $request ) {
+                $project = tona_cms_project_by_slug_payload( $request->get_param( 'slug' ) );
+
+                if ( ! $project ) {
+                    return new WP_Error( 'tona_project_not_found', 'Project not found.', array( 'status' => 404 ) );
+                }
+
+                return rest_ensure_response( $project );
+            },
+        )
+    );
+
     register_rest_route(
         'tona/v1',
         '/jobs',
@@ -1060,6 +1460,10 @@ function tona_cms_register_rest_routes() {
 
                 if ( 'nghe-nghiep' === $page->post_name ) {
                     return rest_ensure_response( tona_cms_jobs_page_payload( $page ) );
+                }
+
+                if ( 'du-an-tona' === $page->post_name ) {
+                    return rest_ensure_response( tona_cms_projects_page_payload( $page ) );
                 }
 
                 return rest_ensure_response(
