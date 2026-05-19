@@ -419,3 +419,23 @@
         width: 100% !important;
     }
 }
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_hero_title"]::before {
+    content: "01. HERO\A Dark green section at the top of the page: title and short description.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"]::before {
+    content: "02. LEADERSHIP CARDS\A Portrait cards below the Hero. Each row is one card.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values_title"]::before {
+    content: "03. CORE VALUES\A Values section in the middle of the page. Each row is one grid card.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_title"]::before {
+    content: "04. FOOTER CTA\A White block at the bottom: title, description and button.";
+}
+
+.acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_teaser_link_label"] .acf-input::before {
+    content: "CTA button";
+}

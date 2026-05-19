@@ -6,161 +6,358 @@
             "key": "field_tona_about_tab_hero",
             "label": "01. Hero",
             "name": "",
+            "aria-label": "",
             "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
-            "endpoint": 0
-        },
-        {
-            "key": "field_tona_about_breadcrumb_label",
-            "label": "Breadcrumb Label",
-            "name": "about_breadcrumb_label",
-            "type": "text",
-            "default_value": "Gioi Thieu"
-        },
-        {
-            "key": "field_tona_about_hero_title",
-            "label": "Hero Title",
-            "name": "about_hero_title",
-            "type": "textarea",
-            "instructions": "Main heading at the top of the About page. Use a new line to split the heading.",
-            "rows": 2,
-            "default_value": "Ve Tona\nCorporation",
-            "new_lines": ""
-        },
-        {
-            "key": "field_tona_about_hero_description",
-            "label": "Hero Description",
-            "name": "about_hero_description",
-            "type": "textarea",
-            "rows": 4,
-            "new_lines": ""
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_tona_about_hero_background",
-            "label": "Hero Background Color",
+            "label": "Kv Background Color",
             "name": "about_hero_background",
+            "aria-label": "",
             "type": "color_picker",
             "instructions": "Leave empty to use the default dark green background.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "#002d17",
             "enable_opacity": 0,
-            "return_format": "string"
+            "return_format": "string",
+            "allow_in_bindings": 1
         },
         {
-            "key": "field_tona_about_stats",
-            "label": "Hero Stats",
-            "name": "about_stats",
-            "type": "repeater",
-            "instructions": "The number cards on the right side of the hero.",
-            "layout": "table",
-            "button_label": "Add Stat",
-            "collapsed": "",
+            "key": "field_6a0c957f227a9",
+            "label": "Hero Intro Left",
+            "name": "about_hero_intro_left",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "60",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
             "sub_fields": [
                 {
-                    "key": "field_tona_about_stat_value",
-                    "label": "Value",
-                    "name": "value",
-                    "type": "text",
-                    "parent_repeater": "field_tona_about_stats"
+                    "key": "field_tona_about_hero_title",
+                    "label": "Kv Title",
+                    "name": "about_hero_title",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "Main heading at the top of the About page. Use a new line to split the heading.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Ve Tona\r\nCorporation",
+                    "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "rows": 2,
+                    "placeholder": "",
+                    "new_lines": ""
                 },
                 {
-                    "key": "field_tona_about_stat_label",
-                    "label": "Label",
-                    "name": "label",
-                    "type": "text",
-                    "parent_repeater": "field_tona_about_stats"
+                    "key": "field_tona_about_hero_description",
+                    "label": "Kv Description",
+                    "name": "about_hero_description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "rows": 4,
+                    "placeholder": "",
+                    "new_lines": ""
+                }
+            ]
+        },
+        {
+            "key": "field_6a0c95b1227aa",
+            "label": "Hero Stats Right",
+            "name": "about_hero_stats_right",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_tona_about_stats",
+                    "label": "Kv Stats",
+                    "name": "about_stats",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "The number cards on the right side of the hero.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "table",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Add Stat",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_tona_about_stat_value",
+                            "label": "Value",
+                            "name": "value",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": false,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "parent_repeater": "field_tona_about_stats",
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_tona_about_stat_label",
+                            "label": "Label",
+                            "name": "label",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": false,
+                            "conditional_logic": false,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "parent_repeater": "field_tona_about_stats",
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        }
+                    ]
                 }
             ]
         },
         {
             "key": "field_tona_about_tab_mission",
-            "label": "02. Mission / Vision",
+            "label": "02. Mission \/ Vision",
             "name": "",
+            "aria-label": "",
             "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_tona_about_mission_background_image",
             "label": "Background Image",
             "name": "about_mission_background_image",
+            "aria-label": "",
             "type": "image",
-            "instructions": "Image behind the Mission / Vision cards. Leave empty to keep the default artwork.",
+            "instructions": "Image behind the Mission \/ Vision cards. Leave empty to keep the default artwork.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "return_format": "array",
             "preview_size": "medium",
             "library": "all",
-            "mime_types": ""
+            "mime_types": "",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0
         },
         {
             "key": "field_tona_about_mission_eyebrow",
             "label": "Mission Label",
             "name": "about_mission_eyebrow",
+            "aria-label": "",
             "type": "text",
-            "default_value": "Su Menh",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "50",
                 "class": "",
                 "id": ""
-            }
+            },
+            "default_value": "Su Menh",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_vision_eyebrow",
             "label": "Vision Label",
             "name": "about_vision_eyebrow",
+            "aria-label": "",
             "type": "text",
-            "default_value": "Tam Nhin",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "50",
                 "class": "",
                 "id": ""
-            }
+            },
+            "default_value": "Tam Nhin",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_mission_text",
             "label": "Mission Text",
             "name": "about_mission_text",
+            "aria-label": "",
             "type": "textarea",
-            "rows": 4,
-            "new_lines": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "50",
                 "class": "",
                 "id": ""
-            }
+            },
+            "rows": 4,
+            "new_lines": "",
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": ""
         },
         {
             "key": "field_tona_about_vision_text",
             "label": "Vision Text",
             "name": "about_vision_text",
+            "aria-label": "",
             "type": "textarea",
-            "rows": 4,
-            "new_lines": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "50",
                 "class": "",
                 "id": ""
-            }
+            },
+            "rows": 4,
+            "new_lines": "",
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": ""
         },
         {
             "key": "field_tona_about_tab_values",
             "label": "03. Core Values",
             "name": "",
+            "aria-label": "",
             "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_tona_about_values_title",
             "label": "Section Title",
             "name": "about_values_title",
+            "aria-label": "",
             "type": "text",
-            "default_value": "Gia Tri Cot Loi"
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Gia Tri Cot Loi",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_values_background",
             "label": "Section Background Color",
             "name": "about_values_background",
+            "aria-label": "",
             "type": "color_picker",
             "instructions": "Leave empty to use the default white background.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "#ffffff",
             "enable_opacity": 0,
             "return_format": "string"
@@ -169,16 +366,37 @@
             "key": "field_tona_about_values",
             "label": "Core Value Cards",
             "name": "about_values",
+            "aria-label": "",
             "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "layout": "row",
             "button_label": "Add Value",
             "collapsed": "field_tona_about_value_title",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_tona_about_value_icon",
                     "label": "Icon",
                     "name": "icon",
+                    "aria-label": "",
                     "type": "select",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
                     "choices": {
                         "Shield": "Shield",
                         "Award": "Award",
@@ -188,34 +406,81 @@
                     "default_value": "Shield",
                     "return_format": "value",
                     "ui": 1,
-                    "parent_repeater": "field_tona_about_values"
+                    "parent_repeater": "field_tona_about_values",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0
                 },
                 {
                     "key": "field_tona_about_value_icon_image",
                     "label": "Custom Icon Image",
                     "name": "icon_image",
+                    "aria-label": "",
                     "type": "image",
                     "instructions": "Optional. Upload an icon image to override the selected icon.",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
                     "return_format": "array",
                     "preview_size": "thumbnail",
                     "library": "all",
-                    "parent_repeater": "field_tona_about_values"
+                    "parent_repeater": "field_tona_about_values",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": ""
                 },
                 {
                     "key": "field_tona_about_value_title",
                     "label": "Title",
                     "name": "title",
+                    "aria-label": "",
                     "type": "text",
-                    "parent_repeater": "field_tona_about_values"
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_about_values",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
                 },
                 {
                     "key": "field_tona_about_value_description",
                     "label": "Description",
                     "name": "description",
+                    "aria-label": "",
                     "type": "textarea",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
                     "rows": 3,
                     "new_lines": "",
-                    "parent_repeater": "field_tona_about_values"
+                    "parent_repeater": "field_tona_about_values",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": ""
                 }
             ]
         },
@@ -223,23 +488,54 @@
             "key": "field_tona_about_tab_timeline",
             "label": "04. Timeline",
             "name": "",
+            "aria-label": "",
             "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_tona_about_timeline_title",
             "label": "Section Title",
             "name": "about_timeline_title",
+            "aria-label": "",
             "type": "text",
-            "default_value": "Hanh Trinh Phat Trien"
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Hanh Trinh Phat Trien",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_timeline_background",
             "label": "Section Background Color",
             "name": "about_timeline_background",
+            "aria-label": "",
             "type": "color_picker",
             "instructions": "Leave empty to use the default light background.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "#f9f9f7",
             "enable_opacity": 0,
             "return_format": "string"
@@ -248,33 +544,85 @@
             "key": "field_tona_about_timeline",
             "label": "Timeline Items",
             "name": "about_timeline",
+            "aria-label": "",
             "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "layout": "row",
             "button_label": "Add Timeline Item",
             "collapsed": "field_tona_about_timeline_year",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_tona_about_timeline_year",
                     "label": "Year",
                     "name": "year",
+                    "aria-label": "",
                     "type": "text",
-                    "parent_repeater": "field_tona_about_timeline"
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_about_timeline",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
                 },
                 {
                     "key": "field_tona_about_timeline_item_title",
                     "label": "Title",
                     "name": "title",
+                    "aria-label": "",
                     "type": "text",
-                    "parent_repeater": "field_tona_about_timeline"
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_about_timeline",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
                 },
                 {
                     "key": "field_tona_about_timeline_description",
                     "label": "Description",
                     "name": "description",
+                    "aria-label": "",
                     "type": "textarea",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
                     "rows": 3,
                     "new_lines": "",
-                    "parent_repeater": "field_tona_about_timeline"
+                    "parent_repeater": "field_tona_about_timeline",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": ""
                 }
             ]
         },
@@ -282,23 +630,54 @@
             "key": "field_tona_about_tab_certifications",
             "label": "05. Certifications",
             "name": "",
+            "aria-label": "",
             "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_tona_about_certifications_title",
             "label": "Section Title",
             "name": "about_certifications_title",
+            "aria-label": "",
             "type": "text",
-            "default_value": "Chung Nhan Quoc Te"
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Chung Nhan Quoc Te",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_certifications_background",
             "label": "Section Background Color",
             "name": "about_certifications_background",
+            "aria-label": "",
             "type": "color_picker",
             "instructions": "Leave empty to use the default dark green background.",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "default_value": "#002d17",
             "enable_opacity": 0,
             "return_format": "string"
@@ -307,31 +686,85 @@
             "key": "field_tona_about_certifications",
             "label": "Certification Cards",
             "name": "about_certifications",
+            "aria-label": "",
             "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "layout": "row",
             "button_label": "Add Certification",
             "collapsed": "field_tona_about_certification_code",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_tona_about_certification_code",
                     "label": "Code",
                     "name": "code",
+                    "aria-label": "",
                     "type": "text",
-                    "parent_repeater": "field_tona_about_certifications"
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_about_certifications",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
                 },
                 {
                     "key": "field_tona_about_certification_title",
                     "label": "Title",
                     "name": "title",
+                    "aria-label": "",
                     "type": "text",
-                    "parent_repeater": "field_tona_about_certifications"
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_about_certifications",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
                 },
                 {
                     "key": "field_tona_about_certification_org",
                     "label": "Organization",
                     "name": "org",
+                    "aria-label": "",
                     "type": "text",
-                    "parent_repeater": "field_tona_about_certifications"
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_about_certifications",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
                 }
             ]
         },
@@ -339,30 +772,52 @@
             "key": "field_tona_about_tab_cta",
             "label": "06. CTA",
             "name": "",
+            "aria-label": "",
             "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_tona_about_cta_background",
             "label": "CTA Background Color",
             "name": "about_cta_background",
+            "aria-label": "",
             "type": "color_picker",
             "instructions": "Leave empty to use the default white background.",
-            "default_value": "#ffffff",
-            "enable_opacity": 0,
-            "return_format": "string",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "",
                 "class": "tona-about-cta-background",
                 "id": ""
-            }
+            },
+            "default_value": "#ffffff",
+            "enable_opacity": 0,
+            "return_format": "string"
         },
         {
             "key": "field_tona_about_cta_layout_note",
             "label": "CTA Layout",
             "name": "",
+            "aria-label": "",
             "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
             "message": "Layout mirrors the frontend: headline and description on the left, two buttons on the right.",
             "new_lines": "wpautop",
             "esc_html": 0
@@ -371,93 +826,133 @@
             "key": "field_tona_about_cta_title",
             "label": "CTA Title",
             "name": "about_cta_title",
+            "aria-label": "",
             "type": "text",
             "instructions": "Left headline in the white CTA band.",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "60",
                 "class": "tona-about-cta-title",
                 "id": ""
-            }
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_cta_primary_label",
             "label": "Primary Button Label",
             "name": "about_cta_primary_label",
+            "aria-label": "",
             "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "20",
                 "class": "tona-about-cta-button tona-about-cta-primary",
                 "id": ""
-            }
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_cta_secondary_label",
             "label": "Secondary Button Label",
             "name": "about_cta_secondary_label",
+            "aria-label": "",
             "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "20",
                 "class": "tona-about-cta-button tona-about-cta-secondary",
                 "id": ""
-            }
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_cta_description",
             "label": "CTA Description",
             "name": "about_cta_description",
+            "aria-label": "",
             "type": "textarea",
             "instructions": "Short line below the CTA headline.",
-            "rows": 3,
-            "new_lines": "",
+            "required": false,
+            "conditional_logic": false,
             "wrapper": {
                 "width": "60",
                 "class": "tona-about-cta-description",
                 "id": ""
-            }
+            },
+            "rows": 3,
+            "new_lines": "",
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": ""
         },
         {
             "key": "field_tona_about_cta_primary_url",
             "label": "Primary Button URL",
             "name": "about_cta_primary_url",
+            "aria-label": "",
             "type": "page_link",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "20",
+                "class": "tona-about-cta-button-url tona-about-cta-primary-url",
+                "id": ""
+            },
             "post_type": "",
             "post_status": "",
             "taxonomy": "",
             "allow_archives": 1,
             "multiple": 0,
             "allow_null": 0,
-            "allow_in_bindings": 0,
-            "wrapper": {
-                "width": "20",
-                "class": "tona-about-cta-button-url tona-about-cta-primary-url",
-                "id": ""
-            }
+            "allow_in_bindings": 0
         },
         {
             "key": "field_tona_about_cta_secondary_url",
             "label": "Secondary Button URL",
             "name": "about_cta_secondary_url",
+            "aria-label": "",
             "type": "page_link",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "20",
+                "class": "tona-about-cta-button-url tona-about-cta-secondary-url",
+                "id": ""
+            },
             "post_type": "",
             "post_status": "",
             "taxonomy": "",
             "allow_archives": 1,
             "multiple": 0,
             "allow_null": 0,
-            "allow_in_bindings": 0,
-            "wrapper": {
-                "width": "20",
-                "class": "tona-about-cta-button-url tona-about-cta-secondary-url",
-                "id": ""
-            }
+            "allow_in_bindings": 0
         }
     ],
     "location": [
         [
             {
-                "param": "page_slug",
+                "param": "page_template",
                 "operator": "==",
-                "value": "gioi-thieu-tona"
+                "value": "templates\/tona-about.php"
             }
         ]
     ],
@@ -470,5 +965,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1778911200
+    "modified": 1779210686
 }

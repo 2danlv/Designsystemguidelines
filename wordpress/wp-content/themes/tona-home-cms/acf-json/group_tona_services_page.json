@@ -21,26 +21,6 @@
             "selected": 0
         },
         {
-            "key": "field_tona_services_breadcrumb_label",
-            "label": "Breadcrumb Label",
-            "name": "services_breadcrumb_label",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "Small label in the hero breadcrumb.",
-            "required": 0,
-            "conditional_logic": false,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "Dich Vu",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
             "key": "field_tona_services_hero_background",
             "label": "Hero Background Color",
             "name": "services_hero_background",
@@ -156,6 +136,55 @@
             "rows_per_page": 20,
             "sub_fields": [
                 {
+                    "key": "field_tona_services_item_featured",
+                    "label": "Featured Card",
+                    "name": "featured",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Only one service can be featured. Turning this on will make the other service cards normal.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "100",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "allow_in_bindings": 1,
+                    "ui_on_text": "Featured",
+                    "ui_off_text": "Normal",
+                    "ui": 1,
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
+                    "key": "field_tona_services_item_image",
+                    "label": "Service Image",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Main image for this service card.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "100",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 1,
+                    "preview_size": "medium",
+                    "parent_repeater": "field_tona_services_items"
+                },
+                {
                     "key": "field_tona_services_item_icon",
                     "label": "Fallback Icon",
                     "name": "icon",
@@ -163,9 +192,9 @@
                     "type": "select",
                     "instructions": "Used only when Icon Image is empty.",
                     "required": 0,
-                    "conditional_logic": false,
+                    "conditional_logic": 0,
                     "wrapper": {
-                        "width": "25",
+                        "width": "33",
                         "class": "",
                         "id": ""
                     },
@@ -179,6 +208,7 @@
                     "return_format": "value",
                     "multiple": 0,
                     "allow_null": 0,
+                    "allow_in_bindings": 1,
                     "ui": 1,
                     "ajax": 0,
                     "placeholder": "",
@@ -194,22 +224,23 @@
                     "type": "image",
                     "instructions": "Optional custom icon uploaded from WP.",
                     "required": 0,
-                    "conditional_logic": false,
+                    "conditional_logic": 0,
                     "wrapper": {
-                        "width": "25",
+                        "width": "33",
                         "class": "",
                         "id": ""
                     },
                     "return_format": "array",
-                    "preview_size": "thumbnail",
                     "library": "all",
-                    "min_width": 0,
-                    "min_height": 0,
-                    "min_size": 0,
-                    "max_width": 0,
-                    "max_height": 0,
-                    "max_size": 0,
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
                     "mime_types": "",
+                    "allow_in_bindings": 1,
+                    "preview_size": "thumbnail",
                     "parent_repeater": "field_tona_services_items"
                 },
                 {
@@ -220,57 +251,16 @@
                     "type": "text",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": false,
+                    "conditional_logic": 0,
                     "wrapper": {
-                        "width": "25",
+                        "width": "33",
                         "class": "",
                         "id": ""
                     },
                     "default_value": "",
                     "maxlength": "",
+                    "allow_in_bindings": 1,
                     "placeholder": "01",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_tona_services_items"
-                },
-                {
-                    "key": "field_tona_services_item_featured",
-                    "label": "Featured Card",
-                    "name": "featured",
-                    "aria-label": "",
-                    "type": "true_false",
-                    "instructions": "Only one service can be featured. Turning this on will make the other service cards normal.",
-                    "required": 0,
-                    "conditional_logic": false,
-                    "wrapper": {
-                        "width": "25",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "ui": 1,
-                    "ui_on_text": "Featured",
-                    "ui_off_text": "Normal",
-                    "parent_repeater": "field_tona_services_items"
-                },
-                {
-                    "key": "field_tona_services_item_tag",
-                    "label": "Featured Badge",
-                    "name": "tag",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "Yellow pill at the top-right of the featured card, for example: The Manh Hang Dau.",
-                    "required": 0,
-                    "conditional_logic": false,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "The Manh Hang Dau",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_tona_services_items"
@@ -304,17 +294,18 @@
                     "type": "textarea",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": false,
+                    "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
+                        "width": "",
                         "class": "",
                         "id": ""
                     },
                     "default_value": "",
-                    "rows": 2,
-                    "new_lines": "",
                     "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "rows": 2,
                     "placeholder": "",
+                    "new_lines": "",
                     "parent_repeater": "field_tona_services_items"
                 },
                 {
@@ -325,17 +316,18 @@
                     "type": "textarea",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": false,
+                    "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
+                        "width": "",
                         "class": "",
                         "id": ""
                     },
                     "default_value": "",
-                    "rows": 4,
-                    "new_lines": "",
                     "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "rows": 4,
                     "placeholder": "",
+                    "new_lines": "",
                     "parent_repeater": "field_tona_services_items"
                 },
                 {
@@ -346,43 +338,18 @@
                     "type": "textarea",
                     "instructions": "One feature per line.",
                     "required": 0,
-                    "conditional_logic": false,
+                    "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
+                        "width": "",
                         "class": "",
                         "id": ""
                     },
                     "default_value": "",
-                    "rows": 5,
-                    "new_lines": "",
                     "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "rows": 5,
                     "placeholder": "",
-                    "parent_repeater": "field_tona_services_items"
-                },
-                {
-                    "key": "field_tona_services_item_image",
-                    "label": "Service Image",
-                    "name": "image",
-                    "aria-label": "",
-                    "type": "image",
-                    "instructions": "Main image for this service card.",
-                    "required": 0,
-                    "conditional_logic": false,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "preview_size": "medium",
-                    "library": "all",
-                    "min_width": 0,
-                    "min_height": 0,
-                    "min_size": 0,
-                    "max_width": 0,
-                    "max_height": 0,
-                    "max_size": 0,
-                    "mime_types": "",
+                    "new_lines": "",
                     "parent_repeater": "field_tona_services_items"
                 },
                 {
@@ -697,9 +664,9 @@
     "location": [
         [
             {
-                "param": "page_slug",
+                "param": "page_template",
                 "operator": "==",
-                "value": "dich-vu"
+                "value": "templates\/tona-services.php"
             }
         ]
     ],
@@ -707,10 +674,10 @@
     "position": "acf_after_title",
     "style": "default",
     "label_placement": "top",
-    "instruction_placement": "label",
+    "instruction_placement": "field",
     "hide_on_screen": "",
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1779131174
+    "modified": 1779211494
 }

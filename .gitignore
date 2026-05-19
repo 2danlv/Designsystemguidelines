@@ -16,6 +16,7 @@ wp-content/*
 !wp-content/plugins/emfresh/index.php
 wp-content/themes/emfresh/assets/css/style.css
 uploads/*
+**/*/uploads/*
 !/assets/*
 .htaccess
 license.txt

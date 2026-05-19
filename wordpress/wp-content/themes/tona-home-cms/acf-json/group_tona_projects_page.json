@@ -21,26 +21,6 @@
                        "selected":  0
                    },
                    {
-                       "key":  "field_tona_projects_breadcrumb_label",
-                       "label":  "Breadcrumb Label",
-                       "name":  "projects_breadcrumb_label",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Du An",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
                        "key":  "field_tona_projects_hero_background",
                        "label":  "Hero Background Color",
                        "name":  "projects_hero_background",
@@ -321,9 +301,9 @@
     "location":  [
                      [
                          {
-                             "param":  "page_slug",
+                             "param":  "page_template",
                              "operator":  "==",
-                             "value":  "du-an-tona"
+                             "value":  "templates/tona-projects.php"
                          }
                      ]
                  ],
@@ -336,5 +316,5 @@
     "active":  true,
     "description":  "",
     "show_in_rest":  1,
-    "modified":  1779129998
+    "modified":  1779234274
 }
