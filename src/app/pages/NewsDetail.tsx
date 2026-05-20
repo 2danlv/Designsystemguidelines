@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router";
 import { news as fallbackNews, type NewsBodyBlock } from "../data";
 import { ArrowLeft, ChevronRight, Clock, Tag, ArrowRight } from "lucide-react";
@@ -101,7 +101,7 @@ export function NewsDetail() {
         <p className="text-[#002d17]/40 font-bold uppercase tracking-widest text-sm">
           Không tìm thấy bài viết.
         </p>
-        <Link to="/vi/news" className="flex items-center gap-2 text-[#f4aa1f] font-bold uppercase tracking-widest text-sm hover:text-[#002d17] transition-colors">
+        <Link to="/vi/tin-tuc" className="flex items-center gap-2 text-[#f4aa1f] font-bold uppercase tracking-widest text-sm hover:text-[#002d17] transition-colors">
           <ArrowLeft size={14} /> Quay lại Tin Tức
         </Link>
       </div>
@@ -126,7 +126,7 @@ export function NewsDetail() {
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8 flex-wrap">
             <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
-            <Link to="/vi/news" className="hover:text-[#f4aa1f] transition-colors">Tin Tức</Link>
+            <Link to="/vi/tin-tuc" className="hover:text-[#f4aa1f] transition-colors">Tin Tức</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f] line-clamp-1 max-w-xs">{article.category}</span>
           </div>
@@ -215,7 +215,7 @@ export function NewsDetail() {
               <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">Bài Viết Liên Quan</p>
               <div className="flex flex-col gap-5">
                 {relatedList.map((item) => (
-                  <Link key={item.id} to={`/vi/news/${item.slug}`} className="group flex gap-3">
+                  <Link key={item.id} to={`/vi/tin-tuc/${item.slug}`} className="group flex gap-3">
                     <div className="shrink-0 w-20 h-16 rounded-lg overflow-hidden bg-[#bcd8cb]">
                       {item.image && <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />}
                     </div>
@@ -253,7 +253,7 @@ export function NewsDetail() {
               <div className="w-10 h-0.5 bg-[#f4aa1f] mb-3" />
               <h3 className="text-2xl font-extrabold text-[#002d17] uppercase tracking-tight">Tin Tức Khác</h3>
             </div>
-            <Link to="/vi/news" className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
+            <Link to="/vi/tin-tuc" className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
               Tất Cả <ArrowRight size={12} />
             </Link>
           </div>
@@ -267,7 +267,7 @@ export function NewsDetail() {
                 transition={{ delay: idx * 0.08 }}
                 className="group flex flex-col"
               >
-                <Link to={`/vi/news/${item.slug}`} className="flex flex-col gap-0">
+                <Link to={`/vi/tin-tuc/${item.slug}`} className="flex flex-col gap-0">
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#bcd8cb] rounded-xl">
                     {item.image && <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />}
                     <div className="absolute top-3 left-3 bg-[#d5ede5] text-[#1a6645] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
@@ -292,3 +292,4 @@ export function NewsDetail() {
     </div>
   );
 }
+

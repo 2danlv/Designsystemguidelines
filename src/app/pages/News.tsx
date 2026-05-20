@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { news as fallbackNews } from "../data";
 import { ArrowRight, ChevronRight, Clock, Search } from "lucide-react";
@@ -21,6 +21,7 @@ function backgroundStyle(color?: string) {
 export function News() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQ, setSearchQ] = useState("");
+  const [visibleCount, setVisibleCount] = useState(6);
   const [cmsPage, setCmsPage] = useState<NewsCmsData | null>(null);
   const [cmsNews, setCmsNews] = useState<NewsPost[]>([]);
 
@@ -65,6 +66,11 @@ export function News() {
     return matchCat && matchSearch;
   });
 
+  useEffect(() => {
+    setVisibleCount(6);
+  }, [activeCategory, searchQ, articles]);
+
+  const visibleArticles = filtered.slice(0, visibleCount);
   const featured = articles[0];
   const colors = cmsPage?.colors;
   const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Tin Tức";
@@ -99,7 +105,7 @@ export function News() {
               {listing?.featuredLabel || "Tin Nổi Bật"}
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <Link to={`/vi/news/${featured.slug}`} className="lg:col-span-7 relative overflow-hidden aspect-[16/9] bg-[#bcd8cb] group cursor-pointer rounded-2xl block">
+              <Link to={`/vi/tin-tuc/${featured.slug}`} className="lg:col-span-7 relative overflow-hidden aspect-[16/9] bg-[#bcd8cb] group cursor-pointer rounded-2xl block">
                 {featured.image && (
                   <img
                     src={featured.image}
@@ -130,7 +136,7 @@ export function News() {
                   {featured.excerpt}
                 </p>
                 <Link
-                  to={`/vi/news/${featured.slug}`}
+                  to={`/vi/tin-tuc/${featured.slug}`}
                   className="mt-2 flex items-center gap-2 bg-[#002d17] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#f4aa1f] hover:text-[#002d17] transition-colors w-fit rounded-lg"
                 >
                   Đọc Tiếp <ArrowRight size={14} />
@@ -191,7 +197,7 @@ export function News() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-            {filtered.map((item, idx) => (
+            {visibleArticles.map((item, idx) => (
               <motion.article
                 key={item.id}
                 initial={{ opacity: 0, y: 24 }}
@@ -199,7 +205,7 @@ export function News() {
                 transition={{ duration: 0.4, delay: idx * 0.07 }}
                 className="group flex flex-col"
               >
-                <Link to={`/vi/news/${item.slug}`} className="flex flex-col gap-0">
+                <Link to={`/vi/tin-tuc/${item.slug}`} className="flex flex-col gap-0">
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#bcd8cb] rounded-xl">
                     {item.image && (
                       <img
@@ -211,6 +217,11 @@ export function News() {
                     {item.category && (
                       <div className="absolute top-3 left-3 bg-[#d5ede5] text-[#1a6645] px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
                         {item.category}
+                      </div>
+                    )}
+                    {item.id === featured?.id && (
+                      <div className="absolute bottom-3 left-3 bg-[#f4aa1f] text-[#002d17] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                        Nổi Bật
                       </div>
                     )}
                   </div>
@@ -239,9 +250,13 @@ export function News() {
           </div>
         )}
 
-        {filtered.length > 0 && (
+        {visibleArticles.length < filtered.length && (
           <div className="mt-16 flex justify-center">
-            <button className="border-2 border-[#002d17] text-[#002d17] px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-white transition-colors rounded-xl">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((count) => count + 3)}
+              className="border-2 border-[#002d17] text-[#002d17] px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-white transition-colors rounded-xl"
+            >
               {listing?.loadMoreLabel || "Xem Thêm Tin Tức"}
             </button>
           </div>
@@ -274,3 +289,4 @@ export function News() {
     </div>
   );
 }
+

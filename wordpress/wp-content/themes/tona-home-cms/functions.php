@@ -280,9 +280,17 @@ function tona_cms_image_url( $image ) {
     return is_string( $image ) ? esc_url_raw( $image ) : '';
 }
 
+function tona_cms_decode_text( $value ) {
+    if ( ! is_string( $value ) ) {
+        return '';
+    }
+
+    return html_entity_decode( wp_specialchars_decode( $value, ENT_QUOTES ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+}
+
 function tona_cms_text_field( $post_id, $field_name ) {
     $value = function_exists( 'get_field' ) ? get_field( $field_name, $post_id ) : '';
-    return is_string( $value ) ? $value : '';
+    return tona_cms_decode_text( $value );
 }
 
 function tona_cms_group_text_field( $post_id, $group_names, $field_name, $fallback_field_name = '' ) {
@@ -1016,7 +1024,7 @@ function tona_cms_news_terms_payload( $post_id, $taxonomy ) {
             function ( $term ) {
                 return array(
                     'id'   => $term->term_id,
-                    'name' => $term->name,
+                    'name' => tona_cms_decode_text( $term->name ),
                     'slug' => $term->slug,
                 );
             },
@@ -1035,17 +1043,17 @@ function tona_cms_news_payload( $post ) {
     return array(
         'id'           => $post_id,
         'slug'         => $post->post_name,
-        'title'        => get_the_title( $post ),
+        'title'        => tona_cms_decode_text( get_the_title( $post ) ),
         'date'         => get_the_date( 'd/m/Y', $post ),
         'category'     => ! empty( $categories ) ? $categories[0]['name'] : '',
         'categorySlug' => ! empty( $categories ) ? $categories[0]['slug'] : '',
         'categories'   => $categories,
         'tags'         => array_values( wp_list_pluck( $tags, 'name' ) ),
         'image'        => $image ? esc_url_raw( $image ) : '',
-        'excerpt'      => has_excerpt( $post ) ? get_the_excerpt( $post ) : wp_trim_words( wp_strip_all_tags( $post->post_content ), 32 ),
+        'excerpt'      => tona_cms_decode_text( has_excerpt( $post ) ? get_the_excerpt( $post ) : wp_trim_words( wp_strip_all_tags( $post->post_content ), 32 ) ),
         'content'      => apply_filters( 'the_content', $post->post_content ),
         'readTime'     => tona_cms_text_field( $post_id, 'news_read_time' ),
-        'author'       => $author_name ?: get_the_author_meta( 'display_name', (int) $post->post_author ),
+        'author'       => $author_name ?: tona_cms_decode_text( get_the_author_meta( 'display_name', (int) $post->post_author ) ),
     );
 }
 

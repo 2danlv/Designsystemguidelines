@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router";
+﻿import { createBrowserRouter, Navigate } from "react-router";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { About } from "./pages/About";
@@ -27,9 +27,10 @@ export const router = createBrowserRouter([
       { path: "dich-vu", Component: Services },
       { path: "du-an-tona", Component: Projects },
       { path: "project/:slug", Component: ProjectDetail },
-      { path: "news", Component: News },
-      { path: "news/:slug", Component: NewsDetail },
+      { path: "tin-tuc", Component: News },
+      { path: "tin-tuc/:slug", Component: NewsDetail },
       { path: "nghe-nghiep", Component: Jobs },
     ],
   },
 ]);
+

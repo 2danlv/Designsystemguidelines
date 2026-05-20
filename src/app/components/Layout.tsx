@@ -1,9 +1,9 @@
-import { Outlet, Link, useLocation } from "react-router";
+﻿import { Outlet, Link, useLocation } from "react-router";
 import { Menu, X, MapPin, Phone, Mail, Facebook, Linkedin, Youtube, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import tonaLogo from "../../imports/TONA_-_LOGO.png";
 
-// ─── NAV DATA ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ NAV DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const navLinks = [
   { label: "HOME", to: "/vi" },
@@ -17,11 +17,11 @@ const navLinks = [
   },
   { label: "DỊCH VỤ", to: "/vi/dich-vu" },
   { label: "DỰ ÁN", to: "/vi/du-an-tona" },
-  { label: "TIN TỨC", to: "/vi/news" },
+  { label: "TIN TỨC", to: "/vi/tin-tuc" },
   { label: "TUYỂN DỤNG", to: "/vi/nghe-nghiep" },
 ];
 
-// ─── HEADER ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -195,7 +195,7 @@ function Header() {
   );
 }
 
-// ─── FOOTER ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Footer() {
   return (
@@ -296,7 +296,7 @@ function Footer() {
             <li className="flex items-start gap-3">
               <MapPin size={15} className="text-[#f4aa1f] shrink-0 mt-0.5" />
               <span className="text-white/60 text-sm leading-relaxed">
-                Toa nhà Tona, 123 Đường Xây Dựng<br />
+                Tòa nhà Tona, 123 Đường Xây Dựng<br />
                 Quận 1, TP. Hồ Chí Minh, Việt Nam
               </span>
             </li>
@@ -348,7 +348,7 @@ function Footer() {
   );
 }
 
-// ─── LAYOUT ROOT ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ LAYOUT ROOT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function Layout() {
   return (
