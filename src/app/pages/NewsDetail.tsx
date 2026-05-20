@@ -1,16 +1,15 @@
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router";
-import { news, NewsBodyBlock } from "../data";
+import { news as fallbackNews, type NewsBodyBlock } from "../data";
 import { ArrowLeft, ChevronRight, Clock, Tag, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
+import { fetchCmsNews, fetchCmsNewsPost, type NewsPost } from "../lib/wordpress";
 
 function BodyBlock({ block }: { block: NewsBodyBlock }) {
   if (block.type === "paragraph") {
-    return (
-      <p className="text-[#002d17]/75 text-base leading-relaxed font-medium">
-        {block.text}
-      </p>
-    );
+    return <p className="text-[#002d17]/75 text-base leading-relaxed font-medium">{block.text}</p>;
   }
+
   if (block.type === "heading") {
     return (
       <h2 className="text-[#002d17] text-xl font-extrabold uppercase tracking-tight mt-4 mb-1 flex items-center gap-3">
@@ -19,18 +18,18 @@ function BodyBlock({ block }: { block: NewsBodyBlock }) {
       </h2>
     );
   }
+
   if (block.type === "quote") {
     return (
       <blockquote className="my-2 bg-[#f0faf6] border-l-4 border-[#46aa85] rounded-r-xl px-6 py-5">
-        <p className="text-[#002d17] font-semibold italic text-base leading-relaxed">
-          "{block.text}"
-        </p>
+        <p className="text-[#002d17] font-semibold italic text-base leading-relaxed">"{block.text}"</p>
         <cite className="block mt-3 text-[#46aa85] font-bold text-xs uppercase tracking-widest not-italic">
-          — {block.author}
+          {block.author}
         </cite>
       </blockquote>
     );
   }
+
   if (block.type === "list") {
     return (
       <ul className="flex flex-col gap-2.5 my-1">
@@ -43,6 +42,7 @@ function BodyBlock({ block }: { block: NewsBodyBlock }) {
       </ul>
     );
   }
+
   if (block.type === "image") {
     return (
       <figure className="my-2">
@@ -57,15 +57,45 @@ function BodyBlock({ block }: { block: NewsBodyBlock }) {
       </figure>
     );
   }
+
   return null;
 }
 
 export function NewsDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const article = news.find((n) => n.slug === slug);
+  const [cmsArticle, setCmsArticle] = useState<NewsPost | null>(null);
+  const [cmsNews, setCmsNews] = useState<NewsPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
-  if (!article) {
+  useEffect(() => {
+    if (!slug) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    Promise.all([
+      fetchCmsNewsPost(slug, controller.signal),
+      fetchCmsNews(controller.signal),
+    ]).then(([article, articles]) => {
+      setCmsArticle(article);
+      setCmsNews(articles);
+      setLoaded(true);
+    });
+
+    return () => controller.abort();
+  }, [slug]);
+
+  const fallbackArticle = useMemo(
+    () => fallbackNews.find((item) => item.slug === slug) as (NewsPost & { body?: NewsBodyBlock[] }) | undefined,
+    [slug],
+  );
+
+  const article = cmsArticle || fallbackArticle;
+  const allArticles = cmsNews.length ? cmsNews : (fallbackNews as NewsPost[]);
+
+  if (loaded && !article) {
     return (
       <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-6">
         <p className="text-[#002d17]/40 font-bold uppercase tracking-widest text-sm">
@@ -78,18 +108,21 @@ export function NewsDetail() {
     );
   }
 
-  const related = news.filter((n) => n.id !== article.id && n.category === article.category).slice(0, 3);
-  const moreRelated = related.length < 2
-    ? news.filter((n) => n.id !== article.id).slice(0, 3 - related.length)
-    : [];
-  const relatedList = [...related, ...moreRelated].slice(0, 3);
+  if (!article) {
+    return null;
+  }
+
+  const relatedList = article.related?.length
+    ? article.related
+    : allArticles
+      .filter((item) => item.id !== article.id && (item.categorySlug || item.category) === (article.categorySlug || article.category))
+      .slice(0, 3);
+  const fallbackBody = (article as NewsPost & { body?: NewsBodyBlock[] }).body;
 
   return (
     <div className="w-full bg-white min-h-screen">
-      {/* HERO */}
       <div className="bg-[#002d17] pt-8 pb-0">
         <div className="max-w-5xl mx-auto px-6">
-          {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8 flex-wrap">
             <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
@@ -98,13 +131,14 @@ export function NewsDetail() {
             <span className="text-[#f4aa1f] line-clamp-1 max-w-xs">{article.category}</span>
           </div>
 
-          {/* Category + meta */}
           <div className="flex flex-wrap items-center gap-3 mb-5">
-            <span className="bg-[#f4aa1f] text-[#002d17] px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">
-              {article.category}
-            </span>
+            {article.category && (
+              <span className="bg-[#f4aa1f] text-[#002d17] px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">
+                {article.category}
+              </span>
+            )}
             <span className="flex items-center gap-1.5 text-white/40 text-xs font-bold uppercase tracking-widest">
-              <Clock size={11} /> {article.readTime} đọc
+              <Clock size={11} /> {article.readTime || "3 phút"}
             </span>
             <span className="text-white/30 text-xs font-bold uppercase tracking-widest">{article.date}</span>
           </div>
@@ -113,58 +147,52 @@ export function NewsDetail() {
             {article.title}
           </h1>
 
-          {/* Author */}
           <div className="flex items-center gap-3 pb-8 border-b border-white/10">
             <div className="w-8 h-8 rounded-full bg-[#46aa85] flex items-center justify-center text-white font-bold text-xs shrink-0">
-              {(article as any).author?.charAt(0) ?? "T"}
+              {(article.author || "T").charAt(0)}
             </div>
-            <div>
-              <p className="text-white/70 text-xs font-bold uppercase tracking-widest">{(article as any).author ?? "Ban Biên Tập Tona"}</p>
-            </div>
+            <p className="text-white/70 text-xs font-bold uppercase tracking-widest">
+              {article.author || "Ban Biên Tập Tona"}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* HERO IMAGE */}
       <div className="max-w-5xl mx-auto px-6">
         <div className="rounded-b-2xl overflow-hidden aspect-[16/8] bg-[#bcd8cb]">
-          <img
-            src={article.image}
-            alt={article.title}
-            className="w-full h-full object-cover"
-          />
+          {article.image && <img src={article.image} alt={article.title} className="w-full h-full object-cover" />}
         </div>
       </div>
 
-      {/* ARTICLE BODY */}
       <div className="max-w-5xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Main content */}
           <motion.article
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="lg:col-span-8 flex flex-col gap-6"
           >
-            {/* Excerpt lead */}
             <p className="text-[#002d17] text-lg font-semibold leading-relaxed border-l-4 border-[#f4aa1f] pl-5 bg-[#fffdf5] rounded-r-xl py-4">
               {article.excerpt}
             </p>
 
-            {/* Body blocks */}
-            <div className="flex flex-col gap-5">
-              {(article as any).body?.map((block: NewsBodyBlock, i: number) => (
-                <BodyBlock key={i} block={block} />
-              ))}
-            </div>
+            {article.content ? (
+              <div
+                className="cms-content flex flex-col gap-5 text-[#002d17]/75 text-base leading-relaxed font-medium"
+                dangerouslySetInnerHTML={{ __html: article.content }}
+              />
+            ) : (
+              <div className="flex flex-col gap-5">
+                {fallbackBody?.map((block, i) => <BodyBlock key={i} block={block} />)}
+              </div>
+            )}
 
-            {/* Tags */}
-            {(article as any).tags && (
+            {!!article.tags?.length && (
               <div className="flex flex-wrap gap-2 pt-6 border-t border-[#002d17]/10 mt-4">
                 <span className="flex items-center gap-1.5 text-[#002d17]/40 text-xs font-bold uppercase tracking-widest">
                   <Tag size={11} /> Tags:
                 </span>
-                {(article as any).tags.map((tag: string) => (
+                {article.tags.map((tag) => (
                   <span key={tag} className="bg-[#f0faf6] text-[#46aa85] px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">
                     {tag}
                   </span>
@@ -172,7 +200,6 @@ export function NewsDetail() {
               </div>
             )}
 
-            {/* Back nav */}
             <div className="pt-4">
               <button
                 onClick={() => navigate(-1)}
@@ -183,24 +210,14 @@ export function NewsDetail() {
             </div>
           </motion.article>
 
-          {/* Sidebar */}
           <aside className="lg:col-span-4 flex flex-col gap-6">
-            {/* Related articles */}
             <div className="bg-[#f9f9f7] rounded-2xl p-6">
               <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">Bài Viết Liên Quan</p>
               <div className="flex flex-col gap-5">
                 {relatedList.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={`/vi/news/${item.slug}`}
-                    className="group flex gap-3"
-                  >
+                  <Link key={item.id} to={`/vi/news/${item.slug}`} className="group flex gap-3">
                     <div className="shrink-0 w-20 h-16 rounded-lg overflow-hidden bg-[#bcd8cb]">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                      {item.image && <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />}
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <span className="text-[#f4aa1f] font-bold text-[10px] uppercase tracking-widest">{item.category}</span>
@@ -214,11 +231,10 @@ export function NewsDetail() {
               </div>
             </div>
 
-            {/* CTA */}
             <div className="bg-[#002d17] rounded-2xl p-6">
               <div className="w-8 h-0.5 bg-[#f4aa1f] mb-4" />
               <h4 className="font-extrabold text-white uppercase tracking-tight mb-2">Dự Án Của Bạn?</h4>
-              <p className="text-white/50 text-sm font-medium mb-5 leading-relaxed">Liên hệ Tona ngay hôm nay để được tư vấn miễn phí.</p>
+              <p className="text-white/50 text-sm font-medium mb-5 leading-relaxed">Liên hệ Tona ngay hôm nay để được tư vấn.</p>
               <Link
                 to="/vi/nghe-nghiep"
                 className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-4 py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors rounded-lg w-fit"
@@ -230,7 +246,6 @@ export function NewsDetail() {
         </div>
       </div>
 
-      {/* MORE NEWS */}
       <div className="bg-[#f9f9f7] py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between mb-10">
@@ -243,7 +258,7 @@ export function NewsDetail() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {news.filter((n) => n.id !== article.id).slice(0, 3).map((item, idx) => (
+            {allArticles.filter((item) => item.id !== article.id).slice(0, 3).map((item, idx) => (
               <motion.article
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -254,11 +269,7 @@ export function NewsDetail() {
               >
                 <Link to={`/vi/news/${item.slug}`} className="flex flex-col gap-0">
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#bcd8cb] rounded-xl">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                    />
+                    {item.image && <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />}
                     <div className="absolute top-3 left-3 bg-[#d5ede5] text-[#1a6645] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
                       {item.category}
                     </div>

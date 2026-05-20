@@ -1,1121 +1,1121 @@
 {
-    "key":  "group_tona_culture_page",
-    "title":  "Culture Page Content",
-    "fields":  [
-                   {
-                       "key":  "field_tona_culture_tab_hero",
-                       "label":  "01. Hero",
-                       "name":  "",
-                       "aria-label":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_hero_title",
-                       "label":  "Hero Title",
-                       "name":  "culture_hero_title",
-                       "aria-label":  "",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "rows":  3,
-                       "new_lines":  "",
-                       "default_value":  "Tona -\nHon Ca\nMot Noi Lam Viec",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_hero_description",
-                       "label":  "Hero Description",
-                       "name":  "culture_hero_description",
-                       "aria-label":  "",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "rows":  4,
-                       "new_lines":  "",
-                       "default_value":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_hero_decorative_text",
-                       "label":  "Decorative Text",
-                       "name":  "culture_hero_decorative_text",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "TONA",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_hero_background",
-                       "label":  "Hero Background Color",
-                       "name":  "culture_hero_background",
-                       "aria-label":  "",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#002d17",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_culture_tab_stats",
-                       "label":  "02. Stats",
-                       "name":  "",
-                       "aria-label":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_stats_background",
-                       "label":  "Stats Background Color",
-                       "name":  "culture_stats_background",
-                       "aria-label":  "",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#f4aa1f",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_culture_stats",
-                       "label":  "Stats",
-                       "name":  "culture_stats",
-                       "aria-label":  "",
-                       "type":  "repeater",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "layout":  "table",
-                       "button_label":  "Add Stat",
-                       "min":  0,
-                       "max":  0,
-                       "rows_per_page":  20,
-                       "collapsed":  "",
-                       "sub_fields":  [
-                                          {
-                                              "key":  "field_tona_culture_stat_value",
-                                              "label":  "Value",
-                                              "name":  "value",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_stats",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_stat_label",
-                                              "label":  "Label",
-                                              "name":  "label",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_stats",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          }
-                                      ]
-                   },
-                   {
-                       "key":  "field_tona_culture_tab_themes",
-                       "label":  "03. Yearly Themes",
-                       "name":  "",
-                       "aria-label":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_themes_title",
-                       "label":  "Section Title",
-                       "name":  "culture_themes_title",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Chu De Nam",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_themes_description",
-                       "label":  "Section Description",
-                       "name":  "culture_themes_description",
-                       "aria-label":  "",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "rows":  3,
-                       "new_lines":  "",
-                       "default_value":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_themes_background",
-                       "label":  "Section Background Color",
-                       "name":  "culture_themes_background",
-                       "aria-label":  "",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#ffffff",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_culture_yearly_themes",
-                       "label":  "Yearly Themes",
-                       "name":  "culture_yearly_themes",
-                       "aria-label":  "",
-                       "type":  "repeater",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "layout":  "row",
-                       "button_label":  "Add Theme",
-                       "collapsed":  "field_tona_culture_theme_year",
-                       "min":  0,
-                       "max":  0,
-                       "rows_per_page":  20,
-                       "sub_fields":  [
-                                          {
-                                              "key":  "field_tona_culture_theme_year",
-                                              "label":  "Year",
-                                              "name":  "year",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_yearly_themes",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_theme_name",
-                                              "label":  "Theme Name",
-                                              "name":  "theme",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_yearly_themes",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_theme_color",
-                                              "label":  "Accent Color",
-                                              "name":  "color",
-                                              "aria-label":  "",
-                                              "type":  "color_picker",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "default_value":  "#f4aa1f",
-                                              "enable_opacity":  0,
-                                              "return_format":  "string",
-                                              "parent_repeater":  "field_tona_culture_yearly_themes"
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_theme_description",
-                                              "label":  "Description",
-                                              "name":  "description",
-                                              "aria-label":  "",
-                                              "type":  "textarea",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "rows":  3,
-                                              "new_lines":  "",
-                                              "parent_repeater":  "field_tona_culture_yearly_themes",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_theme_milestones",
-                                              "label":  "Milestones",
-                                              "name":  "milestones",
-                                              "aria-label":  "",
-                                              "type":  "textarea",
-                                              "instructions":  "One milestone per line.",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "rows":  4,
-                                              "new_lines":  "",
-                                              "parent_repeater":  "field_tona_culture_yearly_themes",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  ""
-                                          }
-                                      ]
-                   },
-                   {
-                       "key":  "field_tona_culture_tab_activities",
-                       "label":  "04. Activities",
-                       "name":  "",
-                       "aria-label":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_activities_title",
-                       "label":  "Section Title",
-                       "name":  "culture_activities_title",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Hoat Dong Van Hoa",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_activities_background",
-                       "label":  "Section Background Color",
-                       "name":  "culture_activities_background",
-                       "aria-label":  "",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#f9f9f7",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_culture_activities",
-                       "label":  "Activity Cards",
-                       "name":  "culture_activities",
-                       "aria-label":  "",
-                       "type":  "repeater",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "layout":  "row",
-                       "button_label":  "Add Activity",
-                       "collapsed":  "field_tona_culture_activity_title",
-                       "min":  0,
-                       "max":  0,
-                       "rows_per_page":  20,
-                       "sub_fields":  [
-                                          {
-                                              "key":  "field_tona_culture_activity_icon",
-                                              "label":  "Icon",
-                                              "name":  "icon",
-                                              "aria-label":  "",
-                                              "type":  "select",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "choices":  {
-                                                              "Heart":  "Heart",
-                                                              "Users":  "Users",
-                                                              "Trophy":  "Trophy",
-                                                              "Zap":  "Zap"
-                                                          },
-                                              "default_value":  "Heart",
-                                              "return_format":  "value",
-                                              "ui":  1,
-                                              "parent_repeater":  "field_tona_culture_activities",
-                                              "multiple":  0,
-                                              "allow_null":  0,
-                                              "ajax":  0,
-                                              "placeholder":  "",
-                                              "create_options":  0,
-                                              "save_options":  0
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_activity_icon_image",
-                                              "label":  "Custom Icon Image",
-                                              "name":  "icon_image",
-                                              "aria-label":  "",
-                                              "type":  "image",
-                                              "instructions":  "Optional. Upload an icon image to override the selected icon.",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "return_format":  "array",
-                                              "preview_size":  "thumbnail",
-                                              "library":  "all",
-                                              "parent_repeater":  "field_tona_culture_activities",
-                                              "min_width":  0,
-                                              "min_height":  0,
-                                              "min_size":  0,
-                                              "max_width":  0,
-                                              "max_height":  0,
-                                              "max_size":  0,
-                                              "mime_types":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_activity_title",
-                                              "label":  "Title",
-                                              "name":  "title",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_activities",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_activity_subtitle",
-                                              "label":  "Subtitle",
-                                              "name":  "subtitle",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_activities",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_activity_description",
-                                              "label":  "Description",
-                                              "name":  "description",
-                                              "aria-label":  "",
-                                              "type":  "textarea",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "rows":  3,
-                                              "new_lines":  "",
-                                              "parent_repeater":  "field_tona_culture_activities",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_activity_image",
-                                              "label":  "Image",
-                                              "name":  "image",
-                                              "aria-label":  "",
-                                              "type":  "image",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "return_format":  "array",
-                                              "preview_size":  "medium",
-                                              "library":  "all",
-                                              "parent_repeater":  "field_tona_culture_activities",
-                                              "min_width":  0,
-                                              "min_height":  0,
-                                              "min_size":  0,
-                                              "max_width":  0,
-                                              "max_height":  0,
-                                              "max_size":  0,
-                                              "mime_types":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_activity_color",
-                                              "label":  "Accent Color",
-                                              "name":  "color",
-                                              "aria-label":  "",
-                                              "type":  "color_picker",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "default_value":  "#f4aa1f",
-                                              "enable_opacity":  0,
-                                              "return_format":  "string",
-                                              "parent_repeater":  "field_tona_culture_activities"
-                                          }
-                                      ]
-                   },
-                   {
-                       "key":  "field_tona_culture_tab_academy",
-                       "label":  "05. Academy",
-                       "name":  "",
-                       "aria-label":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_background",
-                       "label":  "Section Background Color",
-                       "name":  "culture_academy_background",
-                       "aria-label":  "",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#002d17",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_eyebrow",
-                       "label":  "Eyebrow",
-                       "name":  "culture_academy_eyebrow",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Phat Trien Con Nguoi",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_title",
-                       "label":  "Title",
-                       "name":  "culture_academy_title",
-                       "aria-label":  "",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "rows":  2,
-                       "new_lines":  "",
-                       "default_value":  "TONA Academy -\nHoc De Vuon Xa",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_description",
-                       "label":  "Description",
-                       "name":  "culture_academy_description",
-                       "aria-label":  "",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "rows":  4,
-                       "new_lines":  "",
-                       "default_value":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_image",
-                       "label":  "Image",
-                       "name":  "culture_academy_image",
-                       "aria-label":  "",
-                       "type":  "image",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "return_format":  "array",
-                       "preview_size":  "medium",
-                       "library":  "all",
-                       "min_width":  0,
-                       "min_height":  0,
-                       "min_size":  0,
-                       "max_width":  0,
-                       "max_height":  0,
-                       "max_size":  0,
-                       "mime_types":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_stats",
-                       "label":  "Academy Stats",
-                       "name":  "culture_academy_stats",
-                       "aria-label":  "",
-                       "type":  "repeater",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "layout":  "table",
-                       "button_label":  "Add Stat",
-                       "min":  0,
-                       "max":  0,
-                       "rows_per_page":  20,
-                       "collapsed":  "",
-                       "sub_fields":  [
-                                          {
-                                              "key":  "field_tona_culture_academy_stat_value",
-                                              "label":  "Value",
-                                              "name":  "value",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_academy_stats",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          },
-                                          {
-                                              "key":  "field_tona_culture_academy_stat_label",
-                                              "label":  "Label",
-                                              "name":  "label",
-                                              "aria-label":  "",
-                                              "type":  "text",
-                                              "instructions":  "",
-                                              "required":  false,
-                                              "conditional_logic":  false,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "parent_repeater":  "field_tona_culture_academy_stats",
-                                              "default_value":  "",
-                                              "maxlength":  "",
-                                              "placeholder":  "",
-                                              "prepend":  "",
-                                              "append":  ""
-                                          }
-                                      ]
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_link_label",
-                       "label":  "Button Label",
-                       "name":  "culture_academy_link_label",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Gia Nhap Tona",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_academy_link_url",
-                       "label":  "Button URL",
-                       "name":  "culture_academy_link_url",
-                       "aria-label":  "",
-                       "type":  "page_link",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  0,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "post_type":  "",
-                       "post_status":  "",
-                       "taxonomy":  "",
-                       "allow_archives":  1,
-                       "multiple":  0,
-                       "allow_null":  0,
-                       "allow_in_bindings":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_tab_gallery",
-                       "label":  "06. Gallery",
-                       "name":  "",
-                       "aria-label":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_gallery_title",
-                       "label":  "Section Title",
-                       "name":  "culture_gallery_title",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Khoanh Khac Tona",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_gallery_background",
-                       "label":  "Section Background Color",
-                       "name":  "culture_gallery_background",
-                       "aria-label":  "",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#ffffff",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_culture_gallery_photos",
-                       "label":  "Gallery Photos",
-                       "name":  "culture_gallery_photos",
-                       "aria-label":  "",
-                       "type":  "repeater",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  0,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "layout":  "table",
-                       "pagination":  0,
-                       "min":  0,
-                       "max":  0,
-                       "collapsed":  "",
-                       "button_label":  "Add Photo",
-                       "rows_per_page":  20,
-                       "sub_fields":  [
-                                          {
-                                              "key":  "field_tona_culture_gallery_photo_image",
-                                              "label":  "Image",
-                                              "name":  "image",
-                                              "aria-label":  "",
-                                              "type":  "image",
-                                              "instructions":  "",
-                                              "required":  0,
-                                              "conditional_logic":  0,
-                                              "wrapper":  {
-                                                              "width":  "",
-                                                              "class":  "",
-                                                              "id":  ""
-                                                          },
-                                              "return_format":  "array",
-                                              "library":  "all",
-                                              "min_width":  "",
-                                              "min_height":  "",
-                                              "min_size":  "",
-                                              "max_width":  "",
-                                              "max_height":  "",
-                                              "max_size":  "",
-                                              "mime_types":  "",
-                                              "allow_in_bindings":  1,
-                                              "preview_size":  "medium",
-                                              "parent_repeater":  "field_tona_culture_gallery_photos"
-                                          }
-                                      ]
-                   },
-                   {
-                       "key":  "field_tona_culture_tab_cta",
-                       "label":  "07. CTA",
-                       "name":  "",
-                       "aria-label":  "",
-                       "type":  "tab",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "placement":  "top",
-                       "endpoint":  0,
-                       "selected":  0
-                   },
-                   {
-                       "key":  "field_tona_culture_cta_background",
-                       "label":  "CTA Background Color",
-                       "name":  "culture_cta_background",
-                       "aria-label":  "",
-                       "type":  "color_picker",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "#f4aa1f",
-                       "enable_opacity":  0,
-                       "return_format":  "string"
-                   },
-                   {
-                       "key":  "field_tona_culture_cta_title",
-                       "label":  "CTA Title",
-                       "name":  "culture_cta_title",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_cta_description",
-                       "label":  "CTA Description",
-                       "name":  "culture_cta_description",
-                       "aria-label":  "",
-                       "type":  "textarea",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "rows":  3,
-                       "new_lines":  "",
-                       "default_value":  "",
-                       "maxlength":  "",
-                       "placeholder":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_cta_link_label",
-                       "label":  "Button Label",
-                       "name":  "culture_cta_link_label",
-                       "aria-label":  "",
-                       "type":  "text",
-                       "instructions":  "",
-                       "required":  false,
-                       "conditional_logic":  false,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "default_value":  "Xem Co Hoi Nghe Nghiep",
-                       "maxlength":  "",
-                       "placeholder":  "",
-                       "prepend":  "",
-                       "append":  ""
-                   },
-                   {
-                       "key":  "field_tona_culture_cta_link_url",
-                       "label":  "Button URL",
-                       "name":  "culture_cta_link_url",
-                       "aria-label":  "",
-                       "type":  "page_link",
-                       "instructions":  "",
-                       "required":  0,
-                       "conditional_logic":  0,
-                       "wrapper":  {
-                                       "width":  "50",
-                                       "class":  "",
-                                       "id":  ""
-                                   },
-                       "post_type":  "",
-                       "post_status":  "",
-                       "taxonomy":  "",
-                       "allow_archives":  1,
-                       "multiple":  0,
-                       "allow_null":  0,
-                       "allow_in_bindings":  0
-                   }
-               ],
-    "location":  [
-                     [
-                         {
-                             "param":  "page_template",
-                             "operator":  "==",
-                             "value":  "templates/tona-culture.php"
-                         }
-                     ]
-                 ],
-    "menu_order":  2,
-    "position":  "acf_after_title",
-    "style":  "default",
-    "label_placement":  "top",
-    "instruction_placement":  "field",
-    "hide_on_screen":  "",
-    "active":  true,
-    "description":  "",
-    "show_in_rest":  1,
-    "modified":  1779234274
+    "key": "group_tona_culture_page",
+    "title": "Culture Page Content",
+    "fields": [
+        {
+            "key": "field_tona_culture_tab_hero",
+            "label": "01. Hero",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_culture_hero_title",
+            "label": "Hero Title",
+            "name": "culture_hero_title",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "new_lines": "",
+            "default_value": "Tona -\nHon Ca\nMot Noi Lam Viec",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_culture_hero_description",
+            "label": "Hero Description",
+            "name": "culture_hero_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 4,
+            "new_lines": "",
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_culture_hero_decorative_text",
+            "label": "Decorative Text",
+            "name": "culture_hero_decorative_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "TONA",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_hero_background",
+            "label": "Hero Background Color",
+            "name": "culture_hero_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_culture_tab_stats",
+            "label": "02. Stats",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_culture_stats_background",
+            "label": "Stats Background Color",
+            "name": "culture_stats_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f4aa1f",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_culture_stats",
+            "label": "Stats",
+            "name": "culture_stats",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "Add Stat",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_tona_culture_stat_value",
+                    "label": "Value",
+                    "name": "value",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_stats",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_tona_culture_stat_label",
+                    "label": "Label",
+                    "name": "label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_stats",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_tona_culture_tab_themes",
+            "label": "03. Yearly Themes",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_culture_themes_title",
+            "label": "Section Title",
+            "name": "culture_themes_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Chu De Nam",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_themes_description",
+            "label": "Section Description",
+            "name": "culture_themes_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "new_lines": "",
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_culture_themes_background",
+            "label": "Section Background Color",
+            "name": "culture_themes_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#ffffff",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_culture_yearly_themes",
+            "label": "Yearly Themes",
+            "name": "culture_yearly_themes",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "button_label": "Add Theme",
+            "collapsed": "field_tona_culture_theme_year",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_culture_theme_year",
+                    "label": "Year",
+                    "name": "year",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_yearly_themes",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_tona_culture_theme_name",
+                    "label": "Theme Name",
+                    "name": "theme",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_yearly_themes",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_tona_culture_theme_color",
+                    "label": "Accent Color",
+                    "name": "color",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "#f4aa1f",
+                    "enable_opacity": 0,
+                    "return_format": "string",
+                    "parent_repeater": "field_tona_culture_yearly_themes"
+                },
+                {
+                    "key": "field_tona_culture_theme_description",
+                    "label": "Description",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "rows": 3,
+                    "new_lines": "",
+                    "parent_repeater": "field_tona_culture_yearly_themes",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_tona_culture_theme_milestones",
+                    "label": "Milestones",
+                    "name": "milestones",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "One milestone per line.",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "rows": 4,
+                    "new_lines": "",
+                    "parent_repeater": "field_tona_culture_yearly_themes",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": ""
+                }
+            ]
+        },
+        {
+            "key": "field_tona_culture_tab_activities",
+            "label": "04. Activities",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_culture_activities_title",
+            "label": "Section Title",
+            "name": "culture_activities_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Hoat Dong Van Hoa",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_activities_background",
+            "label": "Section Background Color",
+            "name": "culture_activities_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f9f9f7",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_culture_activities",
+            "label": "Activity Cards",
+            "name": "culture_activities",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "button_label": "Add Activity",
+            "collapsed": "field_tona_culture_activity_title",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_culture_activity_icon",
+                    "label": "Icon",
+                    "name": "icon",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "Heart": "Heart",
+                        "Users": "Users",
+                        "Trophy": "Trophy",
+                        "Zap": "Zap"
+                    },
+                    "default_value": "Heart",
+                    "return_format": "value",
+                    "ui": 1,
+                    "parent_repeater": "field_tona_culture_activities",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0
+                },
+                {
+                    "key": "field_tona_culture_activity_icon_image",
+                    "label": "Custom Icon Image",
+                    "name": "icon_image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Optional. Upload an icon image to override the selected icon.",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "parent_repeater": "field_tona_culture_activities",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_tona_culture_activity_title",
+                    "label": "Title",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_activities",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_tona_culture_activity_subtitle",
+                    "label": "Subtitle",
+                    "name": "subtitle",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_activities",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_tona_culture_activity_description",
+                    "label": "Description",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "rows": 3,
+                    "new_lines": "",
+                    "parent_repeater": "field_tona_culture_activities",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": ""
+                },
+                {
+                    "key": "field_tona_culture_activity_image",
+                    "label": "Image",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "medium",
+                    "library": "all",
+                    "parent_repeater": "field_tona_culture_activities",
+                    "min_width": 0,
+                    "min_height": 0,
+                    "min_size": 0,
+                    "max_width": 0,
+                    "max_height": 0,
+                    "max_size": 0,
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_tona_culture_activity_color",
+                    "label": "Accent Color",
+                    "name": "color",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "#f4aa1f",
+                    "enable_opacity": 0,
+                    "return_format": "string",
+                    "parent_repeater": "field_tona_culture_activities"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_culture_tab_academy",
+            "label": "05. Academy",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_culture_academy_background",
+            "label": "Section Background Color",
+            "name": "culture_academy_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_culture_academy_eyebrow",
+            "label": "Eyebrow",
+            "name": "culture_academy_eyebrow",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Phat Trien Con Nguoi",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_academy_title",
+            "label": "Title",
+            "name": "culture_academy_title",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 2,
+            "new_lines": "",
+            "default_value": "TONA Academy -\nHoc De Vuon Xa",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_culture_academy_description",
+            "label": "Description",
+            "name": "culture_academy_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 4,
+            "new_lines": "",
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_culture_academy_image",
+            "label": "Image",
+            "name": "culture_academy_image",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0,
+            "mime_types": ""
+        },
+        {
+            "key": "field_tona_culture_academy_stats",
+            "label": "Academy Stats",
+            "name": "culture_academy_stats",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "Add Stat",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_tona_culture_academy_stat_value",
+                    "label": "Value",
+                    "name": "value",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_academy_stats",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_tona_culture_academy_stat_label",
+                    "label": "Label",
+                    "name": "label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_tona_culture_academy_stats",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_tona_culture_academy_link_label",
+            "label": "Button Label",
+            "name": "culture_academy_link_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Gia Nhap Tona",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_academy_link_url",
+            "label": "Button URL",
+            "name": "culture_academy_link_url",
+            "aria-label": "",
+            "type": "page_link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "",
+            "post_status": "",
+            "taxonomy": "",
+            "allow_archives": 1,
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_tona_culture_tab_gallery",
+            "label": "06. Gallery",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_culture_gallery_title",
+            "label": "Section Title",
+            "name": "culture_gallery_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Khoanh Khac Tona",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_gallery_background",
+            "label": "Section Background Color",
+            "name": "culture_gallery_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#ffffff",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_culture_gallery_photos",
+            "label": "Gallery Photos",
+            "name": "culture_gallery_photos",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Photo",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_culture_gallery_photo_image",
+                    "label": "Image",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 1,
+                    "preview_size": "medium",
+                    "parent_repeater": "field_tona_culture_gallery_photos"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_culture_tab_cta",
+            "label": "07. CTA",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_tona_culture_cta_background",
+            "label": "CTA Background Color",
+            "name": "culture_cta_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f4aa1f",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_culture_cta_title",
+            "label": "CTA Title",
+            "name": "culture_cta_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_cta_description",
+            "label": "CTA Description",
+            "name": "culture_cta_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "new_lines": "",
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_culture_cta_link_label",
+            "label": "Button Label",
+            "name": "culture_cta_link_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Xem Co Hoi Nghe Nghiep",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_culture_cta_link_url",
+            "label": "Button URL",
+            "name": "culture_cta_link_url",
+            "aria-label": "",
+            "type": "page_link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "",
+            "post_status": "",
+            "taxonomy": "",
+            "allow_archives": 1,
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "templates\/tona-culture.php"
+            }
+        ]
+    ],
+    "menu_order": 2,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1,
+    "modified": 1779211709
 }

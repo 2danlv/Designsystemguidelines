@@ -13,377 +13,9 @@ function tona_cms_theme_setup() {
 }
 add_action( 'after_setup_theme', 'tona_cms_theme_setup' );
 
-function tona_cms_register_job_post_type() {
-    register_post_type(
-        'tona_job',
-        array(
-            'labels'       => array(
-                'name'          => 'Jobs',
-                'singular_name' => 'Job',
-                'add_new_item'  => 'Add New Job',
-                'edit_item'     => 'Edit Job',
-            ),
-            'public'       => true,
-            'show_ui'      => true,
-            'show_in_menu' => true,
-            'show_in_rest' => true,
-            'menu_icon'    => 'dashicons-businessperson',
-            'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-            'rewrite'      => array( 'slug' => 'jobs' ),
-        )
-    );
-
-    register_taxonomy(
-        'tona_job_category',
-        'tona_job',
-        array(
-            'labels'       => array(
-                'name'          => 'Job Categories',
-                'singular_name' => 'Job Category',
-                'add_new_item'  => 'Add New Job Category',
-                'edit_item'     => 'Edit Job Category',
-            ),
-            'hierarchical' => true,
-            'public'       => true,
-            'show_ui'      => true,
-            'show_in_rest' => true,
-            'meta_box_cb'  => 'tona_cms_job_category_radio_meta_box',
-            'rewrite'      => array( 'slug' => 'job-category' ),
-        )
-    );
-
-    $default_terms = array(
-        'tuyen-dung' => 'Tuyen Dung',
-        'thuc-tap'   => 'Thuc Tap',
-    );
-
-    foreach ( $default_terms as $slug => $name ) {
-        if ( ! term_exists( $slug, 'tona_job_category' ) ) {
-            wp_insert_term(
-                $name,
-                'tona_job_category',
-                array(
-                    'slug' => $slug,
-                )
-            );
-        }
-    }
-}
-add_action( 'init', 'tona_cms_register_job_post_type' );
-
-function tona_cms_job_category_radio_meta_box( $post, $box ) {
-    $taxonomy = $box['args']['taxonomy'];
-    $terms = get_terms(
-        array(
-            'taxonomy'   => $taxonomy,
-            'hide_empty' => false,
-        )
-    );
-
-    if ( is_wp_error( $terms ) || empty( $terms ) ) {
-        return;
-    }
-
-    $selected_terms = wp_get_object_terms(
-        $post->ID,
-        $taxonomy,
-        array(
-            'fields' => 'ids',
-        )
-    );
-    $selected_term_id = ! is_wp_error( $selected_terms ) && ! empty( $selected_terms ) ? (int) $selected_terms[0] : 0;
-
-    if ( ! $selected_term_id ) {
-        $default_term = get_term_by( 'slug', 'tuyen-dung', $taxonomy );
-        $selected_term_id = $default_term ? (int) $default_term->term_id : 0;
-    }
-
-    echo '<div id="taxonomy-' . esc_attr( $taxonomy ) . '" class="categorydiv">';
-    echo '<ul class="categorychecklist form-no-clear">';
-
-    foreach ( $terms as $term ) {
-        printf(
-            '<li><label class="selectit"><input type="radio" name="tax_input[%1$s][]" value="%2$d" %3$s> %4$s</label></li>',
-            esc_attr( $taxonomy ),
-            (int) $term->term_id,
-            checked( $selected_term_id, (int) $term->term_id, false ),
-            esc_html( $term->name )
-        );
-    }
-
-    echo '</ul>';
-    echo '<p class="description">Choose exactly one category. Tuyen Dung shows in the main jobs list, Thuc Tap shows in the internship section.</p>';
-    echo '</div>';
-}
-
-function tona_cms_job_category_single_term( $post_id ) {
-    if ( wp_is_post_revision( $post_id ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ) {
-        return;
-    }
-
-    $terms = wp_get_object_terms(
-        $post_id,
-        'tona_job_category',
-        array(
-            'fields' => 'ids',
-        )
-    );
-
-    if ( is_wp_error( $terms ) ) {
-        return;
-    }
-
-    if ( empty( $terms ) ) {
-        $default_term = get_term_by( 'slug', 'tuyen-dung', 'tona_job_category' );
-
-        if ( $default_term ) {
-            wp_set_object_terms( $post_id, array( (int) $default_term->term_id ), 'tona_job_category', false );
-        }
-
-        return;
-    }
-
-    wp_set_object_terms( $post_id, array( (int) $terms[0] ), 'tona_job_category', false );
-}
-add_action( 'save_post_tona_job', 'tona_cms_job_category_single_term', 20 );
-
-function tona_cms_job_admin_columns( $columns ) {
-    $date_column = isset( $columns['date'] ) ? $columns['date'] : null;
-
-    if ( isset( $columns['date'] ) ) {
-        unset( $columns['date'] );
-    }
-
-    $columns['tona_job_category'] = 'Category';
-
-    if ( null !== $date_column ) {
-        $columns['date'] = $date_column;
-    }
-
-    return $columns;
-}
-add_filter( 'manage_tona_job_posts_columns', 'tona_cms_job_admin_columns' );
-
-function tona_cms_job_admin_column_content( $column, $post_id ) {
-    if ( 'tona_job_category' !== $column ) {
-        return;
-    }
-
-    $terms = get_the_terms( $post_id, 'tona_job_category' );
-
-    if ( is_wp_error( $terms ) || empty( $terms ) ) {
-        echo '&mdash;';
-        return;
-    }
-
-    echo esc_html( implode( ', ', wp_list_pluck( $terms, 'name' ) ) );
-}
-add_action( 'manage_tona_job_posts_custom_column', 'tona_cms_job_admin_column_content', 10, 2 );
-
-function tona_cms_job_admin_category_filter() {
-    $screen = get_current_screen();
-
-    if ( ! $screen || 'edit-tona_job' !== $screen->id ) {
-        return;
-    }
-
-    $selected = isset( $_GET['tona_job_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_job_category'] ) ) : '';
-
-    wp_dropdown_categories(
-        array(
-            'show_option_all' => 'All Job Categories',
-            'taxonomy'        => 'tona_job_category',
-            'name'            => 'tona_job_category',
-            'orderby'         => 'name',
-            'selected'        => $selected,
-            'hierarchical'    => true,
-            'depth'           => 0,
-            'show_count'      => false,
-            'hide_empty'      => false,
-            'value_field'     => 'slug',
-        )
-    );
-}
-add_action( 'restrict_manage_posts', 'tona_cms_job_admin_category_filter' );
-
-function tona_cms_job_admin_category_query( $query ) {
-    global $pagenow;
-
-    if ( ! is_admin() || 'edit.php' !== $pagenow || ! $query->is_main_query() ) {
-        return;
-    }
-
-    if ( 'tona_job' !== $query->get( 'post_type' ) ) {
-        return;
-    }
-
-    $category = isset( $_GET['tona_job_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_job_category'] ) ) : '';
-
-    if ( '' === $category || '0' === $category ) {
-        return;
-    }
-
-    $query->set(
-        'tax_query',
-        array(
-            array(
-                'taxonomy' => 'tona_job_category',
-                'field'    => 'slug',
-                'terms'    => $category,
-            ),
-        )
-    );
-}
-add_action( 'pre_get_posts', 'tona_cms_job_admin_category_query' );
-
-function tona_cms_register_project_post_type() {
-    register_post_type(
-        'tona_project',
-        array(
-            'labels'       => array(
-                'name'          => 'Projects',
-                'singular_name' => 'Project',
-                'add_new_item'  => 'Add New Project',
-                'edit_item'     => 'Edit Project',
-            ),
-            'public'       => true,
-            'show_ui'      => true,
-            'show_in_menu' => true,
-            'show_in_rest' => true,
-            'menu_icon'    => 'dashicons-building',
-            'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
-            'rewrite'      => array( 'slug' => 'projects' ),
-        )
-    );
-
-    register_taxonomy(
-        'tona_project_category',
-        'tona_project',
-        array(
-            'labels'       => array(
-                'name'          => 'Project Categories',
-                'singular_name' => 'Project Category',
-                'add_new_item'  => 'Add New Project Category',
-                'edit_item'     => 'Edit Project Category',
-            ),
-            'hierarchical' => true,
-            'public'       => true,
-            'show_ui'      => true,
-            'show_in_rest' => true,
-            'rewrite'      => array( 'slug' => 'project-category' ),
-        )
-    );
-
-    $default_terms = array(
-        'industrial'      => 'Industrial',
-        'commercial'      => 'Commercial',
-        'solar-rooftop'   => 'Solar Rooftop',
-        'hotels'          => 'Hotels',
-        'apartments'      => 'Apartments',
-    );
-
-    foreach ( $default_terms as $slug => $name ) {
-        if ( ! term_exists( $slug, 'tona_project_category' ) ) {
-            wp_insert_term(
-                $name,
-                'tona_project_category',
-                array(
-                    'slug' => $slug,
-                )
-            );
-        }
-    }
-}
-add_action( 'init', 'tona_cms_register_project_post_type' );
-
-function tona_cms_project_admin_columns( $columns ) {
-    $date_column = isset( $columns['date'] ) ? $columns['date'] : null;
-
-    if ( isset( $columns['date'] ) ) {
-        unset( $columns['date'] );
-    }
-
-    $columns['tona_project_category'] = 'Categories';
-
-    if ( null !== $date_column ) {
-        $columns['date'] = $date_column;
-    }
-
-    return $columns;
-}
-add_filter( 'manage_tona_project_posts_columns', 'tona_cms_project_admin_columns' );
-
-function tona_cms_project_admin_column_content( $column, $post_id ) {
-    if ( 'tona_project_category' !== $column ) {
-        return;
-    }
-
-    $terms = get_the_terms( $post_id, 'tona_project_category' );
-
-    if ( is_wp_error( $terms ) || empty( $terms ) ) {
-        echo '&mdash;';
-        return;
-    }
-
-    echo esc_html( implode( ', ', wp_list_pluck( $terms, 'name' ) ) );
-}
-add_action( 'manage_tona_project_posts_custom_column', 'tona_cms_project_admin_column_content', 10, 2 );
-
-function tona_cms_project_admin_category_filter() {
-    $screen = get_current_screen();
-
-    if ( ! $screen || 'edit-tona_project' !== $screen->id ) {
-        return;
-    }
-
-    $selected = isset( $_GET['tona_project_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_project_category'] ) ) : '';
-
-    wp_dropdown_categories(
-        array(
-            'show_option_all' => 'All Project Categories',
-            'taxonomy'        => 'tona_project_category',
-            'name'            => 'tona_project_category',
-            'orderby'         => 'name',
-            'selected'        => $selected,
-            'hierarchical'    => true,
-            'depth'           => 0,
-            'show_count'      => false,
-            'hide_empty'      => false,
-            'value_field'     => 'slug',
-        )
-    );
-}
-add_action( 'restrict_manage_posts', 'tona_cms_project_admin_category_filter' );
-
-function tona_cms_project_admin_category_query( $query ) {
-    global $pagenow;
-
-    if ( ! is_admin() || 'edit.php' !== $pagenow || ! $query->is_main_query() ) {
-        return;
-    }
-
-    if ( 'tona_project' !== $query->get( 'post_type' ) ) {
-        return;
-    }
-
-    $category = isset( $_GET['tona_project_category'] ) ? sanitize_text_field( wp_unslash( $_GET['tona_project_category'] ) ) : '';
-
-    if ( '' === $category || '0' === $category ) {
-        return;
-    }
-
-    $query->set(
-        'tax_query',
-        array(
-            array(
-                'taxonomy' => 'tona_project_category',
-                'field'    => 'slug',
-                'terms'    => $category,
-            ),
-        )
-    );
-}
-add_action( 'pre_get_posts', 'tona_cms_project_admin_category_query' );
+require_once get_stylesheet_directory() . '/inc/post-types/jobs.php';
+require_once get_stylesheet_directory() . '/inc/post-types/projects.php';
+require_once get_stylesheet_directory() . '/inc/post-types/news.php';
 
 function tona_cms_create_default_pages() {
     $pages = array(
@@ -410,6 +42,10 @@ function tona_cms_create_default_pages() {
         'du-an-tona' => array(
             'title'    => 'Du An Tona',
             'template' => 'templates/tona-projects.php',
+        ),
+        'tin-tuc' => array(
+            'title'    => 'Tin Tuc',
+            'template' => 'templates/tona-news.php',
         ),
     );
 
@@ -462,6 +98,7 @@ function tona_cms_normalize_acf_field_group_location( $field_group ) {
         'group_tona_services_page' => 'templates/tona-services.php',
         'group_tona_jobs_page'     => 'templates/tona-jobs.php',
         'group_tona_projects_page' => 'templates/tona-projects.php',
+        'group_tona_news_page'     => 'templates/tona-news.php',
     );
 
     if ( isset( $template_locations[ $field_group['key'] ] ) ) {
@@ -542,53 +179,6 @@ function tona_cms_acf_image_field( $key, $label, $name, $instructions = '' ) {
     );
 }
 
-function tona_cms_about_background_field_map() {
-    return array(
-        'field_tona_about_hero_description' => tona_cms_acf_color_field(
-            'field_tona_about_hero_background',
-            'Hero Background Color',
-            'about_hero_background',
-            '#002d17',
-            'Leave empty to use the default dark green background.'
-        ),
-        'field_tona_about_tab_mission' => tona_cms_acf_image_field(
-            'field_tona_about_mission_background_image',
-            'Background Image',
-            'about_mission_background_image',
-            'Image behind the Mission / Vision cards. Leave empty to keep the default artwork.'
-        ),
-        'field_tona_about_values_title' => tona_cms_acf_color_field(
-            'field_tona_about_values_background',
-            'Section Background Color',
-            'about_values_background',
-            '#ffffff',
-            'Leave empty to use the default white background.'
-        ),
-        'field_tona_about_timeline_title' => tona_cms_acf_color_field(
-            'field_tona_about_timeline_background',
-            'Section Background Color',
-            'about_timeline_background',
-            '#f9f9f7',
-            'Leave empty to use the default light background.'
-        ),
-        'field_tona_about_certifications_title' => tona_cms_acf_color_field(
-            'field_tona_about_certifications_background',
-            'Section Background Color',
-            'about_certifications_background',
-            '#002d17',
-            'Leave empty to use the default dark green background.'
-        ),
-        'field_tona_about_tab_cta' => tona_cms_acf_color_field(
-            'field_tona_about_cta_background',
-            'CTA Background Color',
-            'about_cta_background',
-            '#ffffff',
-            'Leave empty to use the default white background.',
-            'tona-about-cta-background'
-        ),
-    );
-}
-
 function tona_cms_insert_acf_field_after( $fields, $after_key, $field_to_insert ) {
     foreach ( $fields as $existing_field ) {
         if ( isset( $existing_field['key'] ) && $existing_field['key'] === $field_to_insert['key'] ) {
@@ -627,341 +217,6 @@ function tona_cms_acf_parent_key( $parent ) {
 
     return '';
 }
-
-function tona_cms_about_load_fields( $fields, $parent ) {
-    $parent_key = tona_cms_acf_parent_key( $parent );
-
-    if ( 'group_tona_about_page' !== $parent_key ) {
-        return $fields;
-    }
-
-    foreach ( tona_cms_about_background_field_map() as $after_key => $field ) {
-        $fields = tona_cms_insert_acf_field_after( $fields, $after_key, $field );
-    }
-
-    return $fields;
-}
-add_filter( 'acf/load_fields', 'tona_cms_about_load_fields', 20, 2 );
-
-function tona_cms_culture_yearly_themes_acf_field( $field ) {
-    if ( empty( $field['sub_fields'] ) || ! is_array( $field['sub_fields'] ) ) {
-        return $field;
-    }
-
-    $field['sub_fields'] = array_values(
-        array_filter(
-            $field['sub_fields'],
-            function ( $sub_field ) {
-                return 'field_tona_culture_theme_active' !== ( $sub_field['key'] ?? '' );
-            }
-        )
-    );
-
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_tona_culture_yearly_themes', 'tona_cms_culture_yearly_themes_acf_field', 20 );
-
-function tona_cms_remove_breadcrumb_label_fields( $fields, $parent ) {
-    if ( ! is_array( $fields ) ) {
-        return $fields;
-    }
-
-    return array_values(
-        array_filter(
-            $fields,
-            function ( $field ) {
-                return ! preg_match( '/_breadcrumb_label$/', $field['name'] ?? '' );
-            }
-        )
-    );
-}
-add_filter( 'acf/load_fields', 'tona_cms_remove_breadcrumb_label_fields', 25, 2 );
-
-function tona_cms_jobs_page_load_fields( $fields, $parent ) {
-    $parent_key = tona_cms_acf_parent_key( $parent );
-
-    if ( 'group_tona_jobs_page' !== $parent_key || ! is_array( $fields ) ) {
-        return $fields;
-    }
-
-    return array_values(
-        array_filter(
-            $fields,
-            function ( $field ) {
-                return ! in_array(
-                    $field['key'] ?? '',
-                    array(
-                        'field_tona_jobs_interns_slots_label',
-                        'field_tona_jobs_interns_majors_label',
-                    ),
-                    true
-                );
-            }
-        )
-    );
-}
-add_filter( 'acf/load_fields', 'tona_cms_jobs_page_load_fields', 20, 2 );
-
-function tona_cms_jobs_interns_slots_value_acf_field( $field ) {
-    $field['label'] = 'Internship Slots';
-    $field['instructions'] = '';
-    $field['wrapper']['width'] = '40';
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_tona_jobs_interns_slots_value', 'tona_cms_jobs_interns_slots_value_acf_field', 20 );
-
-function tona_cms_jobs_interns_majors_value_acf_field( $field ) {
-    $field['label'] = 'Majors Count';
-    $field['instructions'] = '';
-    $field['wrapper']['width'] = '40';
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_tona_jobs_interns_majors_value', 'tona_cms_jobs_interns_majors_value_acf_field', 20 );
-
-function tona_cms_services_items_acf_field( $field ) {
-    if ( empty( $field['sub_fields'] ) || ! is_array( $field['sub_fields'] ) ) {
-        return $field;
-    }
-
-    $field['sub_fields'] = array_values(
-        array_filter(
-            $field['sub_fields'],
-            function ( $sub_field ) {
-                return 'field_tona_services_item_tag' !== ( $sub_field['key'] ?? '' );
-            }
-        )
-    );
-
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_tona_services_items', 'tona_cms_services_items_acf_field', 20 );
-
-function tona_cms_jobs_interns_intro_left_acf_field( $field ) {
-    $field['label'] = 'Internship Intro Left';
-    $field['name'] = 'jobs_interns_intro_left';
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_6a0c927692087', 'tona_cms_jobs_interns_intro_left_acf_field', 20 );
-
-function tona_cms_jobs_interns_intro_right_acf_field( $field ) {
-    $field['label'] = 'Internship Summary Right';
-    $field['name'] = 'jobs_interns_intro_right';
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_6a0c92aa92088', 'tona_cms_jobs_interns_intro_right_acf_field', 20 );
-
-function tona_cms_about_hero_left_acf_field( $field ) {
-    $field['label'] = 'Hero Intro Left';
-    $field['name'] = 'about_hero_intro_left';
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_6a0c957f227a9', 'tona_cms_about_hero_left_acf_field', 20 );
-
-function tona_cms_about_hero_right_acf_field( $field ) {
-    $field['label'] = 'Hero Stats Right';
-    $field['name'] = 'about_hero_stats_right';
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_6a0c95b1227aa', 'tona_cms_about_hero_right_acf_field', 20 );
-
-function tona_cms_project_summary_acf_field( $field ) {
-    $field['type'] = 'repeater';
-    $field['label'] = 'Project Summary Items';
-    $field['name'] = 'project_summary';
-    $field['_name'] = 'project_summary';
-    $field['instructions'] = 'Each row is one project info item shown on the project card/detail specs.';
-    $field['wrapper'] = array(
-        'width' => '',
-        'class' => 'tona-acf-section',
-        'id'    => '',
-    );
-    $field['collapsed'] = 'field_tona_project_summary_item_value';
-    $field['min'] = 0;
-    $field['max'] = 6;
-    $field['layout'] = 'table';
-    $field['button_label'] = 'Add Summary Item';
-    $field['rows_per_page'] = 20;
-    $field['sub_fields'] = array(
-        array(
-            'ID'                => 0,
-            'key'               => 'field_tona_project_summary_item_key',
-            '_key'              => 'field_tona_project_summary_item_key',
-            'label'             => 'Item',
-            'name'              => 'field',
-            '_name'             => 'field',
-            'type'              => 'select',
-            'instructions'      => '',
-            'required'          => 0,
-            'conditional_logic' => 0,
-            'wrapper'           => array(
-                'width' => '35',
-                'class' => '',
-                'id'    => '',
-            ),
-            'choices'           => array(
-                'client'   => 'Client',
-                'location' => 'Location',
-                'area'     => 'Area',
-                'duration' => 'Duration',
-                'status'   => 'Status',
-                'year'     => 'Year',
-            ),
-            'default_value'     => 'client',
-            'return_format'     => 'value',
-            'multiple'          => 0,
-            'allow_null'        => 0,
-            'ui'                => 1,
-            'ajax'              => 0,
-            'placeholder'       => '',
-            'parent_repeater'   => 'field_tona_project_summary',
-        ),
-        array(
-            'ID'                => 0,
-            'key'               => 'field_tona_project_summary_item_value',
-            '_key'              => 'field_tona_project_summary_item_value',
-            'label'             => 'Value',
-            'name'              => 'value',
-            '_name'             => 'value',
-            'type'              => 'text',
-            'instructions'      => 'Enter the value for this summary item.',
-            'required'          => 0,
-            'conditional_logic' => 0,
-            'wrapper'           => array(
-                'width' => '65',
-                'class' => '',
-                'id'    => '',
-            ),
-            'default_value'     => '',
-            'maxlength'         => '',
-            'placeholder'       => '',
-            'prepend'           => '',
-            'append'            => '',
-            'parent_repeater'   => 'field_tona_project_summary',
-        ),
-    );
-
-    return $field;
-}
-add_filter( 'acf/load_field/key=field_tona_project_summary', 'tona_cms_project_summary_acf_field', 20 );
-
-function tona_cms_project_line_repeater_acf_field( $field, $label, $name, $sub_field_key, $button_label ) {
-    $field['type'] = 'repeater';
-    $field['label'] = $label;
-    $field['name'] = $name;
-    $field['_name'] = $name;
-    $field['instructions'] = 'Each row is one item.';
-    $field['wrapper'] = array(
-        'width' => '',
-        'class' => 'tona-acf-section',
-        'id'    => '',
-    );
-    $field['collapsed'] = $sub_field_key;
-    $field['min'] = 0;
-    $field['max'] = 0;
-    $field['layout'] = 'table';
-    $field['button_label'] = $button_label;
-    $field['rows_per_page'] = 20;
-    $field['sub_fields'] = array(
-        array(
-            'ID'                => 0,
-            'key'               => $sub_field_key,
-            '_key'              => $sub_field_key,
-            'label'             => 'Item',
-            'name'              => 'item',
-            '_name'             => 'item',
-            'type'              => 'text',
-            'instructions'      => '',
-            'required'          => 0,
-            'conditional_logic' => 0,
-            'wrapper'           => array(
-                'width' => '',
-                'class' => '',
-                'id'    => '',
-            ),
-            'default_value'     => '',
-            'maxlength'         => '',
-            'placeholder'       => '',
-            'prepend'           => '',
-            'append'            => '',
-            'parent_repeater'   => $field['key'],
-        ),
-    );
-
-    return $field;
-}
-
-function tona_cms_project_renovation_items_acf_field( $field ) {
-    return tona_cms_project_line_repeater_acf_field(
-        $field,
-        'Construction Items',
-        'project_renovation_items',
-        'field_tona_project_renovation_item_text',
-        'Add Construction Item'
-    );
-}
-add_filter( 'acf/load_field/key=field_tona_project_renovation_items', 'tona_cms_project_renovation_items_acf_field', 20 );
-
-function tona_cms_project_highlights_acf_field( $field ) {
-    return tona_cms_project_line_repeater_acf_field(
-        $field,
-        'Highlights',
-        'project_highlights',
-        'field_tona_project_highlight_text',
-        'Add Highlight'
-    );
-}
-add_filter( 'acf/load_field/key=field_tona_project_highlights', 'tona_cms_project_highlights_acf_field', 20 );
-
-function tona_cms_migrate_project_lines_to_repeater( $post_id, $field_name, $field_key, $sub_field_name, $sub_field_key ) {
-    $raw_value = get_post_meta( $post_id, $field_name, true );
-
-    if ( ! is_string( $raw_value ) || '' === trim( $raw_value ) || preg_match( '/^\d+$/', trim( $raw_value ) ) ) {
-        return;
-    }
-
-    $items = array_values(
-        array_filter(
-            array_map( 'trim', preg_split( '/\R+/', $raw_value ) )
-        )
-    );
-
-    if ( empty( $items ) ) {
-        return;
-    }
-
-    update_post_meta( $post_id, $field_name, count( $items ) );
-    update_post_meta( $post_id, '_' . $field_name, $field_key );
-
-    foreach ( $items as $index => $item ) {
-        $row_key = $field_name . '_' . $index . '_' . $sub_field_name;
-        update_post_meta( $post_id, $row_key, $item );
-        update_post_meta( $post_id, '_' . $row_key, $sub_field_key );
-    }
-}
-
-function tona_cms_migrate_project_repeaters_on_edit() {
-    $post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-    if ( ! $post_id || 'tona_project' !== get_post_type( $post_id ) ) {
-        return;
-    }
-
-    tona_cms_migrate_project_lines_to_repeater(
-        $post_id,
-        'project_renovation_items',
-        'field_tona_project_renovation_items',
-        'item',
-        'field_tona_project_renovation_item_text'
-    );
-    tona_cms_migrate_project_lines_to_repeater(
-        $post_id,
-        'project_highlights',
-        'field_tona_project_highlights',
-        'item',
-        'field_tona_project_highlight_text'
-    );
-}
-add_action( 'load-post.php', 'tona_cms_migrate_project_repeaters_on_edit' );
 
 function tona_cms_admin_assets( $hook_suffix ) {
     if ( ! in_array( $hook_suffix, array( 'post.php', 'post-new.php' ), true ) ) {
@@ -1002,179 +257,15 @@ function tona_cms_is_page_editor_screen() {
     return $screen && 'page' === $screen->post_type && in_array( $screen->base, array( 'post', 'post-new' ), true );
 }
 
-function tona_cms_prepare_members_field( $field ) {
-    if ( ! tona_cms_is_page_editor_screen() ) {
-        return $field;
-    }
 
-    $field_map = array(
-        'field_tona_members_tab_hero' => array( 'label' => '01. Hero' ),
-        'field_tona_members_hero_title' => array(
-            'label'        => 'TiÃªu Ä‘á» Hero',
-            'instructions' => 'TiÃªu Ä‘á» lá»›n trong trÃªn Ä‘áº§u trang. CÃ³ thá»ƒ xuá»‘ng dÃ²ng.',
-        ),
-        'field_tona_members_hero_description' => array(
-            'label'        => 'MÃ´ táº£ Hero',
-            'instructions' => 'Äoáº¡n mÃ´ táº£ ngáº¯n ngay dÆ°á»›i tiÃªu Ä‘á».',
-        ),
-        'field_tona_members_tab_leadership' => array( 'label' => '02. Cards lÃ£nh Ä‘áº¡o' ),
-        'field_tona_members_leadership' => array(
-            'label'        => 'Danh sÃ¡ch card lÃ£nh Ä‘áº¡o',
-            'instructions' => 'Má»—i dÃ²ng lÃ  má»™t card chÃ¢n dung trÃªn giao diá»‡n. KÃ©o Ä‘á»ƒ Ä‘á»•i thá»© tá»± hiá»ƒn thá»‹.',
-        ),
-        'field_tona_members_member_id' => array(
-            'label'        => 'ID',
-            'instructions' => 'CÃ³ thá»ƒ Ä‘á»ƒ trá»‘ng. Chá»‰ dÃ¹ng ná»™i bá»™.',
-        ),
-        'field_tona_members_member_name' => array( 'label' => 'TÃªn' ),
-        'field_tona_members_member_role' => array( 'label' => 'Chá»©c danh' ),
-        'field_tona_members_member_role_en' => array( 'label' => 'Chá»©c danh EN' ),
-        'field_tona_members_member_image' => array(
-            'label'        => 'áº¢nh chÃ¢n dung',
-        ),
-        'field_tona_members_member_bio' => array( 'label' => 'MÃ´ táº£ ngáº¯n' ),
-        'field_tona_members_member_linkedin' => array( 'label' => 'LinkedIn' ),
-        'field_tona_members_tab_values' => array( 'label' => '03. GiÃ¡ trá»‹' ),
-        'field_tona_members_values_title' => array(
-            'label'        => 'TiÃªu Ä‘á» section',
-            'instructions' => 'Heading cá»§a khu vá»±c ná»n xanh Ä‘áº­m á»Ÿ giá»¯a trang.',
-        ),
-        'field_tona_members_values' => array(
-            'label'        => 'Danh sÃ¡ch Ã´ giÃ¡ trá»‹',
-            'instructions' => 'Má»—i dÃ²ng lÃ  má»™t Ã´ trong grid giÃ¡ trá»‹.',
-        ),
-        'field_tona_members_value_icon' => array( 'label' => 'Icon' ),
-        'field_tona_members_value_title' => array( 'label' => 'TiÃªu Ä‘á» Ã´' ),
-        'field_tona_members_value_description' => array( 'label' => 'MÃ´ táº£ Ã´' ),
-        'field_tona_members_tab_teaser' => array( 'label' => '04. CTA cuá»‘i trang' ),
-        'field_tona_members_teaser_title' => array(
-            'label'        => 'TiÃªu Ä‘á» CTA',
-            'instructions' => 'TiÃªu Ä‘á» block ná»n tráº¯ng cuá»‘i trang.',
-            'wrapper'      => array(
-                'width' => '50',
-                'class' => 'tona-cta-title',
-                'id'    => '',
-            ),
-        ),
-        'field_tona_members_teaser_description' => array(
-            'label'   => 'MÃ´ táº£ CTA',
-            'wrapper' => array(
-                'width' => '50',
-                'class' => 'tona-cta-description',
-                'id'    => '',
-            ),
-        ),
-        'field_tona_members_teaser_link_label' => array(
-            'label'   => 'Chá»¯ trÃªn nÃºt',
-            'wrapper' => array(
-                'width' => '50',
-                'class' => 'tona-cta-button-label',
-                'id'    => '',
-            ),
-        ),
-        'field_tona_members_teaser_link_url' => array(
-            'label'   => 'Trang Ä‘Ã­ch cá»§a nÃºt',
-            'wrapper' => array(
-                'width' => '50',
-                'class' => 'tona-cta-button-url',
-                'id'    => '',
-            ),
-        ),
-    );
-
-    if ( isset( $field_map[ $field['key'] ] ) ) {
-        $field = array_merge( $field, $field_map[ $field['key'] ] );
-    }
-
-    return $field;
-}
-add_filter( 'acf/prepare_field', 'tona_cms_prepare_members_field' );
-
-function tona_cms_prepare_members_field_clean_labels( $field ) {
-    if ( ! tona_cms_is_page_editor_screen() ) {
-        return $field;
-    }
-
-    $field_map = array(
-        'field_tona_members_tab_hero' => array( 'label' => '01. Hero' ),
-        'field_tona_members_hero_title' => array(
-            'label'        => 'Hero Title',
-            'instructions' => 'Large heading at the top of the page. Line breaks are allowed.',
-        ),
-        'field_tona_members_hero_description' => array(
-            'label'        => 'Hero Description',
-            'instructions' => 'Short paragraph below the hero title.',
-        ),
-        'field_tona_members_tab_leadership' => array( 'label' => '02. Leadership Cards' ),
-        'field_tona_members_leadership' => array(
-            'label'        => 'Leadership Members',
-            'instructions' => 'Each row is one portrait card. Drag rows to change the display order.',
-        ),
-        'field_tona_members_member_id' => array(
-            'label'        => 'ID',
-            'instructions' => 'Optional internal ID.',
-        ),
-        'field_tona_members_member_name' => array( 'label' => 'Name' ),
-        'field_tona_members_member_role' => array( 'label' => 'Role' ),
-        'field_tona_members_member_role_en' => array( 'label' => 'Role EN' ),
-        'field_tona_members_member_image' => array( 'label' => 'Portrait Image' ),
-        'field_tona_members_member_bio' => array( 'label' => 'Short Bio' ),
-        'field_tona_members_member_linkedin' => array( 'label' => 'LinkedIn' ),
-        'field_tona_members_tab_values' => array( 'label' => '03. Core Values' ),
-        'field_tona_members_values_title' => array(
-            'label'        => 'Values Section Title',
-            'instructions' => 'Heading for the values section.',
-        ),
-        'field_tona_members_values' => array(
-            'label'        => 'Values',
-            'instructions' => 'Each row is one card in the values grid.',
-        ),
-        'field_tona_members_value_icon' => array( 'label' => 'Icon' ),
-        'field_tona_members_value_title' => array( 'label' => 'Card Title' ),
-        'field_tona_members_value_description' => array( 'label' => 'Card Description' ),
-        'field_tona_members_tab_teaser' => array( 'label' => '04. Footer CTA' ),
-        'field_tona_members_teaser_title' => array(
-            'label'        => 'CTA Title',
-            'instructions' => 'Title for the white CTA block at the bottom of the page.',
-            'wrapper'      => array(
-                'width' => '50',
-                'class' => 'tona-cta-title',
-                'id'    => '',
-            ),
-        ),
-        'field_tona_members_teaser_description' => array(
-            'label'   => 'CTA Description',
-            'wrapper' => array(
-                'width' => '50',
-                'class' => 'tona-cta-description',
-                'id'    => '',
-            ),
-        ),
-        'field_tona_members_teaser_link_label' => array(
-            'label'   => 'Button Label',
-            'wrapper' => array(
-                'width' => '50',
-                'class' => 'tona-cta-button-label',
-                'id'    => '',
-            ),
-        ),
-        'field_tona_members_teaser_link_url' => array(
-            'label'   => 'Button Target Page',
-            'wrapper' => array(
-                'width' => '50',
-                'class' => 'tona-cta-button-url',
-                'id'    => '',
-            ),
-        ),
-    );
-
-    if ( isset( $field_map[ $field['key'] ] ) ) {
-        $field = array_merge( $field, $field_map[ $field['key'] ] );
-    }
-
-    return $field;
-}
-add_filter( 'acf/prepare_field', 'tona_cms_prepare_members_field_clean_labels', 20 );
+require_once get_stylesheet_directory() . '/inc/acf-fields/shared.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/about.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/members.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/culture.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/services.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/jobs.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/projects.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/news.php';
 
 function tona_cms_image_url( $image ) {
     if ( is_array( $image ) && ! empty( $image['url'] ) ) {
@@ -1640,33 +731,6 @@ function tona_cms_services_payload( $page ) {
     );
 }
 
-function tona_cms_services_unique_featured_card( $value, $post_id, $field ) {
-    if ( ! is_array( $value ) ) {
-        return $value;
-    }
-
-    $featured_found = false;
-
-    foreach ( $value as $row_index => $row ) {
-        if ( ! is_array( $row ) ) {
-            continue;
-        }
-
-        $featured_key = array_key_exists( 'featured', $row ) ? 'featured' : 'field_tona_services_item_featured';
-
-        if ( ! empty( $row[ $featured_key ] ) && ! $featured_found ) {
-            $value[ $row_index ][ $featured_key ] = 1;
-            $featured_found = true;
-            continue;
-        }
-
-        $value[ $row_index ][ $featured_key ] = 0;
-    }
-
-    return $value;
-}
-add_filter( 'acf/update_value/name=services_items', 'tona_cms_services_unique_featured_card', 20, 3 );
-
 function tona_cms_job_payload( $post ) {
     $post_id = $post->ID;
     $terms = get_the_terms( $post_id, 'tona_job_category' );
@@ -1940,7 +1004,172 @@ function tona_cms_projects_page_payload( $page ) {
     );
 }
 
+function tona_cms_news_terms_payload( $post_id, $taxonomy ) {
+    $terms = get_the_terms( $post_id, $taxonomy );
+
+    if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+        return array();
+    }
+
+    return array_values(
+        array_map(
+            function ( $term ) {
+                return array(
+                    'id'   => $term->term_id,
+                    'name' => $term->name,
+                    'slug' => $term->slug,
+                );
+            },
+            $terms
+        )
+    );
+}
+
+function tona_cms_news_payload( $post ) {
+    $post_id = $post->ID;
+    $categories = tona_cms_news_terms_payload( $post_id, 'tona_news_category' );
+    $tags = tona_cms_news_terms_payload( $post_id, 'tona_news_tag' );
+    $image = get_the_post_thumbnail_url( $post, 'large' );
+    $author_name = tona_cms_text_field( $post_id, 'news_author_name' );
+
+    return array(
+        'id'           => $post_id,
+        'slug'         => $post->post_name,
+        'title'        => get_the_title( $post ),
+        'date'         => get_the_date( 'd/m/Y', $post ),
+        'category'     => ! empty( $categories ) ? $categories[0]['name'] : '',
+        'categorySlug' => ! empty( $categories ) ? $categories[0]['slug'] : '',
+        'categories'   => $categories,
+        'tags'         => array_values( wp_list_pluck( $tags, 'name' ) ),
+        'image'        => $image ? esc_url_raw( $image ) : '',
+        'excerpt'      => has_excerpt( $post ) ? get_the_excerpt( $post ) : wp_trim_words( wp_strip_all_tags( $post->post_content ), 32 ),
+        'content'      => apply_filters( 'the_content', $post->post_content ),
+        'readTime'     => tona_cms_text_field( $post_id, 'news_read_time' ),
+        'author'       => $author_name ?: get_the_author_meta( 'display_name', (int) $post->post_author ),
+    );
+}
+
+function tona_cms_related_news_payload( $post, $limit = 3 ) {
+    $terms = get_the_terms( $post->ID, 'tona_news_category' );
+
+    if ( is_wp_error( $terms ) || empty( $terms ) ) {
+        return array();
+    }
+
+    $related_posts = get_posts(
+        array(
+            'post_type'      => 'tona_news',
+            'post_status'    => 'publish',
+            'posts_per_page' => $limit,
+            'post__not_in'   => array( $post->ID ),
+            'tax_query'      => array(
+                array(
+                    'taxonomy' => 'tona_news_category',
+                    'field'    => 'term_id',
+                    'terms'    => wp_list_pluck( $terms, 'term_id' ),
+                ),
+            ),
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        )
+    );
+
+    return array_values(
+        array_map( 'tona_cms_news_payload', is_array( $related_posts ) ? $related_posts : array() )
+    );
+}
+
+function tona_cms_news_list_payload() {
+    $posts = get_posts(
+        array(
+            'post_type'      => 'tona_news',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        )
+    );
+
+    return array_values(
+        array_map( 'tona_cms_news_payload', is_array( $posts ) ? $posts : array() )
+    );
+}
+
+function tona_cms_news_by_slug_payload( $slug ) {
+    $post = get_page_by_path( sanitize_title( $slug ), OBJECT, 'tona_news' );
+
+    if ( ! $post || 'publish' !== $post->post_status ) {
+        return null;
+    }
+
+    $payload = tona_cms_news_payload( $post );
+    $payload['related'] = tona_cms_related_news_payload( $post );
+
+    return $payload;
+}
+
+function tona_cms_news_page_payload( $page ) {
+    $post_id = $page->ID;
+
+    return array(
+        'id'     => $post_id,
+        'slug'   => $page->post_name,
+        'title'  => get_the_title( $page ),
+        'colors' => array(
+            'heroBackground' => tona_cms_text_field( $post_id, 'news_hero_background' ),
+            'ctaBackground'  => tona_cms_text_field( $post_id, 'news_cta_background' ),
+        ),
+        'hero'   => array(
+            'breadcrumbLabel' => get_the_title( $page ),
+            'title'           => tona_cms_text_field( $post_id, 'news_hero_title' ),
+            'description'     => tona_cms_text_field( $post_id, 'news_hero_description' ),
+        ),
+        'listing' => array(
+            'featuredLabel'     => tona_cms_text_field( $post_id, 'news_featured_label' ),
+            'searchPlaceholder' => tona_cms_text_field( $post_id, 'news_search_placeholder' ),
+            'emptyText'         => tona_cms_text_field( $post_id, 'news_empty_text' ),
+            'loadMoreLabel'     => tona_cms_text_field( $post_id, 'news_load_more_label' ),
+        ),
+        'cta' => array(
+            'title'            => tona_cms_text_field( $post_id, 'news_cta_title' ),
+            'description'      => tona_cms_text_field( $post_id, 'news_cta_description' ),
+            'emailPlaceholder' => tona_cms_text_field( $post_id, 'news_cta_email_placeholder' ),
+            'buttonLabel'      => tona_cms_text_field( $post_id, 'news_cta_button_label' ),
+        ),
+    );
+}
+
 function tona_cms_register_rest_routes() {
+    register_rest_route(
+        'tona/v1',
+        '/news',
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback'            => function () {
+                return rest_ensure_response( tona_cms_news_list_payload() );
+            },
+        )
+    );
+
+    register_rest_route(
+        'tona/v1',
+        '/news/(?P<slug>[a-z0-9-]+)',
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback'            => function ( $request ) {
+                $article = tona_cms_news_by_slug_payload( $request->get_param( 'slug' ) );
+
+                if ( ! $article ) {
+                    return new WP_Error( 'tona_news_not_found', 'News article not found.', array( 'status' => 404 ) );
+                }
+
+                return rest_ensure_response( $article );
+            },
+        )
+    );
+
     register_rest_route(
         'tona/v1',
         '/projects',
@@ -2021,6 +1250,10 @@ function tona_cms_register_rest_routes() {
                     return rest_ensure_response( tona_cms_projects_page_payload( $page ) );
                 }
 
+                if ( 'tin-tuc' === $page->post_name ) {
+                    return rest_ensure_response( tona_cms_news_page_payload( $page ) );
+                }
+
                 return rest_ensure_response(
                     array(
                         'id'      => $page->ID,
@@ -2034,3 +1267,4 @@ function tona_cms_register_rest_routes() {
     );
 }
 add_action( 'rest_api_init', 'tona_cms_register_rest_routes' );
+

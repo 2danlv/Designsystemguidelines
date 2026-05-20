@@ -1,0 +1,40 @@
+{
+    "key": "group_tona_news_post",
+    "title": "News Article Details",
+    "fields": [
+        {
+            "key": "field_tona_news_read_time",
+            "label": "Read Time",
+            "name": "news_read_time",
+            "type": "text",
+            "instructions": "Example: 3 phut.",
+            "default_value": "3 phut"
+        },
+        {
+            "key": "field_tona_news_author_name",
+            "label": "Author Name",
+            "name": "news_author_name",
+            "type": "text",
+            "instructions": "Leave empty to use the WordPress author display name.",
+            "default_value": "Ban Bien Tap Tona"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "tona_news"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": [],
+    "active": true,
+    "description": "",
+    "show_in_rest": 1
+}

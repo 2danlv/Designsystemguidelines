@@ -310,6 +310,51 @@ export type ProjectsCmsData = {
   };
 };
 
+export type NewsPost = {
+  id: number | string;
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  categorySlug?: string;
+  categories?: Array<{
+    id?: number;
+    name?: string;
+    slug?: string;
+  }>;
+  tags?: string[];
+  image: string;
+  excerpt: string;
+  content?: string;
+  readTime?: string;
+  author?: string;
+  related?: NewsPost[];
+};
+
+export type NewsCmsData = {
+  colors?: {
+    heroBackground?: string;
+    ctaBackground?: string;
+  };
+  hero?: {
+    breadcrumbLabel?: string;
+    title?: string;
+    description?: string;
+  };
+  listing?: {
+    featuredLabel?: string;
+    searchPlaceholder?: string;
+    emptyText?: string;
+    loadMoreLabel?: string;
+  };
+  cta?: {
+    title?: string;
+    description?: string;
+    emailPlaceholder?: string;
+    buttonLabel?: string;
+  };
+};
+
 const wordpressApiBase = (import.meta.env.VITE_WP_API_BASE || "/wp-json").replace(/\/$/, "");
 
 export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promise<T | null> {
@@ -375,6 +420,42 @@ export async function fetchCmsProject(slug: string, signal?: AbortSignal): Promi
     }
 
     return (await response.json()) as ProjectPost;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return null;
+  }
+}
+
+export async function fetchCmsNews(signal?: AbortSignal): Promise<NewsPost[]> {
+  try {
+    const response = await fetch(`${wordpressApiBase}/tona/v1/news`, { signal });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return (await response.json()) as NewsPost[];
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return [];
+  }
+}
+
+export async function fetchCmsNewsPost(slug: string, signal?: AbortSignal): Promise<NewsPost | null> {
+  try {
+    const response = await fetch(`${wordpressApiBase}/tona/v1/news/${slug}`, { signal });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as NewsPost;
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw error;

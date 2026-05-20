@@ -1,0 +1,146 @@
+{
+    "key": "group_tona_news_page",
+    "title": "News Page Content",
+    "fields": [
+        {
+            "key": "field_tona_news_tab_hero",
+            "label": "01. Hero",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_news_hero_background",
+            "label": "Hero Background Color",
+            "name": "news_hero_background",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default dark green background.",
+            "default_value": "#002d17",
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_news_hero_title",
+            "label": "Hero Title",
+            "name": "news_hero_title",
+            "type": "textarea",
+            "instructions": "Use line breaks if needed.",
+            "rows": 2,
+            "default_value": "Tin Tuc\n& Su Kien",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_news_hero_description",
+            "label": "Hero Description",
+            "name": "news_hero_description",
+            "type": "textarea",
+            "rows": 3,
+            "default_value": "Cap nhat moi nhat ve du an, doi tac va cac hoat dong noi bat cua Tona Corporation.",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_news_tab_listing",
+            "label": "02. Listing",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_news_featured_label",
+            "label": "Featured Section Label",
+            "name": "news_featured_label",
+            "type": "text",
+            "default_value": "Tin Noi Bat"
+        },
+        {
+            "key": "field_tona_news_search_placeholder",
+            "label": "Search Placeholder",
+            "name": "news_search_placeholder",
+            "type": "text",
+            "default_value": "Tim kiem..."
+        },
+        {
+            "key": "field_tona_news_empty_text",
+            "label": "Empty Text",
+            "name": "news_empty_text",
+            "type": "text",
+            "default_value": "Khong tim thay bai viet phu hop."
+        },
+        {
+            "key": "field_tona_news_load_more_label",
+            "label": "Load More Label",
+            "name": "news_load_more_label",
+            "type": "text",
+            "default_value": "Xem Them Tin Tuc"
+        },
+        {
+            "key": "field_tona_news_tab_cta",
+            "label": "03. Newsletter CTA",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_news_cta_background",
+            "label": "CTA Background Color",
+            "name": "news_cta_background",
+            "type": "color_picker",
+            "instructions": "Leave empty to use the default dark green background.",
+            "default_value": "#002d17",
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_news_cta_title",
+            "label": "CTA Title",
+            "name": "news_cta_title",
+            "type": "textarea",
+            "instructions": "Use line breaks if needed.",
+            "rows": 2,
+            "default_value": "Nhan Tin Tuc Moi Nhat",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_news_cta_description",
+            "label": "CTA Description",
+            "name": "news_cta_description",
+            "type": "textarea",
+            "rows": 2,
+            "default_value": "Theo doi Tona de cap nhat du an va hoat dong moi nhat.",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_news_cta_email_placeholder",
+            "label": "Email Placeholder",
+            "name": "news_cta_email_placeholder",
+            "type": "text",
+            "default_value": "Email cua ban"
+        },
+        {
+            "key": "field_tona_news_cta_button_label",
+            "label": "Button Label",
+            "name": "news_cta_button_label",
+            "type": "text",
+            "default_value": "Dang Ky"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_template",
+                "operator": "==",
+                "value": "templates/tona-news.php"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": [],
+    "active": true,
+    "description": "",
+    "show_in_rest": 1
+}
