@@ -5,6 +5,19 @@ import { ArrowLeft, ChevronRight, Clock, Tag, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsNews, fetchCmsNewsPost, type NewsPost } from "../lib/wordpress";
 
+function normalizeNewsText(value = "") {
+  return value
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&#8211;|&ndash;/gi, "-")
+    .replace(/&#8212;|&mdash;/gi, "-")
+    .replace(/[.…]+$/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 function BodyBlock({ block }: { block: NewsBodyBlock }) {
   if (block.type === "paragraph") {
     return <p className="text-[#002d17]/75 text-base leading-relaxed font-medium">{block.text}</p>;
@@ -118,6 +131,11 @@ export function NewsDetail() {
       .filter((item) => item.id !== article.id && (item.categorySlug || item.category) === (article.categorySlug || article.category))
       .slice(0, 3);
   const fallbackBody = (article as NewsPost & { body?: NewsBodyBlock[] }).body;
+  const newsContent = article.content || "";
+  const normalizedExcerpt = normalizeNewsText(article.excerpt);
+  const normalizedContent = normalizeNewsText(article.content);
+  const shouldShowExcerpt = normalizedExcerpt
+    && (!normalizedContent || !normalizedContent.startsWith(normalizedExcerpt));
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -172,14 +190,16 @@ export function NewsDetail() {
             transition={{ duration: 0.5 }}
             className="lg:col-span-8 flex flex-col gap-6"
           >
-            <p className="text-[#002d17] text-lg font-semibold leading-relaxed border-l-4 border-[#f4aa1f] pl-5 bg-[#fffdf5] rounded-r-xl py-4">
-              {article.excerpt}
-            </p>
+            {shouldShowExcerpt && (
+              <p className="news-article-excerpt">
+                {article.excerpt}
+              </p>
+            )}
 
             {article.content ? (
               <div
-                className="cms-content flex flex-col gap-5 text-[#002d17]/75 text-base leading-relaxed font-medium"
-                dangerouslySetInnerHTML={{ __html: article.content }}
+                className="news-article-content flex flex-col gap-5 text-[#002d17]/75 text-base leading-relaxed font-medium"
+                dangerouslySetInnerHTML={{ __html: newsContent }}
               />
             ) : (
               <div className="flex flex-col gap-5">
