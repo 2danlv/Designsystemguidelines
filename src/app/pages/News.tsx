@@ -121,13 +121,7 @@ export function News() {
               </Link>
 
               <div className="lg:col-span-5 flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date}</span>
-                  <span className="w-1 h-1 rounded-full bg-[#002d17]/30" />
-                  <span className="flex items-center gap-1 text-[#002d17]/40 font-bold text-xs uppercase tracking-widest">
-                    <Clock size={11} /> {featured.readTime || "3 phút"}
-                  </span>
-                </div>
+                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date}</span>
                 <h2 className="font-extrabold text-[#002d17] text-2xl md:text-3xl uppercase leading-snug tracking-tight">
                   {featured.title}
                 </h2>
@@ -227,13 +221,7 @@ export function News() {
                   </div>
 
                   <div className="flex flex-col gap-3 pt-5 pb-4 flex-1 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-                    <div className="flex items-center gap-3">
-                      <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{item.date}</span>
-                      <span className="w-0.5 h-0.5 rounded-full bg-[#002d17]/20" />
-                      <span className="flex items-center gap-1 text-[#002d17]/40 text-xs font-bold uppercase tracking-wider">
-                        <Clock size={10} /> {item.readTime || "3 phút"}
-                      </span>
-                    </div>
+                    <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{item.date}</span>
                     <h3 className="font-extrabold text-[#002d17] text-lg uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors line-clamp-2">
                       {item.title}
                     </h3>

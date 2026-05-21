@@ -40,7 +40,7 @@ const heroSlides = [
   },
 ];
 
-// â”€â”€â”€ PARTNER LOGOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// PARTNER LOGOS
 const partnerLogos = [
   { name: "SIEMENS", tagline: "Ingenuity for life" },
   { name: "SCHNEIDER\nELECTRIC", tagline: "Life Is On" },
@@ -52,7 +52,7 @@ const partnerLogos = [
   { name: "PANASONIC", tagline: "A Better Life, A Better World" },
 ];
 
-// â”€â”€â”€ HERO SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// HERO SECTION
 function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -167,7 +167,7 @@ function HeroSection() {
   );
 }
 
-// â”€â”€â”€ MARQUEE STRIP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// MARQUEE STRIP
 function MarqueeStrip() {
   const items = [
     "ISO 9001:2015", "Zero Accident", "ISO 45001:2018",
@@ -193,7 +193,7 @@ function MarqueeStrip() {
   );
 }
 
-// ─── SLOGAN / BRAND SECTION ───────────────────────────────────────────────────
+// SLOGAN / BRAND SECTION
 function SloganSection() {
   return (
     <section className="relative w-full bg-[#002d17] overflow-hidden py-24 md:py-32">
@@ -248,7 +248,7 @@ function SloganSection() {
   );
 }
 
-// â”€â”€â”€ SERVICES HIGHLIGHT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// SERVICES HIGHLIGHT
 const services = [
   { id: 1, icon: Wrench, title: "Nâng Cấp Cải Tạo", subtitle: "Renovation & Upgrade", desc: "Thi công cải tạo công trình đang vận hành với zero downtime - tiêu chuẩn an toàn và vệ sinh khắt khe nhất.", highlight: true },
   { id: 2, icon: PenTool, title: "Thiết Kế & Xây Dựng", subtitle: "Design & Build EPC", desc: "Giải pháp tổng thầu EPC toàn diện từ thiết kế đến bàn giao, kiểm soát chất lượng tập trung." },
@@ -315,7 +315,7 @@ function ServicesSection() {
   );
 }
 
-// â”€â”€â”€ PROJECTS CAROUSEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// PROJECTS CAROUSEL
 function ProjectsSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true, containScroll: "trimSnaps", align: "start" });
   const [canPrev, setCanPrev] = useState(false);
@@ -409,7 +409,7 @@ function ProjectsSection() {
   );
 }
 
-// â”€â”€â”€ NEWS SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// NEWS SECTION
 function NewsSection() {
   const featured = news[0];
   const rest = news.slice(1, 4);
@@ -485,7 +485,7 @@ function NewsSection() {
   );
 }
 
-// â”€â”€â”€ PARTNERS AUTO-SCROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// PARTNERS AUTO-SCROLL
 function PartnersSection() {
   const doubled = [...partnerLogos, ...partnerLogos];
 
@@ -508,7 +508,7 @@ function PartnersSection() {
       {/* Auto-scroll row */}
       <div className="relative flex w-full">
         <motion.div
-          className="flex gap-px min-w-max"
+          className="flex gap-5 min-w-max"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ repeat: Infinity, duration: 32, ease: "linear" }}
         >
@@ -526,9 +526,9 @@ function PartnersSection() {
       </div>
 
       {/* Second row reverse */}
-      <div className="relative flex w-full mt-px">
+      <div className="relative flex w-full mt-5">
         <motion.div
-          className="flex gap-px min-w-max"
+          className="flex gap-5 min-w-max"
           animate={{ x: ["-50%", "0%"] }}
           transition={{ repeat: Infinity, duration: 38, ease: "linear" }}
         >
@@ -551,7 +551,7 @@ function PartnersSection() {
   );
 }
 
-// â”€â”€â”€ ROOT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ROOT
 export function Home() {
   return (
     <div className="flex flex-col w-full bg-white overflow-x-hidden">

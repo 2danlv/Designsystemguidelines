@@ -198,13 +198,6 @@ function TimelapseSlider() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Play button overlay */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <Play size={22} className="text-white ml-1" fill="white" />
-        </div>
-      </div>
-
       {/* Progress bars */}
       <div className="absolute top-4 left-4 right-4 flex gap-1.5 z-20">
         {timelapseSlides.map((_, i) => (
@@ -219,14 +212,6 @@ function TimelapseSlider() {
             />
           </button>
         ))}
-      </div>
-
-      {/* Timelapse label */}
-      <div className="absolute top-8 right-4 z-20">
-        <span className="bg-[#f4aa1f] text-[#002d17] px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#002d17] animate-pulse" />
-          Timelapse
-        </span>
       </div>
 
       {/* Slide info */}

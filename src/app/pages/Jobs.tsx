@@ -1,43 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useState } from "react";
 import { jobs as fallbackJobs } from "../data";
 import { Link } from "react-router";
 import {
   MapPin, Clock, Briefcase, ChevronRight, ArrowRight,
   CheckCircle2, Star, Users, TrendingUp, ChevronDown, ChevronUp, X,
-  GraduationCap, BookOpen, Lightbulb, FileText, ExternalLink, type LucideIcon
+  GraduationCap, BookOpen, Lightbulb, FileText, ExternalLink
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { fetchCmsJobs, fetchCmsPage, type JobPost, type JobsCmsData } from "../lib/wordpress";
-
-type PerkItem = {
-  icon: LucideIcon;
-  iconImage?: string;
-  title: string;
-  desc: string;
-};
-
-type InternPosition = {
-  id: string;
-  title: string;
-  subtitle: string;
-  department: string;
-  duration: string;
-  location: string;
-  slots: number;
-  icon: LucideIcon;
-  requirements: string[];
-  benefits: string[];
-  desc: string;
-};
-
-const allDepartmentsLabel = "Tất Cả";
-
-const perkIconMap = {
-  TrendingUp,
-  Star,
-  Users,
-  CheckCircle2,
-};
+import type { JobPost } from "../lib/wordpress";
+import { useJobsPage, type InternPosition, type PerkItem } from "../cms/useJobsPage";
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -52,36 +23,6 @@ function backgroundStyle(color?: string) {
   return color ? { backgroundColor: color } : undefined;
 }
 
-function isInternshipJob(job: JobPost) {
-  const categoryText = [
-    ...(job.categorySlugs || []),
-    ...(job.categories?.map((category) => category.slug || category.name || "") || []),
-    job.department,
-    job.type,
-    job.title,
-  ].join(" ").toLowerCase();
-
-  return categoryText.includes("intern")
-    || categoryText.includes("thuc-tap")
-    || categoryText.includes("thực tập");
-}
-
-function internPositionFromJob(job: JobPost): InternPosition {
-  return {
-    id: String(job.id),
-    title: job.title,
-    subtitle: job.type || "Internship",
-    department: job.department,
-    duration: job.level || job.date || "",
-    location: job.location,
-    slots: job.slots || 1,
-    icon: GraduationCap,
-    requirements: job.requirements || [],
-    benefits: job.benefits || [],
-    desc: job.description,
-  };
-}
-
 const fallbackPerks: PerkItem[] = [
   { icon: TrendingUp, title: "Lộ trình thăng tiến rõ ràng", desc: "Xét thăng tiến 6 tháng/lần theo năng lực thực tế, không phụ thuộc thâm niên." },
   { icon: Star, title: "Lương & thưởng hấp dẫn", desc: "Gói lương cạnh tranh thị trường, thưởng hoàn thành dự án và thưởng cuối năm." },
@@ -89,49 +30,49 @@ const fallbackPerks: PerkItem[] = [
   { icon: CheckCircle2, title: "Đào tạo chuyên sâu", desc: "TONA Academy: 50+ chương trình đào tạo kỹ thuật, quản lý và lãnh đạo." },
 ];
 
-// ─── INTERN DATA ─────────────────────────────────────────────────────────────
+// INTERN DATA
 const fallbackInternPositions: InternPosition[] = [
   {
     id: "intern-civil",
     title: "Thực Tập Sinh Kỹ Thuật Xây Dựng",
     subtitle: "Civil Engineering Intern",
     department: "Kỹ Thuật Công Trường",
-    duration: "3 — 6 tháng",
+    duration: "3 - 6 tháng",
     location: "TP.HCM / Bình Dương",
     slots: 5,
     icon: BookOpen,
     requirements: [
-      "Sinh viên năm 3 — 4 chuyên ngành Xây dựng, Kỹ thuật Công trình hoặc tương đương",
-      "GPA ≥ 2.5 (thang 4.0) hoặc học lực Khá trở lên",
+      "Sinh viên năm 3 - 4 chuyên ngành Xây dựng, Kỹ thuật Công trình hoặc tương đương",
+      "GPA >= 2.5 (thang 4.0) hoặc học lực Khá trở lên",
       "Sẵn sàng đến công trường (Bình Dương / Đồng Nai)",
       "Có kiến thức cơ bản về AutoCAD là lợi thế",
     ],
     benefits: [
-      "Phụ cấp thực tập hàng tháng",
+      "Phụ cấp thực tập hằng tháng",
       "Được hướng dẫn bởi kỹ sư senior",
       "Cơ hội nhận offer full-time sau tốt nghiệp",
       "Chứng nhận thực tập từ Tona Corporation",
-      "Tham quan dự án thực tế hàng tuần",
+      "Tham quan dự án thực tế hằng tuần",
     ],
-    desc: "Tham gia trực tiếp vào các dự án thi công thực tế — từ đọc bản vẽ, theo dõi tiến độ đến lập báo cáo nghiệm thu dưới sự hướng dẫn của kỹ sư giàu kinh nghiệm.",
+    desc: "Tham gia trực tiếp vào các dự án thi công thực tế, từ đọc bản vẽ, theo dõi tiến độ đến lập báo cáo nghiệm thu dưới sự hướng dẫn của kỹ sư giàu kinh nghiệm.",
   },
   {
     id: "intern-mep",
     title: "Thực Tập Sinh Cơ Điện MEP",
     subtitle: "MEP Engineering Intern",
     department: "Kỹ Thuật MEP",
-    duration: "3 — 6 tháng",
+    duration: "3 - 6 tháng",
     location: "TP.HCM / Bình Dương",
     slots: 4,
     icon: Lightbulb,
     requirements: [
-      "Sinh viên năm 3 — 4 ngành Điện, Điện lạnh, Cơ khí, Kỹ thuật Môi trường",
+      "Sinh viên năm 3 - 4 ngành Điện, Điện lạnh, Cơ khí, Kỹ thuật Môi trường",
       "Quan tâm đến hệ thống HVAC, điện, PCCC trong công trình công nghiệp",
       "Có khả năng đọc bản vẽ sơ đồ điện hoặc cơ bản về AutoCAD",
       "Tiếng Anh đọc hiểu tài liệu kỹ thuật là lợi thế",
     ],
     benefits: [
-      "Phụ cấp thực tập hàng tháng",
+      "Phụ cấp thực tập hằng tháng",
       "Tiếp cận hệ thống MEP dự án thực tế",
       "Đào tạo về tiêu chuẩn ISO và quy trình QA/QC",
       "Chứng nhận thực tập từ Tona Corporation",
@@ -144,182 +85,28 @@ const fallbackInternPositions: InternPosition[] = [
     title: "Thực Tập Sinh Quản Lý Dự Án",
     subtitle: "Project Management Intern",
     department: "Quản Lý Dự Án",
-    duration: "3 — 4 tháng",
+    duration: "3 - 4 tháng",
     location: "TP.HCM / Bình Dương",
     slots: 3,
     icon: GraduationCap,
     requirements: [
-      "Sinh viên năm 3 — 4 ngành Quản lý Xây dựng, Kinh tế Xây dựng, Kỹ thuật Công trình",
+      "Sinh viên năm 3 - 4 ngành Quản lý Xây dựng, Kinh tế Xây dựng, Kỹ thuật Công trình",
       "Kỹ năng phân tích, tổng hợp thông tin tốt",
       "Thành thạo Microsoft Office (Word, Excel, PowerPoint)",
       "Giao tiếp tiếng Anh cơ bản là lợi thế",
     ],
     benefits: [
-      "Phụ cấp thực tập hàng tháng",
+      "Phụ cấp thực tập hằng tháng",
       "Tham gia họp dự án thực tế cùng PM",
       "Cơ hội nhận offer junior PM sau tốt nghiệp",
       "Chứng nhận và thư giới thiệu từ Tona",
       "Học công cụ MS Project & quản lý tiến độ",
     ],
-    desc: "Hỗ trợ đội quản lý dự án theo dõi tiến độ, lập báo cáo, điều phối thông tin giữa các bên và tham gia học hỏi quy trình quản lý EPC tại các công trình thực tế.",
+    desc: "Hỗ trợ đội quản lý dự án theo dõi tiến độ, lập báo cáo, điều phối thông tin giữa các bên và học hỏi quy trình quản lý EPC tại các công trình thực tế.",
   },
 ];
 
-// ─── JOB DETAIL MODAL ────────────────────────────────────────────────────────
-function JobDetailModal({
-  job,
-  onClose,
-  onApply,
-}: {
-  job: JobPost;
-  onClose: () => void;
-  onApply: () => void;
-}) {
-  const levelColor = job.level.includes("Senior") || job.level.includes("Manager")
-    ? "bg-[#002d17] text-[#f4aa1f]"
-    : job.level.includes("Mid")
-    ? "bg-[#d5ede5] text-[#1a6645]"
-    : "bg-[#f4aa1f] text-[#002d17]";
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] bg-[#002d17]/90 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.95, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.95, y: 20 }}
-        className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="bg-[#002d17] px-6 py-6 rounded-t-2xl">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-wrap gap-2">
-                <span className={`text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full ${levelColor}`}>
-                  {job.level}
-                </span>
-                <span className="bg-white/10 text-white/70 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                  {job.type}
-                </span>
-                <span className="bg-white/10 text-white/70 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                  {job.slots} vị trí
-                </span>
-              </div>
-              <p className="text-[#f4aa1f] text-xs font-bold uppercase tracking-widest">{job.department}</p>
-              <h3 className="text-white font-extrabold text-xl md:text-2xl uppercase tracking-tight leading-snug">
-                {job.title}
-              </h3>
-              <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-1">
-                <span className="flex items-center gap-1.5 text-white/50 text-xs font-bold uppercase tracking-wider">
-                  <MapPin size={11} className="text-[#f4aa1f]" /> {job.location}
-                </span>
-                <span className="flex items-center gap-1.5 text-white/50 text-xs font-bold uppercase tracking-wider">
-                  <Clock size={11} className="text-[#f4aa1f]" /> {job.date}
-                </span>
-                {job.salary && (
-                  <span className="flex items-center gap-1.5 text-[#46aa85] text-xs font-bold uppercase tracking-wider">
-                    💰 {job.salary}
-                  </span>
-                )}
-              </div>
-            </div>
-            <button onClick={onClose} className="text-white/40 hover:text-[#f4aa1f] transition-colors mt-1 shrink-0">
-              <X size={20} />
-            </button>
-          </div>
-        </div>
-
-        {/* Body */}
-        <div className="p-6 flex flex-col gap-7">
-          {/* Overview */}
-          <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2 flex items-center gap-2">
-              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Tổng Quan Vị Trí
-            </p>
-            <p className="text-[#002d17]/70 text-sm font-medium leading-relaxed">
-              {job.description}
-            </p>
-          </div>
-
-          {/* Requirements */}
-          <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Yêu Cầu Ứng Viên
-            </p>
-            <ul className="flex flex-col gap-3">
-              {job.requirements.map((req, i) => (
-                <li key={i} className="flex items-start gap-3 text-[#002d17]/75 text-sm font-medium">
-                  <CheckCircle2 size={15} className="text-[#46aa85] shrink-0 mt-0.5" />
-                  {req}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Skills */}
-          <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Kỹ Năng Chuyên Môn
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {job.skills.map((skill, i) => (
-                <span
-                  key={i}
-                  className="bg-[#002d17] text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Benefits */}
-          <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Quyền Lợi & Phúc Lợi
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {job.benefits.map((ben, i) => (
-                <div key={i} className="flex items-start gap-2.5 bg-[#f9f9f7] rounded-xl px-4 py-3">
-                  <Star size={13} className="text-[#f4aa1f] shrink-0 mt-0.5" />
-                  <span className="text-[#002d17]/75 text-sm font-medium">{ben}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Action buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-[#002d17]/10">
-            <button
-              onClick={() => { onClose(); onApply(); }}
-              className="flex-1 bg-[#f4aa1f] text-[#002d17] py-3.5 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors rounded-xl flex items-center justify-center gap-2"
-            >
-              Ứng Tuyển Ngay <ArrowRight size={14} />
-            </button>
-            {(job as any).jdUrl && (
-              <a
-                href={(job as any).jdUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 border-2 border-[#002d17]/20 text-[#002d17] py-3.5 font-bold uppercase tracking-widest text-sm hover:border-[#002d17] transition-colors rounded-xl flex items-center justify-center gap-2"
-              >
-                <FileText size={14} /> Xem JD Chi Tiết <ExternalLink size={12} />
-              </a>
-            )}
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// ─── APPLY MODAL ─────────────────────────────────────────────────────────────
+// APPLY MODAL
 function ApplyModal({ job, onClose }: { job: JobPost; onClose: () => void }) {
   return (
     <motion.div
@@ -393,7 +180,7 @@ function ApplyModal({ job, onClose }: { job: JobPost; onClose: () => void }) {
   );
 }
 
-// ─── INTERN APPLY MODAL ───────────────────────────────────────────────────────
+// INTERN APPLY MODAL
 function InternApplyModal({ pos, onClose }: { pos: InternPosition; onClose: () => void }) {
   return (
     <motion.div
@@ -465,7 +252,7 @@ function InternApplyModal({ pos, onClose }: { pos: InternPosition; onClose: () =
   );
 }
 
-// ─── JOB CARD ────────────────────────────────────────────────────────────────
+// JOB CARD
 function JobCard({ job }: { job: JobPost }) {
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
@@ -482,18 +269,9 @@ function JobCard({ job }: { job: JobPost }) {
       <AnimatePresence>
         {applying && <ApplyModal job={job} onClose={() => setApplying(false)} />}
       </AnimatePresence>
-      <AnimatePresence>
-        {showDetail && (
-          <JobDetailModal
-            job={job}
-            onClose={() => setShowDetail(false)}
-            onApply={() => setApplying(true)}
-          />
-        )}
-      </AnimatePresence>
 
       <div className="border border-[#002d17]/10 bg-white hover:border-[#002d17]/30 transition-colors rounded-2xl overflow-hidden">
-        {/* Card header — always visible */}
+        {/* Card header - always visible */}
         <div className="p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div className="flex flex-col gap-3 flex-1">
@@ -528,7 +306,7 @@ function JobCard({ job }: { job: JobPost }) {
                 </span>
                 {job.salary && (
                   <span className="flex items-center gap-1.5 text-[#46aa85] text-xs font-bold uppercase tracking-wider">
-                    💰 {job.salary}
+                    Lương: {job.salary}
                   </span>
                 )}
               </div>
@@ -546,12 +324,14 @@ function JobCard({ job }: { job: JobPost }) {
               >
                 Ứng Tuyển Ngay
               </button>
-              <button
-                onClick={() => setShowDetail(true)}
+              <a
+                href='#'
+                target="_blank"
+                rel="noopener noreferrer"
                 className="border border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
                 <FileText size={12} /> Xem JD
-              </button>
+              </a>
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="border border-[#002d17]/10 text-[#002d17]/50 px-6 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#002d17]/30 hover:text-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
@@ -628,7 +408,7 @@ function JobCard({ job }: { job: JobPost }) {
   );
 }
 
-// ─── INTERN CARD ─────────────────────────────────────────────────────────────
+// INTERN CARD
 function InternCard({ pos }: { pos: InternPosition }) {
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
@@ -738,83 +518,31 @@ function InternCard({ pos }: { pos: InternPosition }) {
   );
 }
 
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
+// MAIN
 export function Jobs() {
-  const [activeDept, setActiveDept] = useState(allDepartmentsLabel);
-  const [cmsPage, setCmsPage] = useState<JobsCmsData | null>(null);
-  const [cmsJobs, setCmsJobs] = useState<JobPost[]>([]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    Promise.all([
-      fetchCmsPage<JobsCmsData>("nghe-nghiep", controller.signal),
-      fetchCmsJobs(controller.signal),
-    ]).then(([page, jobPosts]) => {
-      setCmsPage(page);
-      setCmsJobs(jobPosts);
-    });
-
-    return () => controller.abort();
-  }, []);
-
-  const jobItems = useMemo<JobPost[]>(() => (
-    cmsJobs.length ? cmsJobs : (fallbackJobs as JobPost[])
-  ), [cmsJobs]);
-
-  const recruitmentJobs = useMemo(() => (
-    cmsJobs.length ? jobItems.filter((job) => !isInternshipJob(job)) : jobItems
-  ), [cmsJobs.length, jobItems]);
-
-  const internshipJobs = useMemo(() => (
-    cmsJobs.length ? jobItems.filter(isInternshipJob) : []
-  ), [cmsJobs.length, jobItems]);
-
-  const departments = useMemo(() => {
-    const items = Array.from(new Set(recruitmentJobs.map((job) => job.department).filter(Boolean)));
-    return [allDepartmentsLabel, ...items];
-  }, [recruitmentJobs]);
-
-  const perks = useMemo<PerkItem[]>(() => {
-    if (!cmsPage?.perks?.length) {
-      return fallbackPerks;
-    }
-
-    return cmsPage.perks.map((perk) => ({
-      icon: perkIconMap[perk.icon || "TrendingUp"] || TrendingUp,
-      iconImage: perk.iconImage || "",
-      title: perk.title || "",
-      desc: perk.desc || "",
-    }));
-  }, [cmsPage]);
-
-  const internPositions = useMemo<InternPosition[]>(() => {
-    if (internshipJobs.length) {
-      return internshipJobs.map(internPositionFromJob);
-    }
-
-    if (!cmsJobs.length) {
-      return fallbackInternPositions;
-    }
-
-    return [];
-  }, [cmsJobs.length, internshipJobs]);
-
-  const filteredJobs = activeDept === allDepartmentsLabel
-    ? recruitmentJobs
-    : recruitmentJobs.filter((j) => j.department === activeDept);
-
-  const colors = cmsPage?.colors;
-  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Tuyển Dụng";
-  const heroTitle = cmsPage?.hero?.title || "Gia Nhập\nĐội Ngũ Tona";
-  const heroDescription = cmsPage?.hero?.description || "Môi trường làm việc chuyên nghiệp, dự án đỉnh cao, cơ hội thăng tiến rõ ràng - Tona đang tìm kiếm những tài năng cùng chúng tôi kiến tạo công trình thế kỷ.";
-  const heroDecorativeText = cmsPage?.hero?.decorativeText || "JOIN";
-  const perksEyebrow = cmsPage?.perksEyebrow || "Tại Sao Chọn Tona?";
-  const jobsTitle = cmsPage?.jobsTitle || "Vị Trí Đang Tuyển";
-  const emptyJobsText = cmsPage?.emptyJobsText || "Không có vị trí nào trong bộ phận này.";
-  const spontaneous = cmsPage?.spontaneous;
-  const interns = cmsPage?.interns;
-  const cultureTeaser = cmsPage?.cultureTeaser;
+  const {
+    activeDept,
+    setActiveDept,
+    departments,
+    filteredJobs,
+    perks,
+    internPositions,
+    colors,
+    breadcrumbLabel,
+    heroTitle,
+    heroDescription,
+    heroDecorativeText,
+    perksEyebrow,
+    jobsTitle,
+    emptyJobsText,
+    spontaneous,
+    interns,
+    cultureTeaser,
+  } = useJobsPage({
+    fallbackJobs: fallbackJobs as JobPost[],
+    fallbackPerks,
+    fallbackInternPositions,
+  });
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -929,7 +657,7 @@ export function Jobs() {
         </div>
       </div>
 
-      {/* ─── INTERN SECTION ──────────────────────────────────────────────────── */}
+      {/* INTERN SECTION */}
       <div className="bg-[#f0faf6] border-y border-[#46aa85]/20 py-16" style={backgroundStyle(colors?.internsBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
@@ -1027,3 +755,4 @@ export function Jobs() {
     </div>
   );
 }
+
