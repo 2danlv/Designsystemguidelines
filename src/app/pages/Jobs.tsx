@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import {
   MapPin, Clock, Briefcase, ChevronRight, ArrowRight,
   CheckCircle2, Star, Users, TrendingUp, ChevronDown, ChevronUp, X,
-  GraduationCap, BookOpen, Lightbulb
+  GraduationCap, BookOpen, Lightbulb, ExternalLink, FileText
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -89,6 +89,160 @@ const internPositions = [
     desc: "Hỗ trợ đội quản lý dự án theo dõi tiến độ, lập báo cáo, điều phối thông tin giữa các bên và tham gia học hỏi quy trình quản lý EPC tại các công trình thực tế.",
   },
 ];
+
+// ─── JOB DETAIL MODAL ────────────────────────────────────────────────────────
+function JobDetailModal({
+  job,
+  onClose,
+  onApply,
+}: {
+  job: typeof jobs[0];
+  onClose: () => void;
+  onApply: () => void;
+}) {
+  const levelColor = job.level.includes("Senior") || job.level.includes("Manager")
+    ? "bg-[#002d17] text-[#f4aa1f]"
+    : job.level.includes("Mid")
+    ? "bg-[#d5ede5] text-[#1a6645]"
+    : "bg-[#f4aa1f] text-[#002d17]";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-[#002d17]/90 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.95, y: 20 }}
+        className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="bg-[#002d17] px-6 py-6 rounded-t-2xl">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-2">
+                <span className={`text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full ${levelColor}`}>
+                  {job.level}
+                </span>
+                <span className="bg-white/10 text-white/70 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                  {job.type}
+                </span>
+                <span className="bg-white/10 text-white/70 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                  {job.slots} vị trí
+                </span>
+              </div>
+              <p className="text-[#f4aa1f] text-xs font-bold uppercase tracking-widest">{job.department}</p>
+              <h3 className="text-white font-extrabold text-xl md:text-2xl uppercase tracking-tight leading-snug">
+                {job.title}
+              </h3>
+              <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-1">
+                <span className="flex items-center gap-1.5 text-white/50 text-xs font-bold uppercase tracking-wider">
+                  <MapPin size={11} className="text-[#f4aa1f]" /> {job.location}
+                </span>
+                <span className="flex items-center gap-1.5 text-white/50 text-xs font-bold uppercase tracking-wider">
+                  <Clock size={11} className="text-[#f4aa1f]" /> {job.date}
+                </span>
+                {job.salary && (
+                  <span className="flex items-center gap-1.5 text-[#46aa85] text-xs font-bold uppercase tracking-wider">
+                    💰 {job.salary}
+                  </span>
+                )}
+              </div>
+            </div>
+            <button onClick={onClose} className="text-white/40 hover:text-[#f4aa1f] transition-colors mt-1 shrink-0">
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 flex flex-col gap-7">
+          {/* Overview */}
+          <div>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2 flex items-center gap-2">
+              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Tổng Quan Vị Trí
+            </p>
+            <p className="text-[#002d17]/70 text-sm font-medium leading-relaxed">
+              {job.description}
+            </p>
+          </div>
+
+          {/* Requirements */}
+          <div>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Yêu Cầu Ứng Viên
+            </p>
+            <ul className="flex flex-col gap-3">
+              {job.requirements.map((req, i) => (
+                <li key={i} className="flex items-start gap-3 text-[#002d17]/75 text-sm font-medium">
+                  <CheckCircle2 size={15} className="text-[#46aa85] shrink-0 mt-0.5" />
+                  {req}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Skills */}
+          <div>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Kỹ Năng Chuyên Môn
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {job.skills.map((skill, i) => (
+                <span
+                  key={i}
+                  className="bg-[#002d17] text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Benefits */}
+          <div>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+              <span className="w-4 h-0.5 bg-[#f4aa1f]" /> Quyền Lợi & Phúc Lợi
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {job.benefits.map((ben, i) => (
+                <div key={i} className="flex items-start gap-2.5 bg-[#f9f9f7] rounded-xl px-4 py-3">
+                  <Star size={13} className="text-[#f4aa1f] shrink-0 mt-0.5" />
+                  <span className="text-[#002d17]/75 text-sm font-medium">{ben}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-[#002d17]/10">
+            <button
+              onClick={() => { onClose(); onApply(); }}
+              className="flex-1 bg-[#f4aa1f] text-[#002d17] py-3.5 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors rounded-xl flex items-center justify-center gap-2"
+            >
+              Ứng Tuyển Ngay <ArrowRight size={14} />
+            </button>
+            {(job as any).jdUrl && (
+              <a
+                href={(job as any).jdUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 border-2 border-[#002d17]/20 text-[#002d17] py-3.5 font-bold uppercase tracking-widest text-sm hover:border-[#002d17] transition-colors rounded-xl flex items-center justify-center gap-2"
+              >
+                <FileText size={14} /> Xem JD Chi Tiết <ExternalLink size={12} />
+              </a>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 // ─── APPLY MODAL ─────────────────────────────────────────────────────────────
 function ApplyModal({ job, onClose }: { job: typeof jobs[0]; onClose: () => void }) {
@@ -240,6 +394,7 @@ function InternApplyModal({ pos, onClose }: { pos: typeof internPositions[0]; on
 function JobCard({ job }: { job: typeof jobs[0] }) {
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
 
   const levelColor = job.level.includes("Senior") || job.level.includes("Manager")
     ? "bg-[#002d17] text-[#f4aa1f]"
@@ -251,6 +406,15 @@ function JobCard({ job }: { job: typeof jobs[0] }) {
     <>
       <AnimatePresence>
         {applying && <ApplyModal job={job} onClose={() => setApplying(false)} />}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showDetail && (
+          <JobDetailModal
+            job={job}
+            onClose={() => setShowDetail(false)}
+            onApply={() => setApplying(true)}
+          />
+        )}
       </AnimatePresence>
 
       <div className="border border-[#002d17]/10 bg-white hover:border-[#002d17]/30 transition-colors rounded-2xl overflow-hidden">
@@ -308,8 +472,14 @@ function JobCard({ job }: { job: typeof jobs[0] }) {
                 Ứng Tuyển Ngay
               </button>
               <button
-                onClick={() => setExpanded(!expanded)}
+                onClick={() => setShowDetail(true)}
                 className="border border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
+              >
+                <FileText size={12} /> Xem JD
+              </button>
+              <button
+                onClick={() => setExpanded(!expanded)}
+                className="border border-[#002d17]/10 text-[#002d17]/50 px-6 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#002d17]/30 hover:text-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
                 Chi tiết {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>

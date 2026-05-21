@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { ChevronRight, Heart, Users, Trophy, Zap, ArrowRight } from "lucide-react";
+import { ChevronRight, Heart, Users, Trophy, Zap, ArrowRight, ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
@@ -227,8 +227,9 @@ export function Culture() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {cultureActivities.map((act, idx) => {
+          {/* Regular activities grid (3 cards) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {cultureActivities.filter((a) => a.title !== "CSR & Thiện Nguyện").map((act, idx) => {
               const Icon = act.icon;
               return (
                 <motion.div
@@ -237,7 +238,7 @@ export function Culture() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-[#002d17]/8"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-[#002d17]/8 bg-white"
                 >
                   <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#bcd8cb] rounded-xl">
                     <img
@@ -251,14 +252,77 @@ export function Culture() {
                       <span className="text-white font-bold text-xs uppercase tracking-widest">{act.subtitle}</span>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2 pt-5 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors bg-white px-4">
-                    <h3 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">{act.title}</h3>
+                  <div className="flex flex-col gap-2 pt-5 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors px-4">
+                    <h3 className="font-extrabold text-[#002d17] text-lg uppercase tracking-tight">{act.title}</h3>
                     <p className="text-[#002d17]/60 text-sm leading-relaxed">{act.desc}</p>
                   </div>
                 </motion.div>
               );
             })}
           </div>
+
+          {/* CSR Featured Tile */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="group relative overflow-hidden rounded-2xl bg-[#002d17]"
+          >
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#002d17] via-[#002d17]/95 to-transparent z-10" />
+              <img
+                src="https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=1200&q=80"
+                alt="CSR"
+                className="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-700"
+              />
+            </div>
+            <div className="relative z-20 flex flex-col md:flex-row md:items-center gap-8 p-8 md:p-10">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-[#f4aa1f] flex items-center justify-center shrink-0">
+                    <Heart size={18} className="text-[#002d17]" />
+                  </div>
+                  <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">Trách Nhiệm Xã Hội</span>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-3">
+                  CSR & Trách Nhiệm<br />Cộng Đồng
+                </h3>
+                <p className="text-white/60 text-sm font-medium leading-relaxed max-w-lg mb-5">
+                  Từ "Ươm Tết Đón Nắng Xuân" đến SolarLab và chương trình thực tập sinh — Tona cam kết đồng hành cùng cộng đồng theo những cách thiết thực và lâu dài.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <span className="bg-[#f4aa1f]/15 border border-[#f4aa1f]/30 text-[#f4aa1f] text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                    Ươm Tết Đón Nắng Xuân
+                  </span>
+                  <span className="bg-[#46aa85]/15 border border-[#46aa85]/30 text-[#46aa85] text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                    SolarLab
+                  </span>
+                  <span className="bg-white/10 border border-white/20 text-white/70 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                    Student Internship
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-5 shrink-0">
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { val: "5,000+", label: "Người thụ hưởng" },
+                    { val: "15+", label: "Năm hoạt động" },
+                  ].map((s) => (
+                    <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-center">
+                      <span className="font-extrabold text-[#f4aa1f] text-2xl block">{s.val}</span>
+                      <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold mt-1">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  to="/vi/trach-nhiem-cong-dong"
+                  className="flex items-center justify-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3.5 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-xl"
+                >
+                  Khám Phá CSR <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
