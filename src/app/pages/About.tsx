@@ -1,8 +1,6 @@
 import { Link } from "react-router";
 import { ChevronRight, ArrowRight, Shield, Award, TrendingUp, CheckCircle2 } from "lucide-react";
 import { motion } from "motion/react";
-import artboard2Img from "../../imports/Artboard_2.png";
-
 const timeline = [
   { year: "2009", title: "Thành Lập", desc: "Tona Corporation ra đời tại TP.HCM với đội ngũ 15 kỹ sư, chuyên về thi công kết cấu công nghiệp." },
   { year: "2013", title: "Mở Rộng MEP", desc: "Ra mắt bộ phận Cơ Điện (MEP) chuyên biệt — bước ngoặt đưa Tona trở thành nhà thầu EPC toàn diện." },
@@ -64,35 +62,37 @@ export function About() {
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-[#46aa85]/10 pointer-events-none hidden lg:block" />
       </div>
 
-      {/* MISSION & VISION — on Artboard_2 background */}
-      <section className="relative w-full overflow-hidden">
-        <img src={artboard2Img} alt="" className="w-full h-auto block opacity-90" aria-hidden />
-        <div className="absolute inset-0 flex flex-col justify-center px-6 py-12">
-          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-white/10 backdrop-blur-sm p-8 border-l-4 border-[#f4aa1f]"
-            >
-              <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">Sứ Mệnh</p>
-              <p className="text-white font-extrabold text-lg md:text-2xl leading-snug uppercase">
-                Mang đến giải pháp xây dựng chất lượng cao nhất, tối ưu hóa chi phí và thời gian — góp phần phát triển bền vững cho đối tác và cộng đồng.
-              </p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.15 }}
-              className="bg-white/10 backdrop-blur-sm p-8 border-l-4 border-white/50"
-            >
-              <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">Tầm Nhìn</p>
-              <p className="text-white font-extrabold text-lg md:text-2xl leading-snug uppercase">
-                Trở thành tổng thầu xây dựng công nghiệp và thương mại hàng đầu khu vực — là sự lựa chọn ưu tiên của mọi tập đoàn đa quốc gia tại Đông Nam Á.
-              </p>
-            </motion.div>
-          </div>
+      {/* MISSION & VISION */}
+      <section className="relative w-full bg-[#002d17] py-20 overflow-hidden">
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-[#46aa85]/8 to-transparent pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-gradient-to-r from-[#f4aa1f]/4 to-transparent pointer-events-none" />
+        <div className="absolute right-8 top-8 text-[120px] font-extrabold text-white/[0.03] uppercase leading-none select-none pointer-events-none">
+          TONA
+        </div>
+        <div className="relative max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="bg-white/5 p-8 border-l-4 border-[#f4aa1f] rounded-r-2xl"
+          >
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">Sứ Mệnh</p>
+            <p className="text-white font-extrabold text-xl md:text-2xl leading-snug uppercase">
+              Mang đến giải pháp xây dựng chất lượng cao nhất, tối ưu hóa chi phí và thời gian — góp phần phát triển bền vững cho đối tác và cộng đồng.
+            </p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+            className="bg-white/5 p-8 border-l-4 border-[#46aa85] rounded-r-2xl"
+          >
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">Tầm Nhìn</p>
+            <p className="text-white font-extrabold text-xl md:text-2xl leading-snug uppercase">
+              Trở thành tổng thầu xây dựng công nghiệp và thương mại hàng đầu khu vực — là sự lựa chọn ưu tiên của mọi tập đoàn đa quốc gia tại Đông Nam Á.
+            </p>
+          </motion.div>
         </div>
       </section>
 

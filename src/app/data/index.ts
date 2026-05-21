@@ -435,6 +435,7 @@ export const jobs = [
       "Đào tạo kỹ năng chuyên sâu",
       "Xét thăng chức 6 tháng/lần",
     ],
+    jdUrl: "https://tonacorp.vn/jd/ky-su-giam-sat-xay-dung.pdf",
   },
   {
     id: 2,
@@ -462,6 +463,7 @@ export const jobs = [
       "Cơ hội đào tạo tại Singapore",
       "Lộ trình thăng tiến rõ ràng",
     ],
+    jdUrl: "https://tonacorp.vn/jd/ky-su-mep.pdf",
   },
   {
     id: 3,
@@ -488,6 +490,7 @@ export const jobs = [
       "Team bonding hàng quý",
       "Bảo hiểm sức khỏe cao cấp",
     ],
+    jdUrl: "https://tonacorp.vn/jd/chuyen-vien-qa-qc.pdf",
   },
   {
     id: 4,
@@ -515,5 +518,6 @@ export const jobs = [
       "Cổ phần ưu đãi (ESOP) cho vị trí senior",
       "Cơ hội phát triển thành C-level",
     ],
+    jdUrl: "https://tonacorp.vn/jd/project-manager.pdf",
   },
 ];

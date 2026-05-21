@@ -1,7 +1,7 @@
 
-  # Design System Guidelines (Copy) (Copy)
+  # Design System Guidelines
 
-  This is a code bundle for Design System Guidelines (Copy) (Copy). The original project is available at https://www.figma.com/design/1dMwFR7cyaHDcQxLoNXzAN/Design-System-Guidelines--Copy---Copy-.
+  This is a code bundle for Design System Guidelines. The original project is available at https://www.figma.com/design/5DHSm2e6yE690jXsLDPZAC/Design-System-Guidelines.
 
   ## Running the code
 

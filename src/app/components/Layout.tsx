@@ -13,6 +13,7 @@ const navLinks = [
       { label: "Giới Thiệu", to: "/vi/gioi-thieu-tona" },
       { label: "Đội Ngũ", to: "/vi/doi-ngu" },
       { label: "Cuộc Sống Tona", to: "/vi/cuoc-song-tona" },
+      { label: "Trách Nhiệm Cộng Đồng", to: "/vi/trach-nhiem-cong-dong" },
     ],
   },
   { label: "DỊCH VỤ", to: "/vi/dich-vu" },

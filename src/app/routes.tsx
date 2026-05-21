@@ -10,6 +10,7 @@ import { ProjectDetail } from "./pages/ProjectDetail";
 import { News } from "./pages/News";
 import { NewsDetail } from "./pages/NewsDetail";
 import { Jobs } from "./pages/Jobs";
+import { CSR } from "./pages/CSR";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
       { path: "news", Component: News },
       { path: "news/:slug", Component: NewsDetail },
       { path: "nghe-nghiep", Component: Jobs },
+      { path: "trach-nhiem-cong-dong", Component: CSR },
     ],
   },
 ]);

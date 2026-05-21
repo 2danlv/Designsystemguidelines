@@ -8,8 +8,6 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
 import { projects, news } from "../data";
-import artboard2Img from "../../imports/Artboard_2.png";
-
 // ─── HERO SLIDES DATA ─────────────────────────────────────────────────────────
 const heroSlides = [
   {
@@ -195,36 +193,55 @@ function MarqueeStrip() {
   );
 }
 
-// ─── SLOGAN / BRAND SECTION (on Artboard_2 background) ───────────────────────
+// ─── SLOGAN / BRAND SECTION ───────────────────────────────────────────────────
 function SloganSection() {
   return (
-    <section className="relative w-full overflow-hidden">
-      {/* Artboard_2 as background */}
-      <img
-        src={artboard2Img}
-        alt=""
-        className="w-full h-auto block"
-        aria-hidden
-      />
-      {/* Overlay slogans */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center">
+    <section className="relative w-full bg-[#002d17] overflow-hidden py-24 md:py-32">
+      {/* Decorative geometric accents */}
+      <div className="absolute right-0 top-0 w-[45%] h-full bg-gradient-to-l from-[#46aa85]/8 to-transparent pointer-events-none" />
+      <div className="absolute left-0 bottom-0 w-48 h-48 border border-[#f4aa1f]/10 rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none" />
+      <div className="absolute right-16 top-8 w-24 h-24 border border-[#46aa85]/20 rounded-full pointer-events-none" />
+      {/* Large decorative background text */}
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] md:text-[200px] font-extrabold text-white/[0.03] uppercase leading-none select-none pointer-events-none tracking-tighter">
+        TONA
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-center gap-4"
+          transition={{ duration: 0.7 }}
+          className="flex flex-col items-start gap-6 max-w-3xl"
         >
-          <span className="text-[#f4aa1f] font-bold text-xs md:text-sm uppercase tracking-[0.25em]">
-            Tona Corporation — Build It Right
-          </span>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight max-w-4xl">
-            Tiên Phong Kiến Tạo<br />
-            Chuẩn Mực Mới
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-px bg-[#f4aa1f]" />
+            <span className="text-[#f4aa1f] font-bold text-xs md:text-sm uppercase tracking-[0.25em]">
+              Tona Corporation — Build It Right
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white uppercase tracking-tight leading-[1.05]">
+            Tiên Phong<br />Kiến Tạo<br />
+            <span className="text-[#46aa85]">Chuẩn Mực Mới</span>
           </h2>
-          <p className="text-white/70 font-medium text-base md:text-lg max-w-xl">
+          <p className="text-white/60 font-medium text-base md:text-lg max-w-xl leading-relaxed">
             Hơn 15 năm đồng hành cùng các tập đoàn đa quốc gia — mang lại công trình vượt tiêu chuẩn, đúng tiến độ, đúng cam kết.
           </p>
+          <div className="w-16 h-1 bg-[#f4aa1f]" />
+          {/* Stats row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4 w-full">
+            {[
+              { val: "500+", label: "Dự án" },
+              { val: "800+", label: "Nhân sự" },
+              { val: "15+", label: "Năm KN" },
+              { val: "50+", label: "Đối tác QT" },
+            ].map((s) => (
+              <div key={s.label} className="flex flex-col gap-1">
+                <span className="text-[#f4aa1f] font-extrabold text-2xl md:text-3xl tracking-tight">{s.val}</span>
+                <span className="text-white/40 font-bold text-xs uppercase tracking-widest">{s.label}</span>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
