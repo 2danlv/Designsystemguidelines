@@ -17,64 +17,6 @@ require_once get_stylesheet_directory() . '/inc/post-types/jobs.php';
 require_once get_stylesheet_directory() . '/inc/post-types/projects.php';
 require_once get_stylesheet_directory() . '/inc/post-types/news.php';
 
-function tona_cms_create_default_pages() {
-    $pages = array(
-        'doi-ngu' => array(
-            'title'    => 'Doi Ngu',
-            'template' => 'templates/tona-members.php',
-        ),
-        'gioi-thieu-tona' => array(
-            'title'    => 'Gioi Thieu Tona',
-            'template' => 'templates/tona-about.php',
-        ),
-        'cuoc-song-tona' => array(
-            'title'    => 'Cuoc Song Tona',
-            'template' => 'templates/tona-culture.php',
-        ),
-        'dich-vu' => array(
-            'title'    => 'Dich Vu',
-            'template' => 'templates/tona-services.php',
-        ),
-        'nghe-nghiep' => array(
-            'title'    => 'Nghe Nghiep',
-            'template' => 'templates/tona-jobs.php',
-        ),
-        'du-an-tona' => array(
-            'title'    => 'Du An Tona',
-            'template' => 'templates/tona-projects.php',
-        ),
-        'tin-tuc' => array(
-            'title'    => 'Tin Tuc',
-            'template' => 'templates/tona-news.php',
-        ),
-    );
-
-    foreach ( $pages as $slug => $page_config ) {
-        $page = get_page_by_path( $slug, OBJECT, 'page' );
-
-        if ( $page ) {
-            update_post_meta( $page->ID, '_wp_page_template', $page_config['template'] );
-            continue;
-        }
-
-        $page_id = wp_insert_post(
-            array(
-                'post_type'    => 'page',
-                'post_status'  => 'publish',
-                'post_title'   => $page_config['title'],
-                'post_name'    => $slug,
-                'post_content' => '',
-            )
-        );
-
-        if ( $page_id && ! is_wp_error( $page_id ) ) {
-            update_post_meta( $page_id, '_wp_page_template', $page_config['template'] );
-        }
-    }
-}
-add_action( 'after_switch_theme', 'tona_cms_create_default_pages' );
-add_action( 'init', 'tona_cms_create_default_pages' );
-
 function tona_cms_acf_json_save_path( $path ) {
     return get_stylesheet_directory() . '/acf-json';
 }
@@ -95,6 +37,7 @@ function tona_cms_normalize_acf_field_group_location( $field_group ) {
         'group_tona_members_page'  => 'templates/tona-members.php',
         'group_tona_about_page'    => 'templates/tona-about.php',
         'group_tona_culture_page'  => 'templates/tona-culture.php',
+        'group_tona_csr_page'      => 'templates/tona-csr.php',
         'group_tona_services_page' => 'templates/tona-services.php',
         'group_tona_jobs_page'     => 'templates/tona-jobs.php',
         'group_tona_projects_page' => 'templates/tona-projects.php',
@@ -262,6 +205,7 @@ require_once get_stylesheet_directory() . '/inc/acf-fields/shared.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/about.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/members.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/culture.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/csr.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/services.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/jobs.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/projects.php';
@@ -369,13 +313,99 @@ function tona_cms_repeater_lines_field( $post_id, $field_name, $sub_field_name, 
 }
 
 function tona_cms_get_page_by_slug( $slug ) {
-    $page = get_page_by_path( sanitize_title( $slug ), OBJECT, 'page' );
+    $path = implode(
+        '/',
+        array_filter(
+            array_map(
+                'sanitize_title',
+                explode( '/', trim( (string) $slug, '/' ) )
+            )
+        )
+    );
+
+    $page = get_page_by_path( $path, OBJECT, 'page' );
 
     if ( ! $page || 'publish' !== $page->post_status ) {
         return null;
     }
 
     return $page;
+}
+
+function tona_cms_get_page_by_template( $template_alias ) {
+    $template_map = array(
+        'tona-members'  => 'templates/tona-members.php',
+        'tona-about'    => 'templates/tona-about.php',
+        'tona-culture'  => 'templates/tona-culture.php',
+        'tona-csr'      => 'templates/tona-csr.php',
+        'tona-services' => 'templates/tona-services.php',
+        'tona-jobs'     => 'templates/tona-jobs.php',
+        'tona-projects' => 'templates/tona-projects.php',
+        'tona-news'     => 'templates/tona-news.php',
+    );
+
+    $template_alias = sanitize_key( $template_alias );
+
+    if ( empty( $template_map[ $template_alias ] ) ) {
+        return null;
+    }
+
+    $pages = get_posts(
+        array(
+            'post_type'      => 'page',
+            'post_status'    => 'publish',
+            'posts_per_page' => 1,
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'meta_key'       => '_wp_page_template',
+            'meta_value'     => $template_map[ $template_alias ],
+        )
+    );
+
+    return ! empty( $pages[0] ) ? $pages[0] : null;
+}
+
+function tona_cms_page_payload( $page ) {
+    $template = get_page_template_slug( $page );
+
+    if ( 'templates/tona-members.php' === $template || 'doi-ngu' === $page->post_name ) {
+        return tona_cms_members_payload( $page );
+    }
+
+    if ( 'templates/tona-about.php' === $template || 'gioi-thieu-tona' === $page->post_name ) {
+        return tona_cms_about_payload( $page );
+    }
+
+    if ( 'templates/tona-culture.php' === $template || 'cuoc-song-tona' === $page->post_name ) {
+        return tona_cms_culture_payload( $page );
+    }
+
+    if ( 'templates/tona-csr.php' === $template || 'trach-nhiem-cong-dong' === $page->post_name ) {
+        return tona_cms_csr_payload( $page );
+    }
+
+    if ( 'templates/tona-services.php' === $template || 'dich-vu' === $page->post_name ) {
+        return tona_cms_services_payload( $page );
+    }
+
+    if ( 'templates/tona-jobs.php' === $template || 'nghe-nghiep' === $page->post_name ) {
+        return tona_cms_jobs_page_payload( $page );
+    }
+
+    if ( 'templates/tona-projects.php' === $template || 'du-an-tona' === $page->post_name ) {
+        return tona_cms_projects_page_payload( $page );
+    }
+
+    if ( 'templates/tona-news.php' === $template || 'tin-tuc' === $page->post_name ) {
+        return tona_cms_news_page_payload( $page );
+    }
+
+    return array(
+        'id'      => $page->ID,
+        'slug'    => $page->post_name,
+        'title'   => get_the_title( $page ),
+        'content' => apply_filters( 'the_content', $page->post_content ),
+    );
 }
 
 function tona_cms_members_payload( $page ) {
@@ -653,6 +683,109 @@ function tona_cms_culture_payload( $page ) {
             'description' => tona_cms_text_field( $post_id, 'culture_cta_description' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'culture_cta_link_label' ),
             'linkUrl'     => tona_cms_text_field( $post_id, 'culture_cta_link_url' ),
+        ),
+    );
+}
+
+function tona_cms_csr_payload( $page ) {
+    $post_id = $page->ID;
+    $impact = function_exists( 'get_field' ) ? get_field( 'csr_impact', $post_id ) : array();
+    $programs = function_exists( 'get_field' ) ? get_field( 'csr_programs', $post_id ) : array();
+    $commitment_items = function_exists( 'get_field' ) ? get_field( 'csr_commitment_items', $post_id ) : array();
+
+    return array(
+        'id'     => $post_id,
+        'slug'   => $page->post_name,
+        'title'  => get_the_title( $page ),
+        'colors' => array(
+            'heroBackground'       => tona_cms_text_field( $post_id, 'csr_hero_background' ),
+            'programsBackground'   => tona_cms_text_field( $post_id, 'csr_programs_background' ),
+            'commitmentBackground' => tona_cms_text_field( $post_id, 'csr_commitment_background' ),
+            'ctaBackground'        => tona_cms_text_field( $post_id, 'csr_cta_background' ),
+        ),
+        'hero'   => array(
+            'breadcrumbLabel' => get_the_title( $page ),
+            'title'           => tona_cms_text_field( $post_id, 'csr_hero_title' ),
+            'description'     => tona_cms_text_field( $post_id, 'csr_hero_description' ),
+            'decorativeText'  => tona_cms_text_field( $post_id, 'csr_hero_decorative_text' ),
+        ),
+        'impact' => array_values(
+            array_map(
+                function ( $item ) {
+                    return array(
+                        'icon'  => $item['icon'] ?? 'Handshake',
+                        'value' => $item['value'] ?? '',
+                        'label' => $item['label'] ?? '',
+                    );
+                },
+                is_array( $impact ) ? $impact : array()
+            )
+        ),
+        'programsSection' => array(
+            'title'       => tona_cms_text_field( $post_id, 'csr_programs_title' ),
+            'description' => tona_cms_text_field( $post_id, 'csr_programs_description' ),
+        ),
+        'programs' => array_values(
+            array_map(
+                function ( $program ) {
+                    return array(
+                        'id'          => sanitize_title( $program['title'] ?? '' ),
+                        'icon'        => $program['icon'] ?? 'Heart',
+                        'color'       => $program['color'] ?? '',
+                        'bgColor'     => $program['bg_color'] ?? '',
+                        'tag'         => $program['tag'] ?? '',
+                        'title'       => $program['title'] ?? '',
+                        'subtitle'    => $program['subtitle'] ?? '',
+                        'description' => $program['description'] ?? '',
+                        'image'       => tona_cms_image_url( $program['image'] ?? '' ),
+                        'stats'       => array_values(
+                            array_map(
+                                function ( $stat ) {
+                                    return array(
+                                        'value' => $stat['value'] ?? '',
+                                        'label' => $stat['label'] ?? '',
+                                    );
+                                },
+                                is_array( $program['stats'] ?? null ) ? $program['stats'] : array()
+                            )
+                        ),
+                        'highlights'  => array_values(
+                            array_filter(
+                                array_map(
+                                    function ( $highlight ) {
+                                        return is_array( $highlight ) ? trim( $highlight['item'] ?? '' ) : '';
+                                    },
+                                    is_array( $program['highlights'] ?? null ) ? $program['highlights'] : array()
+                                )
+                            )
+                        ),
+                    );
+                },
+                is_array( $programs ) ? $programs : array()
+            )
+        ),
+        'commitment' => array(
+            'title'       => tona_cms_text_field( $post_id, 'csr_commitment_title' ),
+            'description' => tona_cms_text_field( $post_id, 'csr_commitment_description' ),
+            'items'       => array_values(
+                array_map(
+                    function ( $item ) {
+                        return array(
+                            'title' => $item['title'] ?? '',
+                            'desc'  => $item['description'] ?? '',
+                        );
+                    },
+                    is_array( $commitment_items ) ? $commitment_items : array()
+                )
+            ),
+        ),
+        'cta' => array(
+            'title'          => tona_cms_text_field( $post_id, 'csr_cta_title' ),
+            'description'    => tona_cms_text_field( $post_id, 'csr_cta_description' ),
+            'primaryLabel'   => tona_cms_text_field( $post_id, 'csr_cta_primary_label' ),
+            'primaryUrl'     => tona_cms_text_field( $post_id, 'csr_cta_primary_url' ),
+            'secondaryLabel' => tona_cms_text_field( $post_id, 'csr_cta_secondary_label' ),
+            'secondaryUrl'   => tona_cms_text_field( $post_id, 'csr_cta_secondary_url' ),
         ),
     );
 }
@@ -1222,7 +1355,25 @@ function tona_cms_register_rest_routes() {
 
     register_rest_route(
         'tona/v1',
-        '/pages/(?P<slug>[a-z0-9-]+)',
+        '/page-template/(?P<template>[a-z0-9-]+)',
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback'            => function ( $request ) {
+                $page = tona_cms_get_page_by_template( $request->get_param( 'template' ) );
+
+                if ( ! $page ) {
+                    return new WP_Error( 'tona_page_not_found', 'Page not found.', array( 'status' => 404 ) );
+                }
+
+                return rest_ensure_response( tona_cms_page_payload( $page ) );
+            },
+        )
+    );
+
+    register_rest_route(
+        'tona/v1',
+        '/pages/(?P<slug>[a-z0-9-\/]+)',
         array(
             'methods'             => WP_REST_Server::READABLE,
             'permission_callback' => '__return_true',
@@ -1234,42 +1385,7 @@ function tona_cms_register_rest_routes() {
                     return new WP_Error( 'tona_page_not_found', 'Page not found.', array( 'status' => 404 ) );
                 }
 
-                if ( 'doi-ngu' === $page->post_name ) {
-                    return rest_ensure_response( tona_cms_members_payload( $page ) );
-                }
-
-                if ( 'gioi-thieu-tona' === $page->post_name ) {
-                    return rest_ensure_response( tona_cms_about_payload( $page ) );
-                }
-
-                if ( 'cuoc-song-tona' === $page->post_name ) {
-                    return rest_ensure_response( tona_cms_culture_payload( $page ) );
-                }
-
-                if ( 'dich-vu' === $page->post_name ) {
-                    return rest_ensure_response( tona_cms_services_payload( $page ) );
-                }
-
-                if ( 'nghe-nghiep' === $page->post_name ) {
-                    return rest_ensure_response( tona_cms_jobs_page_payload( $page ) );
-                }
-
-                if ( 'du-an-tona' === $page->post_name ) {
-                    return rest_ensure_response( tona_cms_projects_page_payload( $page ) );
-                }
-
-                if ( 'tin-tuc' === $page->post_name ) {
-                    return rest_ensure_response( tona_cms_news_page_payload( $page ) );
-                }
-
-                return rest_ensure_response(
-                    array(
-                        'id'      => $page->ID,
-                        'slug'    => $page->post_name,
-                        'title'   => get_the_title( $page ),
-                        'content' => apply_filters( 'the_content', $page->post_content ),
-                    )
-                );
+                return rest_ensure_response( tona_cms_page_payload( $page ) );
             },
         )
     );

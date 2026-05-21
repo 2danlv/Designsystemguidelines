@@ -145,6 +145,62 @@ export type CultureCmsData = {
   };
 };
 
+export type CsrCmsData = {
+  colors?: {
+    heroBackground?: string;
+    programsBackground?: string;
+    commitmentBackground?: string;
+    ctaBackground?: string;
+  };
+  hero?: {
+    breadcrumbLabel?: string;
+    title?: string;
+    description?: string;
+    decorativeText?: string;
+  };
+  impact?: Array<{
+    icon?: "Handshake" | "Users" | "Leaf" | "Heart" | "Sun" | "GraduationCap";
+    value?: string;
+    label?: string;
+  }>;
+  programsSection?: {
+    title?: string;
+    description?: string;
+  };
+  programs?: Array<{
+    id?: string;
+    icon?: "Handshake" | "Users" | "Leaf" | "Heart" | "Sun" | "GraduationCap";
+    color?: string;
+    bgColor?: string;
+    tag?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    image?: string;
+    stats?: Array<{
+      value?: string;
+      label?: string;
+    }>;
+    highlights?: string[];
+  }>;
+  commitment?: {
+    title?: string;
+    description?: string;
+    items?: Array<{
+      title?: string;
+      desc?: string;
+    }>;
+  };
+  cta?: {
+    title?: string;
+    description?: string;
+    primaryLabel?: string;
+    primaryUrl?: string;
+    secondaryLabel?: string;
+    secondaryUrl?: string;
+  };
+};
+
 export type ServicesCmsData = {
   colors?: {
     heroBackground?: string;
@@ -360,6 +416,24 @@ const wordpressApiBase = (import.meta.env.VITE_WP_API_BASE || "/wp-json").replac
 export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promise<T | null> {
   try {
     const response = await fetch(`${wordpressApiBase}/tona/v1/pages/${slug}`, { signal });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as T;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return null;
+  }
+}
+
+export async function fetchCmsPageByTemplate<T>(template: string, signal?: AbortSignal): Promise<T | null> {
+  try {
+    const response = await fetch(`${wordpressApiBase}/tona/v1/page-template/${template}`, { signal });
 
     if (!response.ok) {
       return null;
