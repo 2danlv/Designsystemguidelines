@@ -8,37 +8,35 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
 import { projects, news } from "../data";
-import artboard2Img from "../../imports/Artboard_2.png";
 
-// â”€â”€â”€ HERO SLIDES DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const heroSlides = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1650656746788-dee910f6b42b?w=1920&q=85",
-    tag: "Industrial â€¢ BiÃªn HÃ²a, Äá»“ng Nai",
-    title: "NÃ¢ng Cáº¥p Cáº£i Táº¡o\nNhÃ  MÃ¡y Phoenix Contact",
-    sub: "171 ngÃ y Â· Zero Downtime Â· 25,000 mÂ²",
+    tag: "Industrial • Biên Hòa, Đồng Nai",
+    title: "Nâng Cấp Cải Tạo\nNhà Máy Phoenix Contact",
+    sub: "171 ngày · Zero Downtime · 25,000 m²",
   },
   {
     id: 2,
     image: "https://images.unsplash.com/photo-1761333477936-56fbc7851c65?w=1920&q=85",
-    tag: "Commercial â€¢ BiÃªn HÃ²a, Äá»“ng Nai",
-    title: "Cáº£i Táº¡o TTTM\nGO! Äá»“ng Nai",
-    sub: "8 thÃ¡ng Â· Hoáº¡t Ä‘á»™ng liÃªn tá»¥c Â· 46,100 mÂ²",
+    tag: "Commercial • Biên Hòa, Đồng Nai",
+    title: "Cải Tạo TTTM\nGO! Đồng Nai",
+    sub: "8 tháng · Hoạt động liên tục · 46,100 m²",
   },
   {
     id: 3,
     image: "https://images.unsplash.com/photo-1772442198624-4fc4d7281e89?w=1920&q=85",
-    tag: "Industrial â€¢ BÃ¬nh DÆ°Æ¡ng",
-    title: "NhÃ  MÃ¡y Spartronics\nViá»‡t Nam 2",
-    sub: "Cleanroom ISO 6 Â· EPC ToÃ n diá»‡n Â· 40,000 mÂ²",
+    tag: "Industrial • Bình Dương",
+    title: "Nhà Máy Spartronics\nViệt Nam 2",
+    sub: "Cleanroom ISO 6 · EPC Toàn diện · 40,000 m²",
   },
   {
     id: 4,
     image: "https://images.unsplash.com/photo-1772006807170-5750a2aa3713?w=1920&q=85",
-    tag: "Hotels â€¢ PhÃº Quá»‘c",
+    tag: "Hotels • Phú Quốc",
     title: "Hoa Binh Resort\nPhu Quoc",
-    sub: "5 sao Â· 10 ha Â· 18 thÃ¡ng thi cÃ´ng",
+    sub: "5 sao · 10 ha · 18 tháng thi công",
   },
 ];
 
@@ -128,7 +126,7 @@ function HeroSection() {
                 to="/vi/du-an-tona"
                 className="bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
               >
-                Xem Dá»± Ãn
+                Xem Dự Án
               </Link>
               <Link
                 to="/vi/du-an-tona"
@@ -173,9 +171,9 @@ function HeroSection() {
 function MarqueeStrip() {
   const items = [
     "ISO 9001:2015", "Zero Accident", "ISO 45001:2018",
-    "500+ Dá»± Ãn", "ISO 14001:2015", "15+ NÄƒm Kinh Nghiá»‡m",
+    "500+ Dự Án", "ISO 14001:2015", "15+ Năm Kinh Nghiệm",
     "ISO 9001:2015", "Zero Accident", "ISO 45001:2018",
-    "500+ Dá»± Ãn", "ISO 14001:2015", "15+ NÄƒm Kinh Nghiá»‡m",
+    "500+ Dự Án", "ISO 14001:2015", "15+ Năm Kinh Nghiệm",
   ];
   return (
     <div className="w-full bg-[#f4aa1f] overflow-hidden py-2.5 flex">
@@ -195,36 +193,55 @@ function MarqueeStrip() {
   );
 }
 
-// â”€â”€â”€ SLOGAN / BRAND SECTION (on Artboard_2 background) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── SLOGAN / BRAND SECTION ───────────────────────────────────────────────────
 function SloganSection() {
   return (
-    <section className="relative w-full overflow-hidden">
-      {/* Artboard_2 as background */}
-      <img
-        src={artboard2Img}
-        alt=""
-        className="w-full h-auto block"
-        aria-hidden
-      />
-      {/* Overlay slogans */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center">
+    <section className="relative w-full bg-[#002d17] overflow-hidden py-24 md:py-32">
+      {/* Decorative geometric accents */}
+      <div className="absolute right-0 top-0 w-[45%] h-full bg-gradient-to-l from-[#46aa85]/8 to-transparent pointer-events-none" />
+      <div className="absolute left-0 bottom-0 w-48 h-48 border border-[#f4aa1f]/10 rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none" />
+      <div className="absolute right-16 top-8 w-24 h-24 border border-[#46aa85]/20 rounded-full pointer-events-none" />
+      {/* Large decorative background text */}
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] md:text-[200px] font-extrabold text-white/[0.03] uppercase leading-none select-none pointer-events-none tracking-tighter">
+        TONA
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-center gap-4"
+          transition={{ duration: 0.7 }}
+          className="flex flex-col items-start gap-6 max-w-3xl"
         >
-          <span className="text-[#f4aa1f] font-bold text-xs md:text-sm uppercase tracking-[0.25em]">
-            Tona Corporation â€” Build It Right
-          </span>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight max-w-4xl">
-            TiÃªn Phong Kiáº¿n Táº¡o<br />
-            Chuáº©n Má»±c Má»›i
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-px bg-[#f4aa1f]" />
+            <span className="text-[#f4aa1f] font-bold text-xs md:text-sm uppercase tracking-[0.25em]">
+              Tona Corporation — Build It Right
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white uppercase tracking-tight leading-[1.05]">
+            Tiên Phong<br />Kiến Tạo<br />
+            <span className="text-[#46aa85]">Chuẩn Mực Mới</span>
           </h2>
-          <p className="text-white/70 font-medium text-base md:text-lg max-w-xl">
-            HÆ¡n 15 nÄƒm Ä‘á»“ng hÃ nh cÃ¹ng cÃ¡c táº­p Ä‘oÃ n Ä‘a quá»‘c gia â€” mang láº¡i cÃ´ng trÃ¬nh vÆ°á»£t tiÃªu chuáº©n, Ä‘Ãºng tiáº¿n Ä‘á»™, Ä‘Ãºng cam káº¿t.
+          <p className="text-white/60 font-medium text-base md:text-lg max-w-xl leading-relaxed">
+            Hơn 15 năm đồng hành cùng các tập đoàn đa quốc gia — mang lại công trình vượt tiêu chuẩn, đúng tiến độ, đúng cam kết.
           </p>
+          <div className="w-16 h-1 bg-[#f4aa1f]" />
+          {/* Stats row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4 w-full">
+            {[
+              { val: "500+", label: "Dự án" },
+              { val: "800+", label: "Nhân sự" },
+              { val: "15+", label: "Năm KN" },
+              { val: "50+", label: "Đối tác QT" },
+            ].map((s) => (
+              <div key={s.label} className="flex flex-col gap-1">
+                <span className="text-[#f4aa1f] font-extrabold text-2xl md:text-3xl tracking-tight">{s.val}</span>
+                <span className="text-white/40 font-bold text-xs uppercase tracking-widest">{s.label}</span>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
@@ -233,10 +250,10 @@ function SloganSection() {
 
 // â”€â”€â”€ SERVICES HIGHLIGHT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const services = [
-  { id: 1, icon: Wrench, title: "NÃ¢ng Cáº¥p Cáº£i Táº¡o", subtitle: "Renovation & Upgrade", desc: "Thi cÃ´ng cáº£i táº¡o cÃ´ng trÃ¬nh Ä‘ang váº­n hÃ nh vá»›i zero downtime â€” tiÃªu chuáº©n an toÃ n & vá»‡ sinh kháº¯t khe nháº¥t.", highlight: true },
-  { id: 2, icon: PenTool, title: "Thiáº¿t Káº¿ & XÃ¢y Dá»±ng", subtitle: "Design & Build EPC", desc: "Giáº£i phÃ¡p tá»•ng tháº§u EPC toÃ n diá»‡n tá»« thiáº¿t káº¿ Ä‘áº¿n bÃ n giao, kiá»ƒm soÃ¡t cháº¥t lÆ°á»£ng táº­p trung." },
-  { id: 3, icon: Building2, title: "Thi CÃ´ng DÃ¢n Dá»¥ng", subtitle: "Civil & Structural", desc: "Káº¿t cáº¥u thÃ©p, bÃª tÃ´ng cá»‘t thÃ©p cho nhÃ  mÃ¡y, kho xÆ°á»Ÿng, tÃ²a nhÃ  thÆ°Æ¡ng máº¡i quy mÃ´ lá»›n." },
-  { id: 4, icon: Zap, title: "CÆ¡ Äiá»‡n MEP", subtitle: "MEP Systems", desc: "Há»‡ thá»‘ng M&E tiÃªn tiáº¿n cho phÃ²ng sáº¡ch, nhÃ  mÃ¡y Ä‘iá»‡n tá»­ vÃ  cÃ´ng trÃ¬nh ká»¹ thuáº­t cao." },
+  { id: 1, icon: Wrench, title: "Nâng Cấp Cải Tạo", subtitle: "Renovation & Upgrade", desc: "Thi công cải tạo công trình đang vận hành với zero downtime - tiêu chuẩn an toàn và vệ sinh khắt khe nhất.", highlight: true },
+  { id: 2, icon: PenTool, title: "Thiết Kế & Xây Dựng", subtitle: "Design & Build EPC", desc: "Giải pháp tổng thầu EPC toàn diện từ thiết kế đến bàn giao, kiểm soát chất lượng tập trung." },
+  { id: 3, icon: Building2, title: "Thi Công Dân Dụng", subtitle: "Civil & Structural", desc: "Kết cấu thép, bê tông cốt thép cho nhà máy, kho xưởng, tòa nhà thương mại quy mô lớn." },
+  { id: 4, icon: Zap, title: "Cơ Điện MEP", subtitle: "MEP Systems", desc: "Hệ thống M&E tiên tiến cho phòng sạch, nhà máy điện tử và công trình kỹ thuật cao." },
 ];
 
 function ServicesSection() {
@@ -246,7 +263,7 @@ function ServicesSection() {
         <div className="mb-14">
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight">
-            Dá»‹ch Vá»¥ Cá»‘t LÃµi
+            Dịch Vụ Cốt Lõi
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-[#002d17]/10 rounded-2xl overflow-hidden">
@@ -263,7 +280,7 @@ function ServicesSection() {
               >
                 {svc.highlight && (
                   <div className="absolute top-4 right-4 bg-[#f4aa1f] text-[#002d17] text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full">
-                    Tháº¿ Máº¡nh
+                    Thế Mạnh
                   </div>
                 )}
                 <div className={`shrink-0 w-14 h-14 border-2 flex items-center justify-center transition-colors
@@ -290,7 +307,7 @@ function ServicesSection() {
             to="/vi/dich-vu"
             className="flex-1 flex items-center justify-center gap-3 py-5 bg-[#f4aa1f] text-[#002d17] font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors border-x border-b border-[#002d17]/10 md:flex-none md:px-16"
           >
-            Xem Táº¥t Cáº£ Dá»‹ch Vá»¥ <ArrowRight size={14} />
+            Xem Tất Cả Dịch Vụ <ArrowRight size={14} />
           </Link>
         </div>
       </div>
@@ -323,7 +340,7 @@ function ProjectsSection() {
         <div className="max-w-7xl mx-auto px-6 py-10 flex items-center justify-between">
           <div>
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">Portfolio</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">Dá»± Ãn Ná»•i Báº­t</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">Dự Án Nổi Bật</h2>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev}
@@ -335,7 +352,7 @@ function ProjectsSection() {
               <ArrowRight size={18} />
             </button>
             <Link to="/vi/du-an-tona" className="hidden md:flex items-center gap-2 ml-4 text-white/60 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
-              Xem táº¥t cáº£ <ArrowRight size={14} />
+              Xem tất cả <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -379,7 +396,7 @@ function ProjectsSection() {
                       </ul>
                     )}
                     <div className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-2">
-                      Chi tiáº¿t dá»± Ã¡n <ArrowRight size={12} />
+                      Chi tiết dự án <ArrowRight size={12} />
                     </div>
                   </div>
                 </Link>
@@ -404,11 +421,11 @@ function NewsSection() {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Tin Tá»©c &amp; Hoáº¡t Äá»™ng
+              Tin Tức &amp; Hoạt Động
             </h2>
           </div>
           <Link to="/vi/tin-tuc" className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
-            Xem Táº¥t Cáº£ <ArrowRight size={14} />
+            Xem Tất Cả <ArrowRight size={14} />
           </Link>
         </div>
 
@@ -428,12 +445,12 @@ function NewsSection() {
               </div>
             </div>
             <div className="flex flex-col gap-3 pt-6 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-              <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date} Â· {featured.readTime} Ä‘á»c</span>
+              <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date} · {featured.readTime} đọc</span>
               <h3 className="font-extrabold text-[#002d17] text-2xl uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors">
                 {featured.title}
               </h3>
               <p className="text-[#002d17]/60 text-sm leading-relaxed">{featured.excerpt}</p>
-              <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">Äá»c tiáº¿p <ArrowRight size={12} /></span>
+              <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">Đọc tiếp <ArrowRight size={12} /></span>
             </div>
           </motion.article>
 
@@ -483,7 +500,7 @@ function PartnersSection() {
             </h3>
           </div>
           <p className="text-white/40 text-sm max-w-xs">
-            Äá»‘i tÃ¡c tin cáº­y cá»§a cÃ¡c táº­p Ä‘oÃ n Ä‘a quá»‘c gia hÃ ng Ä‘áº§u trong lÄ©nh vá»±c xÃ¢y dá»±ng vÃ  MEP.
+            Đối tác tin cậy của các tập đoàn đa quốc gia hàng đầu trong lĩnh vực xây dựng và MEP.
           </p>
         </div>
       </div>

@@ -232,7 +232,7 @@ export function ProjectDetail() {
       </div>
 
       {/* SPEC STRIP */}
-      <div className="w-full bg-[#46aa85]">
+      <div className="w-full bg-[#002d17]">
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-6">
           {(project as any).leedGold && (
             <div className="flex items-center gap-3 pb-4 border-b border-white/20">
@@ -252,11 +252,11 @@ export function ProjectDetail() {
           ].map((spec) => {
             const Icon = spec.icon;
             return (
-              <div key={spec.label} className="flex flex-col gap-1">
-                <span className="flex items-center gap-1 text-[#f4aa1f] text-xs font-bold uppercase tracking-widest">
+              <div key={spec.label} className="flex flex-col gap-1.5">
+                <span className="flex items-center gap-1.5 text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest">
                   <Icon size={11} /> {spec.label}
                 </span>
-                <span className="text-white font-extrabold text-base">{spec.value}</span>
+                <span className="text-white font-extrabold text-base leading-tight">{spec.value}</span>
               </div>
             );
           })}

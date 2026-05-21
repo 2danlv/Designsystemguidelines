@@ -4,13 +4,16 @@ import {
   ChevronRight,
   Check,
   ArrowRight,
+  ChevronLeft,
+  Play,
   PenTool,
   Wrench,
   Building2,
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
+import { projects } from "../data";
 import { fetchCmsPage, type ServicesCmsData } from "../lib/wordpress";
 
 type ServiceItem = {
@@ -47,88 +50,223 @@ const fallbackServices: ServiceItem[] = [
     id: 1,
     icon: Wrench,
     num: "01",
-    tag: "The Manh Hang Dau",
-    title: "Nang Cap Cai Tao Khong Dung San Xuat",
+    tag: "Thế Mạnh Hàng Đầu",
+    title: "Nâng Cấp Cải Tạo Không Dừng Sản Xuất",
     subtitle: "Renovation & Upgrade",
-    desc: "Tona la don vi tien phong tai Viet Nam ve cai tao cong trinh dang van hanh. Quy trinh thi cong duoc thiet ke de khong gay gian doan day chuyen san xuat.",
+    desc: "Tona là đơn vị tiên phong tại Việt Nam về cải tạo công trình đang vận hành. Quy trình thi công được thiết kế để không gây gián đoạn dây chuyền sản xuất.",
     features: [
-      "Lap ke hoach thi cong khong dung san xuat",
-      "Kiem soat bui va tieng on theo tieu chuan GMP",
-      "Phoi hop ca 24/7 theo lich san xuat",
-      "He thong barrier va vach ngan tam thoi",
+      "Lập kế hoạch thi công không dừng sản xuất",
+      "Kiểm soát bụi và tiếng ồn theo tiêu chuẩn GMP",
+      "Phối hợp cả 24/7 theo lịch sản xuất",
+      "Hệ thống barrier và vách ngăn tạm thời",
     ],
     img: "https://images.unsplash.com/photo-1748002388689-c62b45d5c28b?w=1080&q=80",
     featured: true,
-    linkLabel: "Xem Du An",
+    linkLabel: "Xem Dự Án",
     linkUrl: "/vi/du-an-tona",
   },
   {
     id: 2,
     icon: PenTool,
     num: "02",
-    tag: "EPC Toan Dien",
-    title: "Thiet Ke Va Xay Dung",
+    tag: "EPC Toàn Diện",
+    title: "Thiết Kế Và Xây Dựng",
     subtitle: "Design & Build",
-    desc: "Tong thau EPC chiu trach nhiem toan dien tu thiet ke ky thuat, lap tien do, mua sam vat tu den thi cong va nghiem thu ban giao.",
+    desc: "Tổng thầu EPC chịu trách nhiệm toàn diện từ thiết kế kỹ thuật, lập tiến độ, mua sắm vật tư đến thi công và nghiệm thu bàn giao.",
     features: [
-      "Thiet ke ky thuat va ho so BIM",
-      "Quan ly chuoi cung ung vat tu",
-      "Kiem soat chi phi va tien do tap trung",
-      "Bao hanh va ho tro ky thuat sau ban giao",
+      "Thiết kế kỹ thuật và hồ sơ BIM",
+      "Quản lý chuỗi cung ứng vật tư",
+      "Kiểm soát chi phí và tiến độ tập trung",
+      "Bảo hành và hỗ trợ kỹ thuật sau bàn giao",
     ],
     img: "https://images.unsplash.com/photo-1645434897689-af222b85993e?w=1080&q=80",
     featured: false,
-    linkLabel: "Xem Du An",
+    linkLabel: "Xem Dự Án",
     linkUrl: "/vi/du-an-tona",
   },
   {
     id: 3,
     icon: Building2,
     num: "03",
-    tag: "Ket Cau Va Ha Tang",
-    title: "Thi Cong Dan Dung Va Cong Nghiep",
+    tag: "Kết Cấu Và Hạ Tầng",
+    title: "Thi Công Dân Dụng Và Công Nghiệp",
     subtitle: "Civil & Structural",
-    desc: "Tu ket cau thep tien che nha xuong den cong trinh be tong cot thep nhieu tang, Tona co kinh nghiem thi cong da dang loai hinh cong trinh.",
+    desc: "Từ kết cấu thép tiền chế nhà xưởng đến công trình bê tông cốt thép nhiều tầng, Tona có kinh nghiệm thi công đa dạng loại hình công trình.",
     features: [
-      "Ket cau thep tien che PEB",
-      "Be tong cot thep B30-B40",
-      "Mong coc khoan nhoi, coc ep",
-      "Ha tang duong noi bo, thoat nuoc, kho bai",
+      "Kết cấu thép tiền chế PEB",
+      "Bê tông cốt thép B30-B40",
+      "Móng cọc khoan nhồi, cọc ép",
+      "Hạ tầng đường nội bộ, thoát nước, kho bãi",
     ],
     img: "https://images.unsplash.com/photo-1774979159518-7706ca7bb2e6?w=1080&q=80",
     featured: false,
-    linkLabel: "Xem Du An",
+    linkLabel: "Xem Dự Án",
     linkUrl: "/vi/du-an-tona",
   },
   {
     id: 4,
     icon: Zap,
     num: "04",
-    tag: "Ky Thuat Cao",
-    title: "He Thong Co Dien MEP",
+    tag: "Kỹ Thuật Cao",
+    title: "Hệ Thống Cơ Điện MEP",
     subtitle: "Mechanical, Electrical & Plumbing",
-    desc: "Bo phan MEP cua Tona trien khai he thong ky thuat phuc tap cho nha may dien tu, phong sach cleanroom va cong trinh do chinh xac cao.",
+    desc: "Bộ phận MEP của Tona triển khai hệ thống kỹ thuật phức tạp cho nhà máy điện tử, phòng sạch cleanroom và công trình độ chính xác cao.",
     features: [
-      "Phong sach ISO Class 5-8",
-      "He thong HVAC va dieu hoa cong nghiep",
-      "Dien ha the, MCC panel, UPS",
-      "He thong khi dac biet",
+      "Phòng sạch ISO Class 5-8",
+      "Hệ thống HVAC và điều hòa công nghiệp",
+      "Điện hạ thế, MCC panel, UPS",
+      "Hệ thống khí đặc biệt",
     ],
     img: "https://images.unsplash.com/photo-1759830337357-29c472b6746c?w=1080&q=80",
     featured: false,
-    linkLabel: "Xem Du An",
+    linkLabel: "Xem Dự Án",
     linkUrl: "/vi/du-an-tona",
   },
 ];
 
-const fallbackProcess: ProcessStep[] = [
-  { step: "01", title: "Khao Sat Va Tu Van", desc: "Tiep nhan yeu cau, khao sat hien trang va tu van giai phap phu hop nhat." },
-  { step: "02", title: "Thiet Ke Ky Thuat", desc: "Lap ho so thiet ke ky thuat, ban ve thi cong va ke hoach trien khai." },
-  { step: "03", title: "Ky Ket Hop Dong", desc: "Minh bach ve pham vi, tien do, chi phi va cac cam ket chat luong." },
-  { step: "04", title: "Thi Cong", desc: "Trien khai dung tien do, kiem soat chat luong theo ISO 9001 moi ngay." },
-  { step: "05", title: "Nghiem Thu Va Ban Giao", desc: "Kiem tra toan bo hang muc, ban giao ho so hoan cong va huong dan van hanh." },
-  { step: "06", title: "Bao Hanh", desc: "Ho tro ky thuat sau ban giao, bao hanh theo hop dong." },
+const timelapseSlides = [
+  {
+    title: "Spartronics Cleanroom — Hậu Giang",
+    subtitle: "Timelapse 45 ngày thi công liên tục",
+    duration: "45 ngày",
+    image: "https://images.unsplash.com/photo-1645434897689-af222b85993e?w=1200&q=80",
+  },
+  {
+    title: "Phoenix Contact — Bình Dương",
+    subtitle: "Timelapse toàn bộ quá trình xây dựng EPC",
+    duration: "171 ngày",
+    image: "https://images.unsplash.com/photo-1759830337357-29c472b6746c?w=1200&q=80",
+  },
+  {
+    title: "GO! Đồng Nai Commercial Center",
+    subtitle: "Timelapse thi công phần thô & hoàn thiện",
+    duration: "90 ngày",
+    image: "https://images.unsplash.com/photo-1774979159518-7706ca7bb2e6?w=1200&q=80",
+  },
 ];
+
+const fallbackProcessSteps = [
+  { step: "01", title: "Khảo Sát & Tư Vấn", desc: "Tiếp nhận yêu cầu, khảo sát hiện trạng và tư vấn giải pháp phù hợp nhất." },
+  { step: "02", title: "Thiết Kế Kỹ Thuật", desc: "Lập hồ sơ thiết kế kỹ thuật, bản vẽ thi công và kế hoạch triển khai." },
+  { step: "03", title: "Ký Kết Hợp Đồng", desc: "Minh bạch về phạm vi, tiến độ, chi phí và các cam kết chất lượng." },
+  { step: "04", title: "Thi Công", desc: "Triển khai đúng tiến độ, kiểm soát chất lượng theo ISO 9001 mỗi ngày." },
+  { step: "05", title: "Nghiệm Thu & Bàn Giao", desc: "Kiểm tra toàn bộ hạng mục, bàn giao hồ sơ hoàn công và hướng dẫn vận hành." },
+  { step: "06", title: "Bảo Hành", desc: "Hỗ trợ kỹ thuật sau bàn giao, bảo hành theo hợp đồng." },
+];
+
+function TimelapseSlider() {
+  const [current, setCurrent] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    setProgress(0);
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 100) {
+          setCurrent((c) => (c + 1) % timelapseSlides.length);
+          return 0;
+        }
+        return p + 1;
+      });
+    }, 50);
+    return () => clearInterval(interval);
+  }, [current]);
+
+  const prev = () => setCurrent((c) => (c - 1 + timelapseSlides.length) % timelapseSlides.length);
+  const next = () => setCurrent((c) => (c + 1) % timelapseSlides.length);
+
+  const slide = timelapseSlides[current];
+
+  return (
+    <div className="relative w-full aspect-video bg-[#001a0e] rounded-2xl overflow-hidden group">
+      {/* Background image */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="absolute inset-0"
+        >
+          <img
+            src={slide.image}
+            alt={slide.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#001a0e]/80 via-[#001a0e]/20 to-transparent" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Play button overlay */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <Play size={22} className="text-white ml-1" fill="white" />
+        </div>
+      </div>
+
+      {/* Progress bars */}
+      <div className="absolute top-4 left-4 right-4 flex gap-1.5 z-20">
+        {timelapseSlides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className="flex-1 h-0.5 bg-white/20 rounded-full overflow-hidden"
+          >
+            <div
+              className="h-full bg-[#f4aa1f] rounded-full transition-none"
+              style={{ width: i === current ? `${progress}%` : i < current ? "100%" : "0%" }}
+            />
+          </button>
+        ))}
+      </div>
+
+      {/* Timelapse label */}
+      <div className="absolute top-8 right-4 z-20">
+        <span className="bg-[#f4aa1f] text-[#002d17] px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#002d17] animate-pulse" />
+          Timelapse
+        </span>
+      </div>
+
+      {/* Slide info */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4 }}
+          >
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-1">{slide.subtitle}</p>
+            <h3 className="text-white font-extrabold text-xl uppercase tracking-tight leading-snug">{slide.title}</h3>
+            <span className="text-white/50 text-xs font-bold uppercase tracking-widest mt-1 block">{slide.duration} thi công</span>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Nav buttons */}
+      <button
+        onClick={prev}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#002d17]/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#002d17]/80 transition-colors opacity-0 group-hover:opacity-100"
+      >
+        <ChevronLeft size={18} />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#002d17]/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#002d17]/80 transition-colors opacity-0 group-hover:opacity-100"
+      >
+        <ChevronRight size={18} />
+      </button>
+
+      {/* Slide counter */}
+      <div className="absolute bottom-6 right-6 z-20 bg-[#002d17]/60 backdrop-blur-sm px-3 py-1.5 rounded-lg">
+        <span className="text-white font-bold text-xs">{current + 1} / {timelapseSlides.length}</span>
+      </div>
+    </div>
+  );
+}
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -143,24 +281,6 @@ function backgroundStyle(color?: string) {
   return color ? { backgroundColor: color } : undefined;
 }
 
-function serviceFromCms(item: NonNullable<ServicesCmsData["services"]>[number], index: number): ServiceItem {
-  return {
-    id: index + 1,
-    icon: iconMap[item.icon || "Wrench"] || Wrench,
-    iconImage: item.iconImage || "",
-    num: item.number || String(index + 1).padStart(2, "0"),
-    tag: item.tag || "",
-    title: item.title || "",
-    subtitle: item.subtitle || "",
-    desc: item.description || "",
-    features: item.features?.length ? item.features : [],
-    img: item.image || "",
-    featured: Boolean(item.featured),
-    linkLabel: item.linkLabel || "Xem Du An",
-    linkUrl: item.linkUrl || "/vi/du-an-tona",
-  };
-}
-
 export function Services() {
   const [cmsPage, setCmsPage] = useState<ServicesCmsData | null>(null);
 
@@ -172,37 +292,56 @@ export function Services() {
     return () => controller.abort();
   }, []);
 
-  const services = useMemo<ServiceItem[]>(() => {
-    if (!cmsPage?.services?.length) {
+  const servicesList = useMemo<ServiceItem[]>(() => {
+    const source = cmsPage?.services?.length ? cmsPage.services : null;
+
+    if (!source) {
       return fallbackServices;
     }
 
-    return cmsPage.services.map(serviceFromCms);
+    return source.map((service, index) => ({
+      id: index + 1,
+      icon: iconMap[service.icon || "Wrench"] || Wrench,
+      iconImage: service.iconImage || "",
+      num: service.number || String(index + 1).padStart(2, "0"),
+      tag: service.featured ? "Thế Mạnh Hàng Đầu" : "",
+      title: service.title || "",
+      subtitle: service.subtitle || "",
+      desc: service.description || "",
+      features: service.features || [],
+      img: service.image || fallbackServices[index]?.img || fallbackServices[0]?.img || "",
+      featured: Boolean(service.featured),
+      linkLabel: service.linkLabel || "Xem Dự Án",
+      linkUrl: service.linkUrl || "/vi/du-an-tona",
+    }));
   }, [cmsPage]);
 
   const processSteps = useMemo<ProcessStep[]>(() => {
-    if (!cmsPage?.process?.steps?.length) {
-      return fallbackProcess;
+    const steps = cmsPage?.process?.steps;
+
+    if (!steps?.length) {
+      return fallbackProcessSteps;
     }
 
-    return cmsPage.process.steps.map((step) => ({
-      step: step.step || "",
+    return steps.map((step, index) => ({
+      step: step.step || String(index + 1).padStart(2, "0"),
       title: step.title || "",
       desc: step.description || "",
     }));
   }, [cmsPage]);
 
-  const featured = services.find((service) => service.featured) || services[0] || fallbackServices[0];
-  const rest = services.filter((service) => service !== featured);
+  const featured = servicesList.find((service) => service.featured) || servicesList[0];
+  const rest = servicesList.filter((service) => service.id !== featured.id);
+  const featuredProject = projects.find((p) => p.slug === "nha-may-spartronics-viet-nam-2") || projects[0];
   const colors = cmsPage?.colors;
-  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Dich Vu";
-  const heroTitle = cmsPage?.hero?.title || "Giai Phap\nXay Dung Toan Dien";
-  const heroDescription = cmsPage?.hero?.description || "Tu tong thau EPC den cai tao khong dung san xuat, Tona Corporation cung cap giai phap xay dung dap ung moi yeu cau khat khe nhat cua cong nghiep hien dai.";
-  const processTitle = cmsPage?.process?.title || "Quy Trinh Trien Khai";
-  const ctaTitle = cmsPage?.cta?.title || "San sang bat dau du an?";
-  const ctaDescription = cmsPage?.cta?.description || "Lien he de duoc tu van mien phi ve giai phap phu hop.";
-  const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Lien He Tu Van";
-  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/vi/nghe-nghiep";
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Dịch Vụ";
+  const heroTitle = cmsPage?.hero?.title || "Dịch Vụ\nCốt Lõi";
+  const heroDescription = cmsPage?.hero?.description || "Tona Corporation cung cấp các giải pháp xây dựng công nghiệp, thương mại và kỹ thuật cao.";
+  const processTitle = cmsPage?.process?.title || "Quy Trình Làm Việc";
+  const ctaTitle = cmsPage?.cta?.title || "Sẵn Sàng Bắt Đầu Dự Án?";
+  const ctaDescription = cmsPage?.cta?.description || "Kết nối với Tona để nhận tư vấn giải pháp phù hợp cho công trình của bạn.";
+  const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Liên Hệ Ngay";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/vi/lien-he";
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -356,6 +495,111 @@ export function Services() {
                 <p className="text-white/50 text-sm leading-relaxed">{step.desc}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TIMELAPSE SLIDER */}
+      <section className="bg-[#f9f9f7] py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-4">
+              <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
+                Nhìn Lại<br />Hành Trình<br />Thi Công
+              </h2>
+              <p className="text-[#002d17]/55 text-sm leading-relaxed font-medium mb-6">
+                Những khoảnh khắc đặc biệt được nén lại — từ mảnh đất trống đến công trình hoàn chỉnh. Mỗi timelapse là bằng chứng cho sự chuyên nghiệp và tốc độ triển khai của Tona.
+              </p>
+              <div className="flex flex-col gap-3">
+                {timelapseSlides.map((s, i) => (
+                  <div key={i} className="flex items-center gap-3 text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">
+                    <span className="w-2 h-2 rounded-full bg-[#f4aa1f] shrink-0" />
+                    {s.title}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="lg:col-span-8">
+              <TimelapseSlider />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED PROJECT */}
+      <section className="py-20 bg-white border-t border-[#002d17]/8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-10">
+            <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+              Dự Án Tiêu Biểu
+            </h2>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-[#002d17]/10 group"
+          >
+            {/* Image */}
+            <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden bg-[#bcd8cb] min-h-[280px]">
+              <img
+                src={featuredProject.image}
+                alt={featuredProject.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#002d17]/30 hidden lg:block" />
+              <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                <span className="bg-[#002d17] text-[#f4aa1f] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                  {featuredProject.category}
+                </span>
+                {(featuredProject as any).leedGold && (
+                  <span className="bg-[#b8860b] text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full flex items-center gap-1">
+                    ★ LEED Gold
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex flex-col justify-center px-8 md:px-12 py-10 bg-[#002d17]">
+              <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">{featuredProject.location}</p>
+              <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-4">
+                {featuredProject.title}
+              </h3>
+              <p className="text-white/55 text-sm leading-relaxed font-medium mb-7">
+                {featuredProject.description}
+              </p>
+              <div className="grid grid-cols-3 gap-3 mb-8">
+                {[
+                  { label: "Diện tích", val: featuredProject.area },
+                  { label: "Khách hàng", val: featuredProject.client },
+                  { label: "Năm", val: featuredProject.year },
+                ].map((s) => (
+                  <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                    <p className="text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest mb-1">{s.label}</p>
+                    <span className="text-white font-extrabold text-sm">{s.val}</span>
+                  </div>
+                ))}
+              </div>
+              <Link
+                to={`/vi/project/${featuredProject.slug}`}
+                className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
+              >
+                Xem Chi Tiết <ArrowRight size={14} />
+              </Link>
+            </div>
+          </motion.div>
+
+          <div className="mt-6 flex justify-end">
+            <Link
+              to="/vi/du-an-tona"
+              className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors"
+            >
+              Xem Tất Cả Dự Án <ArrowRight size={12} />
+            </Link>
           </div>
         </div>
       </section>
