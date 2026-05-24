@@ -1,0 +1,117 @@
+{
+    "key": "group_tona_member_post",
+    "title": "Member Details",
+    "fields": [
+        {
+            "key": "field_tona_member_role",
+            "label": "Role",
+            "name": "member_role",
+            "type": "text",
+            "instructions": "Main Vietnamese role shown on the member card.",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_member_role_en",
+            "label": "Role English",
+            "name": "member_role_en",
+            "type": "text",
+            "instructions": "Small English role below the main role.",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_member_linkedin",
+            "label": "LinkedIn URL",
+            "name": "member_linkedin",
+            "type": "url",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_member_since",
+            "label": "At Tona Since",
+            "name": "member_since",
+            "type": "text",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_tona_member_education",
+            "label": "Education / Certificates",
+            "name": "member_education",
+            "type": "textarea",
+            "rows": 3
+        },
+        {
+            "key": "field_tona_member_expertise",
+            "label": "Expertise",
+            "name": "member_expertise",
+            "type": "repeater",
+            "layout": "table",
+            "button_label": "Add Expertise",
+            "sub_fields": [
+                {
+                    "key": "field_tona_member_expertise_item",
+                    "label": "Item",
+                    "name": "item",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_member_achievements",
+            "label": "Achievements",
+            "name": "member_achievements",
+            "type": "repeater",
+            "layout": "table",
+            "button_label": "Add Achievement",
+            "sub_fields": [
+                {
+                    "key": "field_tona_member_achievement_item",
+                    "label": "Item",
+                    "name": "item",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "key": "field_tona_member_quote",
+            "label": "Quote",
+            "name": "member_quote",
+            "type": "textarea",
+            "rows": 4
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "tona_member"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "field",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 1,
+    "modified": 1780000001
+}

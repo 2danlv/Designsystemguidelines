@@ -22,22 +22,7 @@ function tona_cms_prepare_members_field_clean_labels( $field ) {
             'label'        => 'Hero Description',
             'instructions' => 'Short paragraph below the hero title.',
         ),
-        'field_tona_members_tab_leadership' => array( 'label' => '02. Leadership Cards' ),
-        'field_tona_members_leadership' => array(
-            'label'        => 'Leadership Members',
-            'instructions' => 'Each row is one portrait card. Drag rows to change the display order.',
-        ),
-        'field_tona_members_member_id' => array(
-            'label'        => 'ID',
-            'instructions' => 'Optional internal ID.',
-        ),
-        'field_tona_members_member_name' => array( 'label' => 'Name' ),
-        'field_tona_members_member_role' => array( 'label' => 'Role' ),
-        'field_tona_members_member_role_en' => array( 'label' => 'Role EN' ),
-        'field_tona_members_member_image' => array( 'label' => 'Portrait Image' ),
-        'field_tona_members_member_bio' => array( 'label' => 'Short Bio' ),
-        'field_tona_members_member_linkedin' => array( 'label' => 'LinkedIn' ),
-        'field_tona_members_tab_values' => array( 'label' => '03. Core Values' ),
+        'field_tona_members_tab_values' => array( 'label' => '02. Core Values' ),
         'field_tona_members_values_title' => array(
             'label'        => 'Values Section Title',
             'instructions' => 'Heading for the values section.',
@@ -49,7 +34,7 @@ function tona_cms_prepare_members_field_clean_labels( $field ) {
         'field_tona_members_value_icon' => array( 'label' => 'Icon' ),
         'field_tona_members_value_title' => array( 'label' => 'Card Title' ),
         'field_tona_members_value_description' => array( 'label' => 'Card Description' ),
-        'field_tona_members_tab_teaser' => array( 'label' => '04. Footer CTA' ),
+        'field_tona_members_tab_teaser' => array( 'label' => '03. Footer CTA' ),
         'field_tona_members_teaser_title' => array(
             'label'        => 'CTA Title',
             'instructions' => 'Title for the white CTA block at the bottom of the page.',
@@ -92,3 +77,25 @@ function tona_cms_prepare_members_field_clean_labels( $field ) {
     return $field;
 }
 add_filter( 'acf/prepare_field', 'tona_cms_prepare_members_field_clean_labels', 20 );
+
+function tona_cms_members_page_remove_member_repeater( $fields, $parent ) {
+    if ( ! is_array( $fields ) ) {
+        return $fields;
+    }
+
+    $remove_keys = array(
+        'field_tona_members_tab_leadership',
+        'field_tona_members_leadership',
+    );
+
+    return array_values(
+        array_filter(
+            $fields,
+            function ( $field ) use ( $remove_keys ) {
+                return ! in_array( $field['key'] ?? '', $remove_keys, true );
+            }
+        )
+    );
+}
+add_filter( 'acf/load_fields/name=group_tona_members_page', 'tona_cms_members_page_remove_member_repeater', 30, 2 );
+add_filter( 'acf/load_fields', 'tona_cms_members_page_remove_member_repeater', 30, 2 );

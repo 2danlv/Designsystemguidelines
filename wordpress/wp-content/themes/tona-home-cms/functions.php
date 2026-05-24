@@ -14,6 +14,7 @@ function tona_cms_theme_setup() {
 add_action( 'after_setup_theme', 'tona_cms_theme_setup' );
 
 require_once get_stylesheet_directory() . '/inc/post-types/jobs.php';
+require_once get_stylesheet_directory() . '/inc/post-types/members.php';
 require_once get_stylesheet_directory() . '/inc/post-types/projects.php';
 require_once get_stylesheet_directory() . '/inc/post-types/news.php';
 
@@ -410,7 +411,6 @@ function tona_cms_page_payload( $page ) {
 
 function tona_cms_members_payload( $page ) {
     $post_id = $page->ID;
-    $leadership = function_exists( 'get_field' ) ? get_field( 'members_leadership', $post_id ) : array();
     $values = function_exists( 'get_field' ) ? get_field( 'members_values', $post_id ) : array();
 
     return array(
@@ -421,22 +421,6 @@ function tona_cms_members_payload( $page ) {
             'breadcrumbLabel' => get_the_title( $page ),
             'title'           => tona_cms_text_field( $post_id, 'members_hero_title' ),
             'description'     => tona_cms_text_field( $post_id, 'members_hero_description' ),
-        ),
-        'leadership' => array_values(
-            array_map(
-                function ( $member ) {
-                    return array(
-                        'id'       => sanitize_title( $member['id'] ?? $member['name'] ?? '' ),
-                        'name'     => $member['name'] ?? '',
-                        'role'     => $member['role'] ?? '',
-                        'roleEn'   => $member['role_en'] ?? '',
-                        'image'    => tona_cms_image_url( $member['image'] ?? '' ),
-                        'bio'      => $member['bio'] ?? '',
-                        'linkedin' => $member['linkedin'] ?? '#',
-                    );
-                },
-                is_array( $leadership ) ? $leadership : array()
-            )
         ),
         'valuesTitle' => tona_cms_text_field( $post_id, 'members_values_title' ),
         'values'      => array_values(
@@ -458,6 +442,63 @@ function tona_cms_members_payload( $page ) {
             'linkLabel'   => tona_cms_text_field( $post_id, 'members_teaser_link_label' ),
             'linkUrl'     => tona_cms_text_field( $post_id, 'members_teaser_link_url' ),
         ),
+    );
+}
+
+function tona_cms_member_repeater_items( $post_id, $field_name ) {
+    $rows = function_exists( 'get_field' ) ? get_field( $field_name, $post_id ) : array();
+
+    if ( ! is_array( $rows ) ) {
+        return array();
+    }
+
+    return array_values(
+        array_filter(
+            array_map(
+                function ( $row ) {
+                    return is_array( $row ) ? trim( $row['item'] ?? '' ) : '';
+                },
+                $rows
+            )
+        )
+    );
+}
+
+function tona_cms_member_payload( $post ) {
+    $post_id = $post->ID;
+
+    return array(
+        'id'           => $post_id,
+        'slug'         => $post->post_name,
+        'name'         => get_the_title( $post ),
+        'role'         => tona_cms_text_field( $post_id, 'member_role' ),
+        'roleEn'       => tona_cms_text_field( $post_id, 'member_role_en' ),
+        'image'        => get_the_post_thumbnail_url( $post_id, 'large' ) ?: '',
+        'bio'          => tona_cms_decode_text( wp_strip_all_tags( get_the_content( null, false, $post ) ) ),
+        'linkedin'     => tona_cms_text_field( $post_id, 'member_linkedin' ) ?: '#',
+        'education'    => tona_cms_text_field( $post_id, 'member_education' ),
+        'since'        => tona_cms_text_field( $post_id, 'member_since' ),
+        'expertise'    => tona_cms_member_repeater_items( $post_id, 'member_expertise' ),
+        'achievements' => tona_cms_member_repeater_items( $post_id, 'member_achievements' ),
+        'quote'        => tona_cms_text_field( $post_id, 'member_quote' ),
+    );
+}
+
+function tona_cms_members_list_payload() {
+    $posts = get_posts(
+        array(
+            'post_type'      => 'tona_member',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'orderby'        => array(
+                'menu_order' => 'ASC',
+                'date'       => 'DESC',
+            ),
+        )
+    );
+
+    return array_values(
+        array_map( 'tona_cms_member_payload', is_array( $posts ) ? $posts : array() )
     );
 }
 
@@ -1281,6 +1322,18 @@ function tona_cms_news_page_payload( $page ) {
 }
 
 function tona_cms_register_rest_routes() {
+    register_rest_route(
+        'tona/v1',
+        '/members',
+        array(
+            'methods'             => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback'            => function () {
+                return rest_ensure_response( tona_cms_members_list_payload() );
+            },
+        )
+    );
+
     register_rest_route(
         'tona/v1',
         '/news',

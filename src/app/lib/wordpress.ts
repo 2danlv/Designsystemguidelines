@@ -4,15 +4,6 @@ export type MembersCmsData = {
     title?: string;
     description?: string;
   };
-  leadership?: Array<{
-    id?: string;
-    name?: string;
-    role?: string;
-    roleEn?: string;
-    image?: string;
-    bio?: string;
-    linkedin?: string;
-  }>;
   valuesTitle?: string;
   values?: Array<{
     icon?: "Shield" | "Award" | "TrendingUp" | "Users";
@@ -26,6 +17,22 @@ export type MembersCmsData = {
     linkLabel?: string;
     linkUrl?: string;
   };
+};
+
+export type MemberPost = {
+  id: number | string;
+  slug?: string;
+  name: string;
+  role: string;
+  roleEn: string;
+  image: string;
+  bio: string;
+  linkedin?: string;
+  education?: string;
+  since?: string;
+  expertise?: string[];
+  achievements?: string[];
+  quote?: string;
 };
 
 export type AboutCmsData = {
@@ -446,6 +453,24 @@ export async function fetchCmsPageByTemplate<T>(template: string, signal?: Abort
     }
 
     return null;
+  }
+}
+
+export async function fetchCmsMembers(signal?: AbortSignal): Promise<MemberPost[]> {
+  try {
+    const response = await fetch(`${wordpressApiBase}/tona/v1/members`, { signal });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return (await response.json()) as MemberPost[];
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return [];
   }
 }
 
