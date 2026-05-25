@@ -15,13 +15,34 @@
         });
     }
 
+    function moveInstructionsBelowInputs($scope) {
+        var $fields = $scope
+            .find('.acf-field')
+            .add($scope.filter('.acf-field'));
+
+        $fields.each(function () {
+            var $field = $(this);
+            var $labelDescription = $field.children('.acf-label').children('.description');
+            var $input = $field.children('.acf-input');
+
+            if (!$labelDescription.length || !$input.length || $input.children('.description').length) {
+                return;
+            }
+
+            $labelDescription.appendTo($input);
+        });
+    }
+
     if (typeof acf !== 'undefined') {
         acf.addAction('ready append', function ($el) {
-            enforceSingleFeaturedCard($el || $(document));
+            var $scope = $el || $(document);
+            enforceSingleFeaturedCard($scope);
+            moveInstructionsBelowInputs($scope);
         });
     }
 
     $(function () {
         enforceSingleFeaturedCard($(document));
+        moveInstructionsBelowInputs($(document));
     });
 })(jQuery);

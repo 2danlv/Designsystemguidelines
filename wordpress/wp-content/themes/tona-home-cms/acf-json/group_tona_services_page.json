@@ -541,8 +541,178 @@
             ]
         },
         {
+            "key": "field_tona_services_timelapse_tab",
+            "label": "04. Timelapse",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_tona_services_timelapse_background",
+            "label": "Timelapse Background Color",
+            "name": "services_timelapse_background",
+            "type": "color_picker",
+            "instructions": "Background for the timelapse section.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f9f9f7",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_tona_services_timelapse_title",
+            "label": "Timelapse Title",
+            "name": "services_timelapse_title",
+            "type": "textarea",
+            "instructions": "Use line breaks if needed.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Nhìn Lại\nHành Trình\nThi Công",
+            "rows": 3,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_services_timelapse_description",
+            "label": "Timelapse Description",
+            "name": "services_timelapse_description",
+            "type": "textarea",
+            "instructions": "Short paragraph next to the timelapse slider.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Những khoảnh khắc đặc biệt được nén lại - từ mảnh đất trống đến công trình hoàn chỉnh. Mỗi timelapse là bằng chứng cho sự chuyên nghiệp và tốc độ triển khai của Tona.",
+            "rows": 4,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_tona_services_timelapse_slides",
+            "label": "Timelapse Slides",
+            "name": "services_timelapse_slides",
+            "type": "repeater",
+            "instructions": "Each row is one slide in the timelapse carousel.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "tona-acf-section",
+                "id": ""
+            },
+            "collapsed": "field_tona_services_timelapse_slide_title",
+            "min": 0,
+            "max": 0,
+            "layout": "block",
+            "button_label": "Add Slide",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_tona_services_timelapse_slide_image",
+                    "label": "Image",
+                    "name": "image",
+                    "type": "image",
+                    "instructions": "Main image for this timelapse slide.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "100",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "medium",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "parent_repeater": "field_tona_services_timelapse_slides"
+                },
+                {
+                    "key": "field_tona_services_timelapse_slide_title",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_timelapse_slides"
+                },
+                {
+                    "key": "field_tona_services_timelapse_slide_subtitle",
+                    "label": "Subtitle",
+                    "name": "subtitle",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_timelapse_slides"
+                },
+                {
+                    "key": "field_tona_services_timelapse_slide_duration",
+                    "label": "Duration",
+                    "name": "duration",
+                    "type": "text",
+                    "instructions": "For example: 45 ngày.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_services_timelapse_slides"
+                }
+            ]
+        },
+        {
             "key": "field_tona_services_tab_cta",
-            "label": "04. CTA",
+            "label": "05. CTA",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -666,7 +836,7 @@
             {
                 "param": "page_template",
                 "operator": "==",
-                "value": "templates\/tona-services.php"
+                "value": "templates/tona-services.php"
             }
         ]
     ],
@@ -679,5 +849,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1779211494
+    "modified": 1779722575
 }

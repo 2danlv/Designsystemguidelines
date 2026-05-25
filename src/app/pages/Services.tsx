@@ -14,7 +14,13 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { projects } from "../data";
-import { fetchCmsPage, type ServicesCmsData } from "../lib/wordpress";
+import {
+  fetchCmsPage,
+  fetchCmsPageByTemplate,
+  fetchCmsProjects,
+  type ProjectPost,
+  type ServicesCmsData,
+} from "../lib/wordpress";
 
 type ServiceItem = {
   id: number;
@@ -36,6 +42,13 @@ type ProcessStep = {
   step: string;
   title: string;
   desc: string;
+};
+
+type TimelapseSlide = {
+  title: string;
+  subtitle: string;
+  duration: string;
+  image: string;
 };
 
 const iconMap: Record<string, LucideIcon> = {
@@ -124,7 +137,7 @@ const fallbackServices: ServiceItem[] = [
   },
 ];
 
-const timelapseSlides = [
+const fallbackTimelapseSlides: TimelapseSlide[] = [
   {
     title: "Spartronics Cleanroom — Hậu Giang",
     subtitle: "Timelapse 45 ngày thi công liên tục",
@@ -154,28 +167,29 @@ const fallbackProcessSteps = [
   { step: "06", title: "Bảo Hành", desc: "Hỗ trợ kỹ thuật sau bàn giao, bảo hành theo hợp đồng." },
 ];
 
-function TimelapseSlider() {
+function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
+  const items = slides.length ? slides : fallbackTimelapseSlides;
 
   useEffect(() => {
     setProgress(0);
     const interval = setInterval(() => {
       setProgress((p) => {
         if (p >= 100) {
-          setCurrent((c) => (c + 1) % timelapseSlides.length);
+          setCurrent((c) => (c + 1) % items.length);
           return 0;
         }
         return p + 1;
       });
     }, 50);
     return () => clearInterval(interval);
-  }, [current]);
+  }, [current, items.length]);
 
-  const prev = () => setCurrent((c) => (c - 1 + timelapseSlides.length) % timelapseSlides.length);
-  const next = () => setCurrent((c) => (c + 1) % timelapseSlides.length);
+  const prev = () => setCurrent((c) => (c - 1 + items.length) % items.length);
+  const next = () => setCurrent((c) => (c + 1) % items.length);
 
-  const slide = timelapseSlides[current];
+  const slide = items[current] || items[0];
 
   return (
     <div className="relative w-full aspect-video bg-[#001a0e] rounded-2xl overflow-hidden group">
@@ -200,7 +214,7 @@ function TimelapseSlider() {
 
       {/* Progress bars */}
       <div className="absolute top-4 left-4 right-4 flex gap-1.5 z-20">
-        {timelapseSlides.map((_, i) => (
+        {items.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
@@ -234,20 +248,20 @@ function TimelapseSlider() {
       {/* Nav buttons */}
       <button
         onClick={prev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#002d17]/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#002d17]/80 transition-colors opacity-0 group-hover:opacity-100"
+        className="absolute left-4 cursor-pointer top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#002d17]/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#002d17]/80 transition-colors opacity-0 group-hover:opacity-100"
       >
         <ChevronLeft size={18} />
       </button>
       <button
         onClick={next}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#002d17]/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#002d17]/80 transition-colors opacity-0 group-hover:opacity-100"
+        className="absolute right-4 cursor-pointer top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#002d17]/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[#002d17]/80 transition-colors opacity-0 group-hover:opacity-100"
       >
         <ChevronRight size={18} />
       </button>
 
       {/* Slide counter */}
       <div className="absolute bottom-6 right-6 z-20 bg-[#002d17]/60 backdrop-blur-sm px-3 py-1.5 rounded-lg">
-        <span className="text-white font-bold text-xs">{current + 1} / {timelapseSlides.length}</span>
+        <span className="text-white font-bold text-xs">{current + 1} / {items.length}</span>
       </div>
     </div>
   );
@@ -268,11 +282,26 @@ function backgroundStyle(color?: string) {
 
 export function Services() {
   const [cmsPage, setCmsPage] = useState<ServicesCmsData | null>(null);
+  const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetchCmsPage<ServicesCmsData>("dich-vu", controller.signal).then(setCmsPage);
+    Promise.all([
+      fetchCmsPageByTemplate<ServicesCmsData>("tona-services", controller.signal)
+        .then((page) => page || fetchCmsPage<ServicesCmsData>("dich-vu", controller.signal)),
+      fetchCmsProjects(controller.signal),
+    ])
+      .then(([page, projectItems]) => {
+        setCmsPage(page);
+        setCmsProjects(projectItems);
+      })
+      .catch((error) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          setCmsPage(null);
+          setCmsProjects([]);
+        }
+      });
 
     return () => controller.abort();
   }, []);
@@ -284,7 +313,9 @@ export function Services() {
       return fallbackServices;
     }
 
-    return source.map((service, index) => ({
+    const sortedSource = [...source].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+
+    return sortedSource.map((service, index) => ({
       id: index + 1,
       icon: iconMap[service.icon || "Wrench"] || Wrench,
       iconImage: service.iconImage || "",
@@ -315,14 +346,32 @@ export function Services() {
     }));
   }, [cmsPage]);
 
+  const timelapseSlides = useMemo<TimelapseSlide[]>(() => {
+    const slides = cmsPage?.timelapse?.slides;
+
+    if (!slides?.length) {
+      return fallbackTimelapseSlides;
+    }
+
+    return slides.map((slide, index) => ({
+      title: slide.title || fallbackTimelapseSlides[index]?.title || "",
+      subtitle: slide.subtitle || fallbackTimelapseSlides[index]?.subtitle || "",
+      duration: slide.duration || fallbackTimelapseSlides[index]?.duration || "",
+      image: slide.image || fallbackTimelapseSlides[index]?.image || fallbackTimelapseSlides[0]?.image || "",
+    }));
+  }, [cmsPage]);
+
   const featured = servicesList.find((service) => service.featured) || servicesList[0];
   const rest = servicesList.filter((service) => service.id !== featured.id);
-  const featuredProject = projects.find((p) => p.slug === "nha-may-spartronics-viet-nam-2") || projects[0];
+  const projectItems = cmsProjects.length ? cmsProjects : (projects as ProjectPost[]);
+  const featuredProject = projectItems.find((p) => p.slug === "nha-may-spartronics-viet-nam-2") || projectItems[0];
   const colors = cmsPage?.colors;
   const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Dịch Vụ";
   const heroTitle = cmsPage?.hero?.title || "Dịch Vụ\nCốt Lõi";
   const heroDescription = cmsPage?.hero?.description || "Tona Corporation cung cấp các giải pháp xây dựng công nghiệp, thương mại và kỹ thuật cao.";
   const processTitle = cmsPage?.process?.title || "Quy Trình Làm Việc";
+  const timelapseTitle = cmsPage?.timelapse?.title || "Nhìn Lại\nHành Trình\nThi Công";
+  const timelapseDescription = cmsPage?.timelapse?.description || "Những khoảnh khắc đặc biệt được nén lại - từ mảnh đất trống đến công trình hoàn chỉnh. Mỗi timelapse là bằng chứng cho sự chuyên nghiệp và tốc độ triển khai của Tona.";
   const ctaTitle = cmsPage?.cta?.title || "Sẵn Sàng Bắt Đầu Dự Án?";
   const ctaDescription = cmsPage?.cta?.description || "Kết nối với Tona để nhận tư vấn giải pháp phù hợp cho công trình của bạn.";
   const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Liên Hệ Ngay";
@@ -485,16 +534,16 @@ export function Services() {
       </section>
 
       {/* TIMELAPSE SLIDER */}
-      <section className="bg-[#f9f9f7] py-20">
+      <section className="bg-[#f9f9f7] py-20" style={backgroundStyle(colors?.timelapseBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-4">
               <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
-                Nhìn Lại<br />Hành Trình<br />Thi Công
+                {renderLines(timelapseTitle)}
               </h2>
               <p className="text-[#002d17]/55 text-sm leading-relaxed font-medium mb-6">
-                Những khoảnh khắc đặc biệt được nén lại — từ mảnh đất trống đến công trình hoàn chỉnh. Mỗi timelapse là bằng chứng cho sự chuyên nghiệp và tốc độ triển khai của Tona.
+                {timelapseDescription}
               </p>
               <div className="flex flex-col gap-3">
                 {timelapseSlides.map((s, i) => (
@@ -506,7 +555,7 @@ export function Services() {
               </div>
             </div>
             <div className="lg:col-span-8">
-              <TimelapseSlider />
+              <TimelapseSlider slides={timelapseSlides} />
             </div>
           </div>
         </div>

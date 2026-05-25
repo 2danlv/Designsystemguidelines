@@ -57,6 +57,14 @@
     font-size: 12px;
 }
 
+.acf-field > .acf-input > .description {
+    clear: both;
+    color: #5b6f65;
+    display: block;
+    font-size: 12px;
+    margin: 8px 0 0;
+}
+
 .acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_breadcrumb_label"]::before,
 .acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_leadership"]::before,
 .acf-postbox[data-key="group_tona_members_page"] .acf-field[data-key="field_tona_members_values_title"]::before,

@@ -189,14 +189,14 @@ function tona_cms_admin_assets( $hook_suffix ) {
         'tona-cms-acf-admin',
         get_stylesheet_directory_uri() . '/assets/css/acf-admin.css',
         array(),
-        '1.0.1'
+        '1.0.2'
     );
 
     wp_enqueue_script(
         'tona-cms-acf-admin',
         get_stylesheet_directory_uri() . '/assets/js/acf-admin.js',
         array( 'jquery' ),
-        '1.0.0',
+        '1.0.1',
         true
     );
 
@@ -346,6 +346,19 @@ function tona_cms_get_page_by_slug( $slug ) {
     return $page;
 }
 
+function tona_cms_get_page_by_post_name( $post_name ) {
+    $pages = get_posts(
+        array(
+            'post_type'      => 'page',
+            'post_status'    => 'publish',
+            'posts_per_page' => 1,
+            'name'           => sanitize_title( $post_name ),
+        )
+    );
+
+    return ! empty( $pages[0] ) ? $pages[0] : null;
+}
+
 function tona_cms_get_page_by_template( $template_alias ) {
     $template_map = array(
         'tona-home'     => 'templates/tona-home.php',
@@ -389,7 +402,25 @@ function tona_cms_get_page_by_template( $template_alias ) {
         )
     );
 
-    return ! empty( $pages[0] ) ? $pages[0] : null;
+    if ( ! empty( $pages[0] ) ) {
+        return $pages[0];
+    }
+
+    $fallback_post_names = array(
+        'tona-home'     => 'trang-chu',
+        'tona-members'  => 'doi-ngu',
+        'tona-about'    => 'gioi-thieu-tona',
+        'tona-culture'  => 'cuoc-song-tona',
+        'tona-csr'      => 'trach-nhiem-cong-dong',
+        'tona-services' => 'dich-vu',
+        'tona-jobs'     => 'nghe-nghiep',
+        'tona-projects' => 'du-an-tona',
+        'tona-news'     => 'tin-tuc',
+    );
+
+    return isset( $fallback_post_names[ $template_alias ] )
+        ? tona_cms_get_page_by_post_name( $fallback_post_names[ $template_alias ] )
+        : null;
 }
 
 function tona_cms_page_payload( $page ) {
@@ -934,6 +965,7 @@ function tona_cms_services_payload( $page ) {
     $post_id = $page->ID;
     $services = function_exists( 'get_field' ) ? get_field( 'services_items', $post_id ) : array();
     $process_steps = function_exists( 'get_field' ) ? get_field( 'services_process_steps', $post_id ) : array();
+    $timelapse_slides = function_exists( 'get_field' ) ? get_field( 'services_timelapse_slides', $post_id ) : array();
 
     return array(
         'id'     => $post_id,
@@ -943,6 +975,7 @@ function tona_cms_services_payload( $page ) {
             'heroBackground'     => tona_cms_text_field( $post_id, 'services_hero_background' ),
             'servicesBackground' => tona_cms_text_field( $post_id, 'services_services_background' ),
             'processBackground'  => tona_cms_text_field( $post_id, 'services_process_background' ),
+            'timelapseBackground' => tona_cms_text_field( $post_id, 'services_timelapse_background' ),
             'ctaBackground'      => tona_cms_text_field( $post_id, 'services_cta_background' ),
         ),
         'hero'   => array(
@@ -1000,6 +1033,23 @@ function tona_cms_services_payload( $page ) {
                         );
                     },
                     is_array( $process_steps ) ? $process_steps : array()
+                )
+            ),
+        ),
+        'timelapse' => array(
+            'title'       => tona_cms_text_field( $post_id, 'services_timelapse_title' ),
+            'description' => tona_cms_text_field( $post_id, 'services_timelapse_description' ),
+            'slides'      => array_values(
+                array_map(
+                    function ( $slide ) {
+                        return array(
+                            'title'    => $slide['title'] ?? '',
+                            'subtitle' => $slide['subtitle'] ?? '',
+                            'duration' => $slide['duration'] ?? '',
+                            'image'    => tona_cms_image_url( $slide['image'] ?? '' ),
+                        );
+                    },
+                    is_array( $timelapse_slides ) ? $timelapse_slides : array()
                 )
             ),
         ),

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight, ChevronRight, GraduationCap, Handshake, Heart, Leaf, Sun, Users, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
-import { fetchCmsPageByTemplate, type CsrCmsData } from "../lib/wordpress";
+import { fetchCmsPage, fetchCmsPageByTemplate, type CsrCmsData } from "../lib/wordpress";
 
 type CsrProgram = {
   id: string;
@@ -134,7 +134,9 @@ export function CSR() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchCmsPageByTemplate<CsrCmsData>("tona-csr", controller.signal).then(setCmsPage);
+    fetchCmsPageByTemplate<CsrCmsData>("tona-csr", controller.signal)
+      .then((page) => page || fetchCmsPage<CsrCmsData>("cuoc-song-tona/trach-nhiem-cong-dong", controller.signal))
+      .then(setCmsPage);
     return () => controller.abort();
   }, []);
 

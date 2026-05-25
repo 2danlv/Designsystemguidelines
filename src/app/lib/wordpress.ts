@@ -213,6 +213,7 @@ export type ServicesCmsData = {
     heroBackground?: string;
     servicesBackground?: string;
     processBackground?: string;
+    timelapseBackground?: string;
     ctaBackground?: string;
   };
   hero?: {
@@ -240,6 +241,16 @@ export type ServicesCmsData = {
       step?: string;
       title?: string;
       description?: string;
+    }>;
+  };
+  timelapse?: {
+    title?: string;
+    description?: string;
+    slides?: Array<{
+      title?: string;
+      subtitle?: string;
+      duration?: string;
+      image?: string;
     }>;
   };
   cta?: {

@@ -320,7 +320,7 @@ function JobCard({ job }: { job: JobPost }) {
             <div className="flex flex-col gap-2 shrink-0">
               <button
                 onClick={() => setApplying(true)}
-                className="bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors whitespace-nowrap rounded-lg"
+                className="bg-[#f4aa1f] cursor-pointer text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors whitespace-nowrap rounded-lg"
               >
                 Ứng Tuyển Ngay
               </button>
@@ -328,13 +328,13 @@ function JobCard({ job }: { job: JobPost }) {
                 href='#'
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
+                className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
                 <FileText size={12} /> Xem JD
               </a>
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="border border-[#002d17]/10 text-[#002d17]/50 px-6 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#002d17]/30 hover:text-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
+                className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
                 Chi tiết {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
@@ -459,13 +459,13 @@ function InternCard({ pos }: { pos: InternPosition }) {
             <div className="flex flex-col gap-2 shrink-0">
               <button
                 onClick={() => setApplying(true)}
-                className="bg-[#46aa85] text-white px-5 py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] transition-colors whitespace-nowrap rounded-lg"
+                className="bg-[#46aa85] cursor-pointer text-white px-5 py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] transition-colors whitespace-nowrap rounded-lg"
               >
                 Đăng Ký Thực Tập
               </button>
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="border border-[#46aa85]/30 text-[#46aa85] px-5 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#46aa85] transition-colors flex items-center gap-2 justify-center rounded-lg"
+                className="border cursor-pointer border-[#46aa85]/30 text-[#46aa85] px-5 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#46aa85] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
                 Chi tiết {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
