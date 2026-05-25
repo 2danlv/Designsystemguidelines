@@ -250,6 +250,39 @@ export type ServicesCmsData = {
   };
 };
 
+export type HomeCmsData = {
+  hero?: {
+    primaryLabel?: string;
+    primaryUrl?: string;
+    secondaryLabel?: string;
+    secondaryUrl?: string;
+  };
+  marquee?: {
+    items?: string[];
+  };
+  slogan?: {
+    eyebrow?: string;
+    title?: string;
+    accentTitle?: string;
+    description?: string;
+    stats?: Array<{
+      value?: string;
+      label?: string;
+    }>;
+  };
+  sections?: {
+    servicesTitle?: string;
+    projectsLabel?: string;
+    projectsTitle?: string;
+    newsTitle?: string;
+  };
+  partners?: {
+    title?: string;
+    description?: string;
+    logos?: string[];
+  };
+};
+
 export type JobPost = {
   id: number | string;
   slug?: string;

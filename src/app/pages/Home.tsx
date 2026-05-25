@@ -5,11 +5,29 @@ import {
   PenTool, Wrench, Building2, Zap,
   MapPin, Maximize2
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
-import { projects, news } from "../data";
+import { projects as fallbackProjects, news as fallbackNews } from "../data";
+import {
+  fetchCmsNews,
+  fetchCmsPageByTemplate,
+  fetchCmsProjects,
+  type HomeCmsData,
+  type NewsPost,
+  type ProjectPost,
+  type ServicesCmsData,
+} from "../lib/wordpress";
 
-const heroSlides = [
+type HomeHeroSlide = {
+  id: number | string;
+  image: string;
+  tag: string;
+  title: string;
+  sub: string;
+};
+
+const heroSlides: HomeHeroSlide[] = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1650656746788-dee910f6b42b?w=1920&q=85",
@@ -41,7 +59,7 @@ const heroSlides = [
 ];
 
 // PARTNER LOGOS
-const partnerLogos = [
+const fallbackPartnerLogos = [
   { name: "SIEMENS", tagline: "Ingenuity for life" },
   { name: "SCHNEIDER\nELECTRIC", tagline: "Life Is On" },
   { name: "HONEYWELL", tagline: "The Future Is What We Make It" },
@@ -52,11 +70,28 @@ const partnerLogos = [
   { name: "PANASONIC", tagline: "A Better Life, A Better World" },
 ];
 
+type HomeService = {
+  id: number | string;
+  icon: LucideIcon;
+  title: string;
+  subtitle: string;
+  desc: string;
+  highlight?: boolean;
+};
+
+const iconMap: Record<string, LucideIcon> = {
+  PenTool,
+  Wrench,
+  Building2,
+  Zap,
+};
+
 // HERO SECTION
-function HeroSection() {
+function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: HomeCmsData["hero"] }) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const activeSlides = slides.length ? slides : heroSlides;
 
   const goTo = useCallback((idx: number, dir: number) => {
     setDirection(dir);
@@ -64,19 +99,23 @@ function HeroSection() {
   }, []);
 
   const next = useCallback(() => {
-    goTo((current + 1) % heroSlides.length, 1);
-  }, [current, goTo]);
+    goTo((current + 1) % activeSlides.length, 1);
+  }, [activeSlides.length, current, goTo]);
 
   const prev = useCallback(() => {
-    goTo((current - 1 + heroSlides.length) % heroSlides.length, -1);
-  }, [current, goTo]);
+    goTo((current - 1 + activeSlides.length) % activeSlides.length, -1);
+  }, [activeSlides.length, current, goTo]);
 
   useEffect(() => {
     autoRef.current = setInterval(next, 5000);
     return () => { if (autoRef.current) clearInterval(autoRef.current); };
   }, [next]);
 
-  const slide = heroSlides[current];
+  const slide = activeSlides[current] || activeSlides[0];
+  const primaryLabel = content?.primaryLabel || "Xem Dự Án";
+  const primaryUrl = content?.primaryUrl || "/vi/du-an-tona";
+  const secondaryLabel = content?.secondaryLabel || "Portfolio";
+  const secondaryUrl = content?.secondaryUrl || "/vi/du-an-tona";
 
   return (
     <section className="relative w-full h-[100vh] min-h-[600px] bg-[#002d17] overflow-hidden">
@@ -123,16 +162,16 @@ function HeroSection() {
             </p>
             <div className="flex items-center gap-4 mt-4">
               <Link
-                to="/vi/du-an-tona"
+                to={primaryUrl}
                 className="bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
               >
-                Xem Dự Án
+                {primaryLabel}
               </Link>
               <Link
-                to="/vi/du-an-tona"
+                to={secondaryUrl}
                 className="text-white/70 hover:text-[#f4aa1f] font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-2"
               >
-                Portfolio <ArrowRight size={14} />
+                {secondaryLabel} <ArrowRight size={14} />
               </Link>
             </div>
           </motion.div>
@@ -141,7 +180,7 @@ function HeroSection() {
 
       {/* Slide counter */}
       <div className="absolute bottom-8 right-8 md:right-16 flex items-center gap-3">
-        {heroSlides.map((_, i) => (
+        {activeSlides.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i, i > current ? 1 : -1)}
@@ -168,8 +207,8 @@ function HeroSection() {
 }
 
 // MARQUEE STRIP
-function MarqueeStrip() {
-  const items = [
+function MarqueeStrip({ items: cmsItems }: { items?: string[] }) {
+  const items = cmsItems?.length ? [...cmsItems, ...cmsItems] : [
     "ISO 9001:2015", "Zero Accident", "ISO 45001:2018",
     "500+ Dự Án", "ISO 14001:2015", "15+ Năm Kinh Nghiệm",
     "ISO 9001:2015", "Zero Accident", "ISO 45001:2018",
@@ -194,7 +233,16 @@ function MarqueeStrip() {
 }
 
 // SLOGAN / BRAND SECTION
-function SloganSection() {
+function SloganSection({ content }: { content?: HomeCmsData["slogan"] }) {
+  const stats = content?.stats?.length
+    ? content.stats
+    : [
+        { value: "500+", label: "Dự án" },
+        { value: "800+", label: "Nhân sự" },
+        { value: "15+", label: "Năm KN" },
+        { value: "50+", label: "Đối tác QT" },
+      ];
+
   return (
     <section className="relative w-full bg-[#002d17] overflow-hidden py-24 md:py-32">
       {/* Decorative geometric accents */}
@@ -217,27 +265,22 @@ function SloganSection() {
           <div className="flex items-center gap-3">
             <div className="w-8 h-px bg-[#f4aa1f]" />
             <span className="text-[#f4aa1f] font-bold text-xs md:text-sm uppercase tracking-[0.25em]">
-              Tona Corporation — Build It Right
+              {content?.eyebrow || "Tona Corporation - Build It Right"}
             </span>
           </div>
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white uppercase tracking-tight leading-[1.05]">
-            Tiên Phong<br />Kiến Tạo<br />
-            <span className="text-[#46aa85]">Chuẩn Mực Mới</span>
+            <span className="whitespace-pre-line">{content?.title || "Tiên Phong\nKiến Tạo"}</span><br />
+            <span className="text-[#46aa85]">{content?.accentTitle || "Chuẩn Mực Mới"}</span>
           </h2>
           <p className="text-white/60 font-medium text-base md:text-lg max-w-xl leading-relaxed">
-            Hơn 15 năm đồng hành cùng các tập đoàn đa quốc gia — mang lại công trình vượt tiêu chuẩn, đúng tiến độ, đúng cam kết.
+            {content?.description || "Hơn 15 năm đồng hành cùng các tập đoàn đa quốc gia - mang lại công trình vượt tiêu chuẩn, đúng tiến độ, đúng cam kết."}
           </p>
           <div className="w-16 h-1 bg-[#f4aa1f]" />
           {/* Stats row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4 w-full">
-            {[
-              { val: "500+", label: "Dự án" },
-              { val: "800+", label: "Nhân sự" },
-              { val: "15+", label: "Năm KN" },
-              { val: "50+", label: "Đối tác QT" },
-            ].map((s) => (
+            {stats.map((s) => (
               <div key={s.label} className="flex flex-col gap-1">
-                <span className="text-[#f4aa1f] font-extrabold text-2xl md:text-3xl tracking-tight">{s.val}</span>
+                <span className="text-[#f4aa1f] font-extrabold text-2xl md:text-3xl tracking-tight">{s.value}</span>
                 <span className="text-white/40 font-bold text-xs uppercase tracking-widest">{s.label}</span>
               </div>
             ))}
@@ -249,25 +292,40 @@ function SloganSection() {
 }
 
 // SERVICES HIGHLIGHT
-const services = [
+const fallbackServices: HomeService[] = [
   { id: 1, icon: Wrench, title: "Nâng Cấp Cải Tạo", subtitle: "Renovation & Upgrade", desc: "Thi công cải tạo công trình đang vận hành với zero downtime - tiêu chuẩn an toàn và vệ sinh khắt khe nhất.", highlight: true },
   { id: 2, icon: PenTool, title: "Thiết Kế & Xây Dựng", subtitle: "Design & Build EPC", desc: "Giải pháp tổng thầu EPC toàn diện từ thiết kế đến bàn giao, kiểm soát chất lượng tập trung." },
   { id: 3, icon: Building2, title: "Thi Công Dân Dụng", subtitle: "Civil & Structural", desc: "Kết cấu thép, bê tông cốt thép cho nhà máy, kho xưởng, tòa nhà thương mại quy mô lớn." },
   { id: 4, icon: Zap, title: "Cơ Điện MEP", subtitle: "MEP Systems", desc: "Hệ thống M&E tiên tiến cho phòng sạch, nhà máy điện tử và công trình kỹ thuật cao." },
 ];
 
-function ServicesSection() {
+function normalizeHomeServices(items?: ServicesCmsData["services"]): HomeService[] {
+  if (!items?.length) return fallbackServices;
+
+  const sortedItems = [...items].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
+
+  return sortedItems.slice(0, 4).map((item, index) => ({
+    id: item.number || item.title || index,
+    icon: iconMap[item.icon || ""] || Wrench,
+    title: item.title || "",
+    subtitle: item.subtitle || "",
+    desc: item.description || "",
+    highlight: Boolean(item.featured),
+  }));
+}
+
+function ServicesSection({ title, items }: { title?: string; items: HomeService[] }) {
   return (
     <section className="w-full bg-white py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-14">
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight">
-            Dịch Vụ Cốt Lõi
+            {title || "Dịch Vụ Cốt Lõi"}
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-[#002d17]/10 rounded-2xl overflow-hidden">
-          {services.map((svc, idx) => {
+          {items.map((svc, idx) => {
             const Icon = svc.icon;
             return (
               <div
@@ -302,7 +360,7 @@ function ServicesSection() {
             );
           })}
         </div>
-        <div className="mt-0 flex">
+        <div className="mt-4 flex">
           <Link
             to="/vi/dich-vu"
             className="flex-1 flex items-center justify-center gap-3 py-5 bg-[#f4aa1f] text-[#002d17] font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors border-x border-b border-[#002d17]/10 md:flex-none md:px-16"
@@ -316,7 +374,27 @@ function ServicesSection() {
 }
 
 // PROJECTS CAROUSEL
-function ProjectsSection() {
+function normalizeHeroSlides(items: ProjectPost[]): HomeHeroSlide[] {
+  const source = items.length ? items.slice(0, 4) : fallbackProjects.slice(0, 4);
+
+  return source.map((project, index) => ({
+    id: project.id || index,
+    image: project.image,
+    tag: [project.category, project.location].filter(Boolean).join(" • "),
+    title: project.title,
+    sub: [project.duration, project.status, project.area].filter(Boolean).join(" · "),
+  }));
+}
+
+function ProjectsSection({
+  items,
+  label,
+  title,
+}: {
+  items: ProjectPost[];
+  label?: string;
+  title?: string;
+}) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true, containScroll: "trimSnaps", align: "start" });
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -339,8 +417,8 @@ function ProjectsSection() {
       <div className="bg-[#002d17]">
         <div className="max-w-7xl mx-auto px-6 py-10 flex items-center justify-between">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">Portfolio</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">Dự Án Nổi Bật</h2>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{label || "Portfolio"}</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">{title || "Dự Án Nổi Bật"}</h2>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev}
@@ -361,7 +439,7 @@ function ProjectsSection() {
       <div className="py-14 overflow-hidden">
         <div className="pl-6 md:pl-[calc((100vw-80rem)/2+1.5rem)]" ref={emblaRef}>
           <div className="flex gap-6 cursor-grab active:cursor-grabbing">
-            {projects.map((project) => (
+            {items.map((project) => (
               <div key={project.id} className="flex-[0_0_88%] sm:flex-[0_0_70%] md:flex-[0_0_50%] lg:flex-[0_0_38%] min-w-0">
                 <Link to={`/vi/project/${project.slug}`} className="group flex flex-col select-none">
                   <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#bcd8cb] rounded-xl">
@@ -410,9 +488,12 @@ function ProjectsSection() {
 }
 
 // NEWS SECTION
-function NewsSection() {
-  const featured = news[0];
-  const rest = news.slice(1, 4);
+function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
+  const source = items.length ? items : fallbackNews;
+  const featured = source[0];
+  const rest = source.slice(1, 4);
+
+  if (!featured) return null;
 
   return (
     <section className="w-full bg-[#f9f9f7] py-20 md:py-28">
@@ -421,7 +502,7 @@ function NewsSection() {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Tin Tức &amp; Hoạt Động
+              {title || "Tin Tức & Hoạt Động"}
             </h2>
           </div>
           <Link to="/vi/tin-tuc" className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
@@ -486,8 +567,10 @@ function NewsSection() {
 }
 
 // PARTNERS AUTO-SCROLL
-function PartnersSection() {
-  const doubled = [...partnerLogos, ...partnerLogos];
+function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
+  const logos = content?.logos?.filter(Boolean) || [];
+  const doubledLogos = [...logos, ...logos];
+  const doubledFallback = [...fallbackPartnerLogos, ...fallbackPartnerLogos];
 
   return (
     <section className="w-full bg-[#002d17] py-16 md:py-20 overflow-hidden">
@@ -496,11 +579,11 @@ function PartnersSection() {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight">
-              Partners &amp; Customers
+              {content?.title || "Partners & Customers"}
             </h3>
           </div>
           <p className="text-white/40 text-sm max-w-xs">
-            Đối tác tin cậy của các tập đoàn đa quốc gia hàng đầu trong lĩnh vực xây dựng và MEP.
+            {content?.description || "Đối tác tin cậy của các tập đoàn đa quốc gia hàng đầu trong lĩnh vực xây dựng và MEP."}
           </p>
         </div>
       </div>
@@ -512,14 +595,18 @@ function PartnersSection() {
           animate={{ x: ["0%", "-50%"] }}
           transition={{ repeat: Infinity, duration: 32, ease: "linear" }}
         >
-          {doubled.map((partner, idx) => (
+          {(doubledLogos.length ? doubledLogos : doubledFallback).map((partner, idx) => (
             <div
               key={idx}
-              className="w-40 md:w-48 h-24 bg-[#0a3d22] hover:bg-[#46aa85] border border-white/5 hover:border-[#f4aa1f]/30 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors shrink-0 rounded-xl"
+              className="w-40 md:w-48 h-24 overflow-hidden bg-[#0a3d22] hover:bg-[#46aa85] border border-white/5 hover:border-[#f4aa1f]/30 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors shrink-0 rounded-xl"
             >
-              <span className="text-white/50 hover:text-white font-extrabold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
-                {partner.name}
-              </span>
+              {typeof partner === "string" ? (
+                <img src={partner} alt="" className="object-contain" />
+              ) : (
+                <span className="text-white/50 hover:text-white font-extrabold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
+                  {partner.name}
+                </span>
+              )}
             </div>
           ))}
         </motion.div>
@@ -532,17 +619,23 @@ function PartnersSection() {
           animate={{ x: ["-50%", "0%"] }}
           transition={{ repeat: Infinity, duration: 38, ease: "linear" }}
         >
-          {[...doubled].reverse().map((partner, idx) => (
+          {[...(doubledLogos.length ? doubledLogos : doubledFallback)].reverse().map((partner, idx) => (
             <div
               key={idx}
-              className="w-40 md:w-48 h-24 bg-[#0a3d22] hover:bg-[#46aa85] border border-white/5 hover:border-[#f4aa1f]/30 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors shrink-0 rounded-xl"
+              className="w-40 md:w-48 h-24 bg-[#0a3d22] overflow-hidden hover:bg-[#46aa85] border border-white/5 hover:border-[#f4aa1f]/30 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors shrink-0 rounded-xl"
             >
-              <span className="text-white/30 hover:text-white font-extrabold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
-                {partner.name}
-              </span>
-              <span className="text-white/20 text-[9px] text-center px-3 tracking-wider hidden md:block">
-                {partner.tagline}
-              </span>
+              {typeof partner === "string" ? (
+                <img src={partner} alt="" className="object-contain opacity-80" />
+              ) : (
+                <>
+                  <span className="text-white/30 hover:text-white font-extrabold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
+                    {partner.name}
+                  </span>
+                  <span className="text-white/20 text-[9px] text-center px-3 tracking-wider hidden md:block">
+                    {partner.tagline}
+                  </span>
+                </>
+              )}
             </div>
           ))}
         </motion.div>
@@ -553,15 +646,55 @@ function PartnersSection() {
 
 // ROOT
 export function Home() {
+  const [cmsPage, setCmsPage] = useState<HomeCmsData | null>(null);
+  const [servicesPage, setServicesPage] = useState<ServicesCmsData | null>(null);
+  const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
+  const [cmsNews, setCmsNews] = useState<NewsPost[]>([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    Promise.all([
+      fetchCmsPageByTemplate<HomeCmsData>("tona-home", controller.signal),
+      fetchCmsPageByTemplate<ServicesCmsData>("tona-services", controller.signal),
+      fetchCmsProjects(controller.signal),
+      fetchCmsNews(controller.signal),
+    ])
+      .then(([homeData, servicesData, projectsData, newsData]) => {
+        setCmsPage(homeData);
+        setServicesPage(servicesData);
+        setCmsProjects(projectsData);
+        setCmsNews(newsData);
+      })
+      .catch((error) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          setCmsPage(null);
+          setServicesPage(null);
+          setCmsProjects([]);
+          setCmsNews([]);
+        }
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  const projectItems = cmsProjects.length ? cmsProjects : (fallbackProjects as ProjectPost[]);
+  const newsItems = cmsNews.length ? cmsNews : (fallbackNews as NewsPost[]);
+  const homeServices = normalizeHomeServices(servicesPage?.services);
+
   return (
     <div className="flex flex-col w-full bg-white overflow-x-hidden">
-      <HeroSection />
-      <MarqueeStrip />
-      <SloganSection />
-      <ServicesSection />
-      <ProjectsSection />
-      <NewsSection />
-      <PartnersSection />
+      <HeroSection slides={normalizeHeroSlides(projectItems)} content={cmsPage?.hero} />
+      <MarqueeStrip items={cmsPage?.marquee?.items} />
+      <SloganSection content={cmsPage?.slogan} />
+      <ServicesSection title={cmsPage?.sections?.servicesTitle} items={homeServices} />
+      <ProjectsSection
+        items={projectItems}
+        label={cmsPage?.sections?.projectsLabel}
+        title={cmsPage?.sections?.projectsTitle}
+      />
+      <NewsSection items={newsItems} title={cmsPage?.sections?.newsTitle} />
+      <PartnersSection content={cmsPage?.partners} />
     </div>
   );
 }
