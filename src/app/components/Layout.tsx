@@ -67,7 +67,7 @@ function Header() {
           className="flex items-center shrink-0"
           aria-label="Tona Corporation"
         >
-          <div className="bg-white px-3 py-1.5 flex items-center justify-center">
+          <div className="px-3 py-1.5 flex items-center justify-center">
             <img src={tonaLogo} alt="Tona Corporation" className="h-9 w-auto" />
           </div>
         </Link>
