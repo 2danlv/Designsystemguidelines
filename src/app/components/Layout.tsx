@@ -200,7 +200,7 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
           className="flex items-center shrink-0"
           ariaLabel={logoAlt}
         >
-          <div className="bg-white px-3 py-1.5 flex items-center justify-center">
+          <div className="px-3 py-1.5 flex items-center justify-center">
             <img src={logo} alt={logoAlt} className="h-9 w-auto" />
           </div>
         </SmartLink>
