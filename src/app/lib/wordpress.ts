@@ -95,6 +95,7 @@ export type CultureCmsData = {
     themesBackground?: string;
     activitiesBackground?: string;
     academyBackground?: string;
+    socialResponsibilityBackground?: string;
     galleryBackground?: string;
     ctaBackground?: string;
   };
@@ -128,6 +129,19 @@ export type CultureCmsData = {
     image?: string;
     color?: string;
   }>;
+  socialResponsibility?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    image?: string;
+    linkLabel?: string;
+    linkUrl?: string;
+    badges?: string[];
+    stats?: Array<{
+      value?: string;
+      label?: string;
+    }>;
+  };
   academy?: {
     eyebrow?: string;
     title?: string;
@@ -433,7 +447,6 @@ export type NewsPost = {
   image: string;
   excerpt: string;
   content?: string;
-  readTime?: string;
   author?: string;
   related?: NewsPost[];
 };
@@ -462,11 +475,142 @@ export type NewsCmsData = {
   };
 };
 
+export type SiteLink = {
+  label?: string;
+  url?: string;
+};
+
+export type SiteMenuItem = SiteLink & {
+  children?: SiteLink[];
+};
+
+export type SiteSettings = {
+  header?: {
+    logo?: string;
+    logoAlt?: string;
+    homeUrl?: string;
+    nav?: SiteMenuItem[];
+    languages?: SiteLink[];
+  };
+  footer?: {
+    cta?: {
+      eyebrow?: string;
+      title?: string;
+      button?: string;
+      buttonUrl?: string;
+    };
+    logo?: string;
+    logoAlt?: string;
+    description?: string;
+    certifications?: string[];
+    aboutTitle?: string;
+    aboutLinks?: SiteLink[];
+    projectsTitle?: string;
+    projectLinks?: SiteLink[];
+    contactTitle?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    socials?: Array<{
+      platform?: "Facebook" | "LinkedIn" | "YouTube";
+      url?: string;
+    }>;
+    copyright?: string;
+    legalLinks?: SiteLink[];
+  };
+};
+
+export type CmsRouteMatch = {
+  type: "page" | "project" | "news" | "not_found";
+  template?: string;
+  slug?: string;
+  translations?: Partial<Record<SiteLanguage, string>>;
+};
+
 const wordpressApiBase = (import.meta.env.VITE_WP_API_BASE || "/wp-json").replace(/\/$/, "");
+
+export type SiteLanguage = "vi" | "en";
+
+export function getCurrentLanguage(): SiteLanguage {
+  if (typeof window === "undefined") {
+    return "vi";
+  }
+
+  const match = window.location.pathname.match(/^\/en(?=\/|$)/);
+
+  return match ? "en" : "vi";
+}
+
+export function localizeUrl(url: string, targetLanguage: SiteLanguage = getCurrentLanguage()) {
+  if (
+    !url ||
+    url === "#" ||
+    /^https?:\/\//i.test(url) ||
+    url.startsWith("mailto:") ||
+    url.startsWith("tel:")
+  ) {
+    return url;
+  }
+
+  const [pathWithQuery, hash = ""] = url.split("#");
+  const [pathOnly, query = ""] = pathWithQuery.split("?");
+  const parts = pathOnly.replace(/^\/+|\/+$/g, "").split("/").filter(Boolean);
+  const segments = parts.slice(parts[0] === "en" || parts[0] === "vi" ? 1 : 0);
+
+  const nextPath = targetLanguage === "en"
+    ? `/en${segments.length ? `/${segments.join("/")}` : ""}`
+    : `/${segments.join("/")}`;
+  const nextQuery = query ? `?${query}` : "";
+  const nextHash = hash ? `#${hash}` : "";
+
+  return `${nextPath || "/"}${nextQuery}${nextHash}`;
+}
+
+function cmsEndpoint(path: string) {
+  const separator = path.includes("?") ? "&" : "?";
+
+  return `${wordpressApiBase}${path}${separator}lang=${getCurrentLanguage()}`;
+}
+
+export async function fetchCmsSettings(signal?: AbortSignal): Promise<SiteSettings | null> {
+  try {
+    const response = await fetch(cmsEndpoint("/tona/v1/settings"), { signal });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as SiteSettings;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return null;
+  }
+}
+
+export async function fetchCmsRoute(path: string, signal?: AbortSignal): Promise<CmsRouteMatch | null> {
+  try {
+    const response = await fetch(cmsEndpoint(`/tona/v1/resolve?path=${encodeURIComponent(path)}`), { signal });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as CmsRouteMatch;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return null;
+  }
+}
 
 export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promise<T | null> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/pages/${slug}`, { signal });
+    const response = await fetch(cmsEndpoint(`/tona/v1/pages/${slug}`), { signal });
 
     if (!response.ok) {
       return null;
@@ -484,7 +628,7 @@ export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promi
 
 export async function fetchCmsPageByTemplate<T>(template: string, signal?: AbortSignal): Promise<T | null> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/page-template/${template}`, { signal });
+    const response = await fetch(cmsEndpoint(`/tona/v1/page-template/${template}`), { signal });
 
     if (!response.ok) {
       return null;
@@ -502,7 +646,7 @@ export async function fetchCmsPageByTemplate<T>(template: string, signal?: Abort
 
 export async function fetchCmsMembers(signal?: AbortSignal): Promise<MemberPost[]> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/members`, { signal });
+    const response = await fetch(cmsEndpoint("/tona/v1/members"), { signal });
 
     if (!response.ok) {
       return [];
@@ -520,7 +664,7 @@ export async function fetchCmsMembers(signal?: AbortSignal): Promise<MemberPost[
 
 export async function fetchCmsJobs(signal?: AbortSignal): Promise<JobPost[]> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/jobs`, { signal });
+    const response = await fetch(cmsEndpoint("/tona/v1/jobs"), { signal });
 
     if (!response.ok) {
       return [];
@@ -538,7 +682,7 @@ export async function fetchCmsJobs(signal?: AbortSignal): Promise<JobPost[]> {
 
 export async function fetchCmsProjects(signal?: AbortSignal): Promise<ProjectPost[]> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/projects`, { signal });
+    const response = await fetch(cmsEndpoint("/tona/v1/projects"), { signal });
 
     if (!response.ok) {
       return [];
@@ -556,7 +700,7 @@ export async function fetchCmsProjects(signal?: AbortSignal): Promise<ProjectPos
 
 export async function fetchCmsProject(slug: string, signal?: AbortSignal): Promise<ProjectPost | null> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/projects/${slug}`, { signal });
+    const response = await fetch(cmsEndpoint(`/tona/v1/projects/${slug}`), { signal });
 
     if (!response.ok) {
       return null;
@@ -574,7 +718,7 @@ export async function fetchCmsProject(slug: string, signal?: AbortSignal): Promi
 
 export async function fetchCmsNews(signal?: AbortSignal): Promise<NewsPost[]> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/news`, { signal });
+    const response = await fetch(cmsEndpoint("/tona/v1/news"), { signal });
 
     if (!response.ok) {
       return [];
@@ -592,7 +736,7 @@ export async function fetchCmsNews(signal?: AbortSignal): Promise<NewsPost[]> {
 
 export async function fetchCmsNewsPost(slug: string, signal?: AbortSignal): Promise<NewsPost | null> {
   try {
-    const response = await fetch(`${wordpressApiBase}/tona/v1/news/${slug}`, { signal });
+    const response = await fetch(cmsEndpoint(`/tona/v1/news/${slug}`), { signal });
 
     if (!response.ok) {
       return null;

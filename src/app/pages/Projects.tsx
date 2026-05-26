@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "../components/LocalizedLink";
 import { projects as fallbackProjects } from "../data";
 import { MapPin, Maximize2, ArrowRight, ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
-import { fetchCmsPage, fetchCmsProjects, type ProjectPost, type ProjectsCmsData } from "../lib/wordpress";
+import { fetchCmsPageByTemplate, fetchCmsProjects, type ProjectPost, type ProjectsCmsData } from "../lib/wordpress";
 
 const fallbackStats = [
   { value: "500+", label: "Du An Hoan Thanh" },
@@ -34,7 +34,7 @@ export function Projects() {
     const controller = new AbortController();
 
     Promise.all([
-      fetchCmsPage<ProjectsCmsData>("du-an-tona", controller.signal),
+      fetchCmsPageByTemplate<ProjectsCmsData>("tona-projects", controller.signal),
       fetchCmsProjects(controller.signal),
     ]).then(([page, projectPosts]) => {
       setCmsPage(page);
@@ -79,7 +79,7 @@ export function Projects() {
       <div className="relative bg-[#002d17] pt-8 pb-16 overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest">
-            <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>

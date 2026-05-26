@@ -1,33 +1,129 @@
 ﻿import { Outlet, Link, useLocation } from "react-router";
 import { Menu, X, MapPin, Phone, Mail, Facebook, Linkedin, Youtube, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import type React from "react";
 import tonaLogo from "../../imports/TONA_-_LOGO.png";
+import { fetchCmsRoute, fetchCmsSettings, getCurrentLanguage, localizeUrl, type CmsRouteMatch, type SiteLink, type SiteMenuItem, type SiteSettings } from "../lib/wordpress";
 
 // NAV DATA
 
-const navLinks = [
-  { label: "HOME", to: "/vi" },
+const fallbackNavLinks: SiteMenuItem[] = [
+  { label: "HOME", url: "/vi/" },
   {
     label: "VỀ TONA",
     children: [
-      { label: "Giới Thiệu", to: "/vi/gioi-thieu-tona" },
-      { label: "Đội Ngũ", to: "/vi/doi-ngu" },
-      { label: "Cuộc Sống Tona", to: "/vi/cuoc-song-tona" },
-      { label: "Trách Nhiệm Cộng Đồng", to: "/vi/trach-nhiem-cong-dong" },
+      { label: "Giới Thiệu", url: "/vi/gioi-thieu-tona" },
+      { label: "Đội Ngũ", url: "/vi/doi-ngu" },
+      { label: "Cuộc Sống Tona", url: "/vi/cuoc-song-tona" },
+      { label: "Trách Nhiệm Cộng Đồng", url: "/vi/trach-nhiem-cong-dong" },
     ],
   },
-  { label: "DỊCH VỤ", to: "/vi/dich-vu" },
-  { label: "DỰ ÁN", to: "/vi/du-an-tona" },
-  { label: "TIN TỨC", to: "/vi/tin-tuc" },
-  { label: "TUYỂN DỤNG", to: "/vi/nghe-nghiep" },
+  { label: "DỊCH VỤ", url: "/vi/dich-vu" },
+  { label: "DỰ ÁN", url: "/vi/du-an-tona" },
+  { label: "TIN TỨC", url: "/vi/tin-tuc" },
+  { label: "TUYỂN DỤNG", url: "/vi/nghe-nghiep" },
 ];
+
+const fallbackNavLinksEn: SiteMenuItem[] = [
+  { label: "HOME", url: "/en" },
+  {
+    label: "ABOUT TONA",
+    children: [
+      { label: "About Tona", url: "/en" },
+      { label: "Leadership", url: "/en" },
+      { label: "Tona Life", url: "/en" },
+      { label: "CSR", url: "/en" },
+    ],
+  },
+  { label: "SERVICES", url: "/en" },
+  { label: "PROJECTS", url: "/en" },
+  { label: "NEWS", url: "/en" },
+  { label: "CAREERS", url: "/en" },
+];
+
+const fallbackFooter = {
+  cta: {
+    eyebrow: "Bắt đầu dự án của bạn",
+    title: "Hãy kết nối với Tona Corporation",
+    button: "Liên Hệ Ngay",
+    buttonUrl: "/vi/nghe-nghiep",
+  },
+  description: "Nhà thầu xây dựng và MEP hàng đầu, cung cấp giải pháp xây dựng toàn diện đạt chuẩn quốc tế - từ thiết kế đến vận hành.",
+  certifications: ["ISO 9001", "ISO 45001", "ISO 14001"],
+  aboutTitle: "About Tona",
+  aboutLinks: [
+    { label: "Giới Thiệu", url: "/vi/gioi-thieu-tona" },
+    { label: "Đội Ngũ Lãnh Đạo", url: "/vi/doi-ngu" },
+    { label: "Cuộc Sống Tona", url: "/vi/cuoc-song-tona" },
+    { label: "Dịch Vụ", url: "/vi/dich-vu" },
+    { label: "Tuyển Dụng", url: "/vi/nghe-nghiep" },
+  ],
+  projectsTitle: "Dự Án",
+  projectLinks: [
+    { label: "Industrial", url: "/vi/du-an-tona" },
+    { label: "Commercial", url: "/vi/du-an-tona" },
+    { label: "Solar Rooftop", url: "/vi/du-an-tona" },
+    { label: "Hotels & Resorts", url: "/vi/du-an-tona" },
+    { label: "Apartments", url: "/vi/du-an-tona" },
+  ],
+  contactTitle: "Contact",
+  address: "Tòa nhà Tona, 123 Đường Xây Dựng\nQuận 1, TP. Hồ Chí Minh, Việt Nam",
+  phone: "+84 (0)90 123 4567",
+  email: "info@tonacorp.vn",
+  socials: [
+    { platform: "Facebook" as const, url: "" },
+    { platform: "LinkedIn" as const, url: "" },
+    { platform: "YouTube" as const, url: "" },
+  ],
+  copyright: "© {year} Tona Corporation. All Rights Reserved.",
+  legalLinks: [
+    { label: "Privacy Policy", url: "" },
+    { label: "Terms of Service", url: "" },
+    { label: "Sitemap", url: "" },
+  ],
+};
+
+function itemUrl(item: SiteLink | SiteMenuItem) {
+  return item.url || (item as SiteMenuItem & { to?: string }).to || "#";
+}
+
+function SmartLink({
+  to,
+  className,
+  children,
+  ariaLabel,
+}: {
+  to?: string;
+  className?: string;
+  children: React.ReactNode;
+  ariaLabel?: string;
+}) {
+  const rawUrl = to || "#";
+  const cleanUrl = rawUrl.replace(/\/+$/, "");
+  const url = cleanUrl === "/en" ? rawUrl : localizeUrl(rawUrl);
+
+  if (/^https?:\/\//i.test(url) || url.startsWith("mailto:") || url.startsWith("tel:")) {
+    return (
+      <a href={url} className={className} aria-label={ariaLabel}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link to={url} className={className} aria-label={ariaLabel}>
+      {children}
+    </Link>
+  );
+}
 
 // HEADER
 
-function Header() {
+function Header({ settings }: { settings?: SiteSettings["header"] }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [routeMatch, setRouteMatch] = useState<CmsRouteMatch | null>(null);
   const location = useLocation();
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -42,8 +138,25 @@ function Header() {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  const isCurrent = (path: string) =>
-    location.pathname === path || location.pathname.startsWith(path + "/");
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetchCmsRoute(`${location.pathname}${location.search}`, controller.signal).then(setRouteMatch);
+
+    return () => controller.abort();
+  }, [location.pathname, location.search]);
+
+  const normalizePath = (path: string) => {
+    const cleanPath = path.split("?")[0].split("#")[0];
+    return cleanPath.length > 1 ? cleanPath.replace(/\/+$/, "") : cleanPath;
+  };
+
+  const isCurrent = (path: string) => {
+    const currentPath = normalizePath(location.pathname);
+    const targetPath = normalizePath(localizeUrl(path));
+
+    return currentPath === targetPath || (!["/", "/en"].includes(targetPath) && currentPath.startsWith(targetPath + "/"));
+  };
 
   const handleMouseEnter = (label: string) => {
     if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
@@ -54,6 +167,26 @@ function Header() {
     dropdownTimeout.current = setTimeout(() => setActiveDropdown(null), 120);
   };
 
+  const currentLanguage = getCurrentLanguage();
+  const navLinks = settings?.nav?.length ? settings.nav : currentLanguage === "en" ? fallbackNavLinksEn : fallbackNavLinks;
+  const languages = settings?.languages?.length ? settings.languages : [
+    { label: "VI", url: "/" },
+    { label: "EN", url: "/en" },
+  ];
+  const displayLanguages = languages.map((language) => {
+    const targetLanguage = language.label?.toLowerCase() === "en" ? "en" : "vi";
+    const translatedUrl = routeMatch?.translations?.[targetLanguage];
+
+    return {
+      ...language,
+      url: localizeUrl(translatedUrl || location.pathname, targetLanguage),
+      language: targetLanguage,
+    };
+  });
+  const logo = settings?.logo || tonaLogo;
+  const logoAlt = settings?.logoAlt || "Tona Corporation";
+  const homeUrl = settings?.homeUrl || (currentLanguage === "en" ? "/en" : "/");
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
@@ -62,20 +195,20 @@ function Header() {
     >
       <div className="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between gap-8">
         {/* LOGO */}
-        <Link
-          to="/vi"
+        <SmartLink
+          to={homeUrl}
           className="flex items-center shrink-0"
-          aria-label="Tona Corporation"
+          ariaLabel={logoAlt}
         >
           <div className="bg-white px-3 py-1.5 flex items-center justify-center">
-            <img src={tonaLogo} alt="Tona Corporation" className="h-9 w-auto" />
+            <img src={logo} alt={logoAlt} className="h-9 w-auto" />
           </div>
-        </Link>
+        </SmartLink>
 
         {/* DESKTOP NAV */}
         <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
           {navLinks.map((link) => {
-            if (link.children) {
+            if (link.children?.length) {
               return (
                 <div
                   key={link.label}
@@ -101,32 +234,32 @@ function Header() {
                     }`}
                   >
                     {link.children.map((child) => (
-                      <Link
-                        key={child.to}
-                        to={child.to}
+                      <SmartLink
+                        key={`${child.label}-${itemUrl(child)}`}
+                        to={itemUrl(child)}
                         className="block px-5 py-3 text-white/80 hover:text-[#f4aa1f] hover:bg-[#46aa85]/40 font-semibold text-xs uppercase tracking-wider border-b border-white/5 last:border-0 transition-colors"
                       >
                         {child.label}
-                      </Link>
+                      </SmartLink>
                     ))}
                   </div>
                 </div>
               );
             }
             return (
-              <Link
-                key={link.to}
-                to={link.to!}
+              <SmartLink
+                key={`${link.label}-${itemUrl(link)}`}
+                to={itemUrl(link)}
                 className={`px-4 py-2 font-semibold text-xs uppercase tracking-widest transition-colors ${
-                  isCurrent(link.to!) && link.to !== "/vi"
+                  isCurrent(itemUrl(link)) && !["/", "/en"].includes(normalizePath(localizeUrl(itemUrl(link))))
                     ? "text-[#f4aa1f]"
-                    : link.to === "/vi" && location.pathname === "/vi"
+                    : ["/", "/en"].includes(normalizePath(localizeUrl(itemUrl(link)))) && normalizePath(localizeUrl(itemUrl(link))) === normalizePath(location.pathname)
                     ? "text-[#f4aa1f]"
                     : "text-white/80 hover:text-[#f4aa1f]"
                 }`}
               >
                 {link.label}
-              </Link>
+              </SmartLink>
             );
           })}
         </nav>
@@ -135,12 +268,19 @@ function Header() {
         <div className="flex items-center gap-3 shrink-0">
           {/* Language */}
           <div className="hidden lg:flex items-center border border-white/30 text-xs font-bold uppercase overflow-hidden">
-            <button className="px-3 py-1.5 bg-[#f4aa1f] text-[#002d17] hover:bg-[#f4aa1f]/90 transition-colors">
-              VI
-            </button>
-            <button className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-[#46aa85] transition-colors rounded-lg">
-              EN
-            </button>
+            {displayLanguages.map((language) => (
+              <Link
+                key={`${language.label}-${itemUrl(language)}`}
+                to={itemUrl(language)}
+                className={`px-3 py-1.5 transition-colors ${
+                  language.language === currentLanguage
+                    ? "bg-[#f4aa1f] text-[#002d17] hover:bg-[#f4aa1f]/90"
+                    : "text-white/60 hover:text-white hover:bg-[#46aa85] rounded-lg"
+                }`}
+              >
+                {language.label}
+              </Link>
+            ))}
           </div>
 
           {/* Mobile toggle */}
@@ -158,37 +298,46 @@ function Header() {
       {mobileOpen && (
         <div className="lg:hidden bg-[#002d17] border-t border-white/10 py-6 px-6 flex flex-col gap-1">
           {navLinks.map((link) => {
-            if (link.children) {
+            if (link.children?.length) {
               return (
                 <div key={link.label} className="flex flex-col">
                   <span className="text-white/50 font-bold text-xs uppercase tracking-widest py-3 border-b border-white/10">
                     {link.label}
                   </span>
                   {link.children.map((child) => (
-                    <Link
-                      key={child.to}
-                      to={child.to}
+                    <SmartLink
+                      key={`${child.label}-${itemUrl(child)}`}
+                      to={itemUrl(child)}
                       className="pl-4 py-2.5 text-white/80 hover:text-[#f4aa1f] font-semibold text-sm transition-colors"
                     >
                       {child.label}
-                    </Link>
+                    </SmartLink>
                   ))}
                 </div>
               );
             }
             return (
-              <Link
-                key={link.to}
-                to={link.to!}
+              <SmartLink
+                key={`${link.label}-${itemUrl(link)}`}
+                to={itemUrl(link)}
                 className="py-3 text-white font-bold text-sm uppercase tracking-wider border-b border-white/10 hover:text-[#f4aa1f] transition-colors"
               >
                 {link.label}
-              </Link>
+              </SmartLink>
             );
           })}
           <div className="flex gap-2 mt-4">
-            <button className="px-4 py-2 bg-[#f4aa1f] text-[#002d17] font-bold text-xs uppercase">VI</button>
-            <button className="px-4 py-2 border border-white/30 text-white/60 font-bold text-xs uppercase">EN</button>
+            {displayLanguages.map((language) => (
+              <Link
+                key={`${language.label}-${itemUrl(language)}`}
+                to={itemUrl(language)}
+                className={`px-4 py-2 font-bold text-xs uppercase ${
+                  language.language === currentLanguage ? "bg-[#f4aa1f] text-[#002d17]" : "border border-white/30 text-white/60"
+                }`}
+              >
+                {language.label}
+              </Link>
+            ))}
           </div>
         </div>
       )}
@@ -198,24 +347,39 @@ function Header() {
 
 // FOOTER
 
-function Footer() {
+function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
+  const footer = {
+    ...fallbackFooter,
+    ...settings,
+    cta: { ...fallbackFooter.cta, ...settings?.cta },
+    certifications: settings?.certifications?.length ? settings.certifications : fallbackFooter.certifications,
+    aboutLinks: settings?.aboutLinks?.length ? settings.aboutLinks : fallbackFooter.aboutLinks,
+    projectLinks: settings?.projectLinks?.length ? settings.projectLinks : fallbackFooter.projectLinks,
+    socials: settings?.socials?.length ? settings.socials : fallbackFooter.socials,
+    legalLinks: settings?.legalLinks?.length ? settings.legalLinks : fallbackFooter.legalLinks,
+  };
+  const footerLogo = footer.logo || tonaLogo;
+  const footerLogoAlt = footer.logoAlt || "Tona Corporation";
+  const socialIcons = { Facebook, LinkedIn: Linkedin, YouTube: Youtube };
+  const copyright = (footer.copyright || fallbackFooter.copyright).replace("{year}", String(new Date().getFullYear()));
+
   return (
     <footer className="bg-[#002d17] text-white">
       {/* Top CTA Band */}
       <div className="border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">Bắt đầu dự án của bạn</p>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{footer.cta.eyebrow}</p>
             <h3 className="text-2xl md:text-3xl font-extrabold uppercase tracking-tight">
-              Hãy kết nối với Tona Corporation
+              {footer.cta.title}
             </h3>
           </div>
-          <Link
-            to="/vi/nghe-nghiep"
+          <SmartLink
+            to={footer.cta.buttonUrl}
             className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
           >
-            Liên Hệ Ngay
-          </Link>
+            {footer.cta.button}
+          </SmartLink>
         </div>
       </div>
 
@@ -225,15 +389,15 @@ function Footer() {
         <div className="md:col-span-4">
           <div className="flex items-center gap-3 mb-6">
             <div className="bg-white px-3 py-2 inline-flex items-center justify-center">
-              <img src={tonaLogo} alt="Tona Corporation" className="h-10 w-auto" />
+              <img src={footerLogo} alt={footerLogoAlt} className="h-10 w-auto" />
             </div>
           </div>
           <p className="text-white/60 text-sm leading-relaxed mb-8 max-w-sm">
-            Nhà thầu xây dựng và MEP hàng đầu, cung cấp giải pháp xây dựng toàn diện đạt chuẩn quốc tế — từ thiết kế đến vận hành.
+            {footer.description}
           </p>
           {/* Certs */}
           <div className="flex flex-wrap gap-2">
-            {["ISO 9001", "ISO 45001", "ISO 14001"].map((cert) => (
+            {footer.certifications.map((cert) => (
               <span
                 key={cert}
                 className="border border-white/20 text-white/50 text-xs font-bold uppercase tracking-wider px-3 py-1.5"
@@ -246,22 +410,16 @@ function Footer() {
 
         {/* Col 2: About */}
         <div className="md:col-span-2">
-          <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">About Tona</h4>
+          <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">{footer.aboutTitle}</h4>
           <ul className="flex flex-col gap-3">
-            {[
-              { label: "Giới Thiệu", to: "/vi/gioi-thieu-tona" },
-              { label: "Đội Ngũ Lãnh Đạo", to: "/vi/doi-ngu" },
-              { label: "Cuộc Sống Tona", to: "/vi/cuoc-song-tona" },
-              { label: "Dịch Vụ", to: "/vi/dich-vu" },
-              { label: "Tuyển Dụng", to: "/vi/nghe-nghiep" },
-            ].map((item) => (
-              <li key={item.to}>
-                <Link
-                  to={item.to}
+            {footer.aboutLinks.map((item) => (
+              <li key={`${item.label}-${itemUrl(item)}`}>
+                <SmartLink
+                  to={itemUrl(item)}
                   className="text-white/60 hover:text-[#f4aa1f] font-medium text-sm transition-colors"
                 >
                   {item.label}
-                </Link>
+                </SmartLink>
               </li>
             ))}
           </ul>
@@ -269,22 +427,16 @@ function Footer() {
 
         {/* Col 3: Projects */}
         <div className="md:col-span-2">
-          <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">Dự Án</h4>
+          <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">{footer.projectsTitle}</h4>
           <ul className="flex flex-col gap-3">
-            {[
-              "Industrial",
-              "Commercial",
-              "Solar Rooftop",
-              "Hotels & Resorts",
-              "Apartments",
-            ].map((cat) => (
-              <li key={cat}>
-                <Link
-                  to="/vi/du-an-tona"
+            {footer.projectLinks.map((item) => (
+              <li key={`${item.label}-${itemUrl(item)}`}>
+                <SmartLink
+                  to={itemUrl(item)}
                   className="text-white/60 hover:text-[#f4aa1f] font-medium text-sm transition-colors"
                 >
-                  {cat}
-                </Link>
+                  {item.label}
+                </SmartLink>
               </li>
             ))}
           </ul>
@@ -292,44 +444,50 @@ function Footer() {
 
         {/* Col 4: Contact */}
         <div className="md:col-span-4">
-          <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">Contact</h4>
+          <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">{footer.contactTitle}</h4>
           <ul className="flex flex-col gap-4">
             <li className="flex items-start gap-3">
               <MapPin size={15} className="text-[#f4aa1f] shrink-0 mt-0.5" />
               <span className="text-white/60 text-sm leading-relaxed">
-                Tòa nhà Tona, 123 Đường Xây Dựng<br />
-                Quận 1, TP. Hồ Chí Minh, Việt Nam
+                {footer.address.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
+                  <span key={`${line}-${index}`}>
+                    {line}
+                    {index < lines.length - 1 && <br />}
+                  </span>
+                ))}
               </span>
             </li>
             <li className="flex items-center gap-3">
               <Phone size={15} className="text-[#f4aa1f] shrink-0" />
-              <a href="tel:+84901234567" className="text-white/60 hover:text-white text-sm transition-colors">
-                +84 (0)90 123 4567
+              <a href={`tel:${footer.phone.replace(/[^\d+]/g, "")}`} className="text-white/60 hover:text-white text-sm transition-colors">
+                {footer.phone}
               </a>
             </li>
             <li className="flex items-center gap-3">
               <Mail size={15} className="text-[#f4aa1f] shrink-0" />
-              <a href="mailto:info@tonacorp.vn" className="text-white/60 hover:text-white text-sm transition-colors">
-                info@tonacorp.vn
+              <a href={`mailto:${footer.email}`} className="text-white/60 hover:text-white text-sm transition-colors">
+                {footer.email}
               </a>
             </li>
           </ul>
 
           {/* Social */}
           <div className="flex gap-3 mt-8">
-            {[
-              { Icon: Facebook, label: "Facebook" },
-              { Icon: Linkedin, label: "LinkedIn" },
-              { Icon: Youtube, label: "YouTube" },
-            ].map(({ Icon, label }) => (
-              <button
-                key={label}
-                aria-label={label}
+            {footer.socials.map((social) => {
+              const platform = social.platform || "Facebook";
+              const Icon = socialIcons[platform] || Facebook;
+
+              return (
+              <SmartLink
+                key={`${platform}-${social.url}`}
+                to={social.url || "#"}
+                ariaLabel={platform}
                 className="w-9 h-9 border border-white/20 flex items-center justify-center text-white/50 hover:border-[#f4aa1f] hover:text-[#f4aa1f] transition-colors"
               >
                 <Icon size={15} />
-              </button>
-            ))}
+              </SmartLink>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -337,11 +495,13 @@ function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40 font-medium">
-          <span>© {new Date().getFullYear()} Tona Corporation. All Rights Reserved.</span>
+          <span>{copyright}</span>
           <div className="flex gap-5">
-            <span className="hover:text-white/70 cursor-pointer transition-colors">Privacy Policy</span>
-            <span className="hover:text-white/70 cursor-pointer transition-colors">Terms of Service</span>
-            <span className="hover:text-white/70 cursor-pointer transition-colors">Sitemap</span>
+            {footer.legalLinks.map((item) => (
+              <SmartLink key={`${item.label}-${itemUrl(item)}`} to={itemUrl(item)} className="hover:text-white/70 cursor-pointer transition-colors">
+                {item.label}
+              </SmartLink>
+            ))}
           </div>
         </div>
       </div>
@@ -352,13 +512,25 @@ function Footer() {
 // LAYOUT ROOT
 
 export function Layout() {
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const location = useLocation();
+  const language = location.pathname.startsWith("/en") ? "en" : "vi";
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetchCmsSettings(controller.signal).then(setSettings);
+
+    return () => controller.abort();
+  }, [language]);
+
   return (
     <div className="min-h-screen flex flex-col font-sans bg-white text-[#002d17] antialiased">
-      <Header />
+      <Header settings={settings?.header} />
       <main className="flex-1 flex flex-col w-full pt-[72px]">
         <Outlet />
       </main>
-      <Footer />
+      <Footer settings={settings?.footer} />
     </div>
   );
 }

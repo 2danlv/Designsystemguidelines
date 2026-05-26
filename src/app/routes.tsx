@@ -1,38 +1,31 @@
-﻿import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, Navigate, useLocation } from "react-router";
+import { CmsRoute } from "./components/CmsRoute";
 import { Layout } from "./components/Layout";
-import { Home } from "./pages/Home";
-import { About } from "./pages/About";
-import { Members } from "./pages/Members";
-import { Culture } from "./pages/Culture";
-import { Services } from "./pages/Services";
-import { Projects } from "./pages/Projects";
-import { ProjectDetail } from "./pages/ProjectDetail";
-import { News } from "./pages/News";
-import { NewsDetail } from "./pages/NewsDetail";
-import { Jobs } from "./pages/Jobs";
-import { CSR } from "./pages/CSR";
+
+const catchAllRoutes = [
+  { index: true, Component: CmsRoute },
+  { path: "*", Component: CmsRoute },
+];
+
+function MissingLanguageRedirect() {
+  const location = useLocation();
+
+  return <Navigate to={`/${location.search}${location.hash}`} replace />;
+}
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/vi/" replace />
+    Component: Layout,
+    children: catchAllRoutes,
   },
   {
-    path: "/vi",
+    path: "/en",
     Component: Layout,
-    children: [
-      { index: true, Component: Home },
-      { path: "gioi-thieu-tona", Component: About },
-      { path: "doi-ngu", Component: Members },
-      { path: "cuoc-song-tona", Component: Culture },
-      { path: "dich-vu", Component: Services },
-      { path: "du-an-tona", Component: Projects },
-      { path: "project/:slug", Component: ProjectDetail },
-      { path: "tin-tuc", Component: News },
-      { path: "tin-tuc/:slug", Component: NewsDetail },
-      { path: "nghe-nghiep", Component: Jobs },
-      { path: "trach-nhiem-cong-dong", Component: CSR },
-    ],
+    children: catchAllRoutes,
+  },
+  {
+    path: "*",
+    Component: MissingLanguageRedirect,
   },
 ]);
-

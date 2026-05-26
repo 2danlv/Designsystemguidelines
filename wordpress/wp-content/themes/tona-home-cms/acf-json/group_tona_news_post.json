@@ -3,14 +3,6 @@
     "title": "News Article Details",
     "fields": [
         {
-            "key": "field_tona_news_read_time",
-            "label": "Read Time",
-            "name": "news_read_time",
-            "type": "text",
-            "instructions": "Example: 3 phut.",
-            "default_value": "3 phut"
-        },
-        {
             "key": "field_tona_news_author_name",
             "label": "Author Name",
             "name": "news_author_name",
@@ -36,5 +28,6 @@
     "hide_on_screen": [],
     "active": true,
     "description": "",
-    "show_in_rest": 1
+    "show_in_rest": 1,
+    "modified": 1779818840
 }

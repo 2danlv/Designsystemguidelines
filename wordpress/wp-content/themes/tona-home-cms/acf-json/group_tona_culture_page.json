@@ -646,8 +646,280 @@
             ]
         },
         {
+            "key": "field_tona_culture_tab_social",
+            "label": "05. Social Responsibility",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_background",
+            "label": "Section Background Color",
+            "name": "culture_social_background",
+            "type": "color_picker",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#002d17",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_eyebrow",
+            "label": "Eyebrow",
+            "name": "culture_social_eyebrow",
+            "type": "text",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Trách Nhiệm Xã Hội",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_title",
+            "label": "Title",
+            "name": "culture_social_title",
+            "type": "textarea",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "CSR & Trách Nhiệm\nCộng Đồng",
+            "rows": 2,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_description",
+            "label": "Description",
+            "name": "culture_social_description",
+            "type": "textarea",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "rows": 4,
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": ""
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_image",
+            "label": "Background Image",
+            "name": "culture_social_image",
+            "type": "image",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0,
+            "mime_types": ""
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_badges",
+            "label": "Badges",
+            "name": "culture_social_badges",
+            "type": "repeater",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "Add Badge",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "field_tona_culture_social_badge_text",
+            "sub_fields": [
+                {
+                    "aria-label": "",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "key": "field_tona_culture_social_badge_text",
+                    "label": "Text",
+                    "name": "text",
+                    "type": "text",
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_culture_social_badges"
+                }
+            ]
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_stats",
+            "label": "Stats",
+            "name": "culture_social_stats",
+            "type": "repeater",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "Add Stat",
+            "min": 0,
+            "max": 0,
+            "rows_per_page": 20,
+            "collapsed": "field_tona_culture_social_stat_value",
+            "sub_fields": [
+                {
+                    "aria-label": "",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "key": "field_tona_culture_social_stat_value",
+                    "label": "Value",
+                    "name": "value",
+                    "type": "text",
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_culture_social_stats"
+                },
+                {
+                    "aria-label": "",
+                    "instructions": "",
+                    "required": false,
+                    "conditional_logic": false,
+                    "key": "field_tona_culture_social_stat_label",
+                    "label": "Label",
+                    "name": "label",
+                    "type": "text",
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_tona_culture_social_stats"
+                }
+            ]
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": false,
+            "conditional_logic": false,
+            "key": "field_tona_culture_social_link_label",
+            "label": "Button Label",
+            "name": "culture_social_link_label",
+            "type": "text",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Khám Phá CSR",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "aria-label": "",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "key": "field_tona_culture_social_link_url",
+            "label": "Button URL",
+            "name": "culture_social_link_url",
+            "type": "page_link",
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "post_type": "",
+            "post_status": "",
+            "taxonomy": "",
+            "allow_archives": 1,
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0
+        },
+        {
             "key": "field_tona_culture_tab_academy",
-            "label": "05. Academy",
+            "label": "06. Academy",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -875,7 +1147,7 @@
         },
         {
             "key": "field_tona_culture_tab_gallery",
-            "label": "06. Gallery",
+            "label": "07. Gallery",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -982,7 +1254,7 @@
         },
         {
             "key": "field_tona_culture_tab_cta",
-            "label": "07. CTA",
+            "label": "08. CTA",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -1104,7 +1376,7 @@
             {
                 "param": "page_template",
                 "operator": "==",
-                "value": "templates\/tona-culture.php"
+                "value": "templates/tona-culture.php"
             }
         ]
     ],
@@ -1117,5 +1389,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1779211709
+    "modified": 1779817143
 }

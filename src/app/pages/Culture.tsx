@@ -1,9 +1,9 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "../components/LocalizedLink";
 import { ChevronRight, Heart, Users, Trophy, Zap, ArrowRight, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { fetchCmsPage, type CultureCmsData } from "../lib/wordpress";
+import { fetchCmsPageByTemplate, type CultureCmsData } from "../lib/wordpress";
 
 type StatItem = {
   value: string;
@@ -133,6 +133,17 @@ const fallbackAcademyStats: StatItem[] = [
   { value: "98%", label: "Hai long" },
 ];
 
+const fallbackSocialStats: StatItem[] = [
+  { value: "5,000+", label: "Nguoi thu huong" },
+  { value: "15+", label: "Nam hoat dong" },
+];
+
+const fallbackSocialBadges = [
+  "Uom Tet Don Nang Xuan",
+  "SolarLab",
+  "Student Internship",
+];
+
 function backgroundStyle(color?: string) {
   return color ? { backgroundColor: color } : undefined;
 }
@@ -152,7 +163,7 @@ export function Culture() {
   useEffect(() => {
     const controller = new AbortController();
 
-    fetchCmsPage<CultureCmsData>("cuoc-song-tona", controller.signal).then(setCmsPage);
+    fetchCmsPageByTemplate<CultureCmsData>("tona-culture", controller.signal).then(setCmsPage);
 
     return () => controller.abort();
   }, []);
@@ -210,6 +221,17 @@ export function Culture() {
     }));
   }, [cmsPage]);
 
+  const socialStats = useMemo<StatItem[]>(() => {
+    if (!cmsPage?.socialResponsibility?.stats?.length) {
+      return fallbackSocialStats;
+    }
+
+    return cmsPage.socialResponsibility.stats.map((item) => ({
+      value: item.value || "",
+      label: item.label || "",
+    }));
+  }, [cmsPage]);
+
   const galleryPhotos = cmsPage?.gallery?.photos?.length ? cmsPage.gallery.photos : fallbackGallery;
   const colors = cmsPage?.colors;
   const heroTitle = cmsPage?.hero?.title || "Tona -\nHon Ca\nMot Noi Lam Viec";
@@ -219,6 +241,14 @@ export function Culture() {
   const themesTitle = cmsPage?.themesTitle || "Chu De Nam";
   const themesDescription = cmsPage?.themesDescription || "Moi nam Tona lua chon mot chu de chien luoc, dinh huong tinh than va hanh dong cho toan bo to chuc.";
   const activitiesTitle = cmsPage?.activitiesTitle || "Hoat Dong Van Hoa";
+  const social = cmsPage?.socialResponsibility;
+  const socialEyebrow = social?.eyebrow || "Trách Nhiệm Xã Hội";
+  const socialTitle = social?.title || "CSR & Trách Nhiệm\nCộng Đồng";
+  const socialDescription = social?.description || "Từ Ươm Tết Đón Nắng Xuân đến SolarLab và chương trình thực tập sinh - Tona cam kết đồng hành cùng cộng đồng theo những cách thiết thực và lâu dài.";
+  const socialImage = social?.image || "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=1200&q=80";
+  const socialBadges = social?.badges?.length ? social.badges : fallbackSocialBadges;
+  const socialLinkLabel = social?.linkLabel || "Khám Phá CSR";
+  const socialLinkUrl = social?.linkUrl || "/vi/trach-nhiem-cong-dong";
   const academyEyebrow = cmsPage?.academy?.eyebrow || "Phat Trien Con Nguoi";
   const academyTitle = cmsPage?.academy?.title || "TONA Academy -\nHoc De Vuon Xa";
   const academyDescription = cmsPage?.academy?.description || "TONA Academy la chuong trinh dao tao noi bo toan dien, tu ky nang ky thuat chuyen sau den nang luc lanh dao va quan ly du an.";
@@ -233,7 +263,6 @@ export function Culture() {
   const regularActivities = activities
     .filter((activity) => !`${activity.title} ${activity.subtitle}`.toLowerCase().includes("csr"))
     .slice(0, 3);
-  const csrActivity = activities.find((activity) => `${activity.title} ${activity.subtitle}`.toLowerCase().includes("csr"));
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -241,7 +270,7 @@ export function Culture() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -392,11 +421,12 @@ export function Culture() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="group relative overflow-hidden rounded-2xl bg-[#002d17]"
+            style={backgroundStyle(colors?.socialResponsibilityBackground)}
           >
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute inset-0 bg-gradient-to-r from-[#002d17] via-[#002d17]/95 to-transparent z-10" />
               <img
-                src={csrActivity?.image || "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=1200&q=80"}
+                src={socialImage}
                 alt="CSR"
                 className="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-700"
               />
@@ -407,43 +437,45 @@ export function Culture() {
                   <div className="w-10 h-10 rounded-xl bg-[#f4aa1f] flex items-center justify-center shrink-0">
                     <Heart size={18} className="text-[#002d17]" />
                   </div>
-                  <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">Trách Nhiệm Xã Hội</span>
+                  <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{socialEyebrow}</span>
                 </div>
                 <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-3">
-                  CSR & Trách Nhiệm<br />Cộng Đồng
+                  {renderLines(socialTitle)}
                 </h3>
                 <p className="text-white/60 text-sm font-medium leading-relaxed max-w-lg mb-5">
-                  {csrActivity?.desc || "Từ Ươm Tết Đón Nắng Xuân đến SolarLab và chương trình thực tập sinh - Tona cam kết đồng hành cùng cộng đồng theo những cách thiết thực và lâu dài."}
+                  {socialDescription}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <span className="bg-[#f4aa1f]/15 border border-[#f4aa1f]/30 text-[#f4aa1f] text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                    Ươm Tết Đón Nắng Xuân
-                  </span>
-                  <span className="bg-[#46aa85]/15 border border-[#46aa85]/30 text-[#46aa85] text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                    SolarLab
-                  </span>
-                  <span className="bg-white/10 border border-white/20 text-white/70 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                    Student Internship
-                  </span>
+                  {socialBadges.map((badge, index) => (
+                    <span
+                      key={`${badge}-${index}`}
+                      className={`text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full ${
+                        index === 0
+                          ? "bg-[#f4aa1f]/15 border border-[#f4aa1f]/30 text-[#f4aa1f]"
+                          : index === 1
+                          ? "bg-[#46aa85]/15 border border-[#46aa85]/30 text-[#46aa85]"
+                          : "bg-white/10 border border-white/20 text-white/70"
+                      }`}
+                    >
+                      {badge}
+                    </span>
+                  ))}
                 </div>
               </div>
               <div className="flex flex-col gap-5 shrink-0">
                 <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { val: "5,000+", label: "Người thụ hưởng" },
-                    { val: "15+", label: "Năm hoạt động" },
-                  ].map((s) => (
+                  {socialStats.map((s) => (
                     <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-center">
-                      <span className="font-extrabold text-[#f4aa1f] text-2xl block">{s.val}</span>
+                      <span className="font-extrabold text-[#f4aa1f] text-2xl block">{s.value}</span>
                       <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold mt-1">{s.label}</p>
                     </div>
                   ))}
                 </div>
                 <Link
-                  to="/vi/trach-nhiem-cong-dong"
+                  to={socialLinkUrl}
                   className="flex items-center justify-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3.5 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-xl"
                 >
-                  Khám Phá CSR <ArrowRight size={14} />
+                  {socialLinkLabel} <ArrowRight size={14} />
                 </Link>
               </div>
             </div>

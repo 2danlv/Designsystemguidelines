@@ -1,7 +1,8 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
+import { Link } from "../components/LocalizedLink";
 import { news as fallbackNews, type NewsBodyBlock } from "../data";
-import { ArrowLeft, ChevronRight, Clock, Tag, ArrowRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, Tag, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsNews, fetchCmsNewsPost, type NewsPost } from "../lib/wordpress";
 
@@ -74,8 +75,9 @@ function BodyBlock({ block }: { block: NewsBodyBlock }) {
   return null;
 }
 
-export function NewsDetail() {
-  const { slug } = useParams<{ slug: string }>();
+export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
+  const { slug: routeSlug } = useParams<{ slug: string }>();
+  const slug = slugOverride || routeSlug;
   const navigate = useNavigate();
   const [cmsArticle, setCmsArticle] = useState<NewsPost | null>(null);
   const [cmsNews, setCmsNews] = useState<NewsPost[]>([]);
@@ -142,7 +144,7 @@ export function NewsDetail() {
       <div className="bg-[#002d17] pt-8 pb-0">
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8 flex-wrap">
-            <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <Link to="/vi/tin-tuc" className="hover:text-[#f4aa1f] transition-colors">Tin Tức</Link>
             <ChevronRight size={12} />
@@ -155,9 +157,6 @@ export function NewsDetail() {
                 {article.category}
               </span>
             )}
-            <span className="flex items-center gap-1.5 text-white/40 text-xs font-bold uppercase tracking-widest">
-              <Clock size={11} /> {article.readTime || "3 phút"}
-            </span>
             <span className="text-white/30 text-xs font-bold uppercase tracking-widest">{article.date}</span>
           </div>
 

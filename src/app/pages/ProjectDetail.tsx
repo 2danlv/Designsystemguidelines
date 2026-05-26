@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
-import { useParams, Link } from "react-router";
+import { useParams } from "react-router";
+import { Link } from "../components/LocalizedLink";
 import { projects as fallbackProjects } from "../data";
 import {
   ArrowLeft, ArrowRight, X, MapPin, Maximize2,
@@ -174,8 +175,9 @@ function ImageGallery({ images }: { images: string[] }) {
 }
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
-export function ProjectDetail() {
-  const { slug } = useParams();
+export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) {
+  const { slug: routeSlug } = useParams();
+  const slug = slugOverride || routeSlug;
   const fallbackProject = fallbackProjects.find((p) => p.slug === slug) as ProjectPost | undefined;
   const [cmsProject, setCmsProject] = useState<ProjectPost | null>(null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);

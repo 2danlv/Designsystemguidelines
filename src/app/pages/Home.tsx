@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useCallback, useRef } from "react";
-import { Link } from "react-router";
+import { Link } from "../components/LocalizedLink";
 import {
   ArrowRight, ArrowLeft, ChevronRight, ChevronLeft,
   PenTool, Wrench, Building2, Zap,
@@ -526,7 +526,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
               </div>
             </div>
             <div className="flex flex-col gap-3 pt-6 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-              <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date} · {featured.readTime} đọc</span>
+              <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date}</span>
               <h3 className="font-extrabold text-[#002d17] text-2xl uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors">
                 {featured.title}
               </h3>

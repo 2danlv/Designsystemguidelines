@@ -1,6 +1,6 @@
 ﻿import { useState } from "react";
 import { jobs as fallbackJobs } from "../data";
-import { Link } from "react-router";
+import { Link } from "../components/LocalizedLink";
 import {
   MapPin, Clock, Briefcase, ChevronRight, ArrowRight,
   CheckCircle2, Star, Users, TrendingUp, ChevronDown, ChevronUp, X,
@@ -550,7 +550,7 @@ export function Jobs() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/vi" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
