@@ -21,6 +21,7 @@ import {
   type ProjectPost,
   type ServicesCmsData,
 } from "../lib/wordpress";
+import { getCmsIcon } from "../lib/cmsIcons";
 
 type ServiceItem = {
   id: number;
@@ -49,13 +50,6 @@ type TimelapseSlide = {
   subtitle: string;
   duration: string;
   image: string;
-};
-
-const iconMap: Record<string, LucideIcon> = {
-  PenTool,
-  Wrench,
-  Building2,
-  Zap,
 };
 
 const fallbackServices: ServiceItem[] = [
@@ -317,7 +311,7 @@ export function Services() {
 
     return sortedSource.map((service, index) => ({
       id: index + 1,
-      icon: iconMap[service.icon || "Wrench"] || Wrench,
+      icon: getCmsIcon(service.icon, Wrench),
       iconImage: service.iconImage || "",
       num: service.number || String(index + 1).padStart(2, "0"),
       tag: service.featured ? "Thế Mạnh Hàng Đầu" : "",

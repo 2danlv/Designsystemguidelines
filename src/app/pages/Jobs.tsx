@@ -9,6 +9,7 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import { submitCmsApplication, type JobPost, type JobsCmsData } from "../lib/wordpress";
 import { useJobsPage, type InternPosition, type PerkItem } from "../cms/useJobsPage";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -345,6 +346,7 @@ function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onCl
 
 // JOB CARD
 function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: JobsCmsData["applicationModal"] }) {
+  const text = useSiteText();
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
@@ -375,7 +377,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                   {job.level}
                 </span>
                 <span className="bg-white border border-[#f4aa1f] text-[#f4aa1f] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                  {job.slots} vi tri
+                  {job.slots} {text("jobs.slots_suffix", "vi tri")}
                 </span>
               </div>
 
@@ -397,7 +399,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 </span>
                 {job.salary && (
                   <span className="flex items-center gap-1.5 text-[#46aa85] text-xs font-bold uppercase tracking-wider">
-                    Luong: {job.salary}
+                    {text("jobs.salary", "Luong")}: {job.salary}
                   </span>
                 )}
               </div>
@@ -413,7 +415,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 onClick={() => setApplying(true)}
                 className="bg-[#f4aa1f] cursor-pointer text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors whitespace-nowrap rounded-lg"
               >
-                Ung Tuyen Ngay
+                {text("jobs.apply_now", "Ung Tuyen Ngay")}
               </button>
               <a
                 href='#'
@@ -421,13 +423,13 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 rel="noopener noreferrer"
                 className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
-                <FileText size={12} /> Xem JD
+                <FileText size={12} /> {text("jobs.view_jd", "Xem JD")}
               </a>
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
-                Chi tiet {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                {text("jobs.detail", "Chi tiet")} {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
             </div>
           </div>
@@ -447,7 +449,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 {/* Requirements */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Yeu Cau
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.requirements", "Yeu Cau")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {job.requirements.map((req, i) => (
@@ -462,7 +464,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 {/* Skills */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Ky Nang
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.skills", "Ky Nang")}
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {job.skills.map((skill, i) => (
@@ -479,7 +481,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 {/* Benefits */}
                 <div className="p-6 md:p-8">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Phuc Loi
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.benefits", "Phuc Loi")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {job.benefits.map((ben, i) => (
@@ -501,6 +503,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
 
 // INTERN CARD
 function InternCard({ pos, applicationModal }: { pos: InternPosition; applicationModal?: JobsCmsData["applicationModal"] }) {
+  const text = useSiteText();
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
   const Icon = pos.icon;
@@ -524,7 +527,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                     {pos.department}
                   </span>
                   <span className="bg-[#d5ede5] text-[#1a6645] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                    {pos.slots} chi tieu
+                    {pos.slots} {text("jobs.slots_suffix", "chi tieu")}
                   </span>
                 </div>
                 <div>
@@ -552,13 +555,13 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                 onClick={() => setApplying(true)}
                 className="bg-[#46aa85] cursor-pointer text-white px-5 py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] transition-colors whitespace-nowrap rounded-lg"
               >
-                Dang Ky Thuc Tap
+                {text("jobs.apply_now", "Dang Ky Thuc Tap")}
               </button>
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="border cursor-pointer border-[#46aa85]/30 text-[#46aa85] px-5 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#46aa85] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
-                Chi tiet {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                {text("jobs.detail", "Chi tiet")} {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
             </div>
           </div>
@@ -576,7 +579,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
               <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div className="p-6 border-b md:border-b-0 md:border-r border-[#46aa85]/15">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#46aa85]" /> Yeu Cau
+                    <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.requirements", "Yeu Cau")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {pos.requirements.map((req, i) => (
@@ -589,7 +592,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                 </div>
                 <div className="p-6">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#46aa85]" /> Quyen Loi Thuc Tap Sinh
+                    <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.benefits", "Quyen Loi Thuc Tap Sinh")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {pos.benefits.map((ben, i) => (

@@ -18,6 +18,8 @@ import {
   type ProjectPost,
   type ServicesCmsData,
 } from "../lib/wordpress";
+import { getCmsIcon } from "../lib/cmsIcons";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 type HomeHeroSlide = {
   id: number | string;
@@ -79,15 +81,9 @@ type HomeService = {
   highlight?: boolean;
 };
 
-const iconMap: Record<string, LucideIcon> = {
-  PenTool,
-  Wrench,
-  Building2,
-  Zap,
-};
-
 // HERO SECTION
 function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: HomeCmsData["hero"] }) {
+  const text = useSiteText();
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -112,7 +108,7 @@ function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: H
   }, [next]);
 
   const slide = activeSlides[current] || activeSlides[0];
-  const primaryLabel = content?.primaryLabel || "Xem Dự Án";
+  const primaryLabel = content?.primaryLabel || text("home.hero.primary_label", "Xem Dự Án");
   const primaryUrl = content?.primaryUrl || "/du-an-tona";
   const secondaryLabel = content?.secondaryLabel || "Portfolio";
   const secondaryUrl = content?.secondaryUrl || "/du-an-tona";
@@ -306,7 +302,7 @@ function normalizeHomeServices(items?: ServicesCmsData["services"]): HomeService
 
   return sortedItems.slice(0, 4).map((item, index) => ({
     id: item.number || item.title || index,
-    icon: iconMap[item.icon || ""] || Wrench,
+    icon: getCmsIcon(item.icon, Wrench),
     title: item.title || "",
     subtitle: item.subtitle || "",
     desc: item.description || "",
@@ -315,13 +311,15 @@ function normalizeHomeServices(items?: ServicesCmsData["services"]): HomeService
 }
 
 function ServicesSection({ title, items }: { title?: string; items: HomeService[] }) {
+  const text = useSiteText();
+
   return (
     <section className="w-full bg-white py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-14">
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight">
-            {title || "Dịch Vụ Cốt Lõi"}
+            {title || text("home.services.title", "Dịch Vụ Cốt Lõi")}
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-[#002d17]/10 rounded-2xl overflow-hidden">
@@ -365,7 +363,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
             to="/dich-vu"
             className="flex-1 flex items-center justify-center gap-3 py-5 bg-[#f4aa1f] text-[#002d17] font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors border-x border-b border-[#002d17]/10 md:flex-none md:px-16"
           >
-            Xem Tất Cả Dịch Vụ <ArrowRight size={14} />
+            {text("home.services.view_all", "Xem Tất Cả Dịch Vụ")} <ArrowRight size={14} />
           </Link>
         </div>
       </div>
@@ -395,6 +393,7 @@ function ProjectsSection({
   label?: string;
   title?: string;
 }) {
+  const text = useSiteText();
   const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true, containScroll: "trimSnaps", align: "start" });
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -417,8 +416,8 @@ function ProjectsSection({
       <div className="bg-[#002d17]">
         <div className="max-w-7xl mx-auto px-6 py-10 flex items-center justify-between">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{label || "Portfolio"}</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">{title || "Dự Án Nổi Bật"}</h2>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{label || text("home.projects.label", "Portfolio")}</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">{title || text("home.projects.title", "Dự Án Nổi Bật")}</h2>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev}
@@ -430,7 +429,7 @@ function ProjectsSection({
               <ArrowRight size={18} />
             </button>
             <Link to="/du-an-tona" className="hidden md:flex items-center gap-2 ml-4 text-white/60 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
-              Xem tất cả <ArrowRight size={14} />
+              {text("home.projects.view_all", "Xem tất cả")} <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -489,6 +488,7 @@ function ProjectsSection({
 
 // NEWS SECTION
 function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
+  const text = useSiteText();
   const source = items.length ? items : fallbackNews;
   const featured = source[0];
   const rest = source.slice(1, 4);
@@ -502,11 +502,11 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              {title || "Tin Tức & Hoạt Động"}
+              {title || text("home.news.title", "Tin Tức & Hoạt Động")}
             </h2>
           </div>
           <Link to="/tin-tuc" className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
-            Xem Tất Cả <ArrowRight size={14} />
+            {text("home.news.view_all", "Xem Tất Cả")} <ArrowRight size={14} />
           </Link>
         </div>
 
@@ -531,7 +531,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
                 {featured.title}
               </h3>
               <p className="text-[#002d17]/60 text-sm leading-relaxed">{featured.excerpt}</p>
-              <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">Đọc tiếp <ArrowRight size={12} /></span>
+              <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{text("home.news.read_more", "Đọc tiếp")} <ArrowRight size={12} /></span>
             </div>
           </motion.article>
 
@@ -568,6 +568,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
 
 // PARTNERS AUTO-SCROLL
 function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
+  const text = useSiteText();
   const logos = content?.logos?.filter(Boolean) || [];
   const doubledLogos = [...logos, ...logos];
   const doubledFallback = [...fallbackPartnerLogos, ...fallbackPartnerLogos];
@@ -579,7 +580,7 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight">
-              {content?.title || "Partners & Customers"}
+              {content?.title || text("home.partners.title", "Partners & Customers")}
             </h3>
           </div>
           <p className="text-white/40 text-sm max-w-xs">

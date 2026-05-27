@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsPageByTemplate, type AboutCmsData } from "../lib/wordpress";
+import { getCmsIcon } from "../lib/cmsIcons";
 
 type StatItem = {
   value: string;
@@ -34,13 +35,6 @@ type CertificationItem = {
   code: string;
   title: string;
   org: string;
-};
-
-const cmsIconMap: Record<string, LucideIcon> = {
-  Shield,
-  Award,
-  TrendingUp,
-  CheckCircle2,
 };
 
 const fallbackStats: StatItem[] = [
@@ -113,7 +107,7 @@ export function About() {
     }
 
     return cmsPage.values.map((value) => ({
-      icon: cmsIconMap[value.icon || "Shield"] || Shield,
+      icon: getCmsIcon(value.icon, Shield),
       iconImage: value.iconImage || "",
       title: value.title || "",
       desc: value.desc || "",

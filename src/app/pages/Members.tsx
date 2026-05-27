@@ -18,19 +18,13 @@ import {
   type MemberPost,
   type MembersCmsData,
 } from "../lib/wordpress";
+import { getCmsIcon } from "../lib/cmsIcons";
 
 type CoreValue = {
   icon: LucideIcon;
   iconImage?: string;
   title: string;
   desc: string;
-};
-
-const cmsIconMap: Record<string, LucideIcon> = {
-  Shield,
-  Award,
-  TrendingUp,
-  Users,
 };
 
 const fallbackMembers: MemberPost[] = [
@@ -263,7 +257,7 @@ export function Members() {
     }
 
     return cmsPage.values.map((value) => ({
-      icon: cmsIconMap[value.icon || "Shield"] || Shield,
+      icon: getCmsIcon(value.icon, Shield),
       iconImage: value.iconImage || "",
       title: value.title || "",
       desc: value.desc || "",

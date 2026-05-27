@@ -23,6 +23,7 @@ require_once get_stylesheet_directory() . '/inc/post-types/applicants.php';
 require_once get_stylesheet_directory() . '/inc/post-types/members.php';
 require_once get_stylesheet_directory() . '/inc/post-types/projects.php';
 require_once get_stylesheet_directory() . '/inc/post-types/news.php';
+require_once get_stylesheet_directory() . '/inc/i18n/ui-strings.php';
 
 function tona_cms_acf_json_save_path( $path ) {
     return get_stylesheet_directory() . '/acf-json';
@@ -240,6 +241,7 @@ function tona_cms_is_page_editor_screen() {
 
 
 require_once get_stylesheet_directory() . '/inc/acf-fields/shared.php';
+require_once get_stylesheet_directory() . '/inc/acf-fields/icons.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/home.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/about.php';
 require_once get_stylesheet_directory() . '/inc/acf-fields/members.php';
@@ -1841,6 +1843,7 @@ function tona_cms_site_settings_payload() {
     $socials = function_exists( 'get_field' ) ? get_field( 'site_footer_socials', $option_id ) : array();
 
     return array(
+        'ui'     => tona_cms_ui_strings_payload( $current_language ),
         'header' => array(
             'logo'      => tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'site_header_logo', $option_id ) : '' ),
             'logoAlt'   => tona_cms_text_field( $option_id, 'site_header_logo_alt' ),

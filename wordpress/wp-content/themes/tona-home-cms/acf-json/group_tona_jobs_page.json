@@ -842,7 +842,7 @@
             "label": "Culture CTA Button URL",
             "name": "jobs_culture_link_url",
             "aria-label": "",
-            "type": "page_link",
+            "type": "link",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,

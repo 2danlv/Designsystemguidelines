@@ -3,6 +3,7 @@ import { Link } from "../components/LocalizedLink";
 import { ArrowRight, ChevronRight, GraduationCap, Handshake, Heart, Leaf, Sun, Users, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsPage, fetchCmsPageByTemplate, type CsrCmsData } from "../lib/wordpress";
+import { getCmsIcon } from "../lib/cmsIcons";
 
 type CsrProgram = {
   id: string;
@@ -22,15 +23,6 @@ type CsrImpact = {
   icon: LucideIcon;
   val: string;
   label: string;
-};
-
-const iconMap = {
-  GraduationCap,
-  Handshake,
-  Heart,
-  Leaf,
-  Sun,
-  Users,
 };
 
 const fallbackPrograms: CsrProgram[] = [
@@ -146,7 +138,7 @@ export function CSR() {
     }
 
     return cmsPage.impact.map((item) => ({
-      icon: iconMap[item.icon || "Handshake"] || Handshake,
+      icon: getCmsIcon(item.icon, Handshake),
       val: item.value || "",
       label: item.label || "",
     }));
@@ -159,7 +151,7 @@ export function CSR() {
 
     return cmsPage.programs.map((program, index) => ({
       id: program.id || `csr-program-${index}`,
-      icon: iconMap[program.icon || "Heart"] || Heart,
+      icon: getCmsIcon(program.icon, Heart),
       color: program.color || "#f4aa1f",
       bgColor: program.bgColor || "#fffdf5",
       tag: program.tag || "",

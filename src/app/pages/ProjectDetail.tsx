@@ -9,11 +9,13 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
 import { fetchCmsProject, fetchCmsProjects, type ProjectPost } from "../lib/wordpress";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 // ─── LIGHTBOX ────────────────────────────────────────────────────────────────
 function Lightbox({
   images, startAt, onClose,
 }: { images: string[]; startAt: number; onClose: () => void }) {
+  const text = useSiteText();
   const [idx, setIdx] = useState(startAt);
 
   const prev = () => setIdx((i) => (i - 1 + images.length) % images.length);
@@ -59,7 +61,7 @@ function Lightbox({
 
         <button onClick={onClose}
           className="absolute -top-12 right-0 text-white/70 hover:text-[#f4aa1f] transition-colors flex items-center gap-2 font-bold text-xs uppercase tracking-widest">
-          <X size={16} /> Đóng (ESC)
+          <X size={16} /> {text("project.lightbox.close", "Đóng (ESC)")}
         </button>
 
         <button onClick={prev}
@@ -87,6 +89,7 @@ function Lightbox({
 
 // ─── IMAGE GALLERY ────────────────────────────────────────────────────────────
 function ImageGallery({ images }: { images: string[] }) {
+  const text = useSiteText();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
@@ -126,7 +129,7 @@ function ImageGallery({ images }: { images: string[] }) {
                   />
                   <div className="absolute inset-0 bg-[#002d17]/0 group-hover:bg-[#002d17]/20 transition-colors flex items-center justify-center">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-[#f4aa1f] px-4 py-2 font-bold text-[#002d17] text-xs uppercase tracking-widest flex items-center gap-2">
-                      <Maximize2 size={14} /> Phóng to
+                      <Maximize2 size={14} /> {text("project.gallery.zoom", "Phóng to")}
                     </div>
                   </div>
                 </div>
@@ -176,6 +179,7 @@ function ImageGallery({ images }: { images: string[] }) {
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) {
+  const text = useSiteText();
   const { slug: routeSlug } = useParams();
   const slug = slugOverride || routeSlug;
   const fallbackProject = fallbackProjects.find((p) => p.slug === slug) as ProjectPost | undefined;
@@ -207,9 +211,9 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
   if (!project) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-3xl font-extrabold text-[#002d17] uppercase mb-4">Project Not Found</h2>
+        <h2 className="text-3xl font-extrabold text-[#002d17] uppercase mb-4">{text("project.not_found", "Project Not Found")}</h2>
         <Link to="/du-an-tona" className="text-[#f4aa1f] font-bold uppercase tracking-widest border-b-2 border-[#f4aa1f] pb-1">
-          Back to Projects
+          {text("project.back", "Back to Projects")}
         </Link>
       </div>
     );
@@ -226,7 +230,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
       <div className="bg-white border-b border-[#002d17]/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#002d17]/50">
           <Link to="/du-an-tona" className="hover:text-[#f4aa1f] flex items-center gap-1 transition-colors">
-            <ArrowLeft size={13} /> Tất Cả Dự Án
+            <ArrowLeft size={13} /> {text("project.back_all", "Tất Cả Dự Án")}
           </Link>
           <span>/</span>
           <span className="text-[#002d17]">{project.category}</span>
@@ -239,18 +243,18 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
           {(project as any).leedGold && (
             <div className="flex items-center gap-3 pb-4 border-b border-white/20">
               <div className="bg-[#b8860b] text-white px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full flex items-center gap-1.5">
-                ★ LEED Gold Certified
+                ★ {text("project.leed_badge", "LEED Gold Certified")}
               </div>
-              <span className="text-white/70 text-xs font-medium">Công trình đạt chứng nhận xanh LEED Gold</span>
+              <span className="text-white/70 text-xs font-medium">{text("project.leed_note", "Công trình đạt chứng nhận xanh LEED Gold")}</span>
             </div>
           )}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
           {[
-            { label: "Khách Hàng", value: project.client, icon: User },
-            { label: "Vị Trí", value: project.location, icon: MapPin },
-            { label: "Diện Tích", value: project.area, icon: Maximize2 },
-            { label: "Thời Gian", value: project.duration, icon: Calendar },
-            { label: "Trạng Thái", value: project.status, icon: CheckCircle2 },
+            { label: text("project.spec.client", "Khách Hàng"), value: project.client, icon: User },
+            { label: text("project.spec.location", "Vị Trí"), value: project.location, icon: MapPin },
+            { label: text("project.spec.area", "Diện Tích"), value: project.area, icon: Maximize2 },
+            { label: text("project.spec.duration", "Thời Gian"), value: project.duration, icon: Calendar },
+            { label: text("project.spec.status", "Trạng Thái"), value: project.status, icon: CheckCircle2 },
           ].map((spec) => {
             const Icon = spec.icon;
             return (
@@ -279,15 +283,12 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
             <p className="text-[#002d17]/70 text-base leading-relaxed font-medium mb-6">
               {project.description}
             </p>
-            <p className="text-[#002d17]/70 text-base leading-relaxed font-medium">
-              Tại dự án {project.title}, Tona Corp đã áp dụng các giải pháp thi công tối ưu nhất, tuân thủ nghiêm ngặt các quy định về an toàn lao động và bảo vệ môi trường. Chúng tôi tự hào khi bàn giao một công trình không chỉ đạt chất lượng cao mà còn mang lại giá trị bền vững lâu dài cho đối tác {project.client}.
-            </p>
           </div>
 
           {/* Highlights */}
           {project.highlights && (
             <div>
-              <h3 className="font-extrabold text-[#002d17] uppercase tracking-tight mb-4 text-lg">Điểm Nổi Bật</h3>
+              <h3 className="font-extrabold text-[#002d17] uppercase tracking-tight mb-4 text-lg">{text("project.highlights", "Điểm Nổi Bật")}</h3>
               <div className="grid grid-cols-2 gap-3">
                 {project.highlights.map((hl, i) => (
                   <div key={i} className="bg-[#002d17] text-white px-4 py-3 font-bold text-sm uppercase tracking-wider text-center rounded-xl">
@@ -303,7 +304,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
         <div className="flex flex-col gap-6">
           <div className="bg-[#f9f9f7] p-8 rounded-2xl">
             <h3 className="font-extrabold text-[#002d17] uppercase tracking-tight mb-6 text-lg border-b-2 border-[#f4aa1f] pb-3">
-              Hạng Mục Thi Công
+              {text("project.construction", "Hạng Mục Thi Công")}
             </h3>
             {project.renovationItems && (
               <ul className="flex flex-col gap-4">
@@ -318,13 +319,13 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
           </div>
 
           <div className="bg-[#002d17] p-8 rounded-2xl">
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">Có dự án tương tự?</p>
-            <h4 className="text-white font-extrabold text-xl uppercase mb-4">Hãy liên hệ với chúng tôi</h4>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">{text("project.cta_eyebrow", "Có dự án tương tự?")}</p>
+            <h4 className="text-white font-extrabold text-xl uppercase mb-4">{text("project.cta_title", "Hãy liên hệ với chúng tôi")}</h4>
             <Link
               to="/nghe-nghiep"
               className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-5 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors w-full justify-center"
             >
-              Liên Hệ Ngay <ArrowRight size={14} />
+              {text("project.cta_button", "Liên Hệ Ngay")} <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -334,7 +335,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
       <div className="bg-[#f9f9f7] border-t border-[#002d17]/10 py-16">
         <div className="max-w-7xl mx-auto px-6">
           <h3 className="font-extrabold text-[#002d17] uppercase tracking-tight text-2xl mb-10">
-            Dự Án Liên Quan
+            {text("project.related", "Dự Án Liên Quan")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {relatedProjects.map((rel) => (

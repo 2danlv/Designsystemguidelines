@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import type React from "react";
 import tonaLogo from "../../imports/TONA_-_LOGO.png";
 import { fetchCmsRoute, fetchCmsSettings, getCurrentLanguage, localizeUrl, type CmsRouteMatch, type SiteLink, type SiteMenuItem, type SiteSettings } from "../lib/wordpress";
+import { SiteSettingsProvider } from "../context/SiteSettingsContext";
 
 // NAV DATA
 
@@ -83,8 +84,25 @@ const fallbackFooter = {
   ],
 };
 
+function normalizeLinkValue(value: unknown) {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return normalizeLinkValue(value[0]);
+  }
+
+  if (value && typeof value === "object") {
+    const linkValue = value as { url?: unknown; href?: unknown; link?: unknown; permalink?: unknown };
+    return normalizeLinkValue(linkValue.url || linkValue.href || linkValue.link || linkValue.permalink);
+  }
+
+  return "";
+}
+
 function itemUrl(item: SiteLink | SiteMenuItem) {
-  return item.url || (item as SiteMenuItem & { to?: string }).to || "#";
+  return normalizeLinkValue(item.url || (item as SiteMenuItem & { to?: unknown }).to) || "#";
 }
 
 function SmartLink({
@@ -93,12 +111,12 @@ function SmartLink({
   children,
   ariaLabel,
 }: {
-  to?: string;
+  to?: unknown;
   className?: string;
   children: React.ReactNode;
   ariaLabel?: string;
 }) {
-  const rawUrl = to || "#";
+  const rawUrl = normalizeLinkValue(to) || "#";
   const cleanUrl = rawUrl.replace(/\/+$/, "");
   const url = cleanUrl === "/en" ? rawUrl : localizeUrl(rawUrl);
 
@@ -525,13 +543,15 @@ export function Layout() {
   }, [language]);
 
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-white text-[#002d17] antialiased">
-      <Header settings={settings?.header} />
-      <main className="flex-1 flex flex-col w-full pt-[72px]">
-        <Outlet />
-      </main>
-      <Footer settings={settings?.footer} />
-    </div>
+    <SiteSettingsProvider settings={settings}>
+      <div className="min-h-screen flex flex-col font-sans bg-white text-[#002d17] antialiased">
+        <Header settings={settings?.header} />
+        <main className="flex-1 flex flex-col w-full pt-[72px]">
+          <Outlet />
+        </main>
+        <Footer settings={settings?.footer} />
+      </div>
+    </SiteSettingsProvider>
   );
 }
 

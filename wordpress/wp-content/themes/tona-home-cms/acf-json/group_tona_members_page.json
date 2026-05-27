@@ -277,7 +277,7 @@
             "label": "Teaser Link URL",
             "name": "members_teaser_link_url",
             "aria-label": "",
-            "type": "page_link",
+            "type": "link",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,

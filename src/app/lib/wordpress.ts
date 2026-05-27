@@ -6,7 +6,7 @@ export type MembersCmsData = {
   };
   valuesTitle?: string;
   values?: Array<{
-    icon?: "Shield" | "Award" | "TrendingUp" | "Users";
+    icon?: string;
     iconImage?: string;
     title?: string;
     desc?: string;
@@ -61,7 +61,7 @@ export type AboutCmsData = {
   };
   valuesTitle?: string;
   values?: Array<{
-    icon?: "Shield" | "Award" | "TrendingUp" | "CheckCircle2";
+    icon?: string;
     iconImage?: string;
     title?: string;
     desc?: string;
@@ -121,7 +121,7 @@ export type CultureCmsData = {
   }>;
   activitiesTitle?: string;
   activities?: Array<{
-    icon?: "Heart" | "Users" | "Trophy" | "Zap";
+    icon?: string;
     iconImage?: string;
     title?: string;
     subtitle?: string;
@@ -180,7 +180,7 @@ export type CsrCmsData = {
     decorativeText?: string;
   };
   impact?: Array<{
-    icon?: "Handshake" | "Users" | "Leaf" | "Heart" | "Sun" | "GraduationCap";
+    icon?: string;
     value?: string;
     label?: string;
   }>;
@@ -190,7 +190,7 @@ export type CsrCmsData = {
   };
   programs?: Array<{
     id?: string;
-    icon?: "Handshake" | "Users" | "Leaf" | "Heart" | "Sun" | "GraduationCap";
+    icon?: string;
     color?: string;
     bgColor?: string;
     tag?: string;
@@ -236,7 +236,7 @@ export type ServicesCmsData = {
     description?: string;
   };
   services?: Array<{
-    icon?: "PenTool" | "Wrench" | "Building2" | "Zap";
+    icon?: string;
     iconImage?: string;
     number?: string;
     tag?: string;
@@ -346,7 +346,7 @@ export type JobsCmsData = {
   };
   perksEyebrow?: string;
   perks?: Array<{
-    icon?: "TrendingUp" | "Star" | "Users" | "CheckCircle2";
+    icon?: string;
     iconImage?: string;
     title?: string;
     desc?: string;
@@ -514,6 +514,7 @@ export type SiteMenuItem = SiteLink & {
 };
 
 export type SiteSettings = {
+  ui?: Record<string, string>;
   header?: {
     logo?: string;
     logoAlt?: string;
@@ -570,18 +571,48 @@ export function getCurrentLanguage(): SiteLanguage {
   return match ? "en" : "vi";
 }
 
-export function localizeUrl(url: string, targetLanguage: SiteLanguage = getCurrentLanguage()) {
-  if (
-    !url ||
-    url === "#" ||
-    /^https?:\/\//i.test(url) ||
-    url.startsWith("mailto:") ||
-    url.startsWith("tel:")
-  ) {
+function normalizeWordPressUrl(url: string) {
+  if (!/^https?:\/\//i.test(url)) {
     return url;
   }
 
-  const [pathWithQuery, hash = ""] = url.split("#");
+  try {
+    const sourceUrl = new URL(url);
+    const apiUrl = /^https?:\/\//i.test(wordpressApiBase) ? new URL(wordpressApiBase) : null;
+
+    if (!apiUrl || sourceUrl.origin !== apiUrl.origin) {
+      return url;
+    }
+
+    const wpBasePath = apiUrl.pathname.replace(/\/wp-json\/?$/, "").replace(/\/$/, "");
+    let path = sourceUrl.pathname || "/";
+
+    if (wpBasePath && path === wpBasePath) {
+      path = "/";
+    } else if (wpBasePath && path.startsWith(`${wpBasePath}/`)) {
+      path = path.slice(wpBasePath.length) || "/";
+    }
+
+    return `${path}${sourceUrl.search}${sourceUrl.hash}`;
+  } catch {
+    return url;
+  }
+}
+
+export function localizeUrl(url: string, targetLanguage: SiteLanguage = getCurrentLanguage()) {
+  const normalizedUrl = normalizeWordPressUrl(url);
+
+  if (
+    !normalizedUrl ||
+    normalizedUrl === "#" ||
+    /^https?:\/\//i.test(normalizedUrl) ||
+    normalizedUrl.startsWith("mailto:") ||
+    normalizedUrl.startsWith("tel:")
+  ) {
+    return normalizedUrl;
+  }
+
+  const [pathWithQuery, hash = ""] = normalizedUrl.split("#");
   const [pathOnly, query = ""] = pathWithQuery.split("?");
   const parts = pathOnly.replace(/^\/+|\/+$/g, "").split("/").filter(Boolean);
   const segments = parts.slice(parts[0] === "en" || parts[0] === "vi" ? 1 : 0);

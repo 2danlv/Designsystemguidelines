@@ -8,6 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { fetchCmsJobs, fetchCmsPage, type JobPost, type JobsCmsData } from "../lib/wordpress";
+import { getCmsIcon } from "../lib/cmsIcons";
 
 export type PerkItem = {
   icon: LucideIcon;
@@ -31,13 +32,6 @@ export type InternPosition = {
 };
 
 export const allDepartmentsLabel = "Tất Cả";
-
-const perkIconMap = {
-  TrendingUp,
-  Star,
-  Users,
-  CheckCircle2,
-};
 
 function isInternshipJob(job: JobPost) {
   const categoryText = [
@@ -142,7 +136,7 @@ export function useJobsPage({
     }
 
     return cmsPage.perks.map((perk) => ({
-      icon: perkIconMap[perk.icon || "TrendingUp"] || TrendingUp,
+      icon: getCmsIcon(perk.icon, TrendingUp),
       iconImage: perk.iconImage || "",
       title: perk.title || "",
       desc: perk.desc || "",

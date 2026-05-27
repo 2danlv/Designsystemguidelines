@@ -4,6 +4,7 @@ import { ChevronRight, Heart, Users, Trophy, Zap, ArrowRight, type LucideIcon } 
 import { motion } from "motion/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { fetchCmsPageByTemplate, type CultureCmsData } from "../lib/wordpress";
+import { getCmsIcon } from "../lib/cmsIcons";
 
 type StatItem = {
   value: string;
@@ -27,13 +28,6 @@ type CultureActivity = {
   icon: LucideIcon;
   iconImage?: string;
   color: string;
-};
-
-const iconMap: Record<string, LucideIcon> = {
-  Heart,
-  Users,
-  Trophy,
-  Zap,
 };
 
 const fallbackThemes: YearlyTheme[] = [
@@ -204,7 +198,7 @@ export function Culture() {
       subtitle: item.subtitle || "",
       desc: item.description || "",
       image: item.image || "",
-      icon: iconMap[item.icon || "Heart"] || Heart,
+      icon: getCmsIcon(item.icon, Heart),
       iconImage: item.iconImage || "",
       color: item.color || "#f4aa1f",
     }));
