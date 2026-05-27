@@ -224,12 +224,12 @@ export function Culture() {
   const academyDescription = cmsPage?.academy?.description || "TONA Academy la chuong trinh dao tao noi bo toan dien, tu ky nang ky thuat chuyen sau den nang luc lanh dao va quan ly du an.";
   const academyImage = cmsPage?.academy?.image || "https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80";
   const academyLinkLabel = cmsPage?.academy?.linkLabel || "Gia Nhap Tona";
-  const academyLinkUrl = cmsPage?.academy?.linkUrl || "/vi/nghe-nghiep";
+  const academyLinkUrl = cmsPage?.academy?.linkUrl || "/nghe-nghiep";
   const galleryTitle = cmsPage?.gallery?.title || "Khoanh Khac Tona";
   const ctaTitle = cmsPage?.cta?.title || "Muon tro thanh mot phan cua Tona?";
   const ctaDescription = cmsPage?.cta?.description || "Chung toi luon tim kiem nhung tai nang chia se cung gia tri va dam me.";
   const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Xem Co Hoi Nghe Nghiep";
-  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/vi/nghe-nghiep";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/nghe-nghiep";
   const regularActivities = activities
     .filter((activity) => !`${activity.title} ${activity.subtitle}`.toLowerCase().includes("csr"))
     .slice(0, 3);
@@ -440,7 +440,7 @@ export function Culture() {
                   ))}
                 </div>
                 <Link
-                  to="/vi/trach-nhiem-cong-dong"
+                  to="/trach-nhiem-cong-dong"
                   className="flex items-center justify-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3.5 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-xl"
                 >
                   Khám Phá CSR <ArrowRight size={14} />

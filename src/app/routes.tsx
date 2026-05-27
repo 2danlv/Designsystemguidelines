@@ -15,10 +15,6 @@ import { CSR } from "./pages/CSR";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/vi/" replace />
-  },
-  {
-    path: "/vi",
     Component: Layout,
     children: [
       { index: true, Component: Home },

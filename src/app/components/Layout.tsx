@@ -6,20 +6,20 @@ import tonaLogo from "../../imports/TONA_-_LOGO.png";
 // NAV DATA
 
 const navLinks = [
-  { label: "HOME", to: "/vi" },
+  { label: "HOME", to: "/" },
   {
     label: "VỀ TONA",
     children: [
-      { label: "Giới Thiệu", to: "/vi/gioi-thieu-tona" },
-      { label: "Đội Ngũ", to: "/vi/doi-ngu" },
-      { label: "Cuộc Sống Tona", to: "/vi/cuoc-song-tona" },
-      { label: "Trách Nhiệm Cộng Đồng", to: "/vi/trach-nhiem-cong-dong" },
+      { label: "Giới Thiệu", to: "/gioi-thieu-tona" },
+      { label: "Đội Ngũ", to: "/doi-ngu" },
+      { label: "Cuộc Sống Tona", to: "/cuoc-song-tona" },
+      { label: "Trách Nhiệm Cộng Đồng", to: "/trach-nhiem-cong-dong" },
     ],
   },
-  { label: "DỊCH VỤ", to: "/vi/dich-vu" },
-  { label: "DỰ ÁN", to: "/vi/du-an-tona" },
-  { label: "TIN TỨC", to: "/vi/tin-tuc" },
-  { label: "TUYỂN DỤNG", to: "/vi/nghe-nghiep" },
+  { label: "DỊCH VỤ", to: "/dich-vu" },
+  { label: "DỰ ÁN", to: "/du-an-tona" },
+  { label: "TIN TỨC", to: "/tin-tuc" },
+  { label: "TUYỂN DỤNG", to: "/nghe-nghiep" },
 ];
 
 // HEADER
@@ -211,7 +211,7 @@ function Footer() {
             </h3>
           </div>
           <Link
-            to="/vi/nghe-nghiep"
+            to="/nghe-nghiep"
             className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
           >
             Liên Hệ Ngay
@@ -249,11 +249,11 @@ function Footer() {
           <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">About Tona</h4>
           <ul className="flex flex-col gap-3">
             {[
-              { label: "Giới Thiệu", to: "/vi/gioi-thieu-tona" },
-              { label: "Đội Ngũ Lãnh Đạo", to: "/vi/doi-ngu" },
-              { label: "Cuộc Sống Tona", to: "/vi/cuoc-song-tona" },
-              { label: "Dịch Vụ", to: "/vi/dich-vu" },
-              { label: "Tuyển Dụng", to: "/vi/nghe-nghiep" },
+              { label: "Giới Thiệu", to: "/gioi-thieu-tona" },
+              { label: "Đội Ngũ Lãnh Đạo", to: "/doi-ngu" },
+              { label: "Cuộc Sống Tona", to: "/cuoc-song-tona" },
+              { label: "Dịch Vụ", to: "/dich-vu" },
+              { label: "Tuyển Dụng", to: "/nghe-nghiep" },
             ].map((item) => (
               <li key={item.to}>
                 <Link
@@ -280,7 +280,7 @@ function Footer() {
             ].map((cat) => (
               <li key={cat}>
                 <Link
-                  to="/vi/du-an-tona"
+                  to="/du-an-tona"
                   className="text-white/60 hover:text-[#f4aa1f] font-medium text-sm transition-colors"
                 >
                   {cat}

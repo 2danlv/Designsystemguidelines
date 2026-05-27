@@ -143,7 +143,7 @@ export function Projects() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: idx * 0.06 }}
             >
-              <Link to={`/vi/project/${project.slug}`} className="group flex flex-col">
+              <Link to={`/project/${project.slug}`} className="group flex flex-col">
                 <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#bcd8cb] rounded-xl">
                   <img
                     src={project.image}
@@ -221,7 +221,7 @@ export function Projects() {
             <p className="text-white/50 mt-2 text-sm">{cta?.description || "Hay de Tona Corporation dong hanh cung ban tu ban ve den hoan thien."}</p>
           </div>
           <Link
-            to={cta?.linkUrl || "/vi/nghe-nghiep"}
+            to={cta?.linkUrl || "/nghe-nghiep"}
             className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
           >
             {cta?.linkLabel || "Lien He Tu Van"}

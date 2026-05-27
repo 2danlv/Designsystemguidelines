@@ -123,13 +123,13 @@ function HeroSection() {
             </p>
             <div className="flex items-center gap-4 mt-4">
               <Link
-                to="/vi/du-an-tona"
+                to="/du-an-tona"
                 className="bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
               >
                 Xem Dự Án
               </Link>
               <Link
-                to="/vi/du-an-tona"
+                to="/du-an-tona"
                 className="text-white/70 hover:text-[#f4aa1f] font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-2"
               >
                 Portfolio <ArrowRight size={14} />
@@ -304,7 +304,7 @@ function ServicesSection() {
         </div>
         <div className="mt-0 flex">
           <Link
-            to="/vi/dich-vu"
+            to="/dich-vu"
             className="flex-1 flex items-center justify-center gap-3 py-5 bg-[#f4aa1f] text-[#002d17] font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors border-x border-b border-[#002d17]/10 md:flex-none md:px-16"
           >
             Xem Tất Cả Dịch Vụ <ArrowRight size={14} />
@@ -351,7 +351,7 @@ function ProjectsSection() {
               className="w-12 h-12 border-2 border-white/30 hover:border-[#f4aa1f] text-white hover:text-[#f4aa1f] flex items-center justify-center transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
               <ArrowRight size={18} />
             </button>
-            <Link to="/vi/du-an-tona" className="hidden md:flex items-center gap-2 ml-4 text-white/60 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
+            <Link to="/du-an-tona" className="hidden md:flex items-center gap-2 ml-4 text-white/60 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
               Xem tất cả <ArrowRight size={14} />
             </Link>
           </div>
@@ -363,7 +363,7 @@ function ProjectsSection() {
           <div className="flex gap-6 cursor-grab active:cursor-grabbing">
             {projects.map((project) => (
               <div key={project.id} className="flex-[0_0_88%] sm:flex-[0_0_70%] md:flex-[0_0_50%] lg:flex-[0_0_38%] min-w-0">
-                <Link to={`/vi/project/${project.slug}`} className="group flex flex-col select-none">
+                <Link to={`/project/${project.slug}`} className="group flex flex-col select-none">
                   <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#bcd8cb] rounded-xl">
                     <img src={project.image} alt={project.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" draggable={false} />
@@ -424,7 +424,7 @@ function NewsSection() {
               Tin Tức &amp; Hoạt Động
             </h2>
           </div>
-          <Link to="/vi/tin-tuc" className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
+          <Link to="/tin-tuc" className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
             Xem Tất Cả <ArrowRight size={14} />
           </Link>
         </div>

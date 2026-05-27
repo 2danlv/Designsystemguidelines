@@ -277,7 +277,7 @@ export function Members() {
   const teaserTitle = cmsPage?.teaser?.title || "800+ Chuyên Gia Tại Tona";
   const teaserDescription = cmsPage?.teaser?.description || "Phía sau Ban lãnh đạo là đội ngũ kỹ sư, chuyên gia và công nhân lành nghề, những người trực tiếp kiến tạo nên mỗi công trình của Tona.";
   const teaserLinkLabel = cmsPage?.teaser?.linkLabel || "Khám Phá Cuộc Sống Tona";
-  const teaserLinkUrl = cmsPage?.teaser?.linkUrl || "/vi/cuoc-song-tona";
+  const teaserLinkUrl = cmsPage?.teaser?.linkUrl || "/cuoc-song-tona";
 
   return (
     <div className="w-full bg-white min-h-screen">

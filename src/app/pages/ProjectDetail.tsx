@@ -206,7 +206,7 @@ export function ProjectDetail() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <h2 className="text-3xl font-extrabold text-[#002d17] uppercase mb-4">Project Not Found</h2>
-        <Link to="/vi/du-an-tona" className="text-[#f4aa1f] font-bold uppercase tracking-widest border-b-2 border-[#f4aa1f] pb-1">
+        <Link to="/du-an-tona" className="text-[#f4aa1f] font-bold uppercase tracking-widest border-b-2 border-[#f4aa1f] pb-1">
           Back to Projects
         </Link>
       </div>
@@ -223,7 +223,7 @@ export function ProjectDetail() {
       {/* Breadcrumb + back */}
       <div className="bg-white border-b border-[#002d17]/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#002d17]/50">
-          <Link to="/vi/du-an-tona" className="hover:text-[#f4aa1f] flex items-center gap-1 transition-colors">
+          <Link to="/du-an-tona" className="hover:text-[#f4aa1f] flex items-center gap-1 transition-colors">
             <ArrowLeft size={13} /> Tất Cả Dự Án
           </Link>
           <span>/</span>
@@ -319,7 +319,7 @@ export function ProjectDetail() {
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">Có dự án tương tự?</p>
             <h4 className="text-white font-extrabold text-xl uppercase mb-4">Hãy liên hệ với chúng tôi</h4>
             <Link
-              to="/vi/nghe-nghiep"
+              to="/nghe-nghiep"
               className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-5 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors w-full justify-center"
             >
               Liên Hệ Ngay <ArrowRight size={14} />
@@ -336,7 +336,7 @@ export function ProjectDetail() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {relatedProjects.map((rel) => (
-              <Link key={rel.id} to={`/vi/project/${rel.slug}`} className="group flex flex-col">
+              <Link key={rel.id} to={`/project/${rel.slug}`} className="group flex flex-col">
                 <div className="w-full aspect-[4/3] overflow-hidden bg-[#bcd8cb] rounded-xl">
                   <img src={rel.image} alt={rel.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />

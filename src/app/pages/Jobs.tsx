@@ -745,7 +745,7 @@ export function Jobs() {
             <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || "Khám phá những gì làm nên sự khác biệt khi làm việc tại Tona."}</p>
           </div>
           <Link
-            to={cultureTeaser?.linkUrl || "/vi/cuoc-song-tona"}
+            to={cultureTeaser?.linkUrl || "/cuoc-song-tona"}
             className="shrink-0 flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
           >
             {cultureTeaser?.linkLabel || "Cuộc Sống Tona"} <ArrowRight size={14} />

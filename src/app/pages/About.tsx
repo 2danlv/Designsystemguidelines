@@ -157,9 +157,9 @@ export function About() {
   const ctaTitle = cmsPage?.cta?.title || "Cung Tona kien tao cong trinh tiep theo";
   const ctaDescription = cmsPage?.cta?.description || "Tu nha may cong nghe cao den resort 5 sao, chung toi san sang dong hanh.";
   const primaryLabel = cmsPage?.cta?.primaryLabel || "Xem Du An";
-  const primaryUrl = cmsPage?.cta?.primaryUrl || "/vi/du-an-tona";
+  const primaryUrl = cmsPage?.cta?.primaryUrl || "/du-an-tona";
   const secondaryLabel = cmsPage?.cta?.secondaryLabel || "Doi Ngu Lanh Dao";
-  const secondaryUrl = cmsPage?.cta?.secondaryUrl || "/vi/doi-ngu";
+  const secondaryUrl = cmsPage?.cta?.secondaryUrl || "/doi-ngu";
   const colors = cmsPage?.colors;
 
   return (
