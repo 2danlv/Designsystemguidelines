@@ -248,18 +248,18 @@ export function Culture() {
   const socialImage = social?.image || "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=1200&q=80";
   const socialBadges = social?.badges?.length ? social.badges : fallbackSocialBadges;
   const socialLinkLabel = social?.linkLabel || "Khám Phá CSR";
-  const socialLinkUrl = social?.linkUrl || "/vi/trach-nhiem-cong-dong";
+  const socialLinkUrl = social?.linkUrl || "/trach-nhiem-cong-dong";
   const academyEyebrow = cmsPage?.academy?.eyebrow || "Phat Trien Con Nguoi";
   const academyTitle = cmsPage?.academy?.title || "TONA Academy -\nHoc De Vuon Xa";
   const academyDescription = cmsPage?.academy?.description || "TONA Academy la chuong trinh dao tao noi bo toan dien, tu ky nang ky thuat chuyen sau den nang luc lanh dao va quan ly du an.";
   const academyImage = cmsPage?.academy?.image || "https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80";
   const academyLinkLabel = cmsPage?.academy?.linkLabel || "Gia Nhap Tona";
-  const academyLinkUrl = cmsPage?.academy?.linkUrl || "/vi/nghe-nghiep";
+  const academyLinkUrl = cmsPage?.academy?.linkUrl || "/nghe-nghiep";
   const galleryTitle = cmsPage?.gallery?.title || "Khoanh Khac Tona";
   const ctaTitle = cmsPage?.cta?.title || "Muon tro thanh mot phan cua Tona?";
   const ctaDescription = cmsPage?.cta?.description || "Chung toi luon tim kiem nhung tai nang chia se cung gia tri va dam me.";
   const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Xem Co Hoi Nghe Nghiep";
-  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/vi/nghe-nghiep";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/nghe-nghiep";
   const regularActivities = activities
     .filter((activity) => !`${activity.title} ${activity.subtitle}`.toLowerCase().includes("csr"))
     .slice(0, 3);
@@ -270,7 +270,7 @@ export function Culture() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>

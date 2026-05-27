@@ -185,9 +185,9 @@ export function CSR() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(cmsPage?.colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8 flex-wrap">
-            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
-            <Link to="/vi/cuoc-song-tona" className="hover:text-[#f4aa1f] transition-colors">Cuộc Sống Tona</Link>
+            <Link to="/cuoc-song-tona" className="hover:text-[#f4aa1f] transition-colors">Cuộc Sống Tona</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{cmsPage?.hero?.breadcrumbLabel || "Trách Nhiệm Cộng Đồng"}</span>
           </div>
@@ -342,13 +342,13 @@ export function CSR() {
           </div>
           <div className="flex gap-4">
             <Link
-              to={cmsPage?.cta?.secondaryUrl || "/vi/cuoc-song-tona"}
+              to={cmsPage?.cta?.secondaryUrl || "/cuoc-song-tona"}
               className="flex items-center gap-2 border-2 border-white/20 text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:border-[#f4aa1f] hover:text-[#f4aa1f] transition-colors rounded-lg"
             >
               {cmsPage?.cta?.secondaryLabel || "Cuộc Sống Tona"}
             </Link>
             <Link
-              to={cmsPage?.cta?.primaryUrl || "/vi/nghe-nghiep"}
+              to={cmsPage?.cta?.primaryUrl || "/nghe-nghiep"}
               className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
             >
               {cmsPage?.cta?.primaryLabel || "Gia Nhập Tona"} <ArrowRight size={14} />

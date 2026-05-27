@@ -667,7 +667,7 @@ export function Jobs() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -863,7 +863,7 @@ export function Jobs() {
             <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || "Kham pha nhung gi lam nen su khac biet khi lam viec tai Tona."}</p>
           </div>
           <Link
-            to={cultureTeaser?.linkUrl || "/vi/cuoc-song-tona"}
+            to={cultureTeaser?.linkUrl || "/cuoc-song-tona"}
             className="shrink-0 flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
           >
             {cultureTeaser?.linkLabel || "Cuoc Song Tona"} <ArrowRight size={14} />

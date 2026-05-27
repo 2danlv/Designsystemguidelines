@@ -76,7 +76,7 @@ const fallbackServices: ServiceItem[] = [
     img: "https://images.unsplash.com/photo-1748002388689-c62b45d5c28b?w=1080&q=80",
     featured: true,
     linkLabel: "Xem Dự Án",
-    linkUrl: "/vi/du-an-tona",
+    linkUrl: "/du-an-tona",
   },
   {
     id: 2,
@@ -95,7 +95,7 @@ const fallbackServices: ServiceItem[] = [
     img: "https://images.unsplash.com/photo-1645434897689-af222b85993e?w=1080&q=80",
     featured: false,
     linkLabel: "Xem Dự Án",
-    linkUrl: "/vi/du-an-tona",
+    linkUrl: "/du-an-tona",
   },
   {
     id: 3,
@@ -114,7 +114,7 @@ const fallbackServices: ServiceItem[] = [
     img: "https://images.unsplash.com/photo-1774979159518-7706ca7bb2e6?w=1080&q=80",
     featured: false,
     linkLabel: "Xem Dự Án",
-    linkUrl: "/vi/du-an-tona",
+    linkUrl: "/du-an-tona",
   },
   {
     id: 4,
@@ -133,7 +133,7 @@ const fallbackServices: ServiceItem[] = [
     img: "https://images.unsplash.com/photo-1759830337357-29c472b6746c?w=1080&q=80",
     featured: false,
     linkLabel: "Xem Dự Án",
-    linkUrl: "/vi/du-an-tona",
+    linkUrl: "/du-an-tona",
   },
 ];
 
@@ -328,7 +328,7 @@ export function Services() {
       img: service.image || fallbackServices[index]?.img || fallbackServices[0]?.img || "",
       featured: Boolean(service.featured),
       linkLabel: service.linkLabel || "Xem Dự Án",
-      linkUrl: service.linkUrl || "/vi/du-an-tona",
+      linkUrl: service.linkUrl || "/du-an-tona",
     }));
   }, [cmsPage]);
 
@@ -375,7 +375,7 @@ export function Services() {
   const ctaTitle = cmsPage?.cta?.title || "Sẵn Sàng Bắt Đầu Dự Án?";
   const ctaDescription = cmsPage?.cta?.description || "Kết nối với Tona để nhận tư vấn giải pháp phù hợp cho công trình của bạn.";
   const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Liên Hệ Ngay";
-  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/vi/lien-he";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/lien-he";
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -383,7 +383,7 @@ export function Services() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/vi/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -619,7 +619,7 @@ export function Services() {
                 ))}
               </div>
               <Link
-                to={`/vi/project/${featuredProject.slug}`}
+                to={`/project/${featuredProject.slug}`}
                 className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
               >
                 Xem Chi Tiết <ArrowRight size={14} />
@@ -629,7 +629,7 @@ export function Services() {
 
           <div className="mt-6 flex justify-end">
             <Link
-              to="/vi/du-an-tona"
+              to="/du-an-tona"
               className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors"
             >
               Xem Tất Cả Dự Án <ArrowRight size={12} />
