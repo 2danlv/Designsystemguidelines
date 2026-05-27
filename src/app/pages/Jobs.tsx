@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { jobs as fallbackJobs } from "../data";
 import { Link } from "../components/LocalizedLink";
 import {
@@ -7,7 +7,7 @@ import {
   GraduationCap, BookOpen, Lightbulb, FileText, ExternalLink
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import type { JobPost } from "../lib/wordpress";
+import { submitCmsApplication, type JobPost, type JobsCmsData } from "../lib/wordpress";
 import { useJobsPage, type InternPosition, type PerkItem } from "../cms/useJobsPage";
 
 function renderLines(text: string) {
@@ -23,91 +23,130 @@ function backgroundStyle(color?: string) {
   return color ? { backgroundColor: color } : undefined;
 }
 
+function isBrokenCmsText(value?: string) {
+  return !!value && (/[�ï¿]/.test(value) || /[A-Za-zÀ-ỹ]\?[A-Za-zÀ-ỹ]/.test(value) || /\?\?/.test(value));
+}
+
+function cmsText(value: string | undefined, fallback: string) {
+  return value && !isBrokenCmsText(value) ? value : fallback;
+}
+
 const fallbackPerks: PerkItem[] = [
-  { icon: TrendingUp, title: "Lộ trình thăng tiến rõ ràng", desc: "Xét thăng tiến 6 tháng/lần theo năng lực thực tế, không phụ thuộc thâm niên." },
-  { icon: Star, title: "Lương & thưởng hấp dẫn", desc: "Gói lương cạnh tranh thị trường, thưởng hoàn thành dự án và thưởng cuối năm." },
-  { icon: Users, title: "Môi trường quốc tế", desc: "Làm việc cùng các chuyên gia và đối tác từ Singapore, Nhật Bản, Đức, Mỹ." },
-  { icon: CheckCircle2, title: "Đào tạo chuyên sâu", desc: "TONA Academy: 50+ chương trình đào tạo kỹ thuật, quản lý và lãnh đạo." },
+  { icon: TrendingUp, title: "Lo trinh thang tien ro rang", desc: "Xet thang tien 6 thang/lan theo nang luc thuc te, khong phu thuoc tham nien." },
+  { icon: Star, title: "Luong & thuong hap dan", desc: "Goi luong canh tranh thi truong, thuong hoan thanh du an va thuong cuoi nam." },
+  { icon: Users, title: "Moi truong quoc te", desc: "Lam viec cung cac chuyen gia va doi tac tu Singapore, Nhat Ban, Duc, My." },
+  { icon: CheckCircle2, title: "Dao tao chuyen sau", desc: "TONA Academy: 50+ chuong trinh dao tao ky thuat, quan ly va lanh dao." },
 ];
 
 // INTERN DATA
 const fallbackInternPositions: InternPosition[] = [
   {
     id: "intern-civil",
-    title: "Thực Tập Sinh Kỹ Thuật Xây Dựng",
+    title: "Thuc Tap Sinh Ky Thuat Xay Dung",
     subtitle: "Civil Engineering Intern",
-    department: "Kỹ Thuật Công Trường",
-    duration: "3 - 6 tháng",
-    location: "TP.HCM / Bình Dương",
+    department: "Ky Thuat Cong Truong",
+    duration: "3 - 6 thang",
+    location: "TP.HCM / Binh Duong",
     slots: 5,
     icon: BookOpen,
     requirements: [
-      "Sinh viên năm 3 - 4 chuyên ngành Xây dựng, Kỹ thuật Công trình hoặc tương đương",
-      "GPA >= 2.5 (thang 4.0) hoặc học lực Khá trở lên",
-      "Sẵn sàng đến công trường (Bình Dương / Đồng Nai)",
-      "Có kiến thức cơ bản về AutoCAD là lợi thế",
+      "Sinh vien nam 3 - 4 chuyen nganh Xay dung, Ky thuat Cong trinh hoac tuong duong",
+      "GPA >= 2.5 (thang 4.0) hoac hoc luc Kha tro len",
+      "San sang den cong truong (Binh Duong / Dong Nai)",
+      "Co kien thuc co ban ve AutoCAD la loi the",
     ],
     benefits: [
-      "Phụ cấp thực tập hằng tháng",
-      "Được hướng dẫn bởi kỹ sư senior",
-      "Cơ hội nhận offer full-time sau tốt nghiệp",
-      "Chứng nhận thực tập từ Tona Corporation",
-      "Tham quan dự án thực tế hằng tuần",
+      "Phu cap thuc tap hang thang",
+      "Duoc huong dan boi ky su senior",
+      "Co hoi nhan offer full-time sau tot nghiep",
+      "Chung nhan thuc tap tu Tona Corporation",
+      "Tham quan du an thuc te hang tuan",
     ],
-    desc: "Tham gia trực tiếp vào các dự án thi công thực tế, từ đọc bản vẽ, theo dõi tiến độ đến lập báo cáo nghiệm thu dưới sự hướng dẫn của kỹ sư giàu kinh nghiệm.",
+    desc: "Tham gia truc tiep vao cac du an thi cong thuc te, tu doc ban ve, theo doi tien do den lap bao cao nghiem thu duoi su huong dan cua ky su giau kinh nghiem.",
   },
   {
     id: "intern-mep",
-    title: "Thực Tập Sinh Cơ Điện MEP",
+    title: "Thuc Tap Sinh Co Dien MEP",
     subtitle: "MEP Engineering Intern",
-    department: "Kỹ Thuật MEP",
-    duration: "3 - 6 tháng",
-    location: "TP.HCM / Bình Dương",
+    department: "Ky Thuat MEP",
+    duration: "3 - 6 thang",
+    location: "TP.HCM / Binh Duong",
     slots: 4,
     icon: Lightbulb,
     requirements: [
-      "Sinh viên năm 3 - 4 ngành Điện, Điện lạnh, Cơ khí, Kỹ thuật Môi trường",
-      "Quan tâm đến hệ thống HVAC, điện, PCCC trong công trình công nghiệp",
-      "Có khả năng đọc bản vẽ sơ đồ điện hoặc cơ bản về AutoCAD",
-      "Tiếng Anh đọc hiểu tài liệu kỹ thuật là lợi thế",
+      "Sinh vien nam 3 - 4 nganh Dien, Dien lanh, Co khi, Ky thuat Moi truong",
+      "Quan tam den he thong HVAC, dien, PCCC trong cong trinh cong nghiep",
+      "Co kha nang doc ban ve so do dien hoac co ban ve AutoCAD",
+      "Tieng Anh doc hieu tai lieu ky thuat la loi the",
     ],
     benefits: [
-      "Phụ cấp thực tập hằng tháng",
-      "Tiếp cận hệ thống MEP dự án thực tế",
-      "Đào tạo về tiêu chuẩn ISO và quy trình QA/QC",
-      "Chứng nhận thực tập từ Tona Corporation",
-      "Mentor 1-on-1 với kỹ sư MEP senior",
+      "Phu cap thuc tap hang thang",
+      "Tiep can he thong MEP du an thuc te",
+      "Dao tao ve tieu chuan ISO va quy trinh QA/QC",
+      "Chung nhan thuc tap tu Tona Corporation",
+      "Mentor 1-on-1 voi ky su MEP senior",
     ],
-    desc: "Hỗ trợ đội kỹ thuật MEP trong thiết kế, thi công và kiểm tra hệ thống điện, HVAC và PCCC tại các dự án nhà máy công nghệ cao và công trình thương mại.",
+    desc: "Ho tro doi ky thuat MEP trong thiet ke, thi cong va kiem tra he thong dien, HVAC va PCCC tai cac du an nha may cong nghe cao va cong trinh thuong mai.",
   },
   {
     id: "intern-pm",
-    title: "Thực Tập Sinh Quản Lý Dự Án",
+    title: "Thuc Tap Sinh Quan Ly Du An",
     subtitle: "Project Management Intern",
-    department: "Quản Lý Dự Án",
-    duration: "3 - 4 tháng",
-    location: "TP.HCM / Bình Dương",
+    department: "Quan Ly Du An",
+    duration: "3 - 4 thang",
+    location: "TP.HCM / Binh Duong",
     slots: 3,
     icon: GraduationCap,
     requirements: [
-      "Sinh viên năm 3 - 4 ngành Quản lý Xây dựng, Kinh tế Xây dựng, Kỹ thuật Công trình",
-      "Kỹ năng phân tích, tổng hợp thông tin tốt",
-      "Thành thạo Microsoft Office (Word, Excel, PowerPoint)",
-      "Giao tiếp tiếng Anh cơ bản là lợi thế",
+      "Sinh vien nam 3 - 4 nganh Quan ly Xay dung, Kinh te Xay dung, Ky thuat Cong trinh",
+      "Ky nang phan tich, tong hop thong tin tot",
+      "Thanh thao Microsoft Office (Word, Excel, PowerPoint)",
+      "Giao tiep tieng Anh co ban la loi the",
     ],
     benefits: [
-      "Phụ cấp thực tập hằng tháng",
-      "Tham gia họp dự án thực tế cùng PM",
-      "Cơ hội nhận offer junior PM sau tốt nghiệp",
-      "Chứng nhận và thư giới thiệu từ Tona",
-      "Học công cụ MS Project & quản lý tiến độ",
+      "Phu cap thuc tap hang thang",
+      "Tham gia hop du an thuc te cung PM",
+      "Co hoi nhan offer junior PM sau tot nghiep",
+      "Chung nhan va thu gioi thieu tu Tona",
+      "Hoc cong cu MS Project & quan ly tien do",
     ],
-    desc: "Hỗ trợ đội quản lý dự án theo dõi tiến độ, lập báo cáo, điều phối thông tin giữa các bên và học hỏi quy trình quản lý EPC tại các công trình thực tế.",
+    desc: "Ho tro doi quan ly du an theo doi tien do, lap bao cao, dieu phoi thong tin giua cac ben va hoc hoi quy trinh quan ly EPC tai cac cong trinh thuc te.",
   },
 ];
 
 // APPLY MODAL
-function ApplyModal({ job, onClose }: { job: JobPost; onClose: () => void }) {
+function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => void; content?: JobsCmsData["applicationModal"] }) {
+  const initialFormData = { name: "", email: "", phone: "", experience: "", message: "" };
+  const [formData, setFormData] = useState(initialFormData);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const fields = [
+    { name: "name" as const, label: cmsText(content?.nameLabel, "Ho va Ten *"), type: "text", placeholder: cmsText(content?.namePlaceholder, "Nguyen Van A"), required: true },
+    { name: "email" as const, label: cmsText(content?.emailLabel, "Email *"), type: "email", placeholder: cmsText(content?.emailPlaceholder, "email@example.com"), required: true },
+    { name: "phone" as const, label: cmsText(content?.phoneLabel, "So Dien Thoai *"), type: "tel", placeholder: cmsText(content?.phonePlaceholder, "+84 9xx xxx xxx"), required: true },
+    { name: "experience" as const, label: cmsText(content?.experienceLabel, "Nam Kinh Nghiem"), type: "text", placeholder: cmsText(content?.experiencePlaceholder, "VD: 3 nam"), required: false },
+  ];
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    setStatus("submitting");
+
+    const ok = await submitCmsApplication({
+      type: "Job",
+      position: job.title,
+      ...formData,
+      cvFile,
+    });
+
+    setStatus(ok ? "success" : "error");
+    if (ok) {
+      setFormData(initialFormData);
+      setCvFile(null);
+      form.reset();
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -123,7 +162,6 @@ function ApplyModal({ job, onClose }: { job: JobPost; onClose: () => void }) {
         className="bg-white w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal header */}
         <div className="bg-[#002d17] px-6 py-5 flex items-start justify-between gap-4 rounded-t-2xl">
           <div>
             <p className="text-[#f4aa1f] text-xs font-bold uppercase tracking-widest mb-1">{job.department}</p>
@@ -134,54 +172,99 @@ function ApplyModal({ job, onClose }: { job: JobPost; onClose: () => void }) {
           </button>
         </div>
 
-        <div className="p-6 flex flex-col gap-5">
+        <form className="p-6 flex flex-col gap-5" onSubmit={handleSubmit}>
           <p className="text-[#002d17]/60 text-sm font-medium leading-relaxed">
-            Điền thông tin của bạn để ứng tuyển vị trí <strong className="text-[#002d17]">{job.title}</strong>. Chúng tôi sẽ liên hệ trong vòng 3 ngày làm việc.
+            {content?.description && !isBrokenCmsText(content.description)
+              ? content.description
+              : <>Dien thong tin de ung tuyen vi tri <strong className="text-[#002d17]">{job.title}</strong>. Chung toi se lien he trong vong 3 ngay lam viec.</>}
           </p>
 
           <div className="flex flex-col gap-4">
-            {[
-              { label: "Họ và Tên *", type: "text", placeholder: "Nguyễn Văn A" },
-              { label: "Email *", type: "email", placeholder: "email@example.com" },
-              { label: "Số Điện Thoại *", type: "tel", placeholder: "+84 9xx xxx xxx" },
-              { label: "Năm Kinh Nghiệm", type: "text", placeholder: "VD: 3 năm" },
-            ].map((field) => (
+            {fields.map((field) => (
               <div key={field.label} className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{field.label}</label>
                 <input
                   type={field.type}
                   placeholder={field.placeholder}
+                  required={field.required}
+                  value={formData[field.name]}
+                  onChange={(event) => setFormData((current) => ({ ...current, [field.name]: event.target.value }))}
                   className="border border-[#002d17]/20 px-4 py-2.5 text-[#002d17] text-sm font-medium focus:outline-none focus:border-[#f4aa1f] placeholder:text-[#002d17]/30 rounded-lg"
                 />
               </div>
             ))}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">Thư Tự Giới Thiệu</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.coverLetterLabel, "Thu Tu Gioi Thieu")}</label>
               <textarea
                 rows={3}
-                placeholder="Giới thiệu ngắn về bản thân và lý do muốn gia nhập Tona..."
+                placeholder={cmsText(content?.coverLetterPlaceholder, "Gioi thieu ngan ve ban than va ly do muon gia nhap Tona...")}
+                value={formData.message}
+                onChange={(event) => setFormData((current) => ({ ...current, message: event.target.value }))}
                 className="border border-[#002d17]/20 px-4 py-2.5 text-[#002d17] text-sm font-medium focus:outline-none focus:border-[#f4aa1f] placeholder:text-[#002d17]/30 resize-none rounded-lg"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">CV (PDF/DOCX)</label>
-              <div className="border-2 border-dashed border-[#002d17]/20 hover:border-[#f4aa1f] transition-colors p-6 flex items-center justify-center cursor-pointer rounded-xl">
-                <span className="text-[#002d17]/40 text-sm font-medium">Kéo thả file hoặc click để chọn</span>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.cvLabel, "CV (PDF/DOCX)")}</label>
+              <div className="border-2 border-dashed border-[#002d17]/20 hover:border-[#f4aa1f] transition-colors p-4 flex flex-col gap-2 rounded-xl">
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  className="block w-full text-sm text-[#002d17]/70 file:mr-4 file:rounded-lg file:border-0 file:bg-[#f4aa1f] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-widest file:text-[#002d17] hover:file:bg-[#002d17] hover:file:text-[#f4aa1f]"
+                  onChange={(event) => setCvFile(event.target.files?.[0] || null)}
+                />
+                <span className="text-[#002d17]/40 text-sm font-medium">
+                  {cvFile?.name || cmsText(content?.cvHelpText, "Keo tha file hoac click de chon")}
+                </span>
               </div>
             </div>
           </div>
 
-          <button className="w-full bg-[#f4aa1f] text-[#002d17] py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors rounded-xl">
-            Nộp Hồ Sơ Ứng Tuyển
+          {status === "success" && <p className="text-[#1a6645] text-sm font-bold">Da gui ho so thanh cong.</p>}
+          {status === "error" && <p className="text-red-600 text-sm font-bold">Khong gui duoc ho so. Vui long thu lai.</p>}
+          <button disabled={status === "submitting"} className="w-full bg-[#f4aa1f] text-[#002d17] py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors rounded-xl disabled:opacity-60">
+            {status === "submitting" ? "Dang gui..." : cmsText(content?.submitLabel, "Nop Ho So Ung Tuyen")}
           </button>
-        </div>
+        </form>
       </motion.div>
     </motion.div>
   );
 }
 
 // INTERN APPLY MODAL
-function InternApplyModal({ pos, onClose }: { pos: InternPosition; onClose: () => void }) {
+function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onClose: () => void; content?: JobsCmsData["applicationModal"] }) {
+  const initialFormData = { name: "", email: "", phone: "", university: "", major: "", schoolYear: "", startDate: "" };
+  const [formData, setFormData] = useState(initialFormData);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const fields = [
+    { name: "name" as const, label: cmsText(content?.nameLabel, "Ho va Ten *"), type: "text", placeholder: cmsText(content?.namePlaceholder, "Nguyen Van A"), required: true },
+    { name: "email" as const, label: cmsText(content?.emailLabel, "Email *"), type: "email", placeholder: cmsText(content?.emailPlaceholder, "email@example.com"), required: true },
+    { name: "phone" as const, label: cmsText(content?.phoneLabel, "So Dien Thoai *"), type: "tel", placeholder: cmsText(content?.phonePlaceholder, "+84 9xx xxx xxx"), required: true },
+    { name: "university" as const, label: cmsText(content?.universityLabel, "Truong Dai Hoc *"), type: "text", placeholder: cmsText(content?.universityPlaceholder, "DH Bach Khoa TP.HCM"), required: true },
+    { name: "major" as const, label: cmsText(content?.majorLabel, "Chuyen Nganh"), type: "text", placeholder: cmsText(content?.majorPlaceholder, "Ky thuat Xay dung"), required: false },
+    { name: "schoolYear" as const, label: cmsText(content?.schoolYearLabel, "Nam Hoc"), type: "text", placeholder: cmsText(content?.schoolYearPlaceholder, "Nam 3"), required: false },
+  ];
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    setStatus("submitting");
+
+    const ok = await submitCmsApplication({
+      type: "Internship",
+      position: pos.title,
+      ...formData,
+      cvFile,
+    });
+
+    setStatus(ok ? "success" : "error");
+    if (ok) {
+      setFormData(initialFormData);
+      setCvFile(null);
+      form.reset();
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -199,61 +282,69 @@ function InternApplyModal({ pos, onClose }: { pos: InternPosition; onClose: () =
       >
         <div className="bg-[#46aa85] px-6 py-5 flex items-start justify-between gap-4 rounded-t-2xl">
           <div>
-            <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{pos.department} · Thực Tập Sinh</p>
+            <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{pos.department} - {cmsText(content?.internTypeLabel, "Thuc Tap Sinh")}</p>
             <h3 className="text-white font-extrabold text-lg uppercase tracking-tight">{pos.title}</h3>
           </div>
           <button onClick={onClose} className="text-white/50 hover:text-white mt-1 transition-colors">
             <X size={20} />
           </button>
         </div>
-        <div className="p-6 flex flex-col gap-5">
+        <form className="p-6 flex flex-col gap-5" onSubmit={handleSubmit}>
           <p className="text-[#002d17]/60 text-sm font-medium leading-relaxed">
-            Gửi thông tin để đăng ký thực tập tại Tona Corporation. Chúng tôi sẽ liên hệ trong vòng 5 ngày làm việc.
+            {cmsText(content?.internDescription, "Gui thong tin de dang ky thuc tap tai Tona Corporation. Chung toi se lien he trong vong 5 ngay lam viec.")}
           </p>
           <div className="flex flex-col gap-4">
-            {[
-              { label: "Họ và Tên *", type: "text", placeholder: "Nguyễn Văn A" },
-              { label: "Email *", type: "email", placeholder: "email@example.com" },
-              { label: "Số Điện Thoại *", type: "tel", placeholder: "+84 9xx xxx xxx" },
-              { label: "Trường Đại Học *", type: "text", placeholder: "ĐH Bách Khoa TP.HCM" },
-              { label: "Chuyên Ngành", type: "text", placeholder: "Kỹ thuật Xây dựng" },
-              { label: "Năm Học", type: "text", placeholder: "Năm 3" },
-            ].map((field) => (
+            {fields.map((field) => (
               <div key={field.label} className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{field.label}</label>
                 <input
                   type={field.type}
                   placeholder={field.placeholder}
+                  required={field.required}
+                  value={formData[field.name]}
+                  onChange={(event) => setFormData((current) => ({ ...current, [field.name]: event.target.value }))}
                   className="border border-[#002d17]/20 px-4 py-2.5 text-[#002d17] text-sm font-medium focus:outline-none focus:border-[#46aa85] placeholder:text-[#002d17]/30 rounded-lg"
                 />
               </div>
             ))}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">Thời Gian Có Thể Bắt Đầu</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.startDateLabel, "Thoi Gian Co The Bat Dau")}</label>
               <input
                 type="text"
-                placeholder="VD: Tháng 7/2026"
+                placeholder={cmsText(content?.startDatePlaceholder, "VD: Thang 7/2026")}
+                value={formData.startDate}
+                onChange={(event) => setFormData((current) => ({ ...current, startDate: event.target.value }))}
                 className="border border-[#002d17]/20 px-4 py-2.5 text-[#002d17] text-sm font-medium focus:outline-none focus:border-[#46aa85] placeholder:text-[#002d17]/30 rounded-lg"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">CV / Transcript (PDF)</label>
-              <div className="border-2 border-dashed border-[#002d17]/20 hover:border-[#46aa85] transition-colors p-6 flex items-center justify-center cursor-pointer rounded-xl">
-                <span className="text-[#002d17]/40 text-sm font-medium">Kéo thả file hoặc click để chọn</span>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.internCvLabel, "CV / Transcript (PDF)")}</label>
+              <div className="border-2 border-dashed border-[#002d17]/20 hover:border-[#46aa85] transition-colors p-4 flex flex-col gap-2 rounded-xl">
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  className="block w-full text-sm text-[#002d17]/70 file:mr-4 file:rounded-lg file:border-0 file:bg-[#46aa85] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-widest file:text-white hover:file:bg-[#002d17]"
+                  onChange={(event) => setCvFile(event.target.files?.[0] || null)}
+                />
+                <span className="text-[#002d17]/40 text-sm font-medium">
+                  {cvFile?.name || cmsText(content?.internCvHelpText, "Keo tha file hoac click de chon")}
+                </span>
               </div>
             </div>
           </div>
-          <button className="w-full bg-[#46aa85] text-white py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] transition-colors rounded-xl">
-            Đăng Ký Thực Tập
+          {status === "success" && <p className="text-[#1a6645] text-sm font-bold">Da gui ho so thanh cong.</p>}
+          {status === "error" && <p className="text-red-600 text-sm font-bold">Khong gui duoc ho so. Vui long thu lai.</p>}
+          <button disabled={status === "submitting"} className="w-full bg-[#46aa85] text-white py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] transition-colors rounded-xl disabled:opacity-60">
+            {status === "submitting" ? "Dang gui..." : cmsText(content?.internSubmitLabel, "Dang Ky Thuc Tap")}
           </button>
-        </div>
+        </form>
       </motion.div>
     </motion.div>
   );
 }
 
 // JOB CARD
-function JobCard({ job }: { job: JobPost }) {
+function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: JobsCmsData["applicationModal"] }) {
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
@@ -267,7 +358,7 @@ function JobCard({ job }: { job: JobPost }) {
   return (
     <>
       <AnimatePresence>
-        {applying && <ApplyModal job={job} onClose={() => setApplying(false)} />}
+        {applying && <ApplyModal job={job} content={applicationModal} onClose={() => setApplying(false)} />}
       </AnimatePresence>
 
       <div className="border border-[#002d17]/10 bg-white hover:border-[#002d17]/30 transition-colors rounded-2xl overflow-hidden">
@@ -284,7 +375,7 @@ function JobCard({ job }: { job: JobPost }) {
                   {job.level}
                 </span>
                 <span className="bg-white border border-[#f4aa1f] text-[#f4aa1f] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                  {job.slots} vị trí
+                  {job.slots} vi tri
                 </span>
               </div>
 
@@ -306,7 +397,7 @@ function JobCard({ job }: { job: JobPost }) {
                 </span>
                 {job.salary && (
                   <span className="flex items-center gap-1.5 text-[#46aa85] text-xs font-bold uppercase tracking-wider">
-                    Lương: {job.salary}
+                    Luong: {job.salary}
                   </span>
                 )}
               </div>
@@ -322,7 +413,7 @@ function JobCard({ job }: { job: JobPost }) {
                 onClick={() => setApplying(true)}
                 className="bg-[#f4aa1f] cursor-pointer text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors whitespace-nowrap rounded-lg"
               >
-                Ứng Tuyển Ngay
+                Ung Tuyen Ngay
               </button>
               <a
                 href='#'
@@ -336,7 +427,7 @@ function JobCard({ job }: { job: JobPost }) {
                 onClick={() => setExpanded(!expanded)}
                 className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
-                Chi tiết {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                Chi tiet {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
             </div>
           </div>
@@ -356,7 +447,7 @@ function JobCard({ job }: { job: JobPost }) {
                 {/* Requirements */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Yêu Cầu
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Yeu Cau
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {job.requirements.map((req, i) => (
@@ -371,7 +462,7 @@ function JobCard({ job }: { job: JobPost }) {
                 {/* Skills */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Kỹ Năng
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Ky Nang
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {job.skills.map((skill, i) => (
@@ -388,7 +479,7 @@ function JobCard({ job }: { job: JobPost }) {
                 {/* Benefits */}
                 <div className="p-6 md:p-8">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Phúc Lợi
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> Phuc Loi
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {job.benefits.map((ben, i) => (
@@ -409,7 +500,7 @@ function JobCard({ job }: { job: JobPost }) {
 }
 
 // INTERN CARD
-function InternCard({ pos }: { pos: InternPosition }) {
+function InternCard({ pos, applicationModal }: { pos: InternPosition; applicationModal?: JobsCmsData["applicationModal"] }) {
   const [expanded, setExpanded] = useState(false);
   const [applying, setApplying] = useState(false);
   const Icon = pos.icon;
@@ -417,7 +508,7 @@ function InternCard({ pos }: { pos: InternPosition }) {
   return (
     <>
       <AnimatePresence>
-        {applying && <InternApplyModal pos={pos} onClose={() => setApplying(false)} />}
+        {applying && <InternApplyModal pos={pos} content={applicationModal} onClose={() => setApplying(false)} />}
       </AnimatePresence>
 
       <div className="border border-[#46aa85]/20 bg-white hover:border-[#46aa85]/50 transition-colors rounded-2xl overflow-hidden">
@@ -433,7 +524,7 @@ function InternCard({ pos }: { pos: InternPosition }) {
                     {pos.department}
                   </span>
                   <span className="bg-[#d5ede5] text-[#1a6645] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                    {pos.slots} chỉ tiêu
+                    {pos.slots} chi tieu
                   </span>
                 </div>
                 <div>
@@ -461,13 +552,13 @@ function InternCard({ pos }: { pos: InternPosition }) {
                 onClick={() => setApplying(true)}
                 className="bg-[#46aa85] cursor-pointer text-white px-5 py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] transition-colors whitespace-nowrap rounded-lg"
               >
-                Đăng Ký Thực Tập
+                Dang Ky Thuc Tap
               </button>
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="border cursor-pointer border-[#46aa85]/30 text-[#46aa85] px-5 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#46aa85] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
-                Chi tiết {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                Chi tiet {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
             </div>
           </div>
@@ -485,7 +576,7 @@ function InternCard({ pos }: { pos: InternPosition }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div className="p-6 border-b md:border-b-0 md:border-r border-[#46aa85]/15">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#46aa85]" /> Yêu Cầu
+                    <span className="w-3 h-0.5 bg-[#46aa85]" /> Yeu Cau
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {pos.requirements.map((req, i) => (
@@ -498,7 +589,7 @@ function InternCard({ pos }: { pos: InternPosition }) {
                 </div>
                 <div className="p-6">
                   <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#46aa85]" /> Quyền Lợi Thực Tập Sinh
+                    <span className="w-3 h-0.5 bg-[#46aa85]" /> Quyen Loi Thuc Tap Sinh
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {pos.benefits.map((ben, i) => (
@@ -520,6 +611,7 @@ function InternCard({ pos }: { pos: InternPosition }) {
 
 // MAIN
 export function Jobs() {
+  const [openApplication, setOpenApplication] = useState(false);
   const {
     activeDept,
     setActiveDept,
@@ -538,14 +630,39 @@ export function Jobs() {
     spontaneous,
     interns,
     cultureTeaser,
+    applicationModal,
   } = useJobsPage({
     fallbackJobs: fallbackJobs as JobPost[],
     fallbackPerks,
     fallbackInternPositions,
   });
+  const openApplicationJob: JobPost = {
+    id: "open-application",
+    title: spontaneous?.title || "Ung Tuyen Tu Do",
+    department: spontaneous?.eyebrow || "Open Application",
+    location: "",
+    type: "Job",
+    level: "",
+    date: "",
+    slots: 1,
+    description: spontaneous?.description || "",
+    requirements: [],
+    skills: [],
+    benefits: [],
+  };
 
   return (
     <div className="w-full bg-white min-h-screen">
+      <AnimatePresence>
+        {openApplication && (
+          <ApplyModal
+            job={openApplicationJob}
+            content={applicationModal}
+            onClose={() => setOpenApplication(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* HERO */}
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
@@ -627,7 +744,7 @@ export function Jobs() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.08 }}
             >
-              <JobCard job={job} />
+              <JobCard job={job} applicationModal={applicationModal} />
             </motion.div>
           ))}
           {filteredJobs.length === 0 && (
@@ -642,18 +759,19 @@ export function Jobs() {
         {/* Spontaneous */}
         <div className="mt-12 bg-[#f9f9f7] border border-[#002d17]/10 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 rounded-2xl">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{spontaneous?.eyebrow || "Không thấy vị trí phù hợp?"}</p>
-            <h4 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">{spontaneous?.title || "Ứng Tuyển Tự Do"}</h4>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{spontaneous?.eyebrow || "Khong thay vi tri phu hop?"}</p>
+            <h4 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">{spontaneous?.title || "Ung Tuyen Tu Do"}</h4>
             <p className="text-[#002d17]/55 text-sm mt-2 font-medium max-w-md">
-              {spontaneous?.description || "Gửi hồ sơ của bạn cho chúng tôi - chúng tôi luôn tìm kiếm tài năng phù hợp với văn hóa Tona."}
+              {spontaneous?.description || "Gui ho so cua ban cho chung toi - chung toi luon tim kiem tai nang phu hop voi van hoa Tona."}
             </p>
           </div>
-          <a
-            href={spontaneous?.linkUrl || "mailto:hr@tonacorp.vn"}
+          <button
+            type="button"
+            onClick={() => setOpenApplication(true)}
             className="shrink-0 flex items-center gap-2 bg-[#002d17] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg"
           >
-            {spontaneous?.linkLabel || "Gửi CV"} <ArrowRight size={14} />
-          </a>
+            {spontaneous?.linkLabel || "Gui CV"} <ArrowRight size={14} />
+          </button>
         </div>
       </div>
 
@@ -667,31 +785,31 @@ export function Jobs() {
                 <div className="w-10 h-10 rounded-xl bg-[#46aa85] flex items-center justify-center">
                   <GraduationCap size={20} className="text-white" />
                 </div>
-                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.eyebrow || "Chương Trình Thực Tập"}</span>
+                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.eyebrow || "Chuong Trinh Thuc Tap"}</span>
               </div>
               <div className="w-12 h-0.5 bg-[#46aa85] mb-4" />
               <h2 className="text-3xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight">
-                {renderLines(interns?.title || "Sinh Viên Thực Tập\nTona Internship Program")}
+                {renderLines(interns?.title || "Sinh Vien Thuc Tap\nTona Internship Program")}
               </h2>
               <p className="text-[#002d17]/60 text-sm font-medium mt-3 max-w-lg leading-relaxed">
-                {interns?.description || "Tona Corporation chào đón sinh viên năm 3 - 4 các ngành kỹ thuật tham gia chương trình thực tập thực tế tại công trường và văn phòng."}
+                {interns?.description || "Tona Corporation chao don sinh vien nam 3 - 4 cac nganh ky thuat tham gia chuong trinh thuc tap thuc te tai cong truong va van phong."}
               </p>
             </div>
             <div className="shrink-0 bg-white rounded-2xl px-6 py-5 border border-[#46aa85]/20 flex flex-col gap-3 min-w-[200px]">
-              <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.seasonLabel || "Tuyển dụng 2025 - 2026"}</p>
+              <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.seasonLabel || "Tuyen dung 2025 - 2026"}</p>
               <div className="flex gap-4">
                 <div className="flex flex-col">
                   <span className="text-[#002d17] font-extrabold text-2xl">{interns?.slotsValue || "12"}</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.slotsLabel || "chỉ tiêu"}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.slotsLabel || "chi tieu"}</span>
                 </div>
                 <div className="w-px bg-[#002d17]/10" />
                 <div className="flex flex-col">
                   <span className="text-[#002d17] font-extrabold text-2xl">{interns?.majorsValue || "3"}</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || "chuyên ngành"}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || "chuyen nganh"}</span>
                 </div>
               </div>
               <div className="text-[#002d17]/50 text-xs font-medium leading-relaxed">
-                {interns?.note || "Nhận hồ sơ liên tục. Phỏng vấn rolling."}
+                {interns?.note || "Nhan ho so lien tuc. Phong van rolling."}
               </div>
             </div>
           </div>
@@ -706,7 +824,7 @@ export function Jobs() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
               >
-                <InternCard pos={pos} />
+                <InternCard pos={pos} applicationModal={applicationModal} />
               </motion.div>
             ))}
           </div>
@@ -718,9 +836,9 @@ export function Jobs() {
                 <BookOpen size={18} className="text-[#46aa85]" />
               </div>
               <div>
-                <p className="font-extrabold text-[#002d17] text-sm uppercase tracking-tight">{interns?.ctaTitle || "Ký Kết Hợp Tác Với Trường Đại Học"}</p>
+                <p className="font-extrabold text-[#002d17] text-sm uppercase tracking-tight">{interns?.ctaTitle || "Ky Ket Hop Tac Voi Truong Dai Hoc"}</p>
                 <p className="text-[#002d17]/55 text-sm font-medium mt-1 max-w-md">
-                  {interns?.ctaDescription || "Tona Corporation hợp tác với nhiều trường kỹ thuật. Sinh viên có thể đăng ký qua Phòng Quan hệ Doanh nghiệp của trường hoặc liên hệ trực tiếp Tona."}
+                  {interns?.ctaDescription || "Tona Corporation hop tac voi nhieu truong ky thuat. Sinh vien co the dang ky qua Phong Quan he Doanh nghiep cua truong hoac lien he truc tiep Tona."}
                 </p>
               </div>
             </div>
@@ -728,7 +846,7 @@ export function Jobs() {
               href={interns?.ctaLinkUrl || "mailto:internship@tonacorp.vn"}
               className="shrink-0 flex items-center gap-2 bg-[#46aa85] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] transition-colors rounded-lg"
             >
-              {interns?.ctaLinkLabel || "Email Thực Tập"} <ArrowRight size={14} />
+              {interns?.ctaLinkLabel || "Email Thuc Tap"} <ArrowRight size={14} />
             </a>
           </div>
         </div>
@@ -740,15 +858,15 @@ export function Jobs() {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h3 className="text-2xl font-extrabold text-white uppercase tracking-tight">
-              {cultureTeaser?.title || "Trải Nghiệm Văn Hóa Tona"}
+              {cultureTeaser?.title || "Trai Nghiem Van Hoa Tona"}
             </h3>
-            <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || "Khám phá những gì làm nên sự khác biệt khi làm việc tại Tona."}</p>
+            <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || "Kham pha nhung gi lam nen su khac biet khi lam viec tai Tona."}</p>
           </div>
           <Link
             to={cultureTeaser?.linkUrl || "/vi/cuoc-song-tona"}
             className="shrink-0 flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
           >
-            {cultureTeaser?.linkLabel || "Cuộc Sống Tona"} <ArrowRight size={14} />
+            {cultureTeaser?.linkLabel || "Cuoc Song Tona"} <ArrowRight size={14} />
           </Link>
         </div>
       </div>

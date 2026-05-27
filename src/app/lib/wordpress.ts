@@ -381,6 +381,35 @@ export type JobsCmsData = {
     linkLabel?: string;
     linkUrl?: string;
   };
+  applicationModal?: {
+    description?: string;
+    nameLabel?: string;
+    namePlaceholder?: string;
+    emailLabel?: string;
+    emailPlaceholder?: string;
+    phoneLabel?: string;
+    phonePlaceholder?: string;
+    experienceLabel?: string;
+    experiencePlaceholder?: string;
+    coverLetterLabel?: string;
+    coverLetterPlaceholder?: string;
+    cvLabel?: string;
+    cvHelpText?: string;
+    submitLabel?: string;
+    internTypeLabel?: string;
+    internDescription?: string;
+    universityLabel?: string;
+    universityPlaceholder?: string;
+    majorLabel?: string;
+    majorPlaceholder?: string;
+    schoolYearLabel?: string;
+    schoolYearPlaceholder?: string;
+    startDateLabel?: string;
+    startDatePlaceholder?: string;
+    internCvLabel?: string;
+    internCvHelpText?: string;
+    internSubmitLabel?: string;
+  };
 };
 
 export type ProjectPost = {
@@ -677,6 +706,54 @@ export async function fetchCmsJobs(signal?: AbortSignal): Promise<JobPost[]> {
     }
 
     return [];
+  }
+}
+
+export type JobApplicationPayload = {
+  type: "Job" | "Internship";
+  position: string;
+  name: string;
+  email: string;
+  phone: string;
+  experience?: string;
+  university?: string;
+  major?: string;
+  schoolYear?: string;
+  startDate?: string;
+  message?: string;
+  cvFile?: File | null;
+};
+
+export async function submitCmsApplication(payload: JobApplicationPayload, signal?: AbortSignal): Promise<boolean> {
+  try {
+    const { cvFile, ...data } = payload;
+    const body = cvFile ? new FormData() : JSON.stringify(data);
+
+    if (cvFile && body instanceof FormData) {
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          body.append(key, String(value));
+        }
+      });
+      body.append("cv", cvFile);
+    }
+
+    const response = await fetch(cmsEndpoint("/tona/v1/applicants"), {
+      method: "POST",
+      headers: cvFile ? undefined : {
+        "Content-Type": "application/json",
+      },
+      body,
+      signal,
+    });
+
+    return response.ok;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    return false;
   }
 }
 

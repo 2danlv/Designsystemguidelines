@@ -93,6 +93,7 @@ export type JobsPageViewModel = {
   spontaneous: JobsCmsData["spontaneous"];
   interns: JobsCmsData["interns"];
   cultureTeaser: JobsCmsData["cultureTeaser"];
+  applicationModal: JobsCmsData["applicationModal"];
 };
 
 export function useJobsPage({
@@ -182,5 +183,6 @@ export function useJobsPage({
     spontaneous: cmsPage?.spontaneous,
     interns: cmsPage?.interns,
     cultureTeaser: cmsPage?.cultureTeaser,
+    applicationModal: cmsPage?.applicationModal,
   };
 }
