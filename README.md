@@ -151,7 +151,7 @@ npm run build:production
 /vi/dich-vu
 /vi/du-an-tona
 /vi/tin-tuc
-/vi/nghe-nghiep
+/vi/tuyen-dung
 ```
 
 9. If a page breaks after UI replacement, check this order:

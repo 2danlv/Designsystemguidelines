@@ -9,20 +9,20 @@ import { SiteSettingsProvider } from "../context/SiteSettingsContext";
 // NAV DATA
 
 const fallbackNavLinks: SiteMenuItem[] = [
-  { label: "HOME", url: "/vi/" },
+  { label: "HOME", url: "/" },
   {
     label: "VỀ TONA",
     children: [
-      { label: "Giới Thiệu", url: "/vi/gioi-thieu-tona" },
-      { label: "Đội Ngũ", url: "/vi/doi-ngu" },
-      { label: "Cuộc Sống Tona", url: "/vi/cuoc-song-tona" },
-      { label: "Trách Nhiệm Cộng Đồng", url: "/vi/trach-nhiem-cong-dong" },
+      { label: "Giới Thiệu", url: "/gioi-thieu-tona" },
+      { label: "Đội Ngũ", url: "/doi-ngu" },
+      { label: "Cuộc Sống Tona", url: "/cuoc-song-tona" },
+      { label: "Trách Nhiệm Cộng Đồng", url: "/trach-nhiem-cong-dong" },
     ],
   },
-  { label: "DỊCH VỤ", url: "/vi/dich-vu" },
-  { label: "DỰ ÁN", url: "/vi/du-an-tona" },
-  { label: "TIN TỨC", url: "/vi/tin-tuc" },
-  { label: "TUYỂN DỤNG", url: "/vi/nghe-nghiep" },
+  { label: "DỊCH VỤ", url: "/dich-vu" },
+  { label: "DỰ ÁN", url: "/du-an-tona" },
+  { label: "TIN TỨC", url: "/tin-tuc" },
+  { label: "TUYỂN DỤNG", url: "/nghe-nghiep" },
 ];
 
 const fallbackNavLinksEn: SiteMenuItem[] = [
@@ -30,16 +30,16 @@ const fallbackNavLinksEn: SiteMenuItem[] = [
   {
     label: "ABOUT TONA",
     children: [
-      { label: "About Tona", url: "/en" },
-      { label: "Leadership", url: "/en" },
-      { label: "Tona Life", url: "/en" },
-      { label: "CSR", url: "/en" },
+      { label: "About Tona", url: "/en/about-tona" },
+      { label: "Leadership", url: "/en/leadership" },
+      { label: "Tona Life", url: "/en/tona-life" },
+      { label: "CSR", url: "/en/csr" },
     ],
   },
-  { label: "SERVICES", url: "/en" },
-  { label: "PROJECTS", url: "/en" },
-  { label: "NEWS", url: "/en" },
-  { label: "CAREERS", url: "/en" },
+  { label: "SERVICES", url: "/en/services" },
+  { label: "PROJECTS", url: "/en/projects" },
+  { label: "NEWS", url: "/en/news" },
+  { label: "CAREERS", url: "/en/jobs" },
 ];
 
 const fallbackFooter = {
@@ -47,25 +47,25 @@ const fallbackFooter = {
     eyebrow: "Bắt đầu dự án của bạn",
     title: "Hãy kết nối với Tona Corporation",
     button: "Liên Hệ Ngay",
-    buttonUrl: "/vi/nghe-nghiep",
+    buttonUrl: "/nghe-nghiep",
   },
   description: "Nhà thầu xây dựng và MEP hàng đầu, cung cấp giải pháp xây dựng toàn diện đạt chuẩn quốc tế - từ thiết kế đến vận hành.",
   certifications: ["ISO 9001", "ISO 45001", "ISO 14001"],
   aboutTitle: "About Tona",
   aboutLinks: [
-    { label: "Giới Thiệu", url: "/vi/gioi-thieu-tona" },
-    { label: "Đội Ngũ Lãnh Đạo", url: "/vi/doi-ngu" },
-    { label: "Cuộc Sống Tona", url: "/vi/cuoc-song-tona" },
-    { label: "Dịch Vụ", url: "/vi/dich-vu" },
-    { label: "Tuyển Dụng", url: "/vi/nghe-nghiep" },
+    { label: "Giới Thiệu", url: "/gioi-thieu-tona" },
+    { label: "Đội Ngũ Lãnh Đạo", url: "/doi-ngu" },
+    { label: "Cuộc Sống Tona", url: "/cuoc-song-tona" },
+    { label: "Dịch Vụ", url: "/dich-vu" },
+    { label: "Tuyển Dụng", url: "/nghe-nghiep" },
   ],
   projectsTitle: "Dự Án",
   projectLinks: [
-    { label: "Industrial", url: "/vi/du-an-tona" },
-    { label: "Commercial", url: "/vi/du-an-tona" },
-    { label: "Solar Rooftop", url: "/vi/du-an-tona" },
-    { label: "Hotels & Resorts", url: "/vi/du-an-tona" },
-    { label: "Apartments", url: "/vi/du-an-tona" },
+    { label: "Industrial", url: "/du-an-tona" },
+    { label: "Commercial", url: "/du-an-tona" },
+    { label: "Solar Rooftop", url: "/du-an-tona" },
+    { label: "Hotels & Resorts", url: "/du-an-tona" },
+    { label: "Apartments", url: "/du-an-tona" },
   ],
   contactTitle: "Contact",
   address: "Tòa nhà Tona, 123 Đường Xây Dựng\nQuận 1, TP. Hồ Chí Minh, Việt Nam",

@@ -5,6 +5,7 @@ import { MapPin, Maximize2, ArrowRight, ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useLocation, useNavigate } from "react-router";
 import { fetchCmsPageByTemplate, fetchCmsProjects, type ProjectPost, type ProjectsCmsData } from "../lib/wordpress";
+import { projectDetailPath, sitePath } from "../lib/siteLinks";
 
 const fallbackStats = [
   { value: "500+", label: "Du An Hoan Thanh" },
@@ -132,7 +133,7 @@ export function Projects() {
       <div className="relative bg-[#002d17] pt-8 pb-16 overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest">
-            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -196,7 +197,7 @@ export function Projects() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: idx * 0.06 }}
             >
-              <Link to={`/project/${project.slug}`} className="group flex flex-col">
+              <Link to={projectDetailPath(project.slug)} className="group flex flex-col">
                 <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#bcd8cb] rounded-xl">
                   <img
                     src={project.image}
@@ -274,7 +275,7 @@ export function Projects() {
             <p className="text-white/50 mt-2 text-sm">{cta?.description || "Hay de Tona Corporation dong hanh cung ban tu ban ve den hoan thien."}</p>
           </div>
           <Link
-            to={cta?.linkUrl || "/nghe-nghiep"}
+            to={cta?.linkUrl || sitePath("jobs")}
             className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
           >
             {cta?.linkLabel || "Lien He Tu Van"}

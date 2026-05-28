@@ -20,6 +20,7 @@ import {
 } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
 import { useSiteText } from "../context/SiteSettingsContext";
+import { projectDetailPath, sitePath } from "../lib/siteLinks";
 
 type HomeHeroSlide = {
   id: number | string;
@@ -109,9 +110,9 @@ function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: H
 
   const slide = activeSlides[current] || activeSlides[0];
   const primaryLabel = content?.primaryLabel || text("home.hero.primary_label", "Xem Dự Án");
-  const primaryUrl = content?.primaryUrl || "/du-an-tona";
+  const primaryUrl = content?.primaryUrl || sitePath("projects");
   const secondaryLabel = content?.secondaryLabel || "Portfolio";
-  const secondaryUrl = content?.secondaryUrl || "/du-an-tona";
+  const secondaryUrl = content?.secondaryUrl || sitePath("projects");
 
   return (
     <section className="relative w-full h-[100vh] min-h-[600px] bg-[#002d17] overflow-hidden">
@@ -360,7 +361,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
         </div>
         <div className="mt-4 flex">
           <Link
-            to="/dich-vu"
+            to={sitePath("services")}
             className="flex-1 flex items-center justify-center gap-3 py-5 bg-[#f4aa1f] text-[#002d17] font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors border-x border-b border-[#002d17]/10 md:flex-none md:px-16"
           >
             {text("home.services.view_all", "Xem Tất Cả Dịch Vụ")} <ArrowRight size={14} />
@@ -428,7 +429,7 @@ function ProjectsSection({
               className="w-12 h-12 border-2 border-white/30 hover:border-[#f4aa1f] text-white hover:text-[#f4aa1f] flex items-center justify-center transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
               <ArrowRight size={18} />
             </button>
-            <Link to="/du-an-tona" className="hidden md:flex items-center gap-2 ml-4 text-white/60 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
+          <Link to={sitePath("projects")} className="hidden md:flex items-center gap-2 ml-4 text-white/60 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
               {text("home.projects.view_all", "Xem tất cả")} <ArrowRight size={14} />
             </Link>
           </div>
@@ -440,7 +441,7 @@ function ProjectsSection({
           <div className="flex gap-6 cursor-grab active:cursor-grabbing">
             {items.map((project) => (
               <div key={project.id} className="flex-[0_0_88%] sm:flex-[0_0_70%] md:flex-[0_0_50%] lg:flex-[0_0_38%] min-w-0">
-                <Link to={`/project/${project.slug}`} className="group flex flex-col select-none">
+                <Link to={projectDetailPath(project.slug)} className="group flex flex-col select-none">
                   <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#bcd8cb] rounded-xl">
                     <img src={project.image} alt={project.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" draggable={false} />
@@ -505,7 +506,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
               {title || text("home.news.title", "Tin Tức & Hoạt Động")}
             </h2>
           </div>
-          <Link to="/tin-tuc" className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
+          <Link to={sitePath("news")} className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
             {text("home.news.view_all", "Xem Tất Cả")} <ArrowRight size={14} />
           </Link>
         </div>

@@ -19,6 +19,7 @@ import {
   type MembersCmsData,
 } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
+import { sitePath } from "../lib/siteLinks";
 
 type CoreValue = {
   icon: LucideIcon;
@@ -271,14 +272,14 @@ export function Members() {
   const teaserTitle = cmsPage?.teaser?.title || "800+ Chuyên Gia Tại Tona";
   const teaserDescription = cmsPage?.teaser?.description || "Phía sau Ban lãnh đạo là đội ngũ kỹ sư, chuyên gia và công nhân lành nghề, những người trực tiếp kiến tạo nên mỗi công trình của Tona.";
   const teaserLinkLabel = cmsPage?.teaser?.linkLabel || "Khám Phá Cuộc Sống Tona";
-  const teaserLinkUrl = cmsPage?.teaser?.linkUrl || "/cuoc-song-tona";
+  const teaserLinkUrl = cmsPage?.teaser?.linkUrl || sitePath("culture");
 
   return (
     <div className="w-full bg-white min-h-screen">
       <div className="bg-[#002d17] pt-8 pb-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>

@@ -103,7 +103,7 @@ export function useJobsPage({
     const controller = new AbortController();
 
     Promise.all([
-      fetchCmsPage<JobsCmsData>("nghe-nghiep", controller.signal),
+      fetchCmsPage<JobsCmsData>("tuyen-dung", controller.signal),
       fetchCmsJobs(controller.signal),
     ]).then(([page, jobPosts]) => {
       setCmsPage(page);

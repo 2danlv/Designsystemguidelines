@@ -4,6 +4,7 @@ import { news as fallbackNews } from "../data";
 import { ArrowRight, ChevronRight, Clock, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsNews, fetchCmsPageByTemplate, type NewsCmsData, type NewsPost } from "../lib/wordpress";
+import { newsDetailPath, sitePath } from "../lib/siteLinks";
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -84,7 +85,7 @@ export function News() {
       <div className="bg-[#002d17] pt-8 pb-20" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -105,7 +106,7 @@ export function News() {
               {listing?.featuredLabel || "Tin Nổi Bật"}
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <Link to={`/tin-tuc/${featured.slug}`} className="lg:col-span-7 relative overflow-hidden aspect-[16/9] bg-[#bcd8cb] group cursor-pointer rounded-2xl block">
+              <Link to={newsDetailPath(featured.slug)} className="lg:col-span-7 relative overflow-hidden aspect-[16/9] bg-[#bcd8cb] group cursor-pointer rounded-2xl block">
                 {featured.image && (
                   <img
                     src={featured.image}
@@ -130,7 +131,7 @@ export function News() {
                   {featured.excerpt}
                 </p>
                 <Link
-                  to={`/tin-tuc/${featured.slug}`}
+                  to={newsDetailPath(featured.slug)}
                   className="mt-2 flex items-center gap-2 bg-[#002d17] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#f4aa1f] hover:text-[#002d17] transition-colors w-fit rounded-lg"
                 >
                   Đọc Tiếp <ArrowRight size={14} />
@@ -199,7 +200,7 @@ export function News() {
                 transition={{ duration: 0.4, delay: idx * 0.07 }}
                 className="group flex flex-col"
               >
-                <Link to={`/tin-tuc/${item.slug}`} className="flex flex-col gap-0">
+                <Link to={newsDetailPath(item.slug)} className="flex flex-col gap-0">
                   <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#bcd8cb] rounded-xl">
                     {item.image && (
                       <img

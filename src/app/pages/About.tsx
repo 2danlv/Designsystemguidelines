@@ -12,6 +12,7 @@ import {
 import { motion } from "motion/react";
 import { fetchCmsPageByTemplate, type AboutCmsData } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
+import { sitePath } from "../lib/siteLinks";
 
 type StatItem = {
   value: string;
@@ -151,7 +152,7 @@ export function About() {
   const ctaTitle = cmsPage?.cta?.title || "Cung Tona kien tao cong trinh tiep theo";
   const ctaDescription = cmsPage?.cta?.description || "Tu nha may cong nghe cao den resort 5 sao, chung toi san sang dong hanh.";
   const primaryLabel = cmsPage?.cta?.primaryLabel || "Xem Du An";
-  const primaryUrl = cmsPage?.cta?.primaryUrl || "/du-an-tona";
+  const primaryUrl = cmsPage?.cta?.primaryUrl || sitePath("projects");
   const secondaryLabel = cmsPage?.cta?.secondaryLabel || "Doi Ngu Lanh Dao";
   const secondaryUrl = cmsPage?.cta?.secondaryUrl || "/doi-ngu";
   const colors = cmsPage?.colors;
@@ -162,7 +163,7 @@ export function About() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to="/" className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
