@@ -1401,6 +1401,13 @@
             {
                 "param": "options_page",
                 "operator": "==",
+                "value": "tona-site-settings-content"
+            }
+        ],
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
                 "value": "tona-site-settings"
             }
         ]

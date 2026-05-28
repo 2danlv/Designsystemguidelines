@@ -46,6 +46,20 @@ function tona_cms_menu_items_payload( $items ) {
     );
 }
 
+function tona_cms_link_url_value( $value ) {
+    if ( is_array( $value ) ) {
+        $value = $value['url'] ?? '';
+    }
+
+    $url = is_string( $value ) ? trim( $value ) : '';
+
+    if ( '' === $url ) {
+        return '';
+    }
+
+    return tona_cms_frontend_url( $url );
+}
+
 function tona_cms_frontend_url( $url, $menu_item = null ) {
     $url = is_string( $url ) ? trim( $url ) : '';
 
@@ -217,13 +231,30 @@ function tona_cms_link_items_payload( $items ) {
 
                     return array(
                         'label' => $item['label'] ?? '',
-                        'url'   => $item['url'] ?? '',
+                        'url'   => tona_cms_link_url_value( $item['url'] ?? '' ),
                     );
                 },
                 is_array( $items ) ? $items : array()
             )
         )
     );
+}
+
+function tona_cms_option_link_field( $option_id, $field_name ) {
+    $value = function_exists( 'get_field' ) ? get_field( $field_name, $option_id ) : '';
+    return tona_cms_link_url_value( $value );
+}
+
+function tona_cms_localized_option_link_field( $option_id, $field_name, $language ) {
+    if ( 'en' === $language ) {
+        $localized_value = tona_cms_option_link_field( $option_id, $field_name . '_en' );
+
+        if ( '' !== $localized_value ) {
+            return $localized_value;
+        }
+    }
+
+    return tona_cms_option_link_field( $option_id, $field_name );
 }
 
 function tona_cms_site_settings_payload() {
@@ -237,7 +268,7 @@ function tona_cms_site_settings_payload() {
         'header' => array(
             'logo'      => tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'site_header_logo', $option_id ) : '' ),
             'logoAlt'   => tona_cms_text_field( $option_id, 'site_header_logo_alt' ),
-            'homeUrl'   => 'en' === $current_language ? '/en' : '/',
+            'homeUrl'   => tona_cms_option_link_field( $option_id, 'site_header_home_url' ) ?: ( 'en' === $current_language ? '/en' : '/' ),
             'nav'       => tona_cms_nav_menu_payload( 'primary' ),
             'languages' => array(
                 array(
@@ -255,7 +286,7 @@ function tona_cms_site_settings_payload() {
                 'eyebrow'   => tona_cms_localized_text_field( $option_id, 'site_footer_cta_eyebrow', $current_language ),
                 'title'     => tona_cms_localized_text_field( $option_id, 'site_footer_cta_title', $current_language ),
                 'button'    => tona_cms_localized_text_field( $option_id, 'site_footer_cta_button', $current_language ),
-                'buttonUrl' => tona_cms_localized_text_field( $option_id, 'site_footer_cta_button_url', $current_language ),
+                'buttonUrl' => tona_cms_localized_option_link_field( $option_id, 'site_footer_cta_button_url', $current_language ),
             ),
             'logo'           => tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'site_footer_logo', $option_id ) : '' ),
             'logoAlt'        => tona_cms_localized_text_field( $option_id, 'site_footer_logo_alt', $current_language ),

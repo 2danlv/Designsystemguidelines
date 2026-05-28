@@ -29,13 +29,65 @@ function tona_cms_register_options_pages() {
             'menu_title' => 'Logo & Footer',
             'menu_slug'  => 'tona-site-settings',
             'capability' => 'edit_posts',
-            'redirect'   => false,
+            'redirect'   => true,
             'position'   => 58,
             'icon_url'   => 'dashicons-admin-generic',
         )
     );
+
+    if ( function_exists( 'acf_add_options_sub_page' ) ) {
+        acf_add_options_sub_page(
+            array(
+                'page_title'  => 'Logo & Footer Settings',
+                'menu_title'  => 'Settings',
+                'menu_slug'   => 'tona-site-settings-content',
+                'parent_slug' => 'tona-site-settings',
+                'capability'  => 'edit_posts',
+                'post_id'     => 'option',
+            )
+        );
+    }
 }
 add_action( 'acf/init', 'tona_cms_register_options_pages' );
+
+function tona_cms_register_site_settings_field_group() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    $json_path = get_stylesheet_directory() . '/acf-json/group_tona_site_settings.json';
+
+    if ( ! file_exists( $json_path ) || ! is_readable( $json_path ) ) {
+        return;
+    }
+
+    $field_group = json_decode( file_get_contents( $json_path ), true );
+
+    if ( ! is_array( $field_group ) || empty( $field_group['key'] ) || empty( $field_group['fields'] ) ) {
+        return;
+    }
+
+    $field_group['active'] = true;
+    $field_group['location'] = array(
+        array(
+            array(
+                'param'    => 'options_page',
+                'operator' => '==',
+                'value'    => 'tona-site-settings-content',
+            ),
+        ),
+        array(
+            array(
+                'param'    => 'options_page',
+                'operator' => '==',
+                'value'    => 'tona-site-settings',
+            ),
+        ),
+    );
+
+    acf_add_local_field_group( $field_group );
+}
+add_action( 'acf/init', 'tona_cms_register_site_settings_field_group', 20 );
 
 function tona_cms_normalize_acf_field_group_location( $field_group ) {
     if ( ! is_array( $field_group ) || empty( $field_group['key'] ) ) {

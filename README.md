@@ -11,6 +11,8 @@
 
   For the WordPress CMS integration, set `VITE_WP_API_BASE` to your WordPress REST base URL, for example `http://localhost/wordpress/wp-json`. If it is not set, the React app falls back to `/wp-json`.
 
+  Vite reads env files at build time. After changing `VITE_WP_API_BASE`, run the matching build command again and upload the new `dist`; changing env files on the server will not change an already built bundle.
+
 ## WordPress CMS integration
 
 The React app is intentionally kept separate from WordPress. WordPress only acts as the CMS and exposes data through REST endpoints. The frontend should keep rendering the current React UI.
@@ -115,6 +117,26 @@ Then keep the page using values from `useJobsPage(...)` instead of re-adding fet
 
 ```bash
 npm run build
+```
+
+Env files:
+
+```txt
+.env.local
+VITE_WP_API_BASE=http://localhost/wordpress/wp-json
+
+.env.test
+VITE_WP_API_BASE=https://newweb.tonacorp.com/wordpress/wp-json
+
+.env.production
+VITE_WP_API_BASE=
+```
+
+Build commands:
+
+```bash
+npm run build:test
+npm run build:production
 ```
 
 8. Manually check key routes:
