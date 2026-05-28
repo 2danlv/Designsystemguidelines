@@ -26,6 +26,26 @@ function backgroundStyle(color?: string) {
   return color ? { backgroundColor: color } : undefined;
 }
 
+function normalizeFilterValue(value?: string) {
+  return (value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function projectCategoryValues(project: ProjectPost) {
+  const values = [
+    project.categorySlug,
+    project.category,
+    ...(project.categories || []).flatMap((category) => [category.slug, category.name]),
+  ];
+
+  return values.filter(Boolean).map((value) => normalizeFilterValue(value));
+}
+
 export function Projects() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [cmsPage, setCmsPage] = useState<ProjectsCmsData | null>(null);
@@ -55,24 +75,34 @@ export function Projects() {
     const seen = new Map<string, string>();
 
     projectItems.forEach((project) => {
-      const slug = project.categorySlug || project.category;
-      if (slug && project.category && !seen.has(slug)) {
-        seen.set(slug, project.category);
-      }
+      const projectCategories = project.categories?.length
+        ? project.categories
+        : [{ slug: project.categorySlug, name: project.category }];
+
+      projectCategories.forEach((category) => {
+        const slug = normalizeFilterValue(category.slug || category.name);
+        const label = category.name || category.slug || project.category;
+
+        if (slug && label && !seen.has(slug)) {
+          seen.set(slug, label);
+        }
+      });
     });
 
     return Array.from(seen, ([slug, label]) => ({ slug, label }));
   }, [projectItems]);
 
   useEffect(() => {
-    const hashFilter = decodeURIComponent(location.hash.replace(/^#/, "")).trim();
+    const hashFilter = normalizeFilterValue(decodeURIComponent(location.hash.replace(/^#/, "")));
 
     if (!hashFilter) {
       setActiveFilter("all");
       return;
     }
 
-    const matchedCategory = categories.find((cat) => cat.slug === hashFilter);
+    const matchedCategory = categories.find((cat) => (
+      normalizeFilterValue(cat.slug) === hashFilter || normalizeFilterValue(cat.label) === hashFilter
+    ));
 
     if (matchedCategory) {
       setActiveFilter(matchedCategory.slug);
@@ -87,7 +117,7 @@ export function Projects() {
   const filteredProjects =
     activeFilter === "all"
       ? projectItems
-      : projectItems.filter((p) => (p.categorySlug || p.category) === activeFilter);
+      : projectItems.filter((project) => projectCategoryValues(project).includes(activeFilter));
 
   const colors = cmsPage?.colors;
   const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Du An";
