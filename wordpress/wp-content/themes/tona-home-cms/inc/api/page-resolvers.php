@@ -18,6 +18,27 @@ function tona_cms_get_page_by_slug( $slug ) {
         )
     );
 
+    $path_parts = array_values( array_filter( explode( '/', $path ) ) );
+    $post_name = ! empty( $path_parts ) ? end( $path_parts ) : '';
+
+    if ( $post_name ) {
+        $pages = get_posts(
+            array_merge(
+                array(
+                    'post_type'      => 'page',
+                    'post_status'    => 'publish',
+                    'posts_per_page' => 1,
+                    'name'           => sanitize_title( $post_name ),
+                ),
+                tona_cms_language_query_args()
+            )
+        );
+
+        if ( ! empty( $pages[0] ) ) {
+            return $pages[0];
+        }
+    }
+
     $page = get_page_by_path( $path, OBJECT, 'page' );
 
     if ( ! $page || 'publish' !== $page->post_status ) {

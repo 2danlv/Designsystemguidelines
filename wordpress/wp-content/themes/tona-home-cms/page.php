@@ -11,7 +11,9 @@ get_header();
         the_post();
         ?>
         <h1><?php the_title(); ?></h1>
-        <p>This content is managed in WordPress and consumed by the React frontend.</p>
+        <div>
+            <?php the_content(); ?>
+        </div>
         <?php
     endwhile;
     ?>

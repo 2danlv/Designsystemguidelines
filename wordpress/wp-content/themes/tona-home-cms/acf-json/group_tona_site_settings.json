@@ -486,12 +486,12 @@
                     "parent_repeater": "field_tona_site_footer_project_links"
                 },
                 {
-                    "key": "field_tona_site_footer_project_links_url",
-                    "label": "URL",
-                    "name": "url",
+                    "key": "field_tona_site_footer_project_links_category",
+                    "label": "Project Category",
+                    "name": "category",
                     "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
+                    "type": "taxonomy",
+                    "instructions": "Choose a project category. The frontend link will filter the Projects page by this category.",
                     "required": 0,
                     "conditional_logic": false,
                     "wrapper": {
@@ -499,11 +499,14 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
+                    "taxonomy": "tona_project_category",
+                    "add_term": 0,
+                    "save_terms": 0,
+                    "load_terms": 0,
+                    "return_format": "object",
+                    "field_type": "select",
+                    "allow_null": 1,
+                    "multiple": 0,
                     "parent_repeater": "field_tona_site_footer_project_links"
                 }
             ]
@@ -1155,30 +1158,27 @@
                     "parent_repeater": "field_tona_site_en_footer_project_links"
                 },
                 {
-                    "key": "field_tona_site_en_footer_project_links_url",
-                    "label": "URL",
-                    "name": "url",
+                    "key": "field_tona_site_en_footer_project_links_category",
+                    "label": "Project Category",
+                    "name": "category",
                     "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
+                    "type": "taxonomy",
+                    "instructions": "Choose a project category. The frontend link will filter the Projects page by this category.",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": false,
                     "wrapper": {
                         "width": "50",
                         "class": "",
                         "id": ""
                     },
-                    "post_type": [
-                        "page"
-                    ],
-                    "post_status": [
-                        "publish"
-                    ],
-                    "taxonomy": "",
-                    "allow_archives": 1,
+                    "taxonomy": "tona_project_category",
+                    "add_term": 0,
+                    "save_terms": 0,
+                    "load_terms": 0,
+                    "return_format": "object",
+                    "field_type": "select",
+                    "allow_null": 1,
                     "multiple": 0,
-                    "allow_null": 0,
-                    "allow_in_bindings": 0,
                     "parent_repeater": "field_tona_site_en_footer_project_links"
                 }
             ]

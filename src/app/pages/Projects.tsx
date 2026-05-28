@@ -3,6 +3,7 @@ import { Link } from "../components/LocalizedLink";
 import { projects as fallbackProjects } from "../data";
 import { MapPin, Maximize2, ArrowRight, ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
+import { useLocation, useNavigate } from "react-router";
 import { fetchCmsPageByTemplate, fetchCmsProjects, type ProjectPost, type ProjectsCmsData } from "../lib/wordpress";
 
 const fallbackStats = [
@@ -29,6 +30,8 @@ export function Projects() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [cmsPage, setCmsPage] = useState<ProjectsCmsData | null>(null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -60,6 +63,26 @@ export function Projects() {
 
     return Array.from(seen, ([slug, label]) => ({ slug, label }));
   }, [projectItems]);
+
+  useEffect(() => {
+    const hashFilter = decodeURIComponent(location.hash.replace(/^#/, "")).trim();
+
+    if (!hashFilter) {
+      setActiveFilter("all");
+      return;
+    }
+
+    const matchedCategory = categories.find((cat) => cat.slug === hashFilter);
+
+    if (matchedCategory) {
+      setActiveFilter(matchedCategory.slug);
+    }
+  }, [categories, location.hash]);
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    navigate(`${location.pathname}${filter === "all" ? "" : `#${encodeURIComponent(filter)}`}`, { replace: true });
+  };
 
   const filteredProjects =
     activeFilter === "all"
@@ -109,7 +132,7 @@ export function Projects() {
       <div className="border-b border-[#002d17]/10 bg-white sticky top-[72px] z-30">
         <div className="max-w-7xl mx-auto px-6 py-4 flex gap-2 flex-wrap">
           <button
-            onClick={() => setActiveFilter("all")}
+            onClick={() => handleFilterChange("all")}
             className={`px-5 py-2 font-bold uppercase tracking-widest text-xs transition-colors ${
               activeFilter === "all"
                 ? "bg-[#002d17] text-white"
@@ -121,7 +144,7 @@ export function Projects() {
           {categories.map((cat) => (
             <button
               key={cat.slug}
-              onClick={() => setActiveFilter(cat.slug)}
+              onClick={() => handleFilterChange(cat.slug)}
               className={`px-5 py-2 font-bold uppercase tracking-widest text-xs transition-colors ${
                 activeFilter === cat.slug
                   ? "bg-[#002d17] text-white"

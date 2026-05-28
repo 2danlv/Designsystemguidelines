@@ -78,9 +78,9 @@ const fallbackFooter = {
   ],
   copyright: "© {year} Tona Corporation. All Rights Reserved.",
   legalLinks: [
-    { label: "Privacy Policy", url: "" },
-    { label: "Terms of Service", url: "" },
-    { label: "Sitemap", url: "" },
+    { label: "Privacy Policy", url: "/privacy-policy" },
+    { label: "Terms of Service", url: "/terms-of-service" },
+    { label: "Sitemap", url: "/sitemap" },
   ],
 };
 
@@ -219,7 +219,7 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
           ariaLabel={logoAlt}
         >
           <div className="px-3 py-1.5 flex items-center justify-center">
-            <img src={logo} alt={logoAlt} className="h-9 w-auto" />
+            <img src={logo} alt={logoAlt} className="h-14 w-auto" />
           </div>
         </SmartLink>
 
@@ -535,12 +535,8 @@ export function Layout() {
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
 
   useEffect(() => {
-    if (location.hash) {
-      return;
-    }
-
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [location.pathname, location.search, location.hash]);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     const controller = new AbortController();

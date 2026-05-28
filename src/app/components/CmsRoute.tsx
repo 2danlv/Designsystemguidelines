@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router";
 import { fetchCmsRoute, type CmsRouteMatch } from "../lib/wordpress";
 import { About } from "../pages/About";
+import { GenericContentPage } from "../pages/ContentPage";
 import { CSR } from "../pages/CSR";
 import { Culture } from "../pages/Culture";
 import { Home } from "../pages/Home";
@@ -13,7 +14,7 @@ import { ProjectDetail } from "../pages/ProjectDetail";
 import { Projects } from "../pages/Projects";
 import { Services } from "../pages/Services";
 
-function PageByTemplate({ template, routeKey }: { template?: string; routeKey: string }) {
+function renderPageByTemplate({ template, routeKey }: { template?: string; routeKey: string }) {
   switch (template) {
     case "tona-home":
       return <Home key={routeKey} />;
@@ -76,10 +77,14 @@ export function CmsRoute() {
   }
 
   if (routeMatch?.type === "page") {
-    const page = <PageByTemplate routeKey={routeKey} template={routeMatch.template} />;
+    const page = renderPageByTemplate({ routeKey, template: routeMatch.template });
 
     if (page) {
       return page;
+    }
+
+    if (routeMatch.slug) {
+      return <GenericContentPage key={routeKey} slug={routeMatch.slug} initialPage={routeMatch.page} />;
     }
   }
 

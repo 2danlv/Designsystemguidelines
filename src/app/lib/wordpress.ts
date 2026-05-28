@@ -559,6 +559,10 @@ export type CmsRouteMatch = {
   type: "page" | "project" | "news" | "not_found";
   template?: string;
   slug?: string;
+  page?: {
+    title?: string;
+    content?: string;
+  };
   translations?: Partial<Record<SiteLanguage, string>>;
 };
 

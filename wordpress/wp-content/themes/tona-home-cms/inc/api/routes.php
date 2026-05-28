@@ -158,12 +158,18 @@ function tona_cms_resolve_route_payload( $request ) {
             $template_alias = 'tona-home';
         }
 
-        return array(
+        $payload = array(
             'type'         => 'page',
             'template'     => $template_alias,
             'slug'         => $post->post_name,
             'translations' => $translations,
         );
+
+        if ( ! $template_alias ) {
+            $payload['page'] = tona_cms_page_payload( $post );
+        }
+
+        return $payload;
     }
 
     return array(

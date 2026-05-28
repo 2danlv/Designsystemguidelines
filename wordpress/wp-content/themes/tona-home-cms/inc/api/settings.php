@@ -257,6 +257,90 @@ function tona_cms_localized_option_link_field( $option_id, $field_name, $languag
     return tona_cms_option_link_field( $option_id, $field_name );
 }
 
+function tona_cms_project_category_from_value( $value ) {
+    if ( $value instanceof WP_Term ) {
+        return $value;
+    }
+
+    if ( is_array( $value ) ) {
+        if ( ! empty( $value['term_id'] ) ) {
+            $term = get_term( (int) $value['term_id'], 'tona_project_category' );
+            return $term && ! is_wp_error( $term ) ? $term : null;
+        }
+
+        if ( ! empty( $value['slug'] ) ) {
+            $term = get_term_by( 'slug', sanitize_title( $value['slug'] ), 'tona_project_category' );
+            return $term && ! is_wp_error( $term ) ? $term : null;
+        }
+    }
+
+    if ( is_numeric( $value ) ) {
+        $term = get_term( (int) $value, 'tona_project_category' );
+        return $term && ! is_wp_error( $term ) ? $term : null;
+    }
+
+    if ( is_string( $value ) && '' !== trim( $value ) ) {
+        $term = get_term_by( 'slug', sanitize_title( $value ), 'tona_project_category' );
+        return $term && ! is_wp_error( $term ) ? $term : null;
+    }
+
+    return null;
+}
+
+function tona_cms_projects_page_filter_url( $term, $language ) {
+    $page = function_exists( 'tona_cms_get_page_by_template' ) ? tona_cms_get_page_by_template( 'tona-projects' ) : null;
+    $base_url = $page ? tona_cms_frontend_url( get_permalink( $page ) ) : ( 'en' === $language ? '/en/projects' : '/du-an-tona' );
+    $base_url = rtrim( $base_url ?: '/', '/' );
+
+    if ( '' === $base_url ) {
+        $base_url = '/';
+    }
+
+    return $base_url . '#' . rawurlencode( $term->slug );
+}
+
+function tona_cms_project_category_link_items_payload( $items, $language ) {
+    return array_values(
+        array_filter(
+            array_map(
+                function ( $item ) use ( $language ) {
+                    if ( ! is_array( $item ) ) {
+                        return null;
+                    }
+
+                    $term = tona_cms_project_category_from_value( $item['category'] ?? null );
+
+                    if ( $term ) {
+                        return array(
+                            'label' => trim( $item['label'] ?? '' ) ?: tona_cms_decode_text( $term->name ),
+                            'url'   => tona_cms_projects_page_filter_url( $term, $language ),
+                        );
+                    }
+
+                    return array(
+                        'label' => $item['label'] ?? '',
+                        'url'   => tona_cms_link_url_value( $item['url'] ?? '' ),
+                    );
+                },
+                is_array( $items ) ? $items : array()
+            )
+        )
+    );
+}
+
+function tona_cms_localized_project_category_link_items_payload( $option_id, $field_name, $language ) {
+    if ( 'en' === $language && function_exists( 'get_field' ) ) {
+        $localized_items = get_field( $field_name . '_en', $option_id );
+        $localized_payload = tona_cms_project_category_link_items_payload( is_array( $localized_items ) ? $localized_items : array(), $language );
+
+        if ( ! empty( $localized_payload ) ) {
+            return $localized_payload;
+        }
+    }
+
+    return tona_cms_project_category_link_items_payload( function_exists( 'get_field' ) ? get_field( $field_name, $option_id ) : array(), $language );
+}
+
 function tona_cms_site_settings_payload() {
     $option_id = 'option';
     $current_language = function_exists( 'pll_current_language' ) ? pll_current_language( 'slug' ) : 'vi';
@@ -313,7 +397,7 @@ function tona_cms_site_settings_payload() {
             'aboutTitle'     => tona_cms_localized_text_field( $option_id, 'site_footer_about_title', $current_language ),
             'aboutLinks'     => tona_cms_localized_link_items_payload( $option_id, 'site_footer_about_links', $current_language ),
             'projectsTitle'  => tona_cms_localized_text_field( $option_id, 'site_footer_projects_title', $current_language ),
-            'projectLinks'   => tona_cms_localized_link_items_payload( $option_id, 'site_footer_project_links', $current_language ),
+            'projectLinks'   => tona_cms_localized_project_category_link_items_payload( $option_id, 'site_footer_project_links', $current_language ),
             'contactTitle'   => tona_cms_localized_text_field( $option_id, 'site_footer_contact_title', $current_language ),
             'address'        => tona_cms_localized_text_field( $option_id, 'site_footer_address', $current_language ),
             'phone'          => tona_cms_text_field( $option_id, 'site_footer_phone' ),
