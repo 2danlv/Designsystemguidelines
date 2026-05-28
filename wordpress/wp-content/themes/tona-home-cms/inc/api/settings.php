@@ -277,7 +277,7 @@ function tona_cms_site_settings_payload() {
         'header' => array(
             'logo'      => $header_logo ?: ( $site_icon ? esc_url_raw( $site_icon ) : '' ),
             'logoAlt'   => tona_cms_text_field( $option_id, 'site_header_logo_alt' ) ?: $site_title,
-            'homeUrl'   => tona_cms_option_link_field( $option_id, 'site_header_home_url' ) ?: ( 'en' === $current_language ? '/en' : '/' ),
+            'homeUrl'   => 'en' === $current_language ? '/en' : '/',
             'nav'       => tona_cms_nav_menu_payload( 'primary' ),
             'languages' => array(
                 array(

@@ -135,6 +135,8 @@ VITE_WP_API_BASE=
 Build commands:
 
 ```bash
+npm run dev
+npm run dev:test
 npm run build:test
 npm run build:production
 ```

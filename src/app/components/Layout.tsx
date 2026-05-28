@@ -535,6 +535,14 @@ export function Layout() {
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
 
   useEffect(() => {
+    if (location.hash) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname, location.search, location.hash]);
+
+  useEffect(() => {
     const controller = new AbortController();
 
     fetchCmsSettings(controller.signal).then(setSettings);

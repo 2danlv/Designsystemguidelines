@@ -45,17 +45,6 @@ function tona_cms_register_job_post_type() {
             'rewrite'      => array( 'slug' => 'job-category' ),
         )
     );
-
-    $default_terms = array(
-        'tuyen-dung' => 'Tuyen Dung',
-        'thuc-tap'   => 'Thuc Tap',
-    );
-
-    foreach ( $default_terms as $slug => $name ) {
-        if ( ! term_exists( $slug, 'tona_job_category' ) ) {
-            wp_insert_term( $name, 'tona_job_category', array( 'slug' => $slug ) );
-        }
-    }
 }
 add_action( 'init', 'tona_cms_register_job_post_type' );
 
@@ -75,11 +64,6 @@ function tona_cms_job_category_radio_meta_box( $post, $box ) {
     $selected_terms = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
     $selected_term_id = ! is_wp_error( $selected_terms ) && ! empty( $selected_terms ) ? (int) $selected_terms[0] : 0;
 
-    if ( ! $selected_term_id ) {
-        $default_term = get_term_by( 'slug', 'tuyen-dung', $taxonomy );
-        $selected_term_id = $default_term ? (int) $default_term->term_id : 0;
-    }
-
     echo '<div id="taxonomy-' . esc_attr( $taxonomy ) . '" class="categorydiv">';
     echo '<ul class="categorychecklist form-no-clear">';
 
@@ -94,7 +78,7 @@ function tona_cms_job_category_radio_meta_box( $post, $box ) {
     }
 
     echo '</ul>';
-    echo '<p class="description">Choose exactly one category. Tuyen Dung shows in the main jobs list, Thuc Tap shows in the internship section.</p>';
+    echo '<p class="description">Choose exactly one category. Use categories to control where jobs appear on the frontend.</p>';
     echo '</div>';
 }
 
@@ -109,17 +93,9 @@ function tona_cms_job_category_single_term( $post_id ) {
         return;
     }
 
-    if ( empty( $terms ) ) {
-        $default_term = get_term_by( 'slug', 'tuyen-dung', 'tona_job_category' );
-
-        if ( $default_term ) {
-            wp_set_object_terms( $post_id, array( (int) $default_term->term_id ), 'tona_job_category', false );
-        }
-
-        return;
+    if ( ! empty( $terms ) ) {
+        wp_set_object_terms( $post_id, array( (int) $terms[0] ), 'tona_job_category', false );
     }
-
-    wp_set_object_terms( $post_id, array( (int) $terms[0] ), 'tona_job_category', false );
 }
 add_action( 'save_post_tona_job', 'tona_cms_job_category_single_term', 20 );
 

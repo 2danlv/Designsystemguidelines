@@ -637,6 +637,10 @@ function cmsEndpoint(path: string) {
   return `${wordpressApiBase}${path}${separator}lang=${getCurrentLanguage()}`;
 }
 
+function isAbortError(error: unknown) {
+  return error instanceof DOMException && error.name === "AbortError";
+}
+
 export async function fetchCmsSettings(signal?: AbortSignal): Promise<SiteSettings | null> {
   try {
     const response = await fetch(cmsEndpoint("/tona/v1/settings"), { signal });
@@ -647,10 +651,7 @@ export async function fetchCmsSettings(signal?: AbortSignal): Promise<SiteSettin
 
     return (await response.json()) as SiteSettings;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return null;
     return null;
   }
 }
@@ -665,10 +666,7 @@ export async function fetchCmsRoute(path: string, signal?: AbortSignal): Promise
 
     return (await response.json()) as CmsRouteMatch;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return null;
     return null;
   }
 }
@@ -683,10 +681,7 @@ export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promi
 
     return (await response.json()) as T;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return null;
     return null;
   }
 }
@@ -701,10 +696,7 @@ export async function fetchCmsPageByTemplate<T>(template: string, signal?: Abort
 
     return (await response.json()) as T;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return null;
     return null;
   }
 }
@@ -719,10 +711,7 @@ export async function fetchCmsMembers(signal?: AbortSignal): Promise<MemberPost[
 
     return (await response.json()) as MemberPost[];
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return [];
     return [];
   }
 }
@@ -737,10 +726,7 @@ export async function fetchCmsJobs(signal?: AbortSignal): Promise<JobPost[]> {
 
     return (await response.json()) as JobPost[];
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return [];
     return [];
   }
 }
@@ -785,10 +771,7 @@ export async function submitCmsApplication(payload: JobApplicationPayload, signa
 
     return response.ok;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return false;
     return false;
   }
 }
@@ -803,10 +786,7 @@ export async function fetchCmsProjects(signal?: AbortSignal): Promise<ProjectPos
 
     return (await response.json()) as ProjectPost[];
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return [];
     return [];
   }
 }
@@ -821,10 +801,7 @@ export async function fetchCmsProject(slug: string, signal?: AbortSignal): Promi
 
     return (await response.json()) as ProjectPost;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return null;
     return null;
   }
 }
@@ -839,10 +816,7 @@ export async function fetchCmsNews(signal?: AbortSignal): Promise<NewsPost[]> {
 
     return (await response.json()) as NewsPost[];
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return [];
     return [];
   }
 }
@@ -857,10 +831,7 @@ export async function fetchCmsNewsPost(slug: string, signal?: AbortSignal): Prom
 
     return (await response.json()) as NewsPost;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
+    if (isAbortError(error)) return null;
     return null;
   }
 }

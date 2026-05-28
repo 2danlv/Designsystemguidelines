@@ -66,32 +66,6 @@
             "append": ""
         },
         {
-            "key": "field_tona_site_header_home_url",
-            "label": "Logo Home URL",
-            "name": "site_header_home_url",
-            "aria-label": "",
-            "type": "link",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "post_type": [
-                "page"
-            ],
-            "post_status": [
-                "publish"
-            ],
-            "taxonomy": "",
-            "allow_archives": 1,
-            "multiple": 0,
-            "allow_null": 0,
-            "allow_in_bindings": 0
-        },
-        {
             "key": "field_tona_site_tab_footer_vn",
             "label": "02. Footer VN",
             "name": "",

@@ -62,20 +62,6 @@ function tona_cms_register_news_post_type() {
             'rewrite'      => array( 'slug' => 'news-tag' ),
         )
     );
-
-    $default_terms = array(
-        'du-an'       => 'Du An',
-        'doi-tac'     => 'Doi Tac',
-        'giai-thuong' => 'Giai Thuong',
-        'su-kien'     => 'Su Kien',
-        'chung-nhan'  => 'Chung Nhan',
-    );
-
-    foreach ( $default_terms as $slug => $name ) {
-        if ( ! term_exists( $slug, 'tona_news_category' ) ) {
-            wp_insert_term( $name, 'tona_news_category', array( 'slug' => $slug ) );
-        }
-    }
 }
 add_action( 'init', 'tona_cms_register_news_post_type' );
 

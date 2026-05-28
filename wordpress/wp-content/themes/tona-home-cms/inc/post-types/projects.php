@@ -44,20 +44,6 @@ function tona_cms_register_project_post_type() {
             'rewrite'      => array( 'slug' => 'project-category' ),
         )
     );
-
-    $default_terms = array(
-        'industrial'    => 'Industrial',
-        'commercial'    => 'Commercial',
-        'solar-rooftop' => 'Solar Rooftop',
-        'hotels'        => 'Hotels',
-        'apartments'    => 'Apartments',
-    );
-
-    foreach ( $default_terms as $slug => $name ) {
-        if ( ! term_exists( $slug, 'tona_project_category' ) ) {
-            wp_insert_term( $name, 'tona_project_category', array( 'slug' => $slug ) );
-        }
-    }
 }
 add_action( 'init', 'tona_cms_register_project_post_type' );
 

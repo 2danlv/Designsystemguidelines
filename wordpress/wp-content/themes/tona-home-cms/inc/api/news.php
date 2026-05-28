@@ -127,3 +127,34 @@ function tona_cms_news_by_slug_payload( $slug ) {
     return $payload;
 }
 
+function tona_cms_news_page_payload( $page ) {
+    $post_id = $page->ID;
+
+    return array(
+        'id'      => $post_id,
+        'slug'    => $page->post_name,
+        'title'   => get_the_title( $page ),
+        'colors'  => array(
+            'heroBackground' => tona_cms_text_field( $post_id, 'news_hero_background' ),
+            'ctaBackground'  => tona_cms_text_field( $post_id, 'news_cta_background' ),
+        ),
+        'hero'    => array(
+            'breadcrumbLabel' => get_the_title( $page ),
+            'title'           => tona_cms_text_field( $post_id, 'news_hero_title' ),
+            'description'     => tona_cms_text_field( $post_id, 'news_hero_description' ),
+        ),
+        'listing' => array(
+            'featuredLabel'    => tona_cms_text_field( $post_id, 'news_featured_label' ),
+            'searchPlaceholder' => tona_cms_text_field( $post_id, 'news_search_placeholder' ),
+            'emptyText'        => tona_cms_text_field( $post_id, 'news_empty_text' ),
+            'loadMoreLabel'    => tona_cms_text_field( $post_id, 'news_load_more_label' ),
+        ),
+        'cta'     => array(
+            'title'            => tona_cms_text_field( $post_id, 'news_cta_title' ),
+            'description'      => tona_cms_text_field( $post_id, 'news_cta_description' ),
+            'emailPlaceholder' => tona_cms_text_field( $post_id, 'news_cta_email_placeholder' ),
+            'buttonLabel'      => tona_cms_text_field( $post_id, 'news_cta_button_label' ),
+        ),
+    );
+}
+
