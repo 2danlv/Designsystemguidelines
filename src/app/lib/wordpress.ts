@@ -515,6 +515,11 @@ export type SiteMenuItem = SiteLink & {
 
 export type SiteSettings = {
   ui?: Record<string, string>;
+  site?: {
+    title?: string;
+    tagline?: string;
+    icon?: string;
+  };
   header?: {
     logo?: string;
     logoAlt?: string;

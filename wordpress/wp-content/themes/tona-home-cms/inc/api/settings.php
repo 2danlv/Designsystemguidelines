@@ -262,12 +262,21 @@ function tona_cms_site_settings_payload() {
     $current_language = function_exists( 'pll_current_language' ) ? pll_current_language( 'slug' ) : 'vi';
     $current_language = in_array( $current_language, array( 'vi', 'en' ), true ) ? $current_language : 'vi';
     $socials = function_exists( 'get_field' ) ? get_field( 'site_footer_socials', $option_id ) : array();
+    $site_title = tona_cms_decode_text( get_bloginfo( 'name' ) );
+    $site_tagline = tona_cms_decode_text( get_bloginfo( 'description' ) );
+    $site_icon = function_exists( 'get_site_icon_url' ) ? get_site_icon_url( 512 ) : '';
+    $header_logo = tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'site_header_logo', $option_id ) : '' );
 
     return array(
-        'ui'     => tona_cms_ui_strings_payload( $current_language ),
+        'ui'   => tona_cms_ui_strings_payload( $current_language ),
+        'site' => array(
+            'title'   => $site_title,
+            'tagline' => $site_tagline,
+            'icon'    => $site_icon ? esc_url_raw( $site_icon ) : '',
+        ),
         'header' => array(
-            'logo'      => tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'site_header_logo', $option_id ) : '' ),
-            'logoAlt'   => tona_cms_text_field( $option_id, 'site_header_logo_alt' ),
+            'logo'      => $header_logo ?: ( $site_icon ? esc_url_raw( $site_icon ) : '' ),
+            'logoAlt'   => tona_cms_text_field( $option_id, 'site_header_logo_alt' ) ?: $site_title,
             'homeUrl'   => tona_cms_option_link_field( $option_id, 'site_header_home_url' ) ?: ( 'en' === $current_language ? '/en' : '/' ),
             'nav'       => tona_cms_nav_menu_payload( 'primary' ),
             'languages' => array(

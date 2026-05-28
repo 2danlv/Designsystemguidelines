@@ -542,6 +542,27 @@ export function Layout() {
     return () => controller.abort();
   }, [language]);
 
+  useEffect(() => {
+    const siteTitle = settings?.site?.title?.trim();
+    const siteIcon = settings?.site?.icon?.trim();
+
+    if (siteTitle) {
+      document.title = siteTitle;
+    }
+
+    if (siteIcon) {
+      let iconLink = document.querySelector<HTMLLinkElement>("link[rel='icon']");
+
+      if (!iconLink) {
+        iconLink = document.createElement("link");
+        iconLink.rel = "icon";
+        document.head.appendChild(iconLink);
+      }
+
+      iconLink.href = siteIcon;
+    }
+  }, [settings?.site?.title, settings?.site?.icon]);
+
   return (
     <SiteSettingsProvider settings={settings}>
       <div className="min-h-screen flex flex-col font-sans bg-white text-[#002d17] antialiased">
