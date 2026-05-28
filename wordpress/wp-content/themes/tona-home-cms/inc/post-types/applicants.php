@@ -24,10 +24,103 @@ function tona_cms_register_applicant_post_type() {
             'menu_icon'       => 'dashicons-id',
             'supports'        => array( 'title' ),
             'capability_type' => 'post',
+            'map_meta_cap'    => true,
+            'capabilities'    => array(
+                'create_posts'           => 'do_not_allow',
+                'delete_post'            => 'do_not_allow',
+                'delete_posts'           => 'do_not_allow',
+                'delete_private_posts'   => 'do_not_allow',
+                'delete_published_posts' => 'do_not_allow',
+                'delete_others_posts'    => 'do_not_allow',
+            ),
         )
     );
 }
 add_action( 'init', 'tona_cms_register_applicant_post_type' );
+
+function tona_cms_block_applicant_create_delete_caps( $caps, $cap, $user_id, $args ) {
+    if ( in_array( $cap, array( 'delete_post', 'delete_posts' ), true ) ) {
+        $post_id = isset( $args[0] ) ? (int) $args[0] : 0;
+
+        if ( $post_id && 'tona_applicant' === get_post_type( $post_id ) ) {
+            return array( 'do_not_allow' );
+        }
+    }
+
+    return $caps;
+}
+add_filter( 'map_meta_cap', 'tona_cms_block_applicant_create_delete_caps', 10, 4 );
+
+function tona_cms_redirect_applicant_new_screen() {
+    global $pagenow;
+
+    if (
+        is_admin()
+        && 'post-new.php' === $pagenow
+        && 'tona_applicant' === ( $_GET['post_type'] ?? '' )
+    ) {
+        wp_safe_redirect( admin_url( 'edit.php?post_type=tona_applicant' ) );
+        exit;
+    }
+}
+add_action( 'admin_init', 'tona_cms_redirect_applicant_new_screen' );
+
+function tona_cms_remove_applicant_add_new_submenu() {
+    remove_submenu_page( 'edit.php?post_type=tona_applicant', 'post-new.php?post_type=tona_applicant' );
+}
+add_action( 'admin_menu', 'tona_cms_remove_applicant_add_new_submenu', 999 );
+
+function tona_cms_applicant_new_count() {
+    $query = new WP_Query(
+        array(
+            'post_type'      => 'tona_applicant',
+            'post_status'    => array( 'publish', 'private', 'draft', 'pending' ),
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'meta_key'       => 'applicant_status',
+            'meta_value'     => 'new',
+        )
+    );
+
+    return (int) $query->found_posts;
+}
+
+function tona_cms_add_applicant_menu_badge() {
+    global $menu;
+
+    $count = tona_cms_applicant_new_count();
+
+    if ( $count < 1 || ! is_array( $menu ) ) {
+        return;
+    }
+
+    foreach ( $menu as $index => $item ) {
+        if ( isset( $item[2] ) && 'edit.php?post_type=tona_applicant' === $item[2] ) {
+            $menu[ $index ][0] .= sprintf(
+                ' <span class="awaiting-mod count-%1$d"><span class="pending-count">%1$d</span></span>',
+                $count
+            );
+            break;
+        }
+    }
+}
+add_action( 'admin_menu', 'tona_cms_add_applicant_menu_badge', 1000 );
+
+function tona_cms_applicant_row_actions( $actions, $post ) {
+    if ( $post && 'tona_applicant' === $post->post_type ) {
+        unset( $actions['inline hide-if-no-js'], $actions['trash'], $actions['delete'] );
+    }
+
+    return $actions;
+}
+add_filter( 'post_row_actions', 'tona_cms_applicant_row_actions', 10, 2 );
+
+function tona_cms_applicant_bulk_actions( $actions ) {
+    unset( $actions['trash'], $actions['delete'] );
+
+    return $actions;
+}
+add_filter( 'bulk_actions-edit-tona_applicant', 'tona_cms_applicant_bulk_actions' );
 
 function tona_cms_applicant_admin_columns( $columns ) {
     $date_column = isset( $columns['date'] ) ? $columns['date'] : null;
