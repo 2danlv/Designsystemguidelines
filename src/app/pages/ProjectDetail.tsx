@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router";
 import { Link } from "../components/LocalizedLink";
-import { projects as fallbackProjects } from "../data";
 import {
   ArrowLeft, ArrowRight, X, MapPin, Maximize2,
   Calendar, User, CheckCircle2, ChevronLeft, ChevronRight
@@ -183,7 +182,6 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
   const text = useSiteText();
   const { slug: routeSlug } = useParams();
   const slug = slugOverride || routeSlug;
-  const fallbackProject = fallbackProjects.find((p) => p.slug === slug) as ProjectPost | undefined;
   const [cmsProject, setCmsProject] = useState<ProjectPost | null>(null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
 
@@ -205,8 +203,8 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
     return () => controller.abort();
   }, [slug]);
 
-  const project = cmsProject || fallbackProject;
-  const relatedSource = cmsProjects.length ? cmsProjects : (fallbackProjects as ProjectPost[]);
+  const project = cmsProject;
+  const relatedSource = cmsProjects;
   const relatedProjects = relatedSource.filter((p) => p.slug !== slug).slice(0, 3);
 
   if (!project) {

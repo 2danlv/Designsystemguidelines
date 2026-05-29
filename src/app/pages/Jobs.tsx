@@ -1,14 +1,12 @@
-import { useState, type FormEvent } from "react";
-import { jobs as fallbackJobs } from "../data";
+﻿import { useState, type FormEvent } from "react";
 import { Link } from "../components/LocalizedLink";
 import {
-  MapPin, Clock, Briefcase, ChevronRight, ArrowRight,
-  CheckCircle2, Star, Users, TrendingUp, ChevronDown, ChevronUp, X,
-  GraduationCap, BookOpen, Lightbulb, FileText, ExternalLink
+  MapPin, Clock, Briefcase, ChevronRight, ArrowRight, CheckCircle2, Star, ChevronDown, ChevronUp, X,
+  GraduationCap, BookOpen, FileText, ExternalLink
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { submitCmsApplication, type JobPost, type JobsCmsData } from "../lib/wordpress";
-import { useJobsPage, type InternPosition, type PerkItem } from "../cms/useJobsPage";
+import { useJobsPage, type InternPosition } from "../cms/useJobsPage";
 import { useSiteText } from "../context/SiteSettingsContext";
 import { sitePath } from "../lib/siteLinks";
 
@@ -26,95 +24,13 @@ function backgroundStyle(color?: string) {
 }
 
 function isBrokenCmsText(value?: string) {
-  return !!value && (/[�ï¿]/.test(value) || /[A-Za-zÀ-ỹ]\?[A-Za-zÀ-ỹ]/.test(value) || /\?\?/.test(value));
+  return !!value && (/[\uFFFD\u00EF\u00BF]/.test(value) || /\w\?\w/.test(value) || /\?\?/.test(value));
 }
 
 function cmsText(value: string | undefined, fallback: string) {
   return value && !isBrokenCmsText(value) ? value : fallback;
 }
 
-const fallbackPerks: PerkItem[] = [
-  { icon: TrendingUp, title: "Lo trinh thang tien ro rang", desc: "Xet thang tien 6 thang/lan theo nang luc thuc te, khong phu thuoc tham nien." },
-  { icon: Star, title: "Luong & thuong hap dan", desc: "Goi luong canh tranh thi truong, thuong hoan thanh du an va thuong cuoi nam." },
-  { icon: Users, title: "Moi truong quoc te", desc: "Lam viec cung cac chuyen gia va doi tac tu Singapore, Nhat Ban, Duc, My." },
-  { icon: CheckCircle2, title: "Dao tao chuyen sau", desc: "TONA Academy: 50+ chuong trinh dao tao ky thuat, quan ly va lanh dao." },
-];
-
-// INTERN DATA
-const fallbackInternPositions: InternPosition[] = [
-  {
-    id: "intern-civil",
-    title: "Thuc Tap Sinh Ky Thuat Xay Dung",
-    subtitle: "Civil Engineering Intern",
-    department: "Ky Thuat Cong Truong",
-    duration: "3 - 6 thang",
-    location: "TP.HCM / Binh Duong",
-    slots: 5,
-    icon: BookOpen,
-    requirements: [
-      "Sinh vien nam 3 - 4 chuyen nganh Xay dung, Ky thuat Cong trinh hoac tuong duong",
-      "GPA >= 2.5 (thang 4.0) hoac hoc luc Kha tro len",
-      "San sang den cong truong (Binh Duong / Dong Nai)",
-      "Co kien thuc co ban ve AutoCAD la loi the",
-    ],
-    benefits: [
-      "Phu cap thuc tap hang thang",
-      "Duoc huong dan boi ky su senior",
-      "Co hoi nhan offer full-time sau tot nghiep",
-      "Chung nhan thuc tap tu Tona Corporation",
-      "Tham quan du an thuc te hang tuan",
-    ],
-    desc: "Tham gia truc tiep vao cac du an thi cong thuc te, tu doc ban ve, theo doi tien do den lap bao cao nghiem thu duoi su huong dan cua ky su giau kinh nghiem.",
-  },
-  {
-    id: "intern-mep",
-    title: "Thuc Tap Sinh Co Dien MEP",
-    subtitle: "MEP Engineering Intern",
-    department: "Ky Thuat MEP",
-    duration: "3 - 6 thang",
-    location: "TP.HCM / Binh Duong",
-    slots: 4,
-    icon: Lightbulb,
-    requirements: [
-      "Sinh vien nam 3 - 4 nganh Dien, Dien lanh, Co khi, Ky thuat Moi truong",
-      "Quan tam den he thong HVAC, dien, PCCC trong cong trinh cong nghiep",
-      "Co kha nang doc ban ve so do dien hoac co ban ve AutoCAD",
-      "Tieng Anh doc hieu tai lieu ky thuat la loi the",
-    ],
-    benefits: [
-      "Phu cap thuc tap hang thang",
-      "Tiep can he thong MEP du an thuc te",
-      "Dao tao ve tieu chuan ISO va quy trinh QA/QC",
-      "Chung nhan thuc tap tu Tona Corporation",
-      "Mentor 1-on-1 voi ky su MEP senior",
-    ],
-    desc: "Ho tro doi ky thuat MEP trong thiet ke, thi cong va kiem tra he thong dien, HVAC va PCCC tai cac du an nha may cong nghe cao va cong trinh thuong mai.",
-  },
-  {
-    id: "intern-pm",
-    title: "Thuc Tap Sinh Quan Ly Du An",
-    subtitle: "Project Management Intern",
-    department: "Quan Ly Du An",
-    duration: "3 - 4 thang",
-    location: "TP.HCM / Binh Duong",
-    slots: 3,
-    icon: GraduationCap,
-    requirements: [
-      "Sinh vien nam 3 - 4 nganh Quan ly Xay dung, Kinh te Xay dung, Ky thuat Cong trinh",
-      "Ky nang phan tich, tong hop thong tin tot",
-      "Thanh thao Microsoft Office (Word, Excel, PowerPoint)",
-      "Giao tiep tieng Anh co ban la loi the",
-    ],
-    benefits: [
-      "Phu cap thuc tap hang thang",
-      "Tham gia hop du an thuc te cung PM",
-      "Co hoi nhan offer junior PM sau tot nghiep",
-      "Chung nhan va thu gioi thieu tu Tona",
-      "Hoc cong cu MS Project & quan ly tien do",
-    ],
-    desc: "Ho tro doi quan ly du an theo doi tien do, lap bao cao, dieu phoi thong tin giua cac ben va hoc hoi quy trinh quan ly EPC tai cac cong trinh thuc te.",
-  },
-];
 
 // APPLY MODAL
 function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => void; content?: JobsCmsData["applicationModal"] }) {
@@ -635,11 +551,7 @@ export function Jobs() {
     interns,
     cultureTeaser,
     applicationModal,
-  } = useJobsPage({
-    fallbackJobs: fallbackJobs as JobPost[],
-    fallbackPerks,
-    fallbackInternPositions,
-  });
+  } = useJobsPage();
   const openApplicationJob: JobPost = {
     id: "open-application",
     title: spontaneous?.title || "Ung Tuyen Tu Do",
@@ -877,4 +789,6 @@ export function Jobs() {
     </div>
   );
 }
+
+
 

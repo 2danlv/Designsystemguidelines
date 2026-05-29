@@ -4,9 +4,6 @@ import {
   ChevronRight,
   ArrowRight,
   Shield,
-  Award,
-  TrendingUp,
-  CheckCircle2,
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -38,35 +35,6 @@ type CertificationItem = {
   org: string;
 };
 
-const fallbackStats: StatItem[] = [
-  { value: "500+", label: "Du An Hoan Thanh" },
-  { value: "800+", label: "Nhan Su" },
-  { value: "15+", label: "Nam Kinh Nghiem" },
-  { value: "50+", label: "Doi Tac Quoc Te" },
-];
-
-const fallbackCoreValues: CoreValue[] = [
-  { icon: Shield, title: "An Toan Tren Het", desc: "Zero accident la kim chi nam bat di bat dich. Moi nhan su Tona duoc dao tao bai ban ve an toan lao dong." },
-  { icon: Award, title: "Chat Luong Khong Thoa Hiep", desc: "Tung chi tiet nho nhat deu duoc kiem soat nghiem ngat. ISO 9001 khong chi la chung chi, do la van hoa." },
-  { icon: TrendingUp, title: "Hieu Qua Va Tien Do", desc: "Ban giao dung han, tham chi som hon, khong phat sinh chi phi ngoai hop dong." },
-  { icon: CheckCircle2, title: "Tinh Trung Thuc", desc: "Minh bach trong bao cao, trung thuc trong quan he, nen tang cua moi hop tac lau dai." },
-];
-
-const fallbackTimeline: TimelineItem[] = [
-  { year: "2009", title: "Thanh Lap", desc: "Tona Corporation ra doi tai TP.HCM voi doi ngu 15 ky su, chuyen ve thi cong ket cau cong nghiep." },
-  { year: "2013", title: "Mo Rong MEP", desc: "Ra mat bo phan Co Dien (MEP) chuyen biet, dua Tona tro thanh nha thau EPC toan dien." },
-  { year: "2017", title: "ISO 9001", desc: "Nhan chung nhan ISO 9001:2015 dau tien, khang dinh he thong quan ly chat luong dat tieu chuan quoc te." },
-  { year: "2020", title: "100+ Nhan Su", desc: "Doi ngu vuot moc 100 ky su va chuyen gia, hoan thanh du an quoc te dau tien cho Phoenix Contact." },
-  { year: "2023", title: "800+ Nhan Su", desc: "Cot moc 800+ nhan su, 50+ du an song song, top 10 nha thau MEP uy tin mien Nam." },
-  { year: "2025", title: "Beyond Limits", desc: "Buoc vao ky nguyen moi voi Solar, Green Energy, BIM Technology va muc tieu 1,000 nhan su." },
-];
-
-const fallbackCertifications: CertificationItem[] = [
-  { code: "ISO 9001:2015", title: "Quan Ly Chat Luong", org: "Bureau Veritas" },
-  { code: "ISO 45001:2018", title: "An Toan Va Suc Khoe", org: "Bureau Veritas" },
-  { code: "ISO 14001:2015", title: "Quan Ly Moi Truong", org: "Bureau Veritas" },
-];
-
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
     <span key={`${line}-${index}`}>
@@ -92,22 +60,14 @@ export function About() {
   }, []);
 
   const stats = useMemo<StatItem[]>(() => {
-    if (!cmsPage?.stats?.length) {
-      return fallbackStats;
-    }
-
-    return cmsPage.stats.map((stat) => ({
+    return (cmsPage?.stats || []).map((stat) => ({
       value: stat.value || "",
       label: stat.label || "",
     }));
   }, [cmsPage]);
 
   const coreValues = useMemo<CoreValue[]>(() => {
-    if (!cmsPage?.values?.length) {
-      return fallbackCoreValues;
-    }
-
-    return cmsPage.values.map((value) => ({
+    return (cmsPage?.values || []).map((value) => ({
       icon: getCmsIcon(value.icon, Shield),
       iconImage: value.iconImage || "",
       title: value.title || "",
@@ -116,11 +76,7 @@ export function About() {
   }, [cmsPage]);
 
   const timeline = useMemo<TimelineItem[]>(() => {
-    if (!cmsPage?.timeline?.length) {
-      return fallbackTimeline;
-    }
-
-    return cmsPage.timeline.map((item) => ({
+    return (cmsPage?.timeline || []).map((item) => ({
       year: item.year || "",
       title: item.title || "",
       desc: item.desc || "",
@@ -128,11 +84,7 @@ export function About() {
   }, [cmsPage]);
 
   const certifications = useMemo<CertificationItem[]>(() => {
-    if (!cmsPage?.certifications?.length) {
-      return fallbackCertifications;
-    }
-
-    return cmsPage.certifications.map((cert) => ({
+    return (cmsPage?.certifications || []).map((cert) => ({
       code: cert.code || "",
       title: cert.title || "",
       org: cert.org || "",

@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link } from "../components/LocalizedLink";
-import { ArrowRight, ChevronRight, GraduationCap, Handshake, Heart, Leaf, Sun, Users, type LucideIcon } from "lucide-react";
+import { ArrowRight, ChevronRight, Handshake, Heart, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsPage, fetchCmsPageByTemplate, type CsrCmsData } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
@@ -26,88 +26,6 @@ type CsrImpact = {
   label: string;
 };
 
-const fallbackPrograms: CsrProgram[] = [
-  {
-    id: "uom-tet",
-    icon: Heart,
-    color: "#f4aa1f",
-    bgColor: "#fffdf5",
-    tag: "Tết Nguyên Đán",
-    title: "Ươm Tết Đón Nắng Xuân",
-    subtitle: "Spreading Warmth This Tết",
-    desc: "Chương trình trao quà Tết thường niên dành cho gia đình công nhân có hoàn cảnh khó khăn tại các tỉnh miền Đông Nam Bộ, nơi Tona đang triển khai dự án. Mỗi năm, hàng trăm phần quà bao gồm lương thực, tiền mặt và đồ dùng sinh hoạt được trao tận tay trước kỳ nghỉ Tết.",
-    stats: [
-      { val: "300+", label: "Gia đình được hỗ trợ" },
-      { val: "4", label: "Tỉnh thành" },
-      { val: "2019", label: "Năm bắt đầu" },
-    ],
-    highlights: [
-      "Tặng 300+ phần quà Tết gồm gạo, dầu ăn, mì tôm và tiền mặt",
-      "Thăm hỏi và trao học bổng cho con em công nhân học giỏi",
-      "Tổ chức bếp ăn miễn phí trong 3 ngày giáp Tết tại công trường",
-      "Phối hợp với Hội Chữ Thập Đỏ địa phương để xác định đối tượng",
-    ],
-    image: "https://images.unsplash.com/photo-1674574124340-c00cc2dae99c?w=800&q=80",
-  },
-  {
-    id: "solarlab",
-    icon: Sun,
-    color: "#46aa85",
-    bgColor: "#f0faf6",
-    tag: "Giáo Dục & Năng Lượng Xanh",
-    title: "SolarLab - Phòng Thí Nghiệm Năng Lượng",
-    subtitle: "SolarLab Education Initiative",
-    desc: "SolarLab là sáng kiến giáo dục của Tona nhằm đưa kiến thức về năng lượng tái tạo đến với học sinh THPT và sinh viên kỹ thuật. Thông qua workshop thực hành, tham quan dự án solar và cuộc thi thiết kế, Tona góp phần ươm mầm thế hệ kỹ sư xanh cho tương lai.",
-    stats: [
-      { val: "500+", label: "Học sinh/sinh viên tham gia" },
-      { val: "8", label: "Trường đối tác" },
-      { val: "12", label: "Workshop / năm" },
-    ],
-    highlights: [
-      "Workshop lắp ráp và vận hành tấm pin mặt trời thực tế",
-      "Tham quan dự án Solar Rooftop 15 MWp tại SV Group",
-      "Cuộc thi thiết kế hệ thống năng lượng mặt trời cho trường học",
-      "Tài trợ học bổng Kỹ Sư Xanh cho sinh viên xuất sắc",
-    ],
-    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80",
-  },
-  {
-    id: "internship",
-    icon: GraduationCap,
-    color: "#002d17",
-    bgColor: "#f9f9f7",
-    tag: "Phát Triển Nhân Tài",
-    title: "Student Internship Program",
-    subtitle: "Nurturing Tomorrow's Engineers",
-    desc: "Chương trình thực tập sinh của Tona không chỉ là nơi để sinh viên tích lũy giờ thực tập, mà là cơ hội thực sự để học hỏi, đóng góp và phát triển bản thân trong môi trường kỹ thuật chuyên nghiệp đẳng cấp quốc tế.",
-    stats: [
-      { val: "120+", label: "Thực tập sinh / năm" },
-      { val: "60%", label: "Nhận offer full-time" },
-      { val: "10+", label: "Trường đại học đối tác" },
-    ],
-    highlights: [
-      "Thực tập trực tiếp tại công trường và văn phòng kỹ thuật",
-      "Mentor 1-on-1 với kỹ sư senior có kinh nghiệm 5+ năm",
-      "Tham gia đầy đủ vào quá trình QA/QC và nghiệm thu thực tế",
-      "Chứng nhận thực tập và thư giới thiệu từ Tona Corporation",
-      "Cơ hội trình bày dự án thực tập trước Hội đồng Kỹ thuật",
-    ],
-    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80",
-  },
-];
-
-const fallbackCommunityImpact: CsrImpact[] = [
-  { icon: Handshake, val: "15+", label: "Năm hoạt động CSR" },
-  { icon: Users, val: "5,000+", label: "Người được hưởng lợi" },
-  { icon: Leaf, val: "3", label: "Chương trình trọng điểm" },
-  { icon: Heart, val: "100%", label: "Tự nguyện từ nhân viên" },
-];
-
-const fallbackCommitmentItems = [
-  { title: "Minh Bạch", desc: "Báo cáo CSR hàng năm công bố công khai, kiểm toán độc lập." },
-  { title: "Bền Vững", desc: "Ưu tiên chương trình dài hạn, tạo tác động thực sự thay vì hoạt động bề mặt." },
-  { title: "Địa Phương", desc: "Tập trung hỗ trợ cộng đồng tại các địa bàn Tona đang triển khai dự án." },
-];
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -134,11 +52,7 @@ export function CSR() {
   }, []);
 
   const communityImpact = useMemo<CsrImpact[]>(() => {
-    if (!cmsPage?.impact?.length) {
-      return fallbackCommunityImpact;
-    }
-
-    return cmsPage.impact.map((item) => ({
+    return (cmsPage?.impact || []).map((item) => ({
       icon: getCmsIcon(item.icon, Handshake),
       val: item.value || "",
       label: item.label || "",
@@ -146,11 +60,7 @@ export function CSR() {
   }, [cmsPage]);
 
   const programs = useMemo<CsrProgram[]>(() => {
-    if (!cmsPage?.programs?.length) {
-      return fallbackPrograms;
-    }
-
-    return cmsPage.programs.map((program, index) => ({
+    return (cmsPage?.programs || []).map((program, index) => ({
       id: program.id || `csr-program-${index}`,
       icon: getCmsIcon(program.icon, Heart),
       color: program.color || "#f4aa1f",
@@ -168,7 +78,7 @@ export function CSR() {
     }));
   }, [cmsPage]);
 
-  const commitmentItems = cmsPage?.commitment?.items?.length ? cmsPage.commitment.items : fallbackCommitmentItems;
+  const commitmentItems = cmsPage?.commitment?.items || [];
   const heroTitle = cmsPage?.hero?.title || "Tona &\nCộng Đồng";
   const heroDescription = cmsPage?.hero?.description || "Tona Corporation tin rằng doanh nghiệp phát triển bền vững phải song hành với trách nhiệm xã hội. Mỗi công trình chúng tôi xây dựng không chỉ là kết cấu thép và bê tông, mà còn là cam kết với con người và cộng đồng.";
 
@@ -352,3 +262,5 @@ export function CSR() {
     </div>
   );
 }
+
+

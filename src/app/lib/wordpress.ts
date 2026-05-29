@@ -645,6 +645,40 @@ function isAbortError(error: unknown) {
   return error instanceof DOMException && error.name === "AbortError";
 }
 
+const mojibakePattern = /Ã|Â|Ä|Æ|Å|áº|á»|ï¿½|â€|â˜/;
+
+function repairMojibakeText(value: string) {
+  if (!mojibakePattern.test(value)) {
+    return value;
+  }
+
+  try {
+    const bytes = Uint8Array.from(Array.from(value, (char) => char.charCodeAt(0) & 0xff));
+    const decoded = new TextDecoder("utf-8").decode(bytes);
+    return decoded.includes("\uFFFD") ? value : decoded;
+  } catch {
+    return value;
+  }
+}
+
+function sanitizeCmsResponse<T>(value: T): T {
+  if (typeof value === "string") {
+    return repairMojibakeText(value) as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeCmsResponse(item)) as T;
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, sanitizeCmsResponse(item)])
+    ) as T;
+  }
+
+  return value;
+}
+
 export async function fetchCmsSettings(signal?: AbortSignal): Promise<SiteSettings | null> {
   try {
     const response = await fetch(cmsEndpoint("/tona/v1/settings"), { signal });
@@ -653,7 +687,7 @@ export async function fetchCmsSettings(signal?: AbortSignal): Promise<SiteSettin
       return null;
     }
 
-    return (await response.json()) as SiteSettings;
+    return sanitizeCmsResponse((await response.json()) as SiteSettings);
   } catch (error) {
     if (isAbortError(error)) return null;
     return null;
@@ -668,7 +702,7 @@ export async function fetchCmsRoute(path: string, signal?: AbortSignal): Promise
       return null;
     }
 
-    return (await response.json()) as CmsRouteMatch;
+    return sanitizeCmsResponse((await response.json()) as CmsRouteMatch);
   } catch (error) {
     if (isAbortError(error)) return null;
     return null;
@@ -683,7 +717,7 @@ export async function fetchCmsPage<T>(slug: string, signal?: AbortSignal): Promi
       return null;
     }
 
-    return (await response.json()) as T;
+    return sanitizeCmsResponse((await response.json()) as T);
   } catch (error) {
     if (isAbortError(error)) return null;
     return null;
@@ -698,7 +732,7 @@ export async function fetchCmsPageByTemplate<T>(template: string, signal?: Abort
       return null;
     }
 
-    return (await response.json()) as T;
+    return sanitizeCmsResponse((await response.json()) as T);
   } catch (error) {
     if (isAbortError(error)) return null;
     return null;
@@ -713,7 +747,7 @@ export async function fetchCmsMembers(signal?: AbortSignal): Promise<MemberPost[
       return [];
     }
 
-    return (await response.json()) as MemberPost[];
+    return sanitizeCmsResponse((await response.json()) as MemberPost[]);
   } catch (error) {
     if (isAbortError(error)) return [];
     return [];
@@ -728,7 +762,7 @@ export async function fetchCmsJobs(signal?: AbortSignal): Promise<JobPost[]> {
       return [];
     }
 
-    return (await response.json()) as JobPost[];
+    return sanitizeCmsResponse((await response.json()) as JobPost[]);
   } catch (error) {
     if (isAbortError(error)) return [];
     return [];
@@ -788,7 +822,7 @@ export async function fetchCmsProjects(signal?: AbortSignal): Promise<ProjectPos
       return [];
     }
 
-    return (await response.json()) as ProjectPost[];
+    return sanitizeCmsResponse((await response.json()) as ProjectPost[]);
   } catch (error) {
     if (isAbortError(error)) return [];
     return [];
@@ -803,7 +837,7 @@ export async function fetchCmsProject(slug: string, signal?: AbortSignal): Promi
       return null;
     }
 
-    return (await response.json()) as ProjectPost;
+    return sanitizeCmsResponse((await response.json()) as ProjectPost);
   } catch (error) {
     if (isAbortError(error)) return null;
     return null;
@@ -818,7 +852,7 @@ export async function fetchCmsNews(signal?: AbortSignal): Promise<NewsPost[]> {
       return [];
     }
 
-    return (await response.json()) as NewsPost[];
+    return sanitizeCmsResponse((await response.json()) as NewsPost[]);
   } catch (error) {
     if (isAbortError(error)) return [];
     return [];
@@ -833,7 +867,7 @@ export async function fetchCmsNewsPost(slug: string, signal?: AbortSignal): Prom
       return null;
     }
 
-    return (await response.json()) as NewsPost;
+    return sanitizeCmsResponse((await response.json()) as NewsPost);
   } catch (error) {
     if (isAbortError(error)) return null;
     return null;

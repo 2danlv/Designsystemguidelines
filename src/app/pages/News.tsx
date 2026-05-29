@@ -1,6 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import { Link } from "../components/LocalizedLink";
-import { news as fallbackNews } from "../data";
 import { ArrowRight, ChevronRight, Clock, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsNews, fetchCmsPageByTemplate, type NewsCmsData, type NewsPost } from "../lib/wordpress";
@@ -40,9 +39,7 @@ export function News() {
     return () => controller.abort();
   }, []);
 
-  const articles = useMemo<NewsPost[]>(() => (
-    cmsNews.length ? cmsNews : (fallbackNews as NewsPost[])
-  ), [cmsNews]);
+  const articles = useMemo<NewsPost[]>(() => cmsNews, [cmsNews]);
 
   const categories = useMemo(() => {
     const seen = new Map<string, string>();
@@ -250,30 +247,6 @@ export function News() {
             </button>
           </div>
         )}
-      </div>
-
-      <div className="bg-[#002d17] py-14" style={backgroundStyle(colors?.ctaBackground)}>
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div>
-            <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
-            <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight">
-              {renderLines(cta?.title || "Nhận Tin Tức Mới Nhất")}
-            </h3>
-            <p className="text-white/50 mt-2 text-sm">
-              {cta?.description || "Theo dõi Tona để cập nhật dự án và hoạt động mới nhất."}
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <input
-              type="email"
-              placeholder={cta?.emailPlaceholder || "Email của bạn"}
-              className="px-4 py-3 bg-white/10 border border-white/20 text-white placeholder:text-white/30 text-sm font-medium focus:outline-none focus:border-[#f4aa1f] w-56 rounded-lg"
-            />
-            <button className="bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors whitespace-nowrap rounded-lg">
-              {cta?.buttonLabel || "Đăng Ký"}
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

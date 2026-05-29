@@ -1,10 +1,7 @@
-import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
+﻿import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from "react";
 import {
-  CheckCircle2,
   GraduationCap,
-  Star,
   TrendingUp,
-  Users,
   type LucideIcon,
 } from "lucide-react";
 import { fetchCmsJobs, fetchCmsPage, type JobPost, type JobsCmsData } from "../lib/wordpress";
@@ -63,11 +60,7 @@ function internPositionFromJob(job: JobPost): InternPosition {
   };
 }
 
-type UseJobsPageOptions = {
-  fallbackJobs: JobPost[];
-  fallbackPerks: PerkItem[];
-  fallbackInternPositions: InternPosition[];
-};
+type UseJobsPageOptions = Record<string, never>;
 
 export type JobsPageViewModel = {
   activeDept: string;
@@ -90,11 +83,7 @@ export type JobsPageViewModel = {
   applicationModal: JobsCmsData["applicationModal"];
 };
 
-export function useJobsPage({
-  fallbackJobs,
-  fallbackPerks,
-  fallbackInternPositions,
-}: UseJobsPageOptions): JobsPageViewModel {
+export function useJobsPage({}: UseJobsPageOptions = {}): JobsPageViewModel {
   const [activeDept, setActiveDept] = useState(allDepartmentsLabel);
   const [cmsPage, setCmsPage] = useState<JobsCmsData | null>(null);
   const [cmsJobs, setCmsJobs] = useState<JobPost[]>([]);
@@ -113,9 +102,7 @@ export function useJobsPage({
     return () => controller.abort();
   }, []);
 
-  const jobItems = useMemo<JobPost[]>(() => (
-    cmsJobs.length ? cmsJobs : fallbackJobs
-  ), [cmsJobs, fallbackJobs]);
+  const jobItems = useMemo<JobPost[]>(() => cmsJobs, [cmsJobs]);
 
   const recruitmentJobs = useMemo(() => (
     cmsJobs.length ? jobItems.filter((job) => !isInternshipJob(job)) : jobItems
@@ -132,7 +119,7 @@ export function useJobsPage({
 
   const perks = useMemo<PerkItem[]>(() => {
     if (!cmsPage?.perks?.length) {
-      return fallbackPerks;
+      return [];
     }
 
     return cmsPage.perks.map((perk) => ({
@@ -141,19 +128,15 @@ export function useJobsPage({
       title: perk.title || "",
       desc: perk.desc || "",
     }));
-  }, [cmsPage, fallbackPerks]);
+  }, [cmsPage]);
 
   const internPositions = useMemo<InternPosition[]>(() => {
     if (internshipJobs.length) {
       return internshipJobs.map(internPositionFromJob);
     }
 
-    if (!cmsJobs.length) {
-      return fallbackInternPositions;
-    }
-
     return [];
-  }, [cmsJobs.length, fallbackInternPositions, internshipJobs]);
+  }, [internshipJobs]);
 
   const filteredJobs = activeDept === allDepartmentsLabel
     ? recruitmentJobs
@@ -180,3 +163,5 @@ export function useJobsPage({
     applicationModal: cmsPage?.applicationModal,
   };
 }
+
+

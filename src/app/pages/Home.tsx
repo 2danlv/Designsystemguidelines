@@ -8,7 +8,6 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
-import { projects as fallbackProjects, news as fallbackNews } from "../data";
 import {
   fetchCmsNews,
   fetchCmsPageByTemplate,
@@ -30,48 +29,6 @@ type HomeHeroSlide = {
   sub: string;
 };
 
-const heroSlides: HomeHeroSlide[] = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1650656746788-dee910f6b42b?w=1920&q=85",
-    tag: "Industrial • Biên Hòa, Đồng Nai",
-    title: "Nâng Cấp Cải Tạo\nNhà Máy Phoenix Contact",
-    sub: "171 ngày · Zero Downtime · 25,000 m²",
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1761333477936-56fbc7851c65?w=1920&q=85",
-    tag: "Commercial • Biên Hòa, Đồng Nai",
-    title: "Cải Tạo TTTM\nGO! Đồng Nai",
-    sub: "8 tháng · Hoạt động liên tục · 46,100 m²",
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1772442198624-4fc4d7281e89?w=1920&q=85",
-    tag: "Industrial • Bình Dương",
-    title: "Nhà Máy Spartronics\nViệt Nam 2",
-    sub: "Cleanroom ISO 6 · EPC Toàn diện · 40,000 m²",
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1772006807170-5750a2aa3713?w=1920&q=85",
-    tag: "Hotels • Phú Quốc",
-    title: "Hoa Binh Resort\nPhu Quoc",
-    sub: "5 sao · 10 ha · 18 tháng thi công",
-  },
-];
-
-// PARTNER LOGOS
-const fallbackPartnerLogos = [
-  { name: "SIEMENS", tagline: "Ingenuity for life" },
-  { name: "SCHNEIDER\nELECTRIC", tagline: "Life Is On" },
-  { name: "HONEYWELL", tagline: "The Future Is What We Make It" },
-  { name: "DAIKIN", tagline: "Innovation in HVAC" },
-  { name: "MITSUBISHI\nELECTRIC", tagline: "Changes for the Better" },
-  { name: "ABB", tagline: "Electrification & Automation" },
-  { name: "JOHNSON\nCONTROLS", tagline: "Smart Buildings" },
-  { name: "PANASONIC", tagline: "A Better Life, A Better World" },
-];
 
 type HomeService = {
   id: number | string;
@@ -88,7 +45,7 @@ function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: H
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const activeSlides = slides.length ? slides : heroSlides;
+  const activeSlides = slides;
 
   const goTo = useCallback((idx: number, dir: number) => {
     setDirection(dir);
@@ -96,10 +53,12 @@ function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: H
   }, []);
 
   const next = useCallback(() => {
+    if (!activeSlides.length) return;
     goTo((current + 1) % activeSlides.length, 1);
   }, [activeSlides.length, current, goTo]);
 
   const prev = useCallback(() => {
+    if (!activeSlides.length) return;
     goTo((current - 1 + activeSlides.length) % activeSlides.length, -1);
   }, [activeSlides.length, current, goTo]);
 
@@ -113,6 +72,10 @@ function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: H
   const primaryUrl = content?.primaryUrl || sitePath("projects");
   const secondaryLabel = content?.secondaryLabel || "Portfolio";
   const secondaryUrl = content?.secondaryUrl || sitePath("projects");
+
+  if (!slide) {
+    return null;
+  }
 
   return (
     <section className="relative w-full h-[100vh] min-h-[600px] bg-[#002d17] overflow-hidden">
@@ -205,12 +168,9 @@ function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: H
 
 // MARQUEE STRIP
 function MarqueeStrip({ items: cmsItems }: { items?: string[] }) {
-  const items = cmsItems?.length ? [...cmsItems, ...cmsItems] : [
-    "ISO 9001:2015", "Zero Accident", "ISO 45001:2018",
-    "500+ Dự Án", "ISO 14001:2015", "15+ Năm Kinh Nghiệm",
-    "ISO 9001:2015", "Zero Accident", "ISO 45001:2018",
-    "500+ Dự Án", "ISO 14001:2015", "15+ Năm Kinh Nghiệm",
-  ];
+  if (!cmsItems?.length) return null;
+
+  const items = [...cmsItems, ...cmsItems];
   return (
     <div className="w-full bg-[#f4aa1f] overflow-hidden py-2.5 flex">
       <motion.div
@@ -231,14 +191,9 @@ function MarqueeStrip({ items: cmsItems }: { items?: string[] }) {
 
 // SLOGAN / BRAND SECTION
 function SloganSection({ content }: { content?: HomeCmsData["slogan"] }) {
-  const stats = content?.stats?.length
-    ? content.stats
-    : [
-        { value: "500+", label: "Dự án" },
-        { value: "800+", label: "Nhân sự" },
-        { value: "15+", label: "Năm KN" },
-        { value: "50+", label: "Đối tác QT" },
-      ];
+  if (!content) return null;
+
+  const stats = content.stats || [];
 
   return (
     <section className="relative w-full bg-[#002d17] overflow-hidden py-24 md:py-32">
@@ -289,15 +244,9 @@ function SloganSection({ content }: { content?: HomeCmsData["slogan"] }) {
 }
 
 // SERVICES HIGHLIGHT
-const fallbackServices: HomeService[] = [
-  { id: 1, icon: Wrench, title: "Nâng Cấp Cải Tạo", subtitle: "Renovation & Upgrade", desc: "Thi công cải tạo công trình đang vận hành với zero downtime - tiêu chuẩn an toàn và vệ sinh khắt khe nhất.", highlight: true },
-  { id: 2, icon: PenTool, title: "Thiết Kế & Xây Dựng", subtitle: "Design & Build EPC", desc: "Giải pháp tổng thầu EPC toàn diện từ thiết kế đến bàn giao, kiểm soát chất lượng tập trung." },
-  { id: 3, icon: Building2, title: "Thi Công Dân Dụng", subtitle: "Civil & Structural", desc: "Kết cấu thép, bê tông cốt thép cho nhà máy, kho xưởng, tòa nhà thương mại quy mô lớn." },
-  { id: 4, icon: Zap, title: "Cơ Điện MEP", subtitle: "MEP Systems", desc: "Hệ thống M&E tiên tiến cho phòng sạch, nhà máy điện tử và công trình kỹ thuật cao." },
-];
 
 function normalizeHomeServices(items?: ServicesCmsData["services"]): HomeService[] {
-  if (!items?.length) return fallbackServices;
+  if (!items?.length) return [];
 
   const sortedItems = [...items].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
 
@@ -313,6 +262,8 @@ function normalizeHomeServices(items?: ServicesCmsData["services"]): HomeService
 
 function ServicesSection({ title, items }: { title?: string; items: HomeService[] }) {
   const text = useSiteText();
+
+  if (!items.length) return null;
 
   return (
     <section className="w-full bg-white py-20 md:py-28">
@@ -374,7 +325,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
 
 // PROJECTS CAROUSEL
 function normalizeHeroSlides(items: ProjectPost[]): HomeHeroSlide[] {
-  const source = items.length ? items.slice(0, 4) : fallbackProjects.slice(0, 4);
+  const source = items.slice(0, 4);
 
   return source.map((project, index) => ({
     id: project.id || index,
@@ -411,6 +362,10 @@ function ProjectsSection({
     emblaApi.on("reInit", updateBtns);
     updateBtns();
   }, [emblaApi, updateBtns]);
+
+  if (!items.length) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-white overflow-hidden">
@@ -490,7 +445,7 @@ function ProjectsSection({
 // NEWS SECTION
 function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
   const text = useSiteText();
-  const source = items.length ? items : fallbackNews;
+  const source = items;
   const featured = source[0];
   const rest = source.slice(1, 4);
 
@@ -572,7 +527,8 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
   const text = useSiteText();
   const logos = content?.logos?.filter(Boolean) || [];
   const doubledLogos = [...logos, ...logos];
-  const doubledFallback = [...fallbackPartnerLogos, ...fallbackPartnerLogos];
+
+  if (!logos.length) return null;
 
   return (
     <section className="w-full bg-[#002d17] py-16 md:py-20 overflow-hidden">
@@ -597,7 +553,7 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
           animate={{ x: ["0%", "-50%"] }}
           transition={{ repeat: Infinity, duration: 32, ease: "linear" }}
         >
-          {(doubledLogos.length ? doubledLogos : doubledFallback).map((partner, idx) => (
+          {doubledLogos.map((partner, idx) => (
             <div
               key={idx}
               className="w-40 md:w-48 h-24 overflow-hidden bg-[#0a3d22] hover:bg-[#46aa85] border border-white/5 hover:border-[#f4aa1f]/30 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors shrink-0 rounded-xl"
@@ -621,7 +577,7 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
           animate={{ x: ["-50%", "0%"] }}
           transition={{ repeat: Infinity, duration: 38, ease: "linear" }}
         >
-          {[...(doubledLogos.length ? doubledLogos : doubledFallback)].reverse().map((partner, idx) => (
+          {[...doubledLogos].reverse().map((partner, idx) => (
             <div
               key={idx}
               className="w-40 md:w-48 h-24 bg-[#0a3d22] overflow-hidden hover:bg-[#46aa85] border border-white/5 hover:border-[#f4aa1f]/30 flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors shrink-0 rounded-xl"
@@ -680,8 +636,8 @@ export function Home() {
     return () => controller.abort();
   }, []);
 
-  const projectItems = cmsProjects.length ? cmsProjects : (fallbackProjects as ProjectPost[]);
-  const newsItems = cmsNews.length ? cmsNews : (fallbackNews as NewsPost[]);
+  const projectItems = cmsProjects;
+  const newsItems = cmsNews;
   const homeServices = normalizeHomeServices(servicesPage?.services);
 
   return (
@@ -700,4 +656,5 @@ export function Home() {
     </div>
   );
 }
+
 

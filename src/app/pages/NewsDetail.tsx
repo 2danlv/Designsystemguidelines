@@ -1,7 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Link } from "../components/LocalizedLink";
-import { news as fallbackNews, type NewsBodyBlock } from "../data";
 import { ArrowLeft, ChevronRight, Tag, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsNews, fetchCmsNewsPost, type NewsPost } from "../lib/wordpress";
@@ -18,62 +17,6 @@ function normalizeNewsText(value = "") {
     .replace(/\s+/g, " ")
     .trim()
     .toLowerCase();
-}
-
-function BodyBlock({ block }: { block: NewsBodyBlock }) {
-  if (block.type === "paragraph") {
-    return <p className="text-[#002d17]/75 text-base leading-relaxed font-medium">{block.text}</p>;
-  }
-
-  if (block.type === "heading") {
-    return (
-      <h2 className="text-[#002d17] text-xl font-extrabold uppercase tracking-tight mt-4 mb-1 flex items-center gap-3">
-        <span className="w-5 h-0.5 bg-[#f4aa1f] shrink-0" />
-        {block.text}
-      </h2>
-    );
-  }
-
-  if (block.type === "quote") {
-    return (
-      <blockquote className="my-2 bg-[#f0faf6] border-l-4 border-[#46aa85] rounded-r-xl px-6 py-5">
-        <p className="text-[#002d17] font-semibold italic text-base leading-relaxed">"{block.text}"</p>
-        <cite className="block mt-3 text-[#46aa85] font-bold text-xs uppercase tracking-widest not-italic">
-          {block.author}
-        </cite>
-      </blockquote>
-    );
-  }
-
-  if (block.type === "list") {
-    return (
-      <ul className="flex flex-col gap-2.5 my-1">
-        {block.items.map((item, i) => (
-          <li key={i} className="flex items-start gap-3 text-[#002d17]/75 text-base font-medium">
-            <span className="mt-2 w-2 h-2 rounded-full bg-[#f4aa1f] shrink-0" />
-            {item}
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-  if (block.type === "image") {
-    return (
-      <figure className="my-2">
-        <div className="rounded-xl overflow-hidden aspect-[16/9] bg-[#bcd8cb]">
-          <img src={block.src} alt={block.caption ?? ""} className="w-full h-full object-cover" />
-        </div>
-        {block.caption && (
-          <figcaption className="text-center text-[#002d17]/40 text-xs font-medium mt-2">
-            {block.caption}
-          </figcaption>
-        )}
-      </figure>
-    );
-  }
-
-  return null;
 }
 
 export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
@@ -103,13 +46,8 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
     return () => controller.abort();
   }, [slug]);
 
-  const fallbackArticle = useMemo(
-    () => fallbackNews.find((item) => item.slug === slug) as (NewsPost & { body?: NewsBodyBlock[] }) | undefined,
-    [slug],
-  );
-
-  const article = cmsArticle || fallbackArticle;
-  const allArticles = cmsNews.length ? cmsNews : (fallbackNews as NewsPost[]);
+  const article = cmsArticle;
+  const allArticles = cmsNews;
 
   if (loaded && !article) {
     return (
@@ -133,7 +71,6 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
     : allArticles
       .filter((item) => item.id !== article.id && (item.categorySlug || item.category) === (article.categorySlug || article.category))
       .slice(0, 3);
-  const fallbackBody = (article as NewsPost & { body?: NewsBodyBlock[] }).body;
   const newsContent = article.content || "";
   const normalizedExcerpt = normalizeNewsText(article.excerpt);
   const normalizedContent = normalizeNewsText(article.content);
@@ -201,11 +138,7 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
                 className="news-article-content flex flex-col gap-5 text-[#002d17]/75 text-base leading-relaxed font-medium"
                 dangerouslySetInnerHTML={{ __html: newsContent }}
               />
-            ) : (
-              <div className="flex flex-col gap-5">
-                {fallbackBody?.map((block, i) => <BodyBlock key={i} block={block} />)}
-              </div>
-            )}
+            ) : null}
 
             {!!article.tags?.length && (
               <div className="flex flex-wrap gap-2 pt-6 border-t border-[#002d17]/10 mt-4">

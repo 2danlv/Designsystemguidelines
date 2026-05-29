@@ -1,18 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link } from "../components/LocalizedLink";
-import { projects as fallbackProjects } from "../data";
 import { MapPin, Maximize2, ArrowRight, ChevronRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useLocation, useNavigate } from "react-router";
 import { fetchCmsPageByTemplate, fetchCmsProjects, type ProjectPost, type ProjectsCmsData } from "../lib/wordpress";
 import { projectDetailPath, sitePath } from "../lib/siteLinks";
 
-const fallbackStats = [
-  { value: "500+", label: "Du An Hoan Thanh" },
-  { value: "50+", label: "Khach Hang Quoc Te" },
-  { value: "15+", label: "Nam Kinh Nghiem" },
-  { value: "1M+", label: "m2 Da Thi Cong" },
-];
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -68,9 +61,7 @@ export function Projects() {
     return () => controller.abort();
   }, []);
 
-  const projectItems = useMemo<ProjectPost[]>(() => (
-    cmsProjects.length ? cmsProjects : (fallbackProjects as ProjectPost[])
-  ), [cmsProjects]);
+  const projectItems = useMemo<ProjectPost[]>(() => cmsProjects, [cmsProjects]);
 
   const categories = useMemo(() => {
     const seen = new Map<string, string>();
@@ -124,7 +115,7 @@ export function Projects() {
   const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Du An";
   const heroTitle = cmsPage?.hero?.title || "Du An\nNoi Bat";
   const heroDescription = cmsPage?.hero?.description || "Tong hop cac cong trinh tieu bieu Tona Corporation da thuc hien.";
-  const stats = cmsPage?.stats?.length ? cmsPage.stats : fallbackStats;
+  const stats = cmsPage?.stats || [];
   const allFilterLabel = "Tất Cả";
   const cta = cmsPage?.cta;
 
@@ -285,3 +276,4 @@ export function Projects() {
     </div>
   );
 }
+

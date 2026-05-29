@@ -1,15 +1,10 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+﻿import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "../components/LocalizedLink";
 import { AnimatePresence, motion } from "motion/react";
 import {
-  ArrowRight,
-  Award,
-  ChevronRight,
+  ArrowRight,  ChevronRight,
   Linkedin,
-  Shield,
-  TrendingUp,
-  Users,
-  X,
+  Shield,  X,
   type LucideIcon,
 } from "lucide-react";
 import {
@@ -27,88 +22,6 @@ type CoreValue = {
   title: string;
   desc: string;
 };
-
-const fallbackMembers: MemberPost[] = [
-  {
-    id: "chairman",
-    name: "Nguyễn Trọng Khải",
-    role: "Chủ Tịch HĐQT",
-    roleEn: "Chairman of the Board",
-    image: "https://images.unsplash.com/photo-1720501828093-c792c10e3f0b?w=800&q=80",
-    bio: "Hơn 25 năm kinh nghiệm trong lĩnh vực xây dựng công nghiệp và thương mại. Người sáng lập Tona Corporation với tầm nhìn kiến tạo chuẩn mực mới trong ngành xây dựng Việt Nam.",
-    linkedin: "#",
-    since: "2009",
-    education: "Đại học Xây dựng Hà Nội - Kỹ sư Xây dựng dân dụng & công nghiệp",
-    expertise: ["Quản trị chiến lược", "Phát triển thị trường", "Tài chính doanh nghiệp", "Xây dựng công nghiệp"],
-    achievements: [
-      "Sáng lập Tona Corporation từ đội ngũ 15 kỹ sư ban đầu năm 2009",
-      "Xây dựng mạng lưới đối tác quốc tế tại Việt Nam",
-      "Dẫn dắt Tona vào nhóm nhà thầu MEP uy tín tại miền Nam",
-    ],
-    quote: "Tona được xây dựng trên nền tảng tin tưởng từ khách hàng, đội ngũ và chính mỗi người trong hành trình này.",
-  },
-  {
-    id: "ceo",
-    name: "Trần Minh Đức",
-    role: "Tổng Giám Đốc",
-    roleEn: "Chief Executive Officer",
-    image: "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=800&q=80",
-    bio: "18 năm kinh nghiệm quản lý dự án EPC quy mô lớn cho các tập đoàn đa quốc gia. Chuyên gia về quản trị rủi ro và tối ưu chuỗi cung ứng xây dựng.",
-    linkedin: "#",
-    since: "2012",
-    education: "MBA - Singapore Management University; Kỹ sư Xây dựng - ĐH Bách Khoa TP.HCM",
-    expertise: ["Quản lý EPC", "Quản trị rủi ro", "Tối ưu chuỗi cung ứng", "Phát triển tổ chức"],
-    achievements: [
-      "Triển khai thành công hơn 200 dự án EPC",
-      "Xây dựng hệ thống quản lý dự án đạt chuẩn ISO",
-      "Mở rộng năng lực MEP vào phân khúc cleanroom và high-tech factory",
-    ],
-    quote: "Mỗi dự án là một cam kết về chất lượng, tiến độ và sự an toàn tuyệt đối.",
-  },
-  {
-    id: "coo",
-    name: "Lê Thị Hương",
-    role: "Giám Đốc Vận Hành",
-    roleEn: "Chief Operating Officer",
-    image: "https://images.unsplash.com/photo-1758691737605-69a0e78bd193?w=800&q=80",
-    bio: "15 năm kinh nghiệm điều hành vận hành đa dự án đồng thời. Chuyên gia triển khai hệ thống quản lý chất lượng ISO và an toàn lao động.",
-    linkedin: "#",
-    since: "2014",
-    education: "Kỹ sư Cơ khí - ĐH Bách Khoa TP.HCM; Chứng chỉ ISO 45001 Lead Auditor",
-    expertise: ["Quản lý vận hành", "QHSE", "Tối ưu quy trình", "HSE Management"],
-    achievements: [
-      "Triển khai hệ thống HSE hướng đến Zero Accident",
-      "Đạt chứng nhận ISO 45001 cho toàn hệ thống",
-      "Đưa TONA Academy phục vụ đào tạo nội bộ thường niên",
-    ],
-    quote: "An toàn không phải là chi phí, an toàn là đầu tư.",
-  },
-  {
-    id: "cdo",
-    name: "Phạm Văn Hải",
-    role: "Giám Đốc Dự Án",
-    roleEn: "Chief Project Director",
-    image: "https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80",
-    bio: "20 năm chỉ huy các dự án nhà máy công nghệ cao. Người dẫn dắt thành công nhiều dự án công nghiệp trên khắp cả nước.",
-    linkedin: "#",
-    since: "2010",
-    education: "Kỹ sư Xây dựng - ĐH Bách Khoa TP.HCM; PMP Certified",
-    expertise: ["Quản lý dự án", "Kết cấu thép", "Cleanroom Construction", "BIM Technology"],
-    achievements: [
-      "Chỉ huy hơn 200 dự án nhà máy công nghệ cao",
-      "Dẫn dắt dự án cleanroom ISO 6 tại miền Nam",
-      "Triển khai BIM trong các dự án công nghiệp trọng điểm",
-    ],
-    quote: "Kỹ thuật giỏi cần đi cùng kỷ luật, phối hợp tốt và hiểu sâu về khách hàng.",
-  },
-];
-
-const fallbackCoreValues: CoreValue[] = [
-  { icon: Shield, title: "An Toàn Trên Hết", desc: "Zero accident là kim chỉ nam trong mọi quyết định và hành động tại Tona." },
-  { icon: Award, title: "Chất Lượng Không Thỏa Hiệp", desc: "Từng chi tiết đều được kiểm soát theo tiêu chuẩn ISO quốc tế." },
-  { icon: TrendingUp, title: "Hiệu Quả & Tiến Độ", desc: "Cam kết bàn giao đúng hạn, hạn chế phát sinh và kiểm soát chặt chẽ chi phí." },
-  { icon: Users, title: "Con Người Là Nền Tảng", desc: "Đội ngũ được đào tạo bài bản và gắn kết trong một văn hóa doanh nghiệp mạnh mẽ." },
-];
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -249,15 +162,11 @@ export function Members() {
   }, []);
 
   const members = useMemo<MemberPost[]>(() => (
-    cmsMembers.length ? cmsMembers : fallbackMembers
+    cmsMembers
   ), [cmsMembers]);
 
   const coreValues = useMemo<CoreValue[]>(() => {
-    if (!cmsPage?.values?.length) {
-      return fallbackCoreValues;
-    }
-
-    return cmsPage.values.map((value) => ({
+    return (cmsPage?.values || []).map((value) => ({
       icon: getCmsIcon(value.icon, Shield),
       iconImage: value.iconImage || "",
       title: value.title || "",
@@ -421,3 +330,4 @@ export function Members() {
     </div>
   );
 }
+

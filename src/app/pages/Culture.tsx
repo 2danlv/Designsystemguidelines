@@ -1,6 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import { Link } from "../components/LocalizedLink";
-import { ChevronRight, Heart, Users, Trophy, Zap, ArrowRight, type LucideIcon } from "lucide-react";
+import { ChevronRight, Heart, ArrowRight, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { fetchCmsPageByTemplate, type CultureCmsData } from "../lib/wordpress";
@@ -31,113 +31,6 @@ type CultureActivity = {
   color: string;
 };
 
-const fallbackThemes: YearlyTheme[] = [
-  {
-    year: "2025",
-    theme: "BEYOND LIMITS",
-    color: "#f4aa1f",
-    desc: "Vuot qua gioi han ban than va to chuc, chinh phuc nhung du an lon hon, phuc tap hon, va tao ra nhung chuan muc moi cho nganh xay dung Viet Nam.",
-    milestones: [
-      "Spartronics 2 - Nha may cleanroom ISO 6 lon nhat",
-      "Ra mat bo phan Solar va Green Energy",
-      "Chung nhan ISO 45001:2018 toan he thong",
-    ],
-    active: true,
-  },
-  {
-    year: "2024",
-    theme: "BUILD FORWARD",
-    color: "#46aa85",
-    desc: "Tien ve phia truoc, tap trung vao doi moi quy trinh, ung dung cong nghe BIM va mo rong nang luc MEP trong linh vuc nang luong sach.",
-    milestones: [
-      "Hoan thanh Phoenix Contact 171 ngay zero downtime",
-      "15 MWp Solar Rooftop cho SV Group",
-      "Vao top 10 nha thau MEP uy tin mien Nam",
-    ],
-    active: false,
-  },
-  {
-    year: "2023",
-    theme: "TOGETHER WE RISE",
-    color: "#002d17",
-    desc: "Cung nhau vuon cao, phat trien van hoa doi nhom, nang cao phuc loi nhan vien va mo rong mang luoi doi tac chien luoc.",
-    milestones: [
-      "Hoan thanh GO! Dong Nai 46,100 m2",
-      "Ra mat chuong trinh TONA Academy",
-      "Doi ngu tang tu 500 len 800+ nhan su",
-    ],
-    active: false,
-  },
-];
-
-const fallbackActivities: CultureActivity[] = [
-  {
-    title: "Tiec Tat Nien",
-    subtitle: "Year-End Gala",
-    desc: "Su kien cuoi nam vinh danh thanh tich, tri an nhan vien va ket noi cong dong Tona trong khong khi am ap.",
-    image: "https://images.unsplash.com/photo-1768508948835-7dbab7ca6d58?w=800&q=80",
-    icon: Trophy,
-    color: "#f4aa1f",
-  },
-  {
-    title: "Ngay Hoi The Thao",
-    subtitle: "Sports Day",
-    desc: "Giai thi dau the thao noi bo hang nam, noi tinh than dong doi duoc ren luyen va moi ca nhan tim thay nang luong moi.",
-    image: "https://images.unsplash.com/photo-1678893049430-d9087867e775?w=800&q=80",
-    icon: Zap,
-    color: "#46aa85",
-  },
-  {
-    title: "Team Building",
-    subtitle: "Quarterly Retreat",
-    desc: "Chuyen du lich va hoat dong gan ket doi nhom dinh ky, tao dung niem tin va tinh dong nghiep vuot ra ngoai cong truong.",
-    image: "https://images.unsplash.com/photo-1774599661355-327e322f53c2?w=800&q=80",
-    icon: Users,
-    color: "#002d17",
-  },
-  {
-    title: "CSR va Thien Nguyen",
-    subtitle: "Community Care",
-    desc: "Tona dong hanh cung cong dong, tu xay dung truong hoc vung sau den ho tro cac gia dinh kho khan tai vung du an.",
-    image: "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=800&q=80",
-    icon: Heart,
-    color: "#f4aa1f",
-  },
-];
-
-const fallbackGallery = [
-  "https://images.unsplash.com/photo-1768508948835-7dbab7ca6d58?w=800&q=80",
-  "https://images.unsplash.com/photo-1678893049430-d9087867e775?w=800&q=80",
-  "https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80",
-  "https://images.unsplash.com/photo-1774599661355-327e322f53c2?w=800&q=80",
-  "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=800&q=80",
-  "https://images.unsplash.com/photo-1758691737605-69a0e78bd193?w=800&q=80",
-];
-
-const fallbackStats: StatItem[] = [
-  { value: "800+", label: "Nhan Su" },
-  { value: "15+", label: "Nam Kinh Nghiem" },
-  { value: "100%", label: "Dong Bao Hiem" },
-  { value: "4.8/5", label: "Danh Gia Noi Bo" },
-];
-
-const fallbackAcademyStats: StatItem[] = [
-  { value: "200+", label: "Hoc vien/nam" },
-  { value: "50+", label: "Chuong trinh" },
-  { value: "15", label: "Doi tac dao tao" },
-  { value: "98%", label: "Hai long" },
-];
-
-const fallbackSocialStats: StatItem[] = [
-  { value: "5,000+", label: "Nguoi thu huong" },
-  { value: "15+", label: "Nam hoat dong" },
-];
-
-const fallbackSocialBadges = [
-  "Uom Tet Don Nang Xuan",
-  "SolarLab",
-  "Student Internship",
-];
 
 function backgroundStyle(color?: string) {
   return color ? { backgroundColor: color } : undefined;
@@ -164,22 +57,14 @@ export function Culture() {
   }, []);
 
   const stats = useMemo<StatItem[]>(() => {
-    if (!cmsPage?.stats?.length) {
-      return fallbackStats;
-    }
-
-    return cmsPage.stats.map((item) => ({
+    return (cmsPage?.stats || []).map((item) => ({
       value: item.value || "",
       label: item.label || "",
     }));
   }, [cmsPage]);
 
   const yearlyThemes = useMemo<YearlyTheme[]>(() => {
-    if (!cmsPage?.yearlyThemes?.length) {
-      return fallbackThemes;
-    }
-
-    return cmsPage.yearlyThemes.map((item) => ({
+    return (cmsPage?.yearlyThemes || []).map((item) => ({
       year: item.year || "",
       theme: item.theme || "",
       color: item.color || "#f4aa1f",
@@ -190,11 +75,7 @@ export function Culture() {
   }, [cmsPage]);
 
   const activities = useMemo<CultureActivity[]>(() => {
-    if (!cmsPage?.activities?.length) {
-      return fallbackActivities;
-    }
-
-    return cmsPage.activities.map((item) => ({
+    return (cmsPage?.activities || []).map((item) => ({
       title: item.title || "",
       subtitle: item.subtitle || "",
       desc: item.description || "",
@@ -206,28 +87,20 @@ export function Culture() {
   }, [cmsPage]);
 
   const academyStats = useMemo<StatItem[]>(() => {
-    if (!cmsPage?.academy?.stats?.length) {
-      return fallbackAcademyStats;
-    }
-
-    return cmsPage.academy.stats.map((item) => ({
+    return (cmsPage?.academy?.stats || []).map((item) => ({
       value: item.value || "",
       label: item.label || "",
     }));
   }, [cmsPage]);
 
   const socialStats = useMemo<StatItem[]>(() => {
-    if (!cmsPage?.socialResponsibility?.stats?.length) {
-      return fallbackSocialStats;
-    }
-
-    return cmsPage.socialResponsibility.stats.map((item) => ({
+    return (cmsPage?.socialResponsibility?.stats || []).map((item) => ({
       value: item.value || "",
       label: item.label || "",
     }));
   }, [cmsPage]);
 
-  const galleryPhotos = cmsPage?.gallery?.photos?.length ? cmsPage.gallery.photos : fallbackGallery;
+  const galleryPhotos = cmsPage?.gallery?.photos || [];
   const colors = cmsPage?.colors;
   const heroTitle = cmsPage?.hero?.title || "Tona -\nHon Ca\nMot Noi Lam Viec";
   const heroDescription = cmsPage?.hero?.description || "Tai Tona, moi thanh vien duoc ton trong, gan ket va cung nhau phat trien qua nhung hoat dong van hoa noi bo soi noi va y nghia.";
@@ -240,14 +113,14 @@ export function Culture() {
   const socialEyebrow = social?.eyebrow || "Trách Nhiệm Xã Hội";
   const socialTitle = social?.title || "CSR & Trách Nhiệm\nCộng Đồng";
   const socialDescription = social?.description || "Từ Ươm Tết Đón Nắng Xuân đến SolarLab và chương trình thực tập sinh - Tona cam kết đồng hành cùng cộng đồng theo những cách thiết thực và lâu dài.";
-  const socialImage = social?.image || "https://images.unsplash.com/photo-1774599730788-a74cd9253b56?w=1200&q=80";
-  const socialBadges = social?.badges?.length ? social.badges : fallbackSocialBadges;
+  const socialImage = social?.image || "";
+  const socialBadges = social?.badges || [];
   const socialLinkLabel = social?.linkLabel || "Khám Phá CSR";
   const socialLinkUrl = social?.linkUrl || "/trach-nhiem-cong-dong";
   const academyEyebrow = cmsPage?.academy?.eyebrow || "Phat Trien Con Nguoi";
   const academyTitle = cmsPage?.academy?.title || "TONA Academy -\nHoc De Vuon Xa";
   const academyDescription = cmsPage?.academy?.description || "TONA Academy la chuong trinh dao tao noi bo toan dien, tu ky nang ky thuat chuyen sau den nang luc lanh dao va quan ly du an.";
-  const academyImage = cmsPage?.academy?.image || "https://images.unsplash.com/photo-1758518726775-70e538b0d46e?w=800&q=80";
+  const academyImage = cmsPage?.academy?.image || "";
   const academyLinkLabel = cmsPage?.academy?.linkLabel || "Gia Nhap Tona";
   const academyLinkUrl = cmsPage?.academy?.linkUrl || sitePath("jobs");
   const galleryTitle = cmsPage?.gallery?.title || "Khoanh Khac Tona";
@@ -556,3 +429,5 @@ export function Culture() {
     </div>
   );
 }
+
+

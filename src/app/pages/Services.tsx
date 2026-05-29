@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link } from "../components/LocalizedLink";
 import {
   ChevronRight,
@@ -13,7 +13,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { projects } from "../data";
 import {
   fetchCmsPage,
   fetchCmsPageByTemplate,
@@ -53,121 +52,17 @@ type TimelapseSlide = {
   image: string;
 };
 
-const fallbackServices: ServiceItem[] = [
-  {
-    id: 1,
-    icon: Wrench,
-    num: "01",
-    tag: "Thế Mạnh Hàng Đầu",
-    title: "Nâng Cấp Cải Tạo Không Dừng Sản Xuất",
-    subtitle: "Renovation & Upgrade",
-    desc: "Tona là đơn vị tiên phong tại Việt Nam về cải tạo công trình đang vận hành. Quy trình thi công được thiết kế để không gây gián đoạn dây chuyền sản xuất.",
-    features: [
-      "Lập kế hoạch thi công không dừng sản xuất",
-      "Kiểm soát bụi và tiếng ồn theo tiêu chuẩn GMP",
-      "Phối hợp cả 24/7 theo lịch sản xuất",
-      "Hệ thống barrier và vách ngăn tạm thời",
-    ],
-    img: "https://images.unsplash.com/photo-1748002388689-c62b45d5c28b?w=1080&q=80",
-    featured: true,
-    linkLabel: "Xem Dự Án",
-    linkUrl: sitePath("projects"),
-  },
-  {
-    id: 2,
-    icon: PenTool,
-    num: "02",
-    tag: "EPC Toàn Diện",
-    title: "Thiết Kế Và Xây Dựng",
-    subtitle: "Design & Build",
-    desc: "Tổng thầu EPC chịu trách nhiệm toàn diện từ thiết kế kỹ thuật, lập tiến độ, mua sắm vật tư đến thi công và nghiệm thu bàn giao.",
-    features: [
-      "Thiết kế kỹ thuật và hồ sơ BIM",
-      "Quản lý chuỗi cung ứng vật tư",
-      "Kiểm soát chi phí và tiến độ tập trung",
-      "Bảo hành và hỗ trợ kỹ thuật sau bàn giao",
-    ],
-    img: "https://images.unsplash.com/photo-1645434897689-af222b85993e?w=1080&q=80",
-    featured: false,
-    linkLabel: "Xem Dự Án",
-    linkUrl: sitePath("projects"),
-  },
-  {
-    id: 3,
-    icon: Building2,
-    num: "03",
-    tag: "Kết Cấu Và Hạ Tầng",
-    title: "Thi Công Dân Dụng Và Công Nghiệp",
-    subtitle: "Civil & Structural",
-    desc: "Từ kết cấu thép tiền chế nhà xưởng đến công trình bê tông cốt thép nhiều tầng, Tona có kinh nghiệm thi công đa dạng loại hình công trình.",
-    features: [
-      "Kết cấu thép tiền chế PEB",
-      "Bê tông cốt thép B30-B40",
-      "Móng cọc khoan nhồi, cọc ép",
-      "Hạ tầng đường nội bộ, thoát nước, kho bãi",
-    ],
-    img: "https://images.unsplash.com/photo-1774979159518-7706ca7bb2e6?w=1080&q=80",
-    featured: false,
-    linkLabel: "Xem Dự Án",
-    linkUrl: sitePath("projects"),
-  },
-  {
-    id: 4,
-    icon: Zap,
-    num: "04",
-    tag: "Kỹ Thuật Cao",
-    title: "Hệ Thống Cơ Điện MEP",
-    subtitle: "Mechanical, Electrical & Plumbing",
-    desc: "Bộ phận MEP của Tona triển khai hệ thống kỹ thuật phức tạp cho nhà máy điện tử, phòng sạch cleanroom và công trình độ chính xác cao.",
-    features: [
-      "Phòng sạch ISO Class 5-8",
-      "Hệ thống HVAC và điều hòa công nghiệp",
-      "Điện hạ thế, MCC panel, UPS",
-      "Hệ thống khí đặc biệt",
-    ],
-    img: "https://images.unsplash.com/photo-1759830337357-29c472b6746c?w=1080&q=80",
-    featured: false,
-    linkLabel: "Xem Dự Án",
-    linkUrl: sitePath("projects"),
-  },
-];
-
-const fallbackTimelapseSlides: TimelapseSlide[] = [
-  {
-    title: "Spartronics Cleanroom — Hậu Giang",
-    subtitle: "Timelapse 45 ngày thi công liên tục",
-    duration: "45 ngày",
-    image: "https://images.unsplash.com/photo-1645434897689-af222b85993e?w=1200&q=80",
-  },
-  {
-    title: "Phoenix Contact — Bình Dương",
-    subtitle: "Timelapse toàn bộ quá trình xây dựng EPC",
-    duration: "171 ngày",
-    image: "https://images.unsplash.com/photo-1759830337357-29c472b6746c?w=1200&q=80",
-  },
-  {
-    title: "GO! Đồng Nai Commercial Center",
-    subtitle: "Timelapse thi công phần thô & hoàn thiện",
-    duration: "90 ngày",
-    image: "https://images.unsplash.com/photo-1774979159518-7706ca7bb2e6?w=1200&q=80",
-  },
-];
-
-const fallbackProcessSteps = [
-  { step: "01", title: "Khảo Sát & Tư Vấn", desc: "Tiếp nhận yêu cầu, khảo sát hiện trạng và tư vấn giải pháp phù hợp nhất." },
-  { step: "02", title: "Thiết Kế Kỹ Thuật", desc: "Lập hồ sơ thiết kế kỹ thuật, bản vẽ thi công và kế hoạch triển khai." },
-  { step: "03", title: "Ký Kết Hợp Đồng", desc: "Minh bạch về phạm vi, tiến độ, chi phí và các cam kết chất lượng." },
-  { step: "04", title: "Thi Công", desc: "Triển khai đúng tiến độ, kiểm soát chất lượng theo ISO 9001 mỗi ngày." },
-  { step: "05", title: "Nghiệm Thu & Bàn Giao", desc: "Kiểm tra toàn bộ hạng mục, bàn giao hồ sơ hoàn công và hướng dẫn vận hành." },
-  { step: "06", title: "Bảo Hành", desc: "Hỗ trợ kỹ thuật sau bàn giao, bảo hành theo hợp đồng." },
-];
 
 function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
-  const items = slides.length ? slides : fallbackTimelapseSlides;
+  const items = slides;
 
   useEffect(() => {
+    if (!items.length) {
+      return;
+    }
+
     setProgress(0);
     const interval = setInterval(() => {
       setProgress((p) => {
@@ -185,6 +80,10 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
   const next = () => setCurrent((c) => (c + 1) % items.length);
 
   const slide = items[current] || items[0];
+
+  if (!slide) {
+    return null;
+  }
 
   return (
     <div className="relative w-full aspect-video bg-[#001a0e] rounded-2xl overflow-hidden group">
@@ -303,9 +202,8 @@ export function Services() {
 
   const servicesList = useMemo<ServiceItem[]>(() => {
     const source = cmsPage?.services?.length ? cmsPage.services : null;
-
     if (!source) {
-      return fallbackServices;
+      return [];
     }
 
     const sortedSource = [...source].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
@@ -320,7 +218,7 @@ export function Services() {
       subtitle: service.subtitle || "",
       desc: service.description || "",
       features: service.features || [],
-      img: service.image || fallbackServices[index]?.img || fallbackServices[0]?.img || "",
+      img: service.image || "",
       featured: Boolean(service.featured),
       linkLabel: service.linkLabel || "Xem Dự Án",
       linkUrl: service.linkUrl || sitePath("projects"),
@@ -329,9 +227,8 @@ export function Services() {
 
   const processSteps = useMemo<ProcessStep[]>(() => {
     const steps = cmsPage?.process?.steps;
-
     if (!steps?.length) {
-      return fallbackProcessSteps;
+      return [];
     }
 
     return steps.map((step, index) => ({
@@ -343,22 +240,21 @@ export function Services() {
 
   const timelapseSlides = useMemo<TimelapseSlide[]>(() => {
     const slides = cmsPage?.timelapse?.slides;
-
     if (!slides?.length) {
-      return fallbackTimelapseSlides;
+      return [];
     }
 
     return slides.map((slide, index) => ({
-      title: slide.title || fallbackTimelapseSlides[index]?.title || "",
-      subtitle: slide.subtitle || fallbackTimelapseSlides[index]?.subtitle || "",
-      duration: slide.duration || fallbackTimelapseSlides[index]?.duration || "",
-      image: slide.image || fallbackTimelapseSlides[index]?.image || fallbackTimelapseSlides[0]?.image || "",
+      title: slide.title || "",
+      subtitle: slide.subtitle || "",
+      duration: slide.duration || "",
+      image: slide.image || "",
     }));
   }, [cmsPage]);
 
   const featured = servicesList.find((service) => service.featured) || servicesList[0];
-  const rest = servicesList.filter((service) => service.id !== featured.id);
-  const projectItems = cmsProjects.length ? cmsProjects : (projects as ProjectPost[]);
+  const rest = featured ? servicesList.filter((service) => service.id !== featured.id) : [];
+  const projectItems = cmsProjects;
   const featuredProject = projectItems.find((p) => p.slug === "nha-may-spartronics-viet-nam-2") || projectItems[0];
   const colors = cmsPage?.colors;
   const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Dịch Vụ";
@@ -393,6 +289,7 @@ export function Services() {
       </div>
 
       {/* FEATURED SERVICE */}
+      {featured && (
       <div className="max-w-7xl mx-auto px-6 py-16" style={backgroundStyle(colors?.servicesBackground)}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -434,6 +331,7 @@ export function Services() {
           </div>
         </motion.div>
       </div>
+      )}
 
       {/* SERVICE CARDS GRID */}
       <div className="max-w-7xl mx-auto px-6 pb-20">
@@ -557,6 +455,7 @@ export function Services() {
       </section>
 
       {/* FEATURED PROJECT */}
+      {featuredProject && (
       <section className="py-20 bg-white border-t border-[#002d17]/8">
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-10">
@@ -632,6 +531,7 @@ export function Services() {
           </div>
         </div>
       </section>
+      )}
 
       {/* CTA */}
       <div className="bg-[#f4aa1f] py-14" style={backgroundStyle(colors?.ctaBackground)}>
@@ -650,3 +550,4 @@ export function Services() {
     </div>
   );
 }
+
