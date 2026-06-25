@@ -56,6 +56,7 @@ type TimelapseSlide = {
 function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [videoReady, setVideoReady] = useState(false);
   const items = slides;
 
   useEffect(() => {
@@ -64,6 +65,14 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
     }
 
     setProgress(0);
+    setVideoReady(false);
+  }, [current, items.length]);
+
+  useEffect(() => {
+    if (!items.length || !videoReady) {
+      return;
+    }
+
     const interval = setInterval(() => {
       setProgress((p) => {
         if (p >= 100) {
@@ -74,7 +83,7 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
       });
     }, 50);
     return () => clearInterval(interval);
-  }, [current, items.length]);
+  }, [current, items.length, videoReady]);
 
   const prev = () => setCurrent((c) => (c - 1 + items.length) % items.length);
   const next = () => setCurrent((c) => (c + 1) % items.length);
@@ -104,11 +113,24 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
             muted
             loop
             playsInline
+            preload="auto"
             aria-label={slide.title}
+            onCanPlay={() => setVideoReady(true)}
+            onLoadedData={(event) => {
+              event.currentTarget.play().catch(() => undefined);
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#001a0e]/80 via-[#001a0e]/20 to-transparent" />
         </motion.div>
       </AnimatePresence>
+
+      <div className="hidden" aria-hidden>
+        {items.map((item, index) => (
+          index === current ? null : (
+            <video key={item.video} src={item.video} preload="auto" muted playsInline />
+          )
+        ))}
+      </div>
 
       {/* Progress bars */}
       <div className="absolute top-4 left-4 right-4 flex gap-1.5 z-20">
