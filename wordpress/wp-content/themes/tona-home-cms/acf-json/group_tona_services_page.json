@@ -624,11 +624,11 @@
             "rows_per_page": 20,
             "sub_fields": [
                 {
-                    "key": "field_tona_services_timelapse_slide_image",
-                    "label": "Image",
-                    "name": "image",
-                    "type": "image",
-                    "instructions": "Main image for this timelapse slide.",
+                    "key": "field_tona_services_timelapse_slide_video",
+                    "label": "Video",
+                    "name": "video",
+                    "type": "file",
+                    "instructions": "Upload a timelapse video. The frontend will play it loop, autoplay, muted, and inline.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -645,7 +645,7 @@
                     "max_width": "",
                     "max_height": "",
                     "max_size": "",
-                    "mime_types": "",
+                    "mime_types": "mp4,webm,ogg",
                     "parent_repeater": "field_tona_services_timelapse_slides"
                 },
                 {

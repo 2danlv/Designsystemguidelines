@@ -264,6 +264,7 @@ export type ServicesCmsData = {
       title?: string;
       subtitle?: string;
       duration?: string;
+      video?: string;
       image?: string;
     }>;
   };

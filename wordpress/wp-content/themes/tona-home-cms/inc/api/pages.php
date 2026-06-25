@@ -617,7 +617,7 @@ function tona_cms_services_payload( $page ) {
                             'title'    => $slide['title'] ?? '',
                             'subtitle' => $slide['subtitle'] ?? '',
                             'duration' => $slide['duration'] ?? '',
-                            'image'    => tona_cms_image_url( $slide['image'] ?? '' ),
+                            'video'    => tona_cms_image_url( $slide['video'] ?? ( $slide['image'] ?? '' ) ),
                         );
                     },
                     is_array( $timelapse_slides ) ? $timelapse_slides : array()

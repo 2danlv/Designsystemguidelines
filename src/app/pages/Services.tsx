@@ -49,7 +49,7 @@ type TimelapseSlide = {
   title: string;
   subtitle: string;
   duration: string;
-  image: string;
+  video: string;
 };
 
 
@@ -87,7 +87,7 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
 
   return (
     <div className="relative w-full aspect-video bg-[#001a0e] rounded-2xl overflow-hidden group">
-      {/* Background image */}
+      {/* Background video */}
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
@@ -97,10 +97,14 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
           transition={{ duration: 0.6 }}
           className="absolute inset-0"
         >
-          <img
-            src={slide.image}
-            alt={slide.title}
+          <video
+            src={slide.video}
             className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label={slide.title}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#001a0e]/80 via-[#001a0e]/20 to-transparent" />
         </motion.div>
@@ -248,7 +252,7 @@ export function Services() {
       title: slide.title || "",
       subtitle: slide.subtitle || "",
       duration: slide.duration || "",
-      image: slide.image || "",
+      video: slide.video || slide.image || "",
     }));
   }, [cmsPage]);
 
