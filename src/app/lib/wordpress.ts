@@ -1,8 +1,11 @@
 export type MembersCmsData = {
   hero?: {
     breadcrumbLabel?: string;
+    eyebrow?: string;
     title?: string;
     description?: string;
+    videoId?: string;
+    bottomLabel?: string;
   };
   valuesTitle?: string;
   values?: Array<{
@@ -78,6 +81,13 @@ export type AboutCmsData = {
     title?: string;
     org?: string;
   }>;
+  ceo?: {
+    eyebrow?: string;
+    quote?: string;
+    accent?: string;
+    name?: string;
+    role?: string;
+  };
   cta?: {
     title?: string;
     description?: string;

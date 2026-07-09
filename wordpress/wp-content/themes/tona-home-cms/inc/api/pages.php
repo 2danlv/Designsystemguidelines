@@ -202,8 +202,11 @@ function tona_cms_about_payload( $page ) {
         ),
         'hero'      => array(
             'breadcrumbLabel' => get_the_title( $page ),
+            'eyebrow'         => tona_cms_text_field( $post_id, 'about_hero_eyebrow' ),
             'title'           => tona_cms_group_text_field( $post_id, array( 'about_hero_intro_left', 'kv_left' ), 'about_hero_title', 'about_hero_title' ),
             'description'     => tona_cms_group_text_field( $post_id, array( 'about_hero_intro_left', 'kv_left' ), 'about_hero_description', 'about_hero_description' ),
+            'videoId'         => tona_cms_text_field( $post_id, 'about_hero_video_id' ),
+            'bottomLabel'     => tona_cms_text_field( $post_id, 'about_hero_bottom_label' ),
         ),
         'stats'     => array_values(
             array_map(
@@ -263,13 +266,20 @@ function tona_cms_about_payload( $page ) {
                 is_array( $certifications ) ? $certifications : array()
             )
         ),
+        'ceo' => array(
+            'eyebrow' => tona_cms_text_field( $post_id, 'about_ceo_eyebrow' ),
+            'quote'   => tona_cms_text_field( $post_id, 'about_ceo_quote' ),
+            'accent'  => tona_cms_text_field( $post_id, 'about_ceo_accent' ),
+            'name'    => tona_cms_text_field( $post_id, 'about_ceo_name' ),
+            'role'    => tona_cms_text_field( $post_id, 'about_ceo_role' ),
+        ),
         'cta' => array(
             'title'          => tona_cms_text_field( $post_id, 'about_cta_title' ),
             'description'    => tona_cms_text_field( $post_id, 'about_cta_description' ),
             'primaryLabel'   => tona_cms_text_field( $post_id, 'about_cta_primary_label' ),
-            'primaryUrl'     => tona_cms_text_field( $post_id, 'about_cta_primary_url' ),
+            'primaryUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'about_cta_primary_url', $post_id ) : '' ),
             'secondaryLabel' => tona_cms_text_field( $post_id, 'about_cta_secondary_label' ),
-            'secondaryUrl'   => tona_cms_text_field( $post_id, 'about_cta_secondary_url' ),
+            'secondaryUrl'   => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'about_cta_secondary_url', $post_id ) : '' ),
         ),
     );
 }

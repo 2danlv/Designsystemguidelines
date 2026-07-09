@@ -40,6 +40,69 @@
             "allow_in_bindings": 1
         },
         {
+            "key": "field_tona_about_hero_eyebrow",
+            "label": "Kv Top Label",
+            "name": "about_hero_eyebrow",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Small label above the KV headline.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Tona Corporation - Since 2009",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_about_hero_video_id",
+            "label": "Kv YouTube Video ID",
+            "name": "about_hero_video_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "YouTube video ID used as the About KV background. Example: wDmNBXfd7K8. Leave empty to use the frontend default.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "wDmNBXfd7K8",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "wDmNBXfd7K8",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_about_hero_bottom_label",
+            "label": "Kv Bottom Label",
+            "name": "about_hero_bottom_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Small centered label at the bottom of the KV.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Est. 2009 - Hon 15 Nam Dong Hanh",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_6a0c957f227a9",
             "label": "Hero Intro Left",
             "name": "about_hero_intro_left",
@@ -182,6 +245,129 @@
                     ]
                 }
             ]
+        },
+        {
+            "key": "field_tona_about_ceo_group",
+            "label": "Hero CEO Quote",
+            "name": "",
+            "aria-label": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "These fields control the CEO quote block on the right side of the KV.",
+            "new_lines": "wpautop",
+            "esc_html": 0
+        },
+        {
+            "key": "field_tona_about_ceo_eyebrow",
+            "label": "CEO Quote Label",
+            "name": "about_ceo_eyebrow",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Thong Diep Lanh Dao",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_about_ceo_name",
+            "label": "CEO Name",
+            "name": "about_ceo_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Nguyen Binh Phuong",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_about_ceo_quote",
+            "label": "CEO Quote",
+            "name": "about_ceo_quote",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "60",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "rows": 4,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_tona_about_ceo_accent",
+            "label": "CEO Quote Accent Text",
+            "name": "about_ceo_accent",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Optional. Text matching this phrase inside the quote will be highlighted gold.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "chung toi xay dung long tin",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_about_ceo_role",
+            "label": "CEO Role",
+            "name": "about_ceo_role",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Chief Executive Officer, Tona Corporation",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_tona_about_tab_mission",
@@ -965,5 +1151,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "modified": 1779210686
+    "modified": 1783612190
 }
