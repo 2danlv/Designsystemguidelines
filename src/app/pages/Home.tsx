@@ -1,12 +1,12 @@
-﻿import { useState, useEffect, useCallback, useRef } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import { Link } from "../components/LocalizedLink";
 import {
-  ArrowRight, ArrowLeft, ChevronRight, ChevronLeft,
+  ArrowRight, ArrowLeft, ChevronDown,
   PenTool, Wrench, Building2, Zap,
   MapPin, Maximize2
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
 import {
   fetchCmsNews,
@@ -21,15 +21,6 @@ import { getCmsIcon } from "../lib/cmsIcons";
 import { useSiteText } from "../context/SiteSettingsContext";
 import { projectDetailPath, sitePath } from "../lib/siteLinks";
 
-type HomeHeroSlide = {
-  id: number | string;
-  image: string;
-  tag: string;
-  title: string;
-  sub: string;
-};
-
-
 type HomeService = {
   id: number | string;
   icon: LucideIcon;
@@ -39,129 +30,175 @@ type HomeService = {
   highlight?: boolean;
 };
 
+const DEFAULT_HOME_VIDEO_ID = "wDmNBXfd7K8";
+
+function youtubeVideoId(value?: string) {
+  const raw = (value || "").trim();
+  if (!raw) return DEFAULT_HOME_VIDEO_ID;
+
+  const match = raw.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+  return match?.[1] || raw;
+}
+
 // HERO SECTION
-function HeroSection({ slides, content }: { slides: HomeHeroSlide[]; content?: HomeCmsData["hero"] }) {
+function HeroSection({ content }: { content?: HomeCmsData["hero"] }) {
   const text = useSiteText();
-  const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const activeSlides = slides;
-
-  const goTo = useCallback((idx: number, dir: number) => {
-    setDirection(dir);
-    setCurrent(idx);
-  }, []);
-
-  const next = useCallback(() => {
-    if (!activeSlides.length) return;
-    goTo((current + 1) % activeSlides.length, 1);
-  }, [activeSlides.length, current, goTo]);
-
-  const prev = useCallback(() => {
-    if (!activeSlides.length) return;
-    goTo((current - 1 + activeSlides.length) % activeSlides.length, -1);
-  }, [activeSlides.length, current, goTo]);
-
-  useEffect(() => {
-    autoRef.current = setInterval(next, 5000);
-    return () => { if (autoRef.current) clearInterval(autoRef.current); };
-  }, [next]);
-
-  const slide = activeSlides[current] || activeSlides[0];
+  const videoId = youtubeVideoId(content?.videoId);
+  const backgroundColor = content?.backgroundColor || "#001810";
+  const ticker = content?.ticker || "BUILDING RIGHT - GREEN CONSTRUCTION - ENERGY";
+  const title = content?.title || "Build It";
+  const description = content?.description || "Reliable partner in green construction & energy";
   const primaryLabel = content?.primaryLabel || text("home.hero.primary_label", "Xem Dự Án");
   const primaryUrl = content?.primaryUrl || sitePath("projects");
-  const secondaryLabel = content?.secondaryLabel || "Portfolio";
-  const secondaryUrl = content?.secondaryUrl || sitePath("projects");
+  const secondaryLabel = content?.secondaryLabel || text("home.hero.secondary_label", "Dịch Vụ");
+  const secondaryUrl = content?.secondaryUrl || sitePath("services");
+  const [displayed, setDisplayed] = useState("");
 
-  if (!slide) {
-    return null;
-  }
+  useEffect(() => {
+    setDisplayed("");
+    let index = 0;
+    const timer = window.setInterval(() => {
+      index = (index + 1) % (ticker.length + 12);
+      setDisplayed(ticker.slice(0, Math.min(index, ticker.length)));
+    }, 65);
+
+    return () => window.clearInterval(timer);
+  }, [ticker]);
 
   return (
-    <section className="relative w-full h-[100vh] min-h-[600px] bg-[#002d17] overflow-hidden">
-      {/* Slides */}
-      <AnimatePresence mode="sync" initial={false}>
-        <motion.div
-          key={slide.id}
-          className="absolute inset-0"
-          initial={{ opacity: 0, x: direction * 80 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -direction * 80 }}
-          transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
-        >
-          <img
-            src={slide.image}
-            alt={slide.title}
-            className="w-full h-full object-cover"
-          />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#002d17]/90 via-[#002d17]/30 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#002d17]/60 via-transparent to-transparent" />
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Text Content */}
-      <div className="absolute inset-0 flex flex-col justify-end px-8 md:px-16 pb-24 md:pb-28 max-w-7xl mx-auto left-0 right-0">
-        <AnimatePresence mode="wait">
+    <section
+      className="-mt-[72px] relative w-full h-screen min-h-[640px] overflow-hidden bg-[#001810]"
+      style={{ backgroundColor }}
+    >
+    
+          {/* ── YouTube fullscreen background ── */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&playlist=${videoId}&rel=0&showinfo=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0`}
+              title="Tona Timelapse"
+              allow="autoplay; encrypted-media"
+              style={{
+                position: "absolute",
+                width: "100vw",
+                height: "56.25vw",
+                minHeight: "100vh",
+                minWidth: "177.78vh",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                border: "none",
+              }}
+            />
+          </div>
+    
+          {/* ── Overlays ── */}
+          {/* Left-heavy vignette for editorial readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#001810]/90 via-[#001810]/50 to-[#001810]/10 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#001810]/80 via-transparent to-[#001810]/30 z-10" />
+    
+          {/* ── Typewriter ticker — top right ── */}
           <motion.div
-            key={slide.id + "-text"}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-col gap-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="absolute top-[88px] right-8 md:right-16 z-20 hidden md:flex items-center gap-3"
           >
-            <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-[0.2em]">
-              {slide.tag}
+            <div className="w-1.5 h-1.5 rounded-full bg-[#f4aa1f] animate-pulse" />
+            <span className="text-white/50 font-bold text-xs uppercase tracking-[0.2em] min-w-[280px]">
+              {displayed}
+              <span className="inline-block w-0.5 h-[0.85em] bg-[#f4aa1f]/60 ml-0.5 align-middle animate-pulse" />
             </span>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white uppercase leading-[1.05] tracking-tight whitespace-pre-line">
-              {slide.title}
-            </h1>
-            <p className="text-white/70 font-bold text-sm md:text-base tracking-widest uppercase mt-1">
-              {slide.sub}
-            </p>
-            <div className="flex items-center gap-4 mt-4">
-              <Link
-                to={primaryUrl}
-                className="bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
-              >
-                {primaryLabel}
-              </Link>
-              <Link
-                to={secondaryUrl}
-                className="text-white/70 hover:text-[#f4aa1f] font-bold text-sm uppercase tracking-widest transition-colors flex items-center gap-2"
-              >
-                {secondaryLabel} <ArrowRight size={14} />
-              </Link>
-            </div>
           </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Slide counter */}
-      <div className="absolute bottom-8 right-8 md:right-16 flex items-center gap-3">
-        {activeSlides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i, i > current ? 1 : -1)}
-            className={`transition-all duration-300 ${i === current ? "w-8 h-1 bg-[#f4aa1f]" : "w-4 h-1 bg-white/30 hover:bg-white/60"}`}
-          />
-        ))}
-      </div>
-
-      {/* Nav arrows */}
-      <button
-        onClick={prev}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#002d17]/50 hover:bg-[#f4aa1f] text-white hover:text-[#002d17] flex items-center justify-center transition-colors backdrop-blur-sm"
-      >
-        <ChevronLeft size={22} />
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#002d17]/50 hover:bg-[#f4aa1f] text-white hover:text-[#002d17] flex items-center justify-center transition-colors backdrop-blur-sm"
-      >
-        <ChevronRight size={22} />
-      </button>
+    
+          {/* ── Main editorial content — bottom-left anchored ── */}
+          <div className="absolute inset-0 z-20 flex flex-col justify-end px-8 md:px-16 pb-16 md:pb-24">
+            <div className="max-w-7xl mx-auto w-full mx-[92px] my-[0px]">
+    
+              {/* Logo + meta row */}
+              
+    
+              {/* ── Typography hero block ── */}
+              <div className="flex flex-col leading-none mb-6">
+    
+                {/* "BUILD IT" — Bebas Neue, modern, condensed, no serif */}
+                <motion.span
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                  className="block text-white select-none"
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: "50px",
+                    letterSpacing: "0.06em",
+                    lineHeight: 0.9,
+                  }}
+                >{title}</motion.span>
+    
+                {/* "Right" — Kaushan Script, brush, bold, gold */}
+                
+              </div>
+    
+              {/* ── Divider + description ── */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="flex items-center gap-5 mb-10"
+              >
+                
+                <p
+                  className="font-semibold tracking-wide leading-snug max-w-md uppercase"
+                  style={{
+                    fontSize: "clamp(17px, 2.2vw, 22px)",
+                    color: "rgba(255,255,255,0.82)",
+                    letterSpacing: "0.06em",
+                  }}
+                >
+                  {description}
+                </p>
+              </motion.div>
+    
+              {/* ── Stats + CTAs ── */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.8 }}
+                className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10"
+              >
+                {/* Stats */}
+                
+    
+                {/* Thin vertical separator */}
+                
+    
+                {/* CTAs */}
+                <div className="flex items-center gap-3">
+                  <Link
+                    to={primaryUrl}
+                    className="bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors rounded-lg"
+                  >
+                    {primaryLabel}
+                  </Link>
+                  <Link
+                    to={secondaryUrl}
+                    className="border border-white/25 text-white/80 px-6 py-3 font-bold uppercase tracking-widest text-xs hover:border-[#f4aa1f] hover:text-[#f4aa1f] transition-colors rounded-lg"
+                  >
+                    {secondaryLabel}
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+    
+          {/* ── Scroll indicator — bottom center ── */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+            <motion.div
+              animate={{ y: [0, 7, 0] }}
+              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+            >
+              <ChevronDown size={18} className="text-white/30" />
+            </motion.div>
+          </div>
     </section>
   );
 }
@@ -324,18 +361,6 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
 }
 
 // PROJECTS CAROUSEL
-function normalizeHeroSlides(items: ProjectPost[]): HomeHeroSlide[] {
-  const source = items.slice(0, 4);
-
-  return source.map((project, index) => ({
-    id: project.id || index,
-    image: project.image,
-    tag: [project.category, project.location].filter(Boolean).join(" • "),
-    title: project.title,
-    sub: [project.duration, project.status, project.area].filter(Boolean).join(" · "),
-  }));
-}
-
 function ProjectsSection({
   items,
   label,
@@ -642,7 +667,7 @@ export function Home() {
 
   return (
     <div className="flex flex-col w-full bg-white overflow-x-hidden">
-      <HeroSection slides={normalizeHeroSlides(projectItems)} content={cmsPage?.hero} />
+      <HeroSection content={cmsPage?.hero} />
       <MarqueeStrip items={cmsPage?.marquee?.items} />
       <SloganSection content={cmsPage?.slogan} />
       <ServicesSection title={cmsPage?.sections?.servicesTitle} items={homeServices} />

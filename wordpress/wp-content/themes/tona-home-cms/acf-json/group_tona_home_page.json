@@ -21,6 +21,105 @@
             "selected": 0
         },
         {
+            "key": "field_tona_home_hero_background",
+            "label": "Hero Background Color",
+            "name": "home_hero_background",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Fallback background color behind the KV video.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#001810",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_tona_home_hero_video_id",
+            "label": "KV YouTube Video ID",
+            "name": "home_hero_video_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Use only the YouTube video ID, not the full URL.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "30",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "Example: wDmNBXfd7K8",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_home_hero_ticker",
+            "label": "Ticker Text",
+            "name": "home_hero_ticker",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Small typewriter text at the top right of the hero.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "BUILDING RIGHT - GREEN CONSTRUCTION - ENERGY",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_home_hero_title",
+            "label": "Hero Title",
+            "name": "home_hero_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Build It",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_tona_home_hero_description",
+            "label": "Hero Description",
+            "name": "home_hero_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Reliable partner in green construction & energy",
+            "maxlength": "",
+            "rows": 3,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
             "key": "field_tona_home_hero_primary_label",
             "label": "Primary Button Label",
             "name": "home_hero_primary_label",
@@ -560,5 +659,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1779720157
+    "modified": 1783642137
 }

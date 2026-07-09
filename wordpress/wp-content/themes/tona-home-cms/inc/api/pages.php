@@ -18,10 +18,15 @@ function tona_cms_home_payload( $page ) {
         'slug'    => $page->post_name,
         'title'   => get_the_title( $page ),
         'hero'    => array(
+            'backgroundColor' => tona_cms_text_field( $post_id, 'home_hero_background' ),
+            'videoId'         => tona_cms_text_field( $post_id, 'home_hero_video_id' ),
+            'ticker'          => tona_cms_text_field( $post_id, 'home_hero_ticker' ),
+            'title'           => tona_cms_text_field( $post_id, 'home_hero_title' ),
+            'description'     => tona_cms_text_field( $post_id, 'home_hero_description' ),
             'primaryLabel'   => tona_cms_text_field( $post_id, 'home_hero_primary_label' ),
-            'primaryUrl'     => tona_cms_text_field( $post_id, 'home_hero_primary_url' ),
+            'primaryUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'home_hero_primary_url', $post_id ) : '' ),
             'secondaryLabel' => tona_cms_text_field( $post_id, 'home_hero_secondary_label' ),
-            'secondaryUrl'   => tona_cms_text_field( $post_id, 'home_hero_secondary_url' ),
+            'secondaryUrl'   => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'home_hero_secondary_url', $post_id ) : '' ),
         ),
         'marquee' => array(
             'items' => array_values(

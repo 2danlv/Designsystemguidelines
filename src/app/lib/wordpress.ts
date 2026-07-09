@@ -288,6 +288,11 @@ export type ServicesCmsData = {
 
 export type HomeCmsData = {
   hero?: {
+    backgroundColor?: string;
+    videoId?: string;
+    ticker?: string;
+    title?: string;
+    description?: string;
     primaryLabel?: string;
     primaryUrl?: string;
     secondaryLabel?: string;
