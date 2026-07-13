@@ -1,4 +1,4 @@
-﻿import { Outlet, Link, useLocation } from "react-router";
+import { Outlet, Link, useLocation } from "react-router";
 import { Menu, X, MapPin, Phone, Mail, Facebook, Linkedin, Youtube, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import type React from "react";
@@ -110,15 +110,17 @@ function SmartLink({
   className,
   children,
   ariaLabel,
+  skipLocalization = false,
 }: {
   to?: unknown;
   className?: string;
   children: React.ReactNode;
   ariaLabel?: string;
+  skipLocalization?: boolean;
 }) {
   const rawUrl = normalizeLinkValue(to) || "#";
   const cleanUrl = rawUrl.replace(/\/+$/, "");
-  const url = cleanUrl === "/en" ? rawUrl : localizeUrl(rawUrl);
+  const url = skipLocalization ? rawUrl : (cleanUrl === "/en" ? rawUrl : localizeUrl(rawUrl));
 
   if (/^https?:\/\//i.test(url) || url.startsWith("mailto:") || url.startsWith("tel:")) {
     return (
@@ -137,16 +139,24 @@ function SmartLink({
 
 // HEADER
 
+const normalizePath = (path: string) => {
+  const cleanPath = path.split("?")[0].split("#")[0];
+  return cleanPath.length > 1 ? cleanPath.replace(/\/+$/, "") : cleanPath;
+};
+
 function Header({ settings }: { settings?: SiteSettings["header"] }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [routeMatch, setRouteMatch] = useState<CmsRouteMatch | null>(null);
   const location = useLocation();
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 60);
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -163,11 +173,6 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
 
     return () => controller.abort();
   }, [location.pathname, location.search]);
-
-  const normalizePath = (path: string) => {
-    const cleanPath = path.split("?")[0].split("#")[0];
-    return cleanPath.length > 1 ? cleanPath.replace(/\/+$/, "") : cleanPath;
-  };
 
   const isCurrent = (path: string) => {
     const currentPath = normalizePath(location.pathname);
@@ -204,12 +209,30 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
   const logo = settings?.logo || tonaLogo;
   const logoAlt = settings?.logoAlt || "Tona Corporation";
   const homeUrl = settings?.homeUrl || (currentLanguage === "en" ? "/en" : "/");
+  const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
+  const whiteMode = isHovered && !isScrolled && isHomePage;
+  const darkMode = isScrolled || !isHomePage;
+  const headerBg = darkMode
+    ? "bg-[#002d17] backdrop-blur-md"
+    : whiteMode
+      ? "bg-white shadow-xl"
+      : "bg-transparent";
+  const navLinkBase = whiteMode
+    ? "text-[#002d17]/70 hover:text-[#002d17]"
+    : "text-white/80 hover:text-[#f4aa1f]";
+  const navLinkActive = whiteMode ? "text-[#002d17] font-extrabold" : "text-[#f4aa1f]";
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-[#002d17]/98 backdrop-blur-sm" : "bg-[#002d17]"
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${headerBg}`}
+      onPointerMove={(event) => {
+        const hasRealMovement = event.movementX !== 0 || event.movementY !== 0;
+
+        if (event.pointerType === "mouse" && hasRealMovement && !isScrolled) {
+          setIsHovered(true);
+        }
+      }}
+      onPointerLeave={() => setIsHovered(false)}
     >
       <div className="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between gap-8">
         {/* LOGO */}
@@ -218,9 +241,7 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
           className="flex items-center shrink-0"
           ariaLabel={logoAlt}
         >
-          <div className="px-3 py-1.5 flex items-center justify-center">
-            <img src={logo} alt={logoAlt} className="h-14 w-auto" />
-          </div>
+          <img src={logo} alt={logoAlt} className="h-[41px] w-auto ml-[0px] mr-[20px] my-[0px]" />
         </SmartLink>
 
         {/* DESKTOP NAV */}
@@ -234,18 +255,16 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
                   onMouseEnter={() => handleMouseEnter(link.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <button className="flex items-center gap-1 px-4 py-2 text-white/80 hover:text-[#f4aa1f] font-semibold text-xs uppercase tracking-widest transition-colors">
+                  <button className={`flex items-center gap-1 px-4 py-2 font-semibold uppercase tracking-widest transition-colors duration-200 ${navLinkBase} text-[13px]`}>
                     {link.label}
                     <ChevronDown
                       size={12}
-                      className={`transition-transform duration-200 ${
-                        activeDropdown === link.label ? "rotate-180" : ""
-                      }`}
+                      className={`transition-transform duration-200 ${activeDropdown === link.label ? "rotate-180" : ""}`}
                     />
                   </button>
-                  {/* Dropdown */}
+                  {/* Dropdown — always dark */}
                   <div
-                    className={`absolute top-full left-1/2 -translate-x-1/2 min-w-[200px] bg-[#002d17] border-t-2 border-[#f4aa1f] transition-all duration-200 overflow-hidden rounded-b-xl ${
+                    className={`absolute top-full left-1/2 -translate-x-1/2 min-w-[220px] bg-[#002d17] border-t-2 border-[#f4aa1f] transition-all duration-200 overflow-hidden rounded-b-xl shadow-xl ${
                       activeDropdown === link.label
                         ? "opacity-100 visible translate-y-0"
                         : "opacity-0 invisible -translate-y-2"
@@ -268,12 +287,10 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
               <SmartLink
                 key={`${link.label}-${itemUrl(link)}`}
                 to={itemUrl(link)}
-                className={`px-4 py-2 font-semibold text-xs uppercase tracking-widest transition-colors ${
-                  isCurrent(itemUrl(link)) && !["/", "/en"].includes(normalizePath(localizeUrl(itemUrl(link))))
-                    ? "text-[#f4aa1f]"
-                    : ["/", "/en"].includes(normalizePath(localizeUrl(itemUrl(link)))) && normalizePath(localizeUrl(itemUrl(link))) === normalizePath(location.pathname)
-                    ? "text-[#f4aa1f]"
-                    : "text-white/80 hover:text-[#f4aa1f]"
+                className={`px-4 py-2 font-semibold text-[13px] uppercase tracking-widest transition-colors duration-200 ${
+                  isCurrent(itemUrl(link))
+                    ? navLinkActive
+                    : navLinkBase
                 }`}
               >
                 {link.label}
@@ -285,25 +302,29 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
         {/* RIGHT: Language + Mobile Toggle */}
         <div className="flex items-center gap-3 shrink-0">
           {/* Language */}
-          <div className="hidden lg:flex items-center border border-white/30 text-xs font-bold uppercase overflow-hidden">
+          <div className="hidden lg:flex items-center font-bold uppercase overflow-hidden rounded-lg">
             {displayLanguages.map((language) => (
-              <Link
-                key={`${language.label}-${itemUrl(language)}`}
-                to={itemUrl(language)}
-                className={`px-3 py-1.5 transition-colors ${
+              <SmartLink
+                key={language.language}
+                to={language.url}
+                skipLocalization
+                ariaLabel={`Chuyển sang ${language.label}`}
+                className={`px-2 py-1 transition-colors text-xs ${
                   language.language === currentLanguage
                     ? "bg-[#f4aa1f] text-[#002d17] hover:bg-[#f4aa1f]/90"
-                    : "text-white/60 hover:text-white hover:bg-[#46aa85] rounded-lg"
+                    : whiteMode
+                      ? "text-[#002d17]/50 hover:text-[#002d17] hover:bg-[#002d17]/5"
+                      : "text-white/60 hover:text-white hover:bg-[#46aa85]"
                 }`}
               >
                 {language.label}
-              </Link>
+              </SmartLink>
             ))}
           </div>
 
           {/* Mobile toggle */}
           <button
-            className="lg:hidden text-white p-1"
+            className={`lg:hidden p-1 transition-colors duration-200 ${whiteMode ? "text-[#002d17]" : "text-white"}`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -346,15 +367,18 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
           })}
           <div className="flex gap-2 mt-4">
             {displayLanguages.map((language) => (
-              <Link
-                key={`${language.label}-${itemUrl(language)}`}
-                to={itemUrl(language)}
+              <SmartLink
+                key={language.language}
+                to={language.url}
+                skipLocalization
                 className={`px-4 py-2 font-bold text-xs uppercase ${
-                  language.language === currentLanguage ? "bg-[#f4aa1f] text-[#002d17]" : "border border-white/30 text-white/60"
+                  language.language === currentLanguage
+                    ? "bg-[#f4aa1f] text-[#002d17]"
+                    : "border border-white/30 text-white/60"
                 }`}
               >
                 {language.label}
-              </Link>
+              </SmartLink>
             ))}
           </div>
         </div>
@@ -380,6 +404,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
   const footerLogoAlt = footer.logoAlt || "Tona Corporation";
   const socialIcons = { Facebook, LinkedIn: Linkedin, YouTube: Youtube };
   const copyright = (footer.copyright || fallbackFooter.copyright).replace("{year}", String(new Date().getFullYear()));
+  const phoneHref = `tel:${footer.phone.replace(/[^+\d]/g, "")}`;
 
   return (
     <footer className="bg-[#002d17] text-white">
@@ -394,7 +419,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
           </div>
           <SmartLink
             to={footer.cta.buttonUrl}
-            className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
+            className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
           >
             {footer.cta.button}
           </SmartLink>
@@ -405,15 +430,12 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-10 grid grid-cols-1 md:grid-cols-12 gap-10">
         {/* Col 1: Brand */}
         <div className="md:col-span-4">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="px-3 py-2 inline-flex items-center justify-center">
-              <img src={footerLogo} alt={footerLogoAlt} className="h-10 w-auto" />
-            </div>
+          <div className="mb-6">
+            <img src={footerLogo} alt={footerLogoAlt} className="h-10 w-auto" />
           </div>
           <p className="text-white/60 text-sm leading-relaxed mb-8 max-w-sm">
             {footer.description}
           </p>
-          {/* Certs */}
           <div className="flex flex-wrap gap-2">
             {footer.certifications.map((cert) => (
               <span
@@ -466,18 +488,13 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
           <ul className="flex flex-col gap-4">
             <li className="flex items-start gap-3">
               <MapPin size={15} className="text-[#f4aa1f] shrink-0 mt-0.5" />
-              <span className="text-white/60 text-sm leading-relaxed">
-                {footer.address.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
-                  <span key={`${line}-${index}`}>
-                    {line}
-                    {index < lines.length - 1 && <br />}
-                  </span>
-                ))}
+              <span className="text-white/60 text-sm leading-relaxed whitespace-pre-line">
+                {footer.address}
               </span>
             </li>
             <li className="flex items-center gap-3">
               <Phone size={15} className="text-[#f4aa1f] shrink-0" />
-              <a href={`tel:${footer.phone.replace(/[^\d+]/g, "")}`} className="text-white/60 hover:text-white text-sm transition-colors">
+              <a href={phoneHref} className="text-white/60 hover:text-white text-sm transition-colors">
                 {footer.phone}
               </a>
             </li>
@@ -489,21 +506,22 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
             </li>
           </ul>
 
-          {/* Social */}
           <div className="flex gap-3 mt-8">
             {footer.socials.map((social) => {
               const platform = social.platform || "Facebook";
-              const Icon = socialIcons[platform] || Facebook;
+              const Icon = socialIcons[platform];
 
               return (
-              <SmartLink
-                key={`${platform}-${social.url}`}
-                to={social.url || "#"}
-                ariaLabel={platform}
-                className="w-9 h-9 border border-white/20 flex items-center justify-center text-white/50 hover:border-[#f4aa1f] hover:text-[#f4aa1f] transition-colors"
-              >
-                <Icon size={15} />
-              </SmartLink>
+                <a
+                  key={`${platform}-${social.url}`}
+                  href={social.url || "#"}
+                  aria-label={platform}
+                  target={social.url && /^https?:\/\//i.test(social.url) ? "_blank" : undefined}
+                  rel={social.url && /^https?:\/\//i.test(social.url) ? "noreferrer" : undefined}
+                  className="w-9 h-9 border border-white/20 flex items-center justify-center text-white/50 hover:border-[#f4aa1f] hover:text-[#f4aa1f] transition-colors"
+                >
+                  <Icon size={15} />
+                </a>
               );
             })}
           </div>
@@ -516,7 +534,11 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
           <span>{copyright}</span>
           <div className="flex gap-5">
             {footer.legalLinks.map((item) => (
-              <SmartLink key={`${item.label}-${itemUrl(item)}`} to={itemUrl(item)} className="hover:text-white/70 cursor-pointer transition-colors">
+              <SmartLink
+                key={`${item.label}-${itemUrl(item)}`}
+                to={itemUrl(item)}
+                className="hover:text-white/70 transition-colors"
+              >
                 {item.label}
               </SmartLink>
             ))}
@@ -533,6 +555,7 @@ export function Layout() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const location = useLocation();
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
+  const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -569,9 +592,9 @@ export function Layout() {
 
   return (
     <SiteSettingsProvider settings={settings}>
-      <div className="min-h-screen flex flex-col font-sans bg-white text-[#002d17] antialiased">
+      <div className="min-h-screen flex flex-col font-san text-[#002d17] antialiased">
         <Header settings={settings?.header} />
-        <main className="flex-1 flex flex-col w-full pt-[72px]">
+        <main className={`flex-1 flex flex-col w-full ${isHomePage ? "" : "pt-[72px]"}`}>
           <Outlet />
         </main>
         <Footer settings={settings?.footer} />
@@ -579,4 +602,3 @@ export function Layout() {
     </SiteSettingsProvider>
   );
 }
-

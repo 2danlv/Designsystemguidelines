@@ -9,8 +9,53 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function tona_cms_home_payload( $page ) {
     $post_id = $page->ID;
+    $title_image = function_exists( 'get_field' ) ? get_field( 'home_hero_title_image', $post_id ) : '';
+
+    if ( empty( $title_image ) && function_exists( 'get_field' ) && function_exists( 'pll_get_post' ) ) {
+        $current_language = function_exists( 'pll_get_post_language' ) ? pll_get_post_language( $post_id, 'slug' ) : '';
+        $fallback_language = 'en' === $current_language ? 'vi' : 'en';
+        $fallback_post_id = (int) pll_get_post( $post_id, $fallback_language );
+
+        if ( $fallback_post_id && $fallback_post_id !== (int) $post_id ) {
+            $title_image = get_field( 'home_hero_title_image', $fallback_post_id );
+        }
+    }
+
     $marquee_items = function_exists( 'get_field' ) ? get_field( 'home_marquee_items', $post_id ) : array();
+
+    // Polylang stores each translated home page as a separate post. If the
+    // marquee has only been entered on one translation, reuse it instead of
+    // returning an empty strip on the other language.
+    if ( empty( $marquee_items ) && function_exists( 'get_field' ) && function_exists( 'pll_get_post' ) ) {
+        $current_language = function_exists( 'pll_get_post_language' ) ? pll_get_post_language( $post_id, 'slug' ) : '';
+        $fallback_language = 'en' === $current_language ? 'vi' : 'en';
+        $fallback_post_id = (int) pll_get_post( $post_id, $fallback_language );
+
+        if ( $fallback_post_id && $fallback_post_id !== (int) $post_id ) {
+            $fallback_marquee_items = get_field( 'home_marquee_items', $fallback_post_id );
+
+            if ( is_array( $fallback_marquee_items ) && ! empty( $fallback_marquee_items ) ) {
+                $marquee_items = $fallback_marquee_items;
+            }
+        }
+    }
+
     $stats = function_exists( 'get_field' ) ? get_field( 'home_slogan_stats', $post_id ) : array();
+
+    if ( empty( $stats ) && function_exists( 'get_field' ) && function_exists( 'pll_get_post' ) ) {
+        $current_language = function_exists( 'pll_get_post_language' ) ? pll_get_post_language( $post_id, 'slug' ) : '';
+        $fallback_language = 'en' === $current_language ? 'vi' : 'en';
+        $fallback_post_id = (int) pll_get_post( $post_id, $fallback_language );
+
+        if ( $fallback_post_id && $fallback_post_id !== (int) $post_id ) {
+            $fallback_stats = get_field( 'home_slogan_stats', $fallback_post_id );
+
+            if ( is_array( $fallback_stats ) && ! empty( $fallback_stats ) ) {
+                $stats = $fallback_stats;
+            }
+        }
+    }
+
     $partners = function_exists( 'get_field' ) ? get_field( 'home_partner_logos', $post_id ) : array();
 
     return array(
@@ -22,6 +67,7 @@ function tona_cms_home_payload( $page ) {
             'videoId'         => tona_cms_text_field( $post_id, 'home_hero_video_id' ),
             'ticker'          => tona_cms_text_field( $post_id, 'home_hero_ticker' ),
             'title'           => tona_cms_text_field( $post_id, 'home_hero_title' ),
+            'titleImage'      => tona_cms_image_url( $title_image ),
             'description'     => tona_cms_text_field( $post_id, 'home_hero_description' ),
             'primaryLabel'   => tona_cms_text_field( $post_id, 'home_hero_primary_label' ),
             'primaryUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'home_hero_primary_url', $post_id ) : '' ),

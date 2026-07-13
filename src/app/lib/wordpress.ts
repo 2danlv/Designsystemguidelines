@@ -292,6 +292,7 @@ export type HomeCmsData = {
     videoId?: string;
     ticker?: string;
     title?: string;
+    titleImage?: string;
     description?: string;
     primaryLabel?: string;
     primaryUrl?: string;
@@ -641,6 +642,13 @@ export function localizeUrl(url: string, targetLanguage: SiteLanguage = getCurre
   const [pathOnly, query = ""] = pathWithQuery.split("?");
   const parts = pathOnly.replace(/^\/+|\/+$/g, "").split("/").filter(Boolean);
   const segments = parts.slice(parts[0] === "en" || parts[0] === "vi" ? 1 : 0);
+
+  if (
+    segments.length === 1 &&
+    ["trang-chu", "trang-chủ", "home"].includes(decodeURIComponent(segments[0]).toLowerCase())
+  ) {
+    segments.length = 0;
+  }
 
   const nextPath = targetLanguage === "en"
     ? `/en${segments.length ? `/${segments.join("/")}` : ""}`
