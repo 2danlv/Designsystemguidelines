@@ -157,7 +157,7 @@ function tona_cms_members_payload( $page ) {
             'title'       => tona_cms_text_field( $post_id, 'members_teaser_title' ),
             'description' => tona_cms_text_field( $post_id, 'members_teaser_description' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'members_teaser_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'members_teaser_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'members_teaser_link_url', $post_id ) : '' ),
         ),
     );
 }
@@ -202,20 +202,23 @@ function tona_cms_member_payload( $post ) {
 }
 
 function tona_cms_members_list_payload() {
-    $posts = get_posts(
-        array_merge(
-            array(
-            'post_type'      => 'tona_member',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-            'orderby'        => array(
-                'menu_order' => 'ASC',
-                'date'       => 'DESC',
-            ),
-            ),
-            tona_cms_language_query_args()
-        )
+    $query_args = array(
+        'post_type'      => 'tona_member',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => array(
+            'menu_order' => 'ASC',
+            'date'       => 'DESC',
+        ),
     );
+    $language_args = tona_cms_language_query_args();
+    $posts = get_posts( array_merge( $query_args, $language_args ) );
+
+    // Older member posts can exist before a Polylang language is assigned.
+    // Keep them visible until translated member posts are created in CMS.
+    if ( empty( $posts ) && ! empty( $language_args ) ) {
+        $posts = get_posts( $query_args );
+    }
 
     return array_values(
         array_map( 'tona_cms_member_payload', is_array( $posts ) ? $posts : array() )

@@ -185,37 +185,41 @@ export function Members() {
 
   return (
     <div className="w-full bg-white min-h-screen">
-      <div className="bg-[#002d17] pt-8 pb-20">
+      {/* HERO */}
+      <div className="pt-8 pb-14 bg-[#f9f9f7]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+          <div className="flex items-center gap-2 text-[#002d17]/40 text-xs font-bold uppercase tracking-widest mb-8">
+            <Link to={sitePath("home")} className="text-[#002d17]/50 hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
             {renderLines(heroTitle)}
           </h1>
-          <p className="text-white/50 text-base font-medium max-w-xl">
+          <p className="text-base font-medium max-w-xl text-[#002d17]/70">
             {heroDescription}
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 -mt-8 pb-20">
+      {/* BOD CARDS */}
+      <div className="pb-14 bg-[#ffffff]">
+      <div className="max-w-7xl mx-auto px-6 -mt-8 pb-0">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {members.map((member, index) => (
+          {members.map((member, idx) => (
             <motion.div
               key={member.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group flex flex-col cursor-pointer"
               onClick={() => setSelectedLeader(member)}
             >
+              {/* Photo card */}
               <div className="relative overflow-hidden bg-[#002d17] rounded-t-2xl">
-                <div className="aspect-[3/4] overflow-hidden bg-[#d5ede5]">
+                <div className="aspect-[3/4] overflow-hidden">
                   <img
                     src={member.image}
                     alt={member.name}
@@ -231,10 +235,11 @@ export function Members() {
                   <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">
                     {member.role}
                   </p>
-                  <p className="text-white/50 text-[10px] uppercase tracking-widest">
+                  <p className="text-white/50 text-xs uppercase tracking-widest">
                     {member.roleEn}
                   </p>
                 </div>
+                {/* View profile on hover */}
                 <div className="absolute inset-0 bg-[#002d17]/0 group-hover:bg-[#002d17]/20 transition-colors flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-[#f4aa1f] text-[#002d17] px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">
                     Xem Hồ Sơ
@@ -247,6 +252,7 @@ export function Members() {
                   className="absolute top-4 right-4 w-9 h-9 bg-[#002d17]/70 hover:bg-[#f4aa1f] flex items-center justify-center text-white hover:text-[#002d17] transition-colors opacity-0 group-hover:opacity-100 rounded-lg z-10"
                   onClick={(event) => {
                     event.stopPropagation();
+
                     if (!member.linkedin || member.linkedin === "#") {
                       event.preventDefault();
                     }
@@ -256,6 +262,7 @@ export function Members() {
                 </a>
               </div>
 
+              {/* Bio */}
               <div className="bg-[#f9f9f7] px-5 py-5 flex-1 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors rounded-b-2xl">
                 <p className="text-[#002d17]/70 text-sm leading-relaxed font-medium line-clamp-3">
                   {member.bio}
@@ -265,42 +272,45 @@ export function Members() {
           ))}
         </div>
       </div>
+      </div>
 
+      {/* Leader Modal */}
       <AnimatePresence>
         {selectedLeader && (
           <LeaderModal member={selectedLeader} onClose={() => setSelectedLeader(null)} />
         )}
       </AnimatePresence>
 
-      <div className="bg-[#002d17] py-20">
+      {/* CORE VALUES */}
+      <div className="bg-[#002d17] py-14">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-12">
+          <div className="mb-10">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">
               {valuesTitle}
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {coreValues.map((value, index) => {
-              const Icon = value.icon;
+            {coreValues.map((val, idx) => {
+              const Icon = val.icon;
               return (
                 <motion.div
-                  key={`${value.title}-${index}`}
+                  key={idx}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: idx * 0.1 }}
                   className="bg-white/5 hover:bg-[#46aa85] transition-colors p-8 flex flex-col gap-4 group rounded-2xl border border-white/5"
                 >
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center group-hover:bg-[#f4aa1f] transition-colors rounded-xl">
-                    {value.iconImage ? (
-                      <img src={value.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden />
+                    {val.iconImage ? (
+                      <img src={val.iconImage} alt="" className="h-6 w-6 object-contain" />
                     ) : (
                       <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
                     )}
                   </div>
-                  <h3 className="font-extrabold text-white text-base uppercase tracking-tight">{value.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed">{value.desc}</p>
+                  <h3 className="font-extrabold text-white text-base uppercase tracking-tight">{val.title}</h3>
+                  <p className="text-white/50 text-sm leading-relaxed">{val.desc}</p>
                 </motion.div>
               );
             })}
@@ -308,7 +318,8 @@ export function Members() {
         </div>
       </div>
 
-      <div className="py-20 bg-white">
+      {/* MANAGEMENT TEAM TEASER */}
+      <div className="py-12 bg-white border-t border-[#002d17]/10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />

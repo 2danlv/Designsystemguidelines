@@ -345,7 +345,7 @@ export function About() {
         </div>
       </section>
 
-      <section className="relative w-full bg-[#002d17] py-16 overflow-hidden">
+      {/* <section className="relative w-full bg-[#002d17] py-16 overflow-hidden">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-[#46aa85]/8 to-transparent pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
@@ -358,7 +358,7 @@ export function About() {
             </motion.div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       <section className="bg-gradient-to-b from-[#002d17] to-[#f9f9f7] py-14" style={backgroundStyle(colors?.valuesBackground)}>
         <div className="max-w-7xl mx-auto px-6">
