@@ -580,8 +580,16 @@ export function Jobs() {
       </AnimatePresence>
 
       {/* HERO */}
-      <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
-        <div className="max-w-7xl mx-auto px-6">
+      <div
+        className="pt-8 pb-20 relative overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, #12573d 0%, #0d4530 50%, ${colors?.heroBackground || "#002d17"} 100%)`,
+        }}
+      >
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{ backgroundImage: "linear-gradient(#f4aa1f 1px, transparent 1px), linear-gradient(90deg, #f4aa1f 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
             <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
             <ChevronRight size={12} />
@@ -591,27 +599,31 @@ export function Jobs() {
           <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
             {renderLines(heroTitle)}
           </h1>
-          <p className="text-white/50 text-base font-medium max-w-xl">
+          <p className="text-white/70 text-base font-medium max-w-xl">
             {heroDescription}
           </p>
         </div>
-        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-extrabold text-white/5 uppercase leading-none select-none">
+        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-extrabold text-white/[0.04] uppercase leading-none select-none">
           {heroDecorativeText}
         </div>
       </div>
-
-      {/* WHY TONA */}
-      <div className="bg-[#f9f9f7] border-b border-[#002d17]/10" style={backgroundStyle(colors?.perksBackground)}>
-        <div className="max-w-7xl mx-auto px-6 py-14">
-          <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">{perksEyebrow}</p>
+ 
+      {/* WHY TONA — gradient bridge */}
+      <div
+        style={{
+          background: `linear-gradient(to bottom, ${colors?.heroBackground || "#002d17"}, ${colors?.perksBackground || "#f9f9f7"})`,
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <p className="text-[#f4aa1f] font-bold text-[13px] uppercase tracking-widest mb-6">{perksEyebrow}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {perks.map((perk, idx) => {
               const Icon = perk.icon;
               return (
-                <div key={idx} className="flex flex-col gap-3 group bg-white rounded-2xl p-6 border border-[#002d17]/8">
+                <div key={idx} className="flex flex-col gap-3 group bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-white/60">
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center rounded-xl">
                     {perk.iconImage ? (
-                      <img src={perk.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden />
+                      <img src={perk.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden="true" />
                     ) : (
                       <Icon size={20} className="text-[#f4aa1f]" />
                     )}

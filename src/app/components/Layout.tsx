@@ -302,14 +302,14 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
         {/* RIGHT: Language + Mobile Toggle */}
         <div className="flex items-center gap-3 shrink-0">
           {/* Language */}
-          <div className="hidden lg:flex items-center font-bold uppercase overflow-hidden rounded-lg">
+          <div className="hidden lg:flex items-center font-bold uppercase overflow-hidden gap-1">
             {displayLanguages.map((language) => (
               <SmartLink
                 key={language.language}
                 to={language.url}
                 skipLocalization
                 ariaLabel={`Chuyển sang ${language.label}`}
-                className={`px-2 py-1 transition-colors text-xs ${
+                className={`px-2 py-1 transition-colors text-xs rounded-md ${
                   language.language === currentLanguage
                     ? "bg-[#f4aa1f] text-[#002d17] hover:bg-[#f4aa1f]/90"
                     : whiteMode

@@ -4,7 +4,13 @@ import {
   TrendingUp,
   type LucideIcon,
 } from "lucide-react";
-import { fetchCmsJobs, fetchCmsPage, type JobPost, type JobsCmsData } from "../lib/wordpress";
+import {
+  fetchCmsJobs,
+  fetchCmsPage,
+  fetchCmsPageByTemplate,
+  type JobPost,
+  type JobsCmsData,
+} from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
 
 export type PerkItem = {
@@ -91,8 +97,11 @@ export function useJobsPage({}: UseJobsPageOptions = {}): JobsPageViewModel {
   useEffect(() => {
     const controller = new AbortController();
 
+    const pageRequest = fetchCmsPageByTemplate<JobsCmsData>("tona-jobs", controller.signal)
+      .then((page) => page || fetchCmsPage<JobsCmsData>("nghe-nghiep", controller.signal));
+
     Promise.all([
-      fetchCmsPage<JobsCmsData>("tuyen-dung", controller.signal),
+      pageRequest,
       fetchCmsJobs(controller.signal),
     ]).then(([page, jobPosts]) => {
       setCmsPage(page);
@@ -122,12 +131,14 @@ export function useJobsPage({}: UseJobsPageOptions = {}): JobsPageViewModel {
       return [];
     }
 
-    return cmsPage.perks.map((perk) => ({
-      icon: getCmsIcon(perk.icon, TrendingUp),
-      iconImage: perk.iconImage || "",
-      title: perk.title || "",
-      desc: perk.desc || "",
-    }));
+    return cmsPage.perks
+      .filter((perk) => perk.title?.trim() || perk.desc?.trim() || perk.iconImage)
+      .map((perk) => ({
+        icon: getCmsIcon(perk.icon, TrendingUp),
+        iconImage: perk.iconImage || "",
+        title: perk.title || "",
+        desc: perk.desc || "",
+      }));
   }, [cmsPage]);
 
   const internPositions = useMemo<InternPosition[]>(() => {
