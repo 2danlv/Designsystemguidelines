@@ -188,7 +188,7 @@ export function Culture() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`group relative overflow-hidden transition-all duration-300 ${
+                className={`group relative overflow-hidden transition-all duration-300 rounded-2xl ${
                   theme.active
                     ? "bg-[#002d17] cursor-default"
                     : "bg-white border border-[#002d17]/10 hover:border-[#002d17] cursor-pointer"
@@ -365,19 +365,19 @@ export function Culture() {
             </p>
             <div className="grid grid-cols-2 gap-4 mb-8">
               {academyStats.map((item) => (
-                <div key={item.label} className="border border-white/10 p-4">
+                <div key={item.label} className="border border-white/10 p-4 rounded-xl">
                   <span className="font-extrabold text-[#f4aa1f] text-2xl">{item.value}</span>
                   <p className="text-white/50 text-xs uppercase tracking-widest font-bold mt-1">{item.label}</p>
                 </div>
               ))}
             </div>
-            <Link to={academyLinkUrl} className="inline-flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors">
+            <Link to={academyLinkUrl} className="rounded-lg inline-flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors">
               {academyLinkLabel} <ArrowRight size={14} />
             </Link>
           </div>
 
-          <div>
-            <img src={academyImage} alt="Tona Academy" className="w-full aspect-[4/3] object-cover" />
+          <div className="rounded-xl overflow-hidden">
+            <img src={academyImage} alt="Tona Academy" className="w-full aspect-[4/3] object-cover rounded-xl" />
           </div>
         </div>
       </section>
