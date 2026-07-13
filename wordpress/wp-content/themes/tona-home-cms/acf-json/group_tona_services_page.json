@@ -79,6 +79,26 @@
             "placeholder": ""
         },
         {
+            "key": "field_tona_services_hero_decorative_text",
+            "label": "Hero Decorative Text",
+            "name": "services_hero_decorative_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Large translucent word displayed on the right side of the hero.",
+            "required": 0,
+            "conditional_logic": false,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "BUILD",
+            "maxlength": "20",
+            "placeholder": "BUILD",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_tona_services_tab_services",
             "label": "02. Services",
             "name": "",

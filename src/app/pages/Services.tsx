@@ -286,6 +286,7 @@ export function Services() {
   const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Dịch Vụ";
   const heroTitle = cmsPage?.hero?.title || "Dịch Vụ\nCốt Lõi";
   const heroDescription = cmsPage?.hero?.description || "Tona Corporation cung cấp các giải pháp xây dựng công nghiệp, thương mại và kỹ thuật cao.";
+  const heroDecorativeText = cmsPage?.hero?.decorativeText || "BUILD";
   const processTitle = cmsPage?.process?.title || "Quy Trình Làm Việc";
   const timelapseTitle = cmsPage?.timelapse?.title || "Nhìn Lại\nHành Trình\nThi Công";
   const timelapseDescription = cmsPage?.timelapse?.description || "Những khoảnh khắc đặc biệt được nén lại - từ mảnh đất trống đến công trình hoàn chỉnh. Mỗi timelapse là bằng chứng cho sự chuyên nghiệp và tốc độ triển khai của Tona.";
@@ -297,10 +298,25 @@ export function Services() {
   return (
     <div className="w-full bg-white min-h-screen">
       {/* HERO */}
-      <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
-        <div className="max-w-7xl mx-auto px-6">
+      <div
+        className="pt-8 pb-20 relative overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, #12573d 0%, #0d4530 50%, ${colors?.heroBackground || "#002d17"} 100%)`,
+        }}
+      >
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(#f4aa1f 1px, transparent 1px), linear-gradient(90deg, #f4aa1f 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">
+              Home
+            </Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -312,51 +328,73 @@ export function Services() {
             {heroDescription}
           </p>
         </div>
+        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-extrabold text-white/[0.04] uppercase leading-none select-none pointer-events-none">
+          {heroDecorativeText}
+        </div>
       </div>
 
       {/* FEATURED SERVICE */}
       {featured && (
-      <div className="max-w-7xl mx-auto px-6 py-16" style={backgroundStyle(colors?.servicesBackground)}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative overflow-hidden rounded-2xl bg-[#002d17] flex flex-col lg:flex-row min-h-[400px]"
+        <div
+          className="max-w-7xl mx-auto px-6 py-16"
+          style={backgroundStyle(colors?.servicesBackground)}
         >
-          <div className="lg:w-[55%] relative overflow-hidden">
-            <img src={featured.img} alt={featured.title} className="w-full h-56 lg:h-full object-cover opacity-75" />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#002d17]/70 hidden lg:block" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#002d17]/80 to-transparent lg:hidden" />
-          </div>
-
-          <div className="lg:w-[45%] flex flex-col justify-center px-8 md:px-12 py-10 lg:py-14 relative z-10">
-            <div className="absolute top-6 right-6">
-              <span className="bg-[#f4aa1f] text-[#002d17] px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                {featured.tag}
-              </span>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="relative overflow-hidden rounded-2xl bg-[#002d17] flex flex-col lg:flex-row min-h-[400px]"
+          >
+            <div className="lg:w-[55%] relative overflow-hidden">
+              <img
+                src={featured.img}
+                alt={featured.title}
+                className="w-full h-56 lg:h-full object-cover opacity-75"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#002d17]/70 hidden lg:block" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#002d17]/80 to-transparent lg:hidden" />
             </div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">{featured.subtitle}</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight mb-5">
-              {featured.title}
-            </h2>
-            <p className="text-white/55 text-sm leading-relaxed font-medium mb-7">
-              {featured.desc}
-            </p>
-            <ul className="flex flex-col gap-2.5 mb-8">
-              {featured.features.map((feature, index) => (
-                <li key={`${feature}-${index}`} className="flex items-start gap-3 text-white/80 text-sm font-medium">
-                  <Check size={14} className="text-[#f4aa1f] shrink-0 mt-0.5" strokeWidth={3} />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <Link to={featured.linkUrl} className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg">
-              {featured.linkLabel} <ArrowRight size={14} />
-            </Link>
-          </div>
-        </motion.div>
-      </div>
+
+            <div className="lg:w-[45%] flex flex-col justify-center px-8 md:px-12 py-10 lg:py-14 relative z-10">
+              <div className="absolute top-6 right-6">
+                <span className="bg-[#f4aa1f] text-[#002d17] px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                  {featured.tag}
+                </span>
+              </div>
+              <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">
+                {featured.subtitle}
+              </p>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight mb-5">
+                {featured.title}
+              </h2>
+              <p className="text-white/55 text-sm leading-relaxed font-medium mb-7">
+                {featured.desc}
+              </p>
+              <ul className="flex flex-col gap-2.5 mb-8">
+                {featured.features.map((feature, index) => (
+                  <li
+                    key={`${feature}-${index}`}
+                    className="flex items-start gap-3 text-white/80 text-sm font-medium"
+                  >
+                    <Check
+                      size={14}
+                      className="text-[#f4aa1f] shrink-0 mt-0.5"
+                      strokeWidth={3}
+                    />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to={featured.linkUrl}
+                className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
+              >
+                {featured.linkLabel} <ArrowRight size={14} />
+              </Link>
+            </div>
+          </motion.div>
+        </div>
       )}
 
       {/* SERVICE CARDS GRID */}
@@ -374,7 +412,11 @@ export function Services() {
                 className="group flex flex-col border border-[#002d17]/10 rounded-2xl overflow-hidden hover:border-[#f4aa1f] hover:shadow-[0_0_0_1px_#f4aa1f] transition-all duration-300"
               >
                 <div className="w-full aspect-[16/9] overflow-hidden bg-[#bcd8cb] relative">
-                  <img src={service.img} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                  <img
+                    src={service.img}
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
                   <div className="absolute inset-0 bg-[#002d17]/15 group-hover:bg-[#002d17]/5 transition-colors" />
                 </div>
 
@@ -382,9 +424,17 @@ export function Services() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="w-11 h-11 border-2 border-[#f4aa1f] flex items-center justify-center group-hover:bg-[#f4aa1f] transition-colors shrink-0 rounded-xl">
                       {service.iconImage ? (
-                        <img src={service.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden />
+                        <img
+                          src={service.iconImage}
+                          alt=""
+                          className="w-5 h-5 object-contain"
+                          aria-hidden
+                        />
                       ) : (
-                        <Icon size={18} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
+                        <Icon
+                          size={18}
+                          className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors"
+                        />
                       )}
                     </div>
                     <span className="text-[#002d17]/8 font-extrabold text-5xl leading-none tracking-tight group-hover:text-[#f4aa1f]/15 transition-colors select-none">
@@ -393,7 +443,9 @@ export function Services() {
                   </div>
 
                   <div>
-                    <p className="text-[#f4aa1f] font-bold text-[10px] uppercase tracking-widest mb-1.5">{service.subtitle}</p>
+                    <p className="text-[#f4aa1f] font-bold text-[10px] uppercase tracking-widest mb-1.5">
+                      {service.subtitle}
+                    </p>
                     <h3 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight leading-snug">
                       {service.title}
                     </h3>
@@ -405,14 +457,24 @@ export function Services() {
 
                   <ul className="flex flex-col gap-2 border-t border-[#002d17]/8 pt-4">
                     {service.features.map((feature, featureIndex) => (
-                      <li key={`${feature}-${featureIndex}`} className="flex items-start gap-2.5 text-[#002d17]/65 text-xs font-medium">
-                        <Check size={12} className="text-[#46aa85] shrink-0 mt-0.5" strokeWidth={3} />
+                      <li
+                        key={`${feature}-${featureIndex}`}
+                        className="flex items-start gap-2.5 text-[#002d17]/65 text-xs font-medium"
+                      >
+                        <Check
+                          size={12}
+                          className="text-[#46aa85] shrink-0 mt-0.5"
+                          strokeWidth={3}
+                        />
                         {feature}
                       </li>
                     ))}
                   </ul>
 
-                  <Link to={service.linkUrl} className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest group-hover:gap-3 transition-all mt-1">
+                  <Link
+                    to={service.linkUrl}
+                    className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest group-hover:gap-3 transition-all mt-1"
+                  >
                     {service.linkLabel} <ArrowRight size={12} />
                   </Link>
                 </div>
@@ -423,7 +485,10 @@ export function Services() {
       </div>
 
       {/* PROCESS */}
-      <section className="bg-[#002d17] py-20" style={backgroundStyle(colors?.processBackground)}>
+      {/* <section
+        className="bg-[#002d17] py-20"
+        style={backgroundStyle(colors?.processBackground)}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
@@ -444,16 +509,23 @@ export function Services() {
                 <span className="text-[#f4aa1f] font-extrabold text-4xl tracking-tight opacity-40 group-hover:opacity-100 transition-opacity">
                   {step.step}
                 </span>
-                <h3 className="font-extrabold text-white uppercase tracking-tight text-base">{step.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{step.desc}</p>
+                <h3 className="font-extrabold text-white uppercase tracking-tight text-base">
+                  {step.title}
+                </h3>
+                <p className="text-white/50 text-sm leading-relaxed">
+                  {step.desc}
+                </p>
               </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* TIMELAPSE SLIDER */}
-      <section className="bg-[#f9f9f7] py-20" style={backgroundStyle(colors?.timelapseBackground)}>
+      <section
+        className="bg-[#f9f9f7] py-20"
+        style={backgroundStyle(colors?.timelapseBackground)}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-4">
@@ -466,7 +538,10 @@ export function Services() {
               </p>
               <div className="flex flex-col gap-3">
                 {timelapseSlides.map((s, i) => (
-                  <div key={i} className="flex items-center gap-3 text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 text-[#002d17]/50 text-xs font-bold uppercase tracking-widest"
+                  >
                     <span className="w-2 h-2 rounded-full bg-[#f4aa1f] shrink-0" />
                     {s.title}
                   </div>
@@ -482,93 +557,110 @@ export function Services() {
 
       {/* FEATURED PROJECT */}
       {featuredProject && (
-      <section className="py-20 bg-white border-t border-[#002d17]/8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-10">
-            <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
-              Dự Án Tiêu Biểu
-            </h2>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-[#002d17]/10 group"
-          >
-            {/* Image */}
-            <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden bg-[#bcd8cb] min-h-[280px]">
-              <img
-                src={featuredProject.image}
-                alt={featuredProject.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#002d17]/30 hidden lg:block" />
-              <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                <span className="bg-[#002d17] text-[#f4aa1f] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                  {featuredProject.category}
-                </span>
-                {(featuredProject as any).leedGold && (
-                  <span className="bg-[#b8860b] text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full flex items-center gap-1">
-                    ★ LEED Gold
-                  </span>
-                )}
-              </div>
+        <section className="py-20 bg-white border-t border-[#002d17]/8">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-10">
+              <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+                Dự Án Tiêu Biểu
+              </h2>
             </div>
 
-            {/* Content */}
-            <div className="flex flex-col justify-center px-8 md:px-12 py-10 bg-[#002d17]">
-              <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">{featuredProject.location}</p>
-              <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-4">
-                {featuredProject.title}
-              </h3>
-              <p className="text-white/55 text-sm leading-relaxed font-medium mb-7">
-                {featuredProject.description}
-              </p>
-              <div className="grid grid-cols-3 gap-3 mb-8">
-                {[
-                  { label: "Diện tích", val: featuredProject.area },
-                  { label: "Khách hàng", val: featuredProject.client },
-                  { label: "Năm", val: featuredProject.year },
-                ].map((s) => (
-                  <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
-                    <p className="text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest mb-1">{s.label}</p>
-                    <span className="text-white font-extrabold text-sm">{s.val}</span>
-                  </div>
-                ))}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-[#002d17]/10 group"
+            >
+              {/* Image */}
+              <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden bg-[#bcd8cb] min-h-[280px]">
+                <img
+                  src={featuredProject.image}
+                  alt={featuredProject.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#002d17]/30 hidden lg:block" />
+                <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                  <span className="bg-[#002d17] text-[#f4aa1f] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                    {featuredProject.category}
+                  </span>
+                  {(featuredProject as any).leedGold && (
+                    <span className="bg-[#b8860b] text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full flex items-center gap-1">
+                      ★ LEED Gold
+                    </span>
+                  )}
+                </div>
               </div>
+
+              {/* Content */}
+              <div className="flex flex-col justify-center px-8 md:px-12 py-10 bg-[#002d17]">
+                <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">
+                  {featuredProject.location}
+                </p>
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-4">
+                  {featuredProject.title}
+                </h3>
+                <p className="text-white/55 text-sm leading-relaxed font-medium mb-7">
+                  {featuredProject.description}
+                </p>
+                <div className="grid grid-cols-3 gap-3 mb-8">
+                  {[
+                    { label: "Diện tích", val: featuredProject.area },
+                    { label: "Khách hàng", val: featuredProject.client },
+                    { label: "Năm", val: featuredProject.year },
+                  ].map((s) => (
+                    <div
+                      key={s.label}
+                      className="bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+                    >
+                      <p className="text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest mb-1">
+                        {s.label}
+                      </p>
+                      <span className="text-white font-extrabold text-sm">
+                        {s.val}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  to={projectDetailPath(featuredProject.slug)}
+                  className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
+                >
+                  Xem Chi Tiết <ArrowRight size={14} />
+                </Link>
+              </div>
+            </motion.div>
+
+            <div className="mt-6 flex justify-end">
               <Link
-                to={projectDetailPath(featuredProject.slug)}
-                className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
+                to={sitePath("projects")}
+                className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors"
               >
-                Xem Chi Tiết <ArrowRight size={14} />
+                Xem Tất Cả Dự Án <ArrowRight size={12} />
               </Link>
             </div>
-          </motion.div>
-
-          <div className="mt-6 flex justify-end">
-            <Link
-              to={sitePath("projects")}
-              className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors"
-            >
-              Xem Tất Cả Dự Án <ArrowRight size={12} />
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
       {/* CTA */}
-      <div className="bg-[#f4aa1f] py-14" style={backgroundStyle(colors?.ctaBackground)}>
+      <div
+        className="bg-[#f4aa1f] py-14"
+        style={backgroundStyle(colors?.ctaBackground)}
+      >
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
               {ctaTitle}
             </h3>
-            <p className="text-[#002d17]/60 mt-2 text-sm font-medium">{ctaDescription}</p>
+            <p className="text-[#002d17]/60 mt-2 text-sm font-medium">
+              {ctaDescription}
+            </p>
           </div>
-          <Link to={ctaLinkUrl} className="shrink-0 bg-[#002d17] text-white px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg">
+          <Link
+            to={ctaLinkUrl}
+            className="shrink-0 bg-[#002d17] text-white px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg"
+          >
             {ctaLinkLabel}
           </Link>
         </div>

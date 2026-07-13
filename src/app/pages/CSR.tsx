@@ -149,7 +149,7 @@ export function CSR() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5 }}
-                  className={`grid grid-cols-1 lg:grid-cols-2 gap-10 items-center ${isEven ? "" : "lg:[direction:rtl]"}`}
+                  className={`grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10 items-stretch ${isEven ? "" : "lg:[direction:rtl]"}`}
                 >
                   <div className={`relative rounded-2xl overflow-hidden aspect-[4/3] bg-[#bcd8cb] ${isEven ? "" : "lg:[direction:ltr]"}`}>
                     <img src={prog.image} alt={prog.title} className="w-full h-full object-cover" />
@@ -160,9 +160,9 @@ export function CSR() {
                     </div>
                   </div>
 
-                  <div className={`flex flex-col gap-5 ${isEven ? "" : "lg:[direction:ltr]"}`}>
+                  <div className={`flex flex-col gap-3 lg:aspect-[4/3] lg:min-h-0 lg:overflow-hidden lg:justify-between ${isEven ? "" : "lg:[direction:ltr]"}`}>
                     <div>
-                      <div className="w-10 h-0.5 mb-4" style={{ backgroundColor: prog.color }} />
+                      <div className="w-10 h-0.5 mb-3" style={{ backgroundColor: prog.color }} />
                       <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight leading-snug mb-1">
                         {prog.title}
                       </h3>
@@ -171,26 +171,33 @@ export function CSR() {
                       </p>
                     </div>
 
-                    <p className="text-[#002d17]/65 text-sm leading-relaxed font-medium">
+                    <p
+                      className="text-[#002d17]/65 text-sm leading-6 font-medium lg:line-clamp-3"
+                      title={prog.desc}
+                    >
                       {prog.desc}
                     </p>
 
                     <div className="grid grid-cols-3 gap-3">
                       {prog.stats.map((s) => (
-                        <div key={s.label} className="rounded-xl px-4 py-3 border border-[#002d17]/10" style={{ backgroundColor: prog.bgColor }}>
+                        <div key={s.label} className="rounded-xl px-3 py-2.5 border border-[#002d17]/10" style={{ backgroundColor: prog.bgColor }}>
                           <span className="font-extrabold text-[#002d17] text-xl">{s.val}</span>
-                          <p className="text-[#002d17]/50 text-[10px] uppercase tracking-widest font-bold mt-0.5">{s.label}</p>
+                          <p className="text-[#002d17]/50 text-[10px] leading-4 uppercase tracking-widest font-bold mt-0.5 line-clamp-2">{s.label}</p>
                         </div>
                       ))}
                     </div>
 
-                    <div>
-                      <p className="text-[#002d17]/40 font-bold text-xs uppercase tracking-widest mb-3">Điểm Nổi Bật</p>
-                      <ul className="flex flex-col gap-2.5">
+                    <div className="min-h-0">
+                      <p className="text-[#002d17]/40 font-bold text-xs uppercase tracking-widest mb-2">Điểm Nổi Bật</p>
+                      <ul className="flex flex-col gap-2">
                         {prog.highlights.map((h, i) => (
-                          <li key={i} className="flex items-start gap-3 text-[#002d17]/70 text-sm font-medium">
-                            <span className="mt-2 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: prog.color }} />
-                            {h}
+                          <li
+                            key={i}
+                            className={`items-start gap-3 text-[#002d17]/70 text-sm leading-5 font-medium ${i >= 4 ? "flex lg:hidden" : "flex"}`}
+                            title={h}
+                          >
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: prog.color }} />
+                            <span className="lg:line-clamp-1">{h}</span>
                           </li>
                         ))}
                       </ul>

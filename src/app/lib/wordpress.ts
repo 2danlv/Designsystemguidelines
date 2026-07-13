@@ -50,6 +50,7 @@ export type AboutCmsData = {
     breadcrumbLabel?: string;
     title?: string;
     description?: string;
+    decorativeText?: string;
   };
   stats?: Array<{
     value?: string;
@@ -244,6 +245,7 @@ export type ServicesCmsData = {
     breadcrumbLabel?: string;
     title?: string;
     description?: string;
+    decorativeText?: string;
   };
   services?: Array<{
     icon?: string;
@@ -464,6 +466,7 @@ export type ProjectsCmsData = {
     breadcrumbLabel?: string;
     title?: string;
     description?: string;
+    decorativeText?: string;
   };
   stats?: Array<{
     value?: string;

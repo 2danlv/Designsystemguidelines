@@ -155,7 +155,7 @@ export function Projects() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex gap-2 flex-wrap">
           <button
             onClick={() => handleFilterChange("all")}
-            className={`px-5 py-2 font-bold uppercase tracking-widest text-xs transition-colors ${
+            className={`px-5 py-2 font-bold uppercase tracking-widest text-xs transition-colors rounded-md ${
               activeFilter === "all"
                 ? "bg-[#002d17] text-white"
                 : "bg-transparent border border-[#002d17]/20 text-[#002d17]/70 hover:border-[#002d17] hover:text-[#002d17]"
@@ -167,7 +167,7 @@ export function Projects() {
             <button
               key={cat.slug}
               onClick={() => handleFilterChange(cat.slug)}
-              className={`px-5 py-2 font-bold uppercase tracking-widest text-xs transition-colors ${
+              className={`px-5 py-2 font-bold uppercase tracking-widest text-xs transition-colors rounded-md ${
                 activeFilter === cat.slug
                   ? "bg-[#002d17] text-white"
                   : "bg-transparent border border-[#002d17]/20 text-[#002d17]/70 hover:border-[#002d17] hover:text-[#002d17]"

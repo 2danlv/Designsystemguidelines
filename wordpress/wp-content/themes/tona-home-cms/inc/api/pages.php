@@ -617,6 +617,7 @@ function tona_cms_services_payload( $page ) {
             'breadcrumbLabel' => get_the_title( $page ),
             'title'           => tona_cms_text_field( $post_id, 'services_hero_title' ),
             'description'     => tona_cms_text_field( $post_id, 'services_hero_description' ),
+            'decorativeText'  => tona_cms_text_field( $post_id, 'services_hero_decorative_text' ),
         ),
         'services' => array_values(
             array_map(
@@ -649,7 +650,7 @@ function tona_cms_services_payload( $page ) {
                         'image'       => tona_cms_image_url( $service['image'] ?? '' ),
                         'featured'    => $is_featured,
                         'linkLabel'   => $service['link_label'] ?? '',
-                        'linkUrl'     => $service['link_url'] ?? '',
+                        'linkUrl'     => tona_cms_link_url_value( $service['link_url'] ?? '' ),
                     );
                 },
                 is_array( $services ) ? $services : array(),
@@ -692,7 +693,7 @@ function tona_cms_services_payload( $page ) {
             'title'       => tona_cms_text_field( $post_id, 'services_cta_title' ),
             'description' => tona_cms_text_field( $post_id, 'services_cta_description' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'services_cta_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'services_cta_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'services_cta_link_url', $post_id ) : '' ),
         ),
     );
 }
