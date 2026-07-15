@@ -310,7 +310,7 @@ export function Members() {
                     )}
                   </div>
                   <h3 className="font-extrabold text-white text-base uppercase tracking-tight">{val.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed">{val.desc}</p>
+                  <p className="text-white/50 text-[16px] leading-relaxed">{val.desc}</p>
                 </motion.div>
               );
             })}

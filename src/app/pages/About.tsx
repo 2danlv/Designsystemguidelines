@@ -288,10 +288,10 @@ export function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center flex-1 py-10">
             <div className="flex flex-col gap-8">
               <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.95, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}>
-                <h1 className="font-extrabold text-white uppercase leading-none mb-5" style={{ fontSize: "clamp(46px, 7vw, 96px)", textShadow: "0 2px 40px rgba(0,0,0,0.25)" }}>
+                <h1 className="font-bold text-white uppercase leading-none mb-5" style={{ fontSize: "clamp(46px, 7vw, 96px)", textShadow: "0 2px 40px rgba(0,0,0,0.25)" }}>
                   {renderLines(heroTitle)}
                 </h1>
-                <p className="text-white/65 text-[15px] leading-[1.8] font-light max-w-[420px]">{heroDescription}</p>
+                <p className="text-white/65 text-[18px] leading-[1.8] font-normal max-w-[460px]">{heroDescription}</p>
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.22, ease: [0.16, 1, 0.3, 1] }} className="grid grid-cols-2 gap-3">
@@ -308,7 +308,7 @@ export function About() {
                       style={{ borderRadius: "20px", background: "rgba(255,255,255,0.06)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.11)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.09)" }}
                     >
                       <div className="flex items-baseline gap-0.5 leading-none mb-3">
-                        <span className="font-extrabold" style={{ fontSize: "clamp(32px, 4vw, 52px)", color: "#f4aa1f", fontVariantNumeric: "tabular-nums" }}>{number}</span>
+                        <span className="font-bold" style={{ fontSize: "clamp(32px, 4vw, 52px)", color: "#f4aa1f", fontVariantNumeric: "tabular-nums" }}>{number}</span>
                         {suffix && <span className="font-light" style={{ fontSize: "clamp(18px, 2.2vw, 28px)", color: "rgba(244,170,31,0.55)" }}>{suffix}</span>}
                       </div>
                       <div className="w-6 h-px mb-3" style={{ background: "rgba(255,255,255,0.18)" }} />
@@ -330,8 +330,8 @@ export function About() {
                   {quoteWithAccent(ceoQuote, ceoAccent)}
                 </p>
                 <div className="flex flex-col gap-1 pt-1 border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-                  <span className="font-medium uppercase" style={{ fontSize: "12px", color: "rgba(255,255,255,0.82)", letterSpacing: "0.16em" }}>{ceoName}</span>
-                  <span style={{ fontSize: "12px", fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "rgba(255,255,255,0.38)", letterSpacing: "0.04em" }}>{ceoRole}</span>
+                  <span className="font-medium uppercase" style={{ fontSize: "14px", color: "rgba(255,255,255,0.82)", letterSpacing: "0.16em" }}>{ceoName}</span>
+                  <span style={{ fontSize: "14px", fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "rgba(255,255,255,0.38)", letterSpacing: "0.04em" }}>{ceoRole}</span>
                 </div>
               </blockquote>
             </motion.div>
@@ -354,7 +354,7 @@ export function About() {
           ].map((item, index) => (
             <motion.div key={item.eyebrow} initial={{ opacity: 0, x: index === 0 ? -30 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.12 }} className="bg-white/5 p-8 border-l-4 rounded-r-2xl" style={{ borderColor: item.color }}>
               <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">{item.eyebrow}</p>
-              <p className="text-white font-extrabold text-xl md:text-2xl leading-snug uppercase">{item.text}</p>
+              <p className="text-white font-semibold text-xl md:text-2xl leading-snug uppercase">{item.text}</p>
             </motion.div>
           ))}
         </div>
@@ -362,7 +362,7 @@ export function About() {
 
       <section className="bg-gradient-to-b from-[#002d17] to-[#f9f9f7] py-14" style={backgroundStyle(colors?.valuesBackground)}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">{valuesTitle}</h2></div>
+          <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl md:text-4xl font-semibold text-white uppercase tracking-tight">{valuesTitle}</h2></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {coreValues.map((value, index) => {
               const Icon = value.icon;
@@ -372,8 +372,8 @@ export function About() {
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center mb-5 group-hover:bg-[#f4aa1f] transition-colors rounded-xl">
                     {value.iconImage ? <img src={value.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden /> : <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />}
                   </div>
-                  <h3 className="font-extrabold text-[#002d17] group-hover:text-[#46aa85] uppercase text-base tracking-tight mb-3 transition-colors">{value.title}</h3>
-                  <p className="text-[#002d17]/55 text-sm leading-relaxed">{value.desc}</p>
+                  <h3 className="font-semibold text-[#002d17] group-hover:text-[#46aa85] uppercase text-base tracking-tight mb-3 transition-colors">{value.title}</h3>
+                  <p className="text-[#002d17]/55 text-[16px] leading-relaxed">{value.desc}</p>
                 </motion.div>
               );
             })}
@@ -383,14 +383,14 @@ export function About() {
 
       <section className="py-14 bg-[#f9f9f7]" style={backgroundStyle(colors?.timelineBackground)}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">{timelineTitle}</h2></div>
+          <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl md:text-4xl font-semibold text-[#002d17] uppercase tracking-tight">{timelineTitle}</h2></div>
           <div className="relative flex flex-col gap-0">
             <div className="absolute left-16 md:left-24 top-0 bottom-0 w-px bg-[#002d17]/10 mx-[54px]" />
             {timeline.map((item, index) => (
               <motion.div key={`${item.year}-${index}`} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="flex gap-8 md:gap-12 items-start group py-6 first:pt-0">
-                <div className="shrink-0 w-16 md:w-24 flex flex-col items-end"><span className="font-extrabold text-[#002d17]/30 group-hover:text-[#f4aa1f] text-lg md:text-2xl tracking-tight transition-colors">{item.year}</span></div>
+                <div className="shrink-0 w-16 md:w-24 flex flex-col items-end"><span className="font-semibold text-[#002d17]/30 group-hover:text-[#f4aa1f] text-lg md:text-2xl tracking-tight transition-colors">{item.year}</span></div>
                 <div className="shrink-0 w-3 h-3 rounded-full bg-white border-2 border-[#002d17]/30 group-hover:border-[#f4aa1f] group-hover:bg-[#f4aa1f] mt-1.5 transition-colors relative z-10" />
-                <div className="flex-1 pb-6 border-b border-[#002d17]/10 last:border-0"><h3 className="font-extrabold text-[#002d17] uppercase tracking-tight text-lg mb-2">{item.title}</h3><p className="text-[#002d17]/55 text-sm leading-relaxed font-medium">{item.desc}</p></div>
+                <div className="flex-1 pb-6 border-b border-[#002d17]/10 last:border-0"><h3 className="font-semibold text-[#002d17] uppercase tracking-tight text-lg mb-2">{item.title}</h3><p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium">{item.desc}</p></div>
               </motion.div>
             ))}
           </div>
@@ -399,12 +399,12 @@ export function About() {
 
       <section className="py-14 bg-[#002d17]" style={backgroundStyle(colors?.certificationsBackground)}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl font-extrabold text-white uppercase tracking-tight">{certificationsTitle}</h2></div>
+          <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl font-semibold text-white uppercase tracking-tight">{certificationsTitle}</h2></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {certifications.map((cert, index) => (
               <div key={`${cert.code}-${index}`} className="bg-white/5 hover:bg-[#46aa85] transition-colors p-7 flex flex-col gap-4 group rounded-2xl border border-white/10">
-                <span className="text-[#f4aa1f] font-extrabold text-3xl tracking-tight">{cert.code}</span>
-                <div><h4 className="text-white font-extrabold uppercase tracking-tight text-base">{cert.title}</h4><p className="text-white/40 text-[13px] font-bold uppercase tracking-widest mt-1">Cap boi {cert.org}</p></div>
+                <span className="text-[#f4aa1f] font-semibold text-3xl tracking-tight">{cert.code}</span>
+                <div><h4 className="text-white font-semibold uppercase tracking-tight text-base">{cert.title}</h4><p className="text-white/40 text-[13px] font-bold uppercase tracking-widest mt-1">Cap boi {cert.org}</p></div>
               </div>
             ))}
           </div>
@@ -413,7 +413,7 @@ export function About() {
 
       <div className="bg-white py-12 border-t border-[#002d17]/10" style={backgroundStyle(colors?.ctaBackground)}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div><h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">{ctaTitle}</h3><p className="text-[#002d17]/50 mt-2 text-sm font-medium">{ctaDescription}</p></div>
+          <div><h3 className="text-2xl md:text-3xl font-semibold text-[#002d17] uppercase tracking-tight">{ctaTitle}</h3><p className="text-[#002d17]/50 mt-2 text-sm font-medium">{ctaDescription}</p></div>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link to={primaryUrl} className="flex items-center justify-center gap-2 border-2 border-[#002d17] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-white transition-colors rounded-lg">{primaryLabel} <ArrowRight size={14} /></Link>
             <Link to={secondaryUrl} className="flex items-center justify-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors rounded-lg">{secondaryLabel} <ArrowRight size={14} /></Link>

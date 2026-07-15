@@ -289,7 +289,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                   />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col pt-0.5 md:pr-8">
-                  <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#f4aa1f]">
+                  <p className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.16em] text-[#f4aa1f]">
                     {svc.subtitle}
                   </p>
                   <h3
@@ -300,7 +300,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                     {svc.title}
                   </h3>
                   <p
-                    className={`max-w-[560px] text-sm leading-6 md:text-[15px] ${
+                    className={`max-w-[560px] text-[16px] leading-6 md:text-[15px] ${
                       svc.highlight ? "text-white/75" : "text-[#002d17]/55"
                     }`}
                   >
@@ -549,7 +549,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
               <h3 className="font-extrabold text-[#002d17] text-2xl uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors">
                 {featured.title}
               </h3>
-              <p className="text-[#002d17]/60 text-sm leading-relaxed">{featured.excerpt}</p>
+              <p className="text-[#002d17]/60 text-[16px] leading-relaxed">{featured.excerpt}</p>
               <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{text("home.news.read_more", "Đọc tiếp")} <ArrowRight size={12} /></span>
             </div>
           </motion.article>

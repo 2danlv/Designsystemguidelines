@@ -132,7 +132,7 @@ export function CSR() {
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
               {cmsPage?.programsSection?.title || "Các Chương Trình Trọng Điểm"}
             </h2>
-            <p className="text-[#002d17]/50 text-sm font-medium mt-3 max-w-xl">
+            <p className="text-[#002d17]/50 text-[16px] font-medium mt-3 max-w-xl">
               {cmsPage?.programsSection?.description || "Ba sáng kiến cốt lõi phản ánh cam kết dài hạn của Tona với cộng đồng, từ chia sẻ ấm áp mỗi dịp Tết đến ươm mầm tri thức cho thế hệ kỹ sư tương lai."}
             </p>
           </div>
@@ -172,7 +172,7 @@ export function CSR() {
                     </div>
 
                     <p
-                      className="text-[#002d17]/65 text-sm leading-6 font-medium lg:line-clamp-3"
+                      className="text-[#002d17]/65 text-[16px] leading-6 font-medium lg:line-clamp-3"
                       title={prog.desc}
                     >
                       {prog.desc}
@@ -193,7 +193,7 @@ export function CSR() {
                         {prog.highlights.map((h, i) => (
                           <li
                             key={i}
-                            className={`items-start gap-3 text-[#002d17]/70 text-sm leading-5 font-medium ${i >= 4 ? "flex lg:hidden" : "flex"}`}
+                            className={`items-start gap-3 text-[#002d17]/70 text-[16px] leading-5 font-medium ${i >= 4 ? "flex lg:hidden" : "flex"}`}
                             title={h}
                           >
                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: prog.color }} />

@@ -175,7 +175,7 @@ export function Culture() {
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
               {themesTitle}
             </h2>
-            <p className="text-[#002d17]/50 mt-3 text-sm font-medium">
+            <p className="text-[#002d17]/50 mt-3 text-[16px] font-medium">
               {themesDescription}
             </p>
           </div>
@@ -211,12 +211,12 @@ export function Culture() {
                     <h3 className={`font-extrabold text-3xl md:text-4xl uppercase tracking-tight mb-4 ${theme.active ? "text-[#f4aa1f]" : "text-[#002d17]"}`}>
                       {theme.theme}
                     </h3>
-                    <p className={`text-sm leading-relaxed font-medium mb-6 max-w-xl ${theme.active ? "text-white/70" : "text-[#002d17]/60"}`}>
+                    <p className={`text-[16px] leading-relaxed font-medium mb-6 max-w-xl ${theme.active ? "text-white/70" : "text-[#002d17]/60"}`}>
                       {theme.desc}
                     </p>
                     <ul className="flex flex-col gap-2">
                       {theme.milestones.map((milestone, milestoneIndex) => (
-                        <li key={milestoneIndex} className={`flex items-start gap-3 text-sm font-medium ${theme.active ? "text-white/60" : "text-[#002d17]/50"}`}>
+                        <li key={milestoneIndex} className={`flex items-start gap-3 text-[16px] font-medium ${theme.active ? "text-white/60" : "text-[#002d17]/50"}`}>
                           <span className="w-1.5 h-1.5 rounded-full bg-[#f4aa1f] mt-1.5 shrink-0" />
                           {milestone}
                         </li>
@@ -310,7 +310,7 @@ export function Culture() {
                 <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-3">
                   {renderLines(socialTitle)}
                 </h3>
-                <p className="text-white/60 text-sm font-medium leading-relaxed max-w-lg mb-5">
+                <p className="text-white/60 text-[16px] font-medium leading-relaxed max-w-lg mb-5">
                   {socialDescription}
                 </p>
                 <div className="flex flex-wrap gap-3">

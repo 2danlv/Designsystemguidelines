@@ -332,12 +332,11 @@ export function Services() {
           {heroDecorativeText}
         </div>
       </div>
-
+      <div className="bg-gradient-to-b from-[#002d17] to-[#f9f9f7]">
       {/* FEATURED SERVICE */}
       {featured && (
         <div
           className="max-w-7xl mx-auto px-6 py-16"
-          style={backgroundStyle(colors?.servicesBackground)}
         >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -368,14 +367,14 @@ export function Services() {
               <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight mb-5">
                 {featured.title}
               </h2>
-              <p className="text-white/55 text-sm leading-relaxed font-medium mb-7">
+              <p className="text-white/55 text-[16px] leading-relaxed font-medium mb-7">
                 {featured.desc}
               </p>
               <ul className="flex flex-col gap-2.5 mb-8">
                 {featured.features.map((feature, index) => (
                   <li
                     key={`${feature}-${index}`}
-                    className="flex items-start gap-3 text-white/80 text-sm font-medium"
+                    className="flex items-start gap-3 text-white/80 text-[16px] font-medium"
                   >
                     <Check
                       size={14}
@@ -388,7 +387,7 @@ export function Services() {
               </ul>
               <Link
                 to={featured.linkUrl}
-                className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
+                className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-[16px] hover:bg-white transition-colors rounded-lg"
               >
                 {featured.linkLabel} <ArrowRight size={14} />
               </Link>
@@ -396,6 +395,7 @@ export function Services() {
           </motion.div>
         </div>
       )}
+      </div>
 
       {/* SERVICE CARDS GRID */}
       <div className="max-w-7xl mx-auto px-6 pb-20">
@@ -451,7 +451,7 @@ export function Services() {
                     </h3>
                   </div>
 
-                  <p className="text-[#002d17]/55 text-sm leading-relaxed font-medium flex-1">
+                  <p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium flex-1">
                     {service.desc}
                   </p>
 
@@ -459,7 +459,7 @@ export function Services() {
                     {service.features.map((feature, featureIndex) => (
                       <li
                         key={`${feature}-${featureIndex}`}
-                        className="flex items-start gap-2.5 text-[#002d17]/65 text-xs font-medium"
+                        className="flex items-start gap-2.5 text-[#002d17]/65 text-[16px] font-medium"
                       >
                         <Check
                           size={12}
@@ -512,7 +512,7 @@ export function Services() {
                 <h3 className="font-extrabold text-white uppercase tracking-tight text-base">
                   {step.title}
                 </h3>
-                <p className="text-white/50 text-sm leading-relaxed">
+                <p className="text-white/50 text-[16px] leading-relaxed">
                   {step.desc}
                 </p>
               </motion.div>
@@ -533,14 +533,14 @@ export function Services() {
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
                 {renderLines(timelapseTitle)}
               </h2>
-              <p className="text-[#002d17]/55 text-sm leading-relaxed font-medium mb-6">
+              <p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium mb-6">
                 {timelapseDescription}
               </p>
               <div className="flex flex-col gap-3">
                 {timelapseSlides.map((s, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 text-[#002d17]/50 text-xs font-bold uppercase tracking-widest"
+                    className="flex items-center gap-3 text-[#002d17]/50 text-[16px] font-bold uppercase tracking-widest"
                   >
                     <span className="w-2 h-2 rounded-full bg-[#f4aa1f] shrink-0" />
                     {s.title}
@@ -600,7 +600,7 @@ export function Services() {
                 <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-4">
                   {featuredProject.title}
                 </h3>
-                <p className="text-white/55 text-sm leading-relaxed font-medium mb-7">
+                <p className="text-white/55 text-[16px] leading-relaxed font-medium mb-7">
                   {featuredProject.description}
                 </p>
                 <div className="grid grid-cols-3 gap-3 mb-8">
@@ -616,7 +616,7 @@ export function Services() {
                       <p className="text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest mb-1">
                         {s.label}
                       </p>
-                      <span className="text-white font-extrabold text-sm">
+                      <span className="text-white font-extrabold text-[16px]">
                         {s.val}
                       </span>
                     </div>
@@ -624,7 +624,7 @@ export function Services() {
                 </div>
                 <Link
                   to={projectDetailPath(featuredProject.slug)}
-                  className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
+                  className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-[16px] hover:bg-white transition-colors rounded-lg"
                 >
                   Xem Chi Tiết <ArrowRight size={14} />
                 </Link>
@@ -653,13 +653,13 @@ export function Services() {
             <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
               {ctaTitle}
             </h3>
-            <p className="text-[#002d17]/60 mt-2 text-sm font-medium">
+            <p className="text-[#002d17]/60 mt-2 text-[16px] font-medium">
               {ctaDescription}
             </p>
           </div>
           <Link
             to={ctaLinkUrl}
-            className="shrink-0 bg-[#002d17] text-white px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg"
+            className="shrink-0 bg-[#002d17] text-white px-8 py-4 font-bold uppercase tracking-widest text-[16px] hover:bg-[#46aa85] transition-colors rounded-lg"
           >
             {ctaLinkLabel}
           </Link>

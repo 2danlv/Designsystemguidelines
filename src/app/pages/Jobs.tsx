@@ -321,7 +321,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 )}
               </div>
 
-              <p className="text-[#002d17]/60 text-sm leading-relaxed font-medium max-w-2xl">
+              <p className="text-[#002d17]/60 text-[16px] leading-relaxed font-medium max-w-2xl">
                 {job.description}
               </p>
             </div>
@@ -628,8 +628,8 @@ export function Jobs() {
                       <Icon size={20} className="text-[#f4aa1f]" />
                     )}
                   </div>
-                  <h3 className="font-extrabold text-[#002d17] uppercase text-sm tracking-tight">{perk.title}</h3>
-                  <p className="text-[#002d17]/55 text-sm leading-relaxed font-medium">{perk.desc}</p>
+                  <h3 className="font-extrabold text-[#002d17] uppercase text-[18px] tracking-tight">{perk.title}</h3>
+                  <p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium">{perk.desc}</p>
                 </div>
               );
             })}

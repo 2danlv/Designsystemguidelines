@@ -141,9 +141,9 @@ export function Projects() {
       </div>
 
       <div className="bg-[#f4aa1f]" style={backgroundStyle(colors?.statsBackground)}>
-        <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-[#002d17]/20">
+        <div className="max-w-7xl mx-auto px-6 py-2 md:py-2 grid grid-cols-2 md:grid-cols-4 divide-x divide-[#002d17]/20">
           {stats.map((s) => (
-            <div key={s.label} className="flex flex-col items-center py-2">
+            <div key={s.label} className="flex flex-col items-center py-1">
               <span className="font-extrabold text-[#002d17] text-3xl tracking-tight">{s.value}</span>
               <span className="text-[#002d17]/70 font-bold text-xs uppercase tracking-widest mt-1">{s.label}</span>
             </div>
@@ -225,22 +225,22 @@ export function Projects() {
                 </div>
 
                 <div className="flex flex-col gap-3 pt-5 pb-3 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-                  <h3 className="font-extrabold text-[#002d17] text-lg uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
+                  <h3 className="font-extrabold text-[#002d17] text-[20px] uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
                     {project.title}
                   </h3>
                   <div className="flex flex-wrap gap-x-4 gap-y-1">
-                    <span className="flex items-center gap-1.5 text-[#002d17]/60 text-xs font-bold uppercase tracking-wider">
-                      <MapPin size={11} className="text-[#f4aa1f]" /> {project.location}
+                    <span className="flex items-center gap-1.5 text-[#002d17]/60 text-[16px] font-bold uppercase tracking-wider">
+                      <MapPin size={14} className="text-[#f4aa1f]" /> {project.location}
                     </span>
-                    <span className="flex items-center gap-1.5 text-[#002d17]/60 text-xs font-bold uppercase tracking-wider">
-                      <Maximize2 size={11} className="text-[#f4aa1f]" /> {project.area}
+                    <span className="flex items-center gap-1.5 text-[#002d17]/60 text-[16px] font-bold uppercase tracking-wider">
+                      <Maximize2 size={14} className="text-[#f4aa1f]" /> {project.area}
                     </span>
                   </div>
                   {project.renovationItems?.length ? (
                     <ul className="flex flex-col gap-1 mt-1">
                       {project.renovationItems.slice(0, 3).map((item, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-[#002d17]/50">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#f4aa1f] mt-1.5 shrink-0" />
+                        <li key={i} className="flex items-start gap-2 text-[16px] leading-relaxed text-[#002d17]/50">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#f4aa1f] mt-2.5 shrink-0" />
                           {item}
                         </li>
                       ))}
