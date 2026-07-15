@@ -468,23 +468,23 @@ function ProjectsSection({
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 pt-5 pb-2 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-                    <h3 className="font-extrabold text-[#002d17] text-lg uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
+                    <h3 className="font-extrabold text-[#002d17] text-[20px] uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
                       {project.title}
                     </h3>
                     {/* Key info row */}
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
-                      <span className="flex items-center gap-1 text-[#002d17]/60 text-xs font-bold uppercase tracking-wider">
-                        <MapPin size={11} className="text-[#f4aa1f]" /> {project.location}
+                      <span className="flex items-center gap-1 text-[#002d17]/60 text-[16px] font-bold uppercase tracking-wider">
+                        <MapPin size={14} className="text-[#f4aa1f]" /> {project.location}
                       </span>
-                      <span className="flex items-center gap-1 text-[#002d17]/60 text-xs font-bold uppercase tracking-wider">
-                        <Maximize2 size={11} className="text-[#f4aa1f]" /> {project.area}
+                      <span className="flex items-center gap-1 text-[#002d17]/60 text-[16px] font-bold uppercase tracking-wider">
+                        <Maximize2 size={14} className="text-[#f4aa1f]" /> {project.area}
                       </span>
                     </div>
                     {/* Renovation items preview */}
                     {project.renovationItems && (
                       <ul className="mt-1 flex flex-col gap-1">
                         {project.renovationItems.slice(0, 2).map((item, i) => (
-                          <li key={i} className="text-xs text-[#002d17]/50 flex items-start gap-2">
+                          <li key={i} className="text-[16px] text-[#002d17]/50 flex items-start gap-2">
                             <span className="w-1 h-1 rounded-full bg-[#f4aa1f] mt-1.5 shrink-0" />
                             {item}
                           </li>
