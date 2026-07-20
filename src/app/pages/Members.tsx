@@ -62,7 +62,7 @@ function LeaderModal({ member, onClose }: { member: MemberPost; onClose: () => v
             </div>
             <div>
               <div className="w-8 h-0.5 bg-[#f4aa1f] mb-2" />
-              <h2 className="font-extrabold text-white text-2xl uppercase tracking-tight leading-tight">{member.name}</h2>
+              <h2 className="font-bold text-white text-2xl uppercase tracking-tight leading-tight">{member.name}</h2>
               <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{member.role}</p>
               <p className="text-white/50 text-[10px] uppercase tracking-widest">
                 {member.roleEn}{member.since ? ` · Tại Tona từ ${member.since}` : ""}
@@ -194,7 +194,7 @@ export function Members() {
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-          <h1 className="text-5xl md:text-6xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
             {renderLines(heroTitle)}
           </h1>
           <p className="text-base font-medium max-w-xl text-[#002d17]/70">
@@ -229,7 +229,7 @@ export function Members() {
                 <div className="absolute bottom-0 left-0 right-0 h-2/5 bg-gradient-to-t from-[#002d17] to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
                   <div className="w-10 h-0.5 bg-[#f4aa1f] mb-3" />
-                  <h3 className="font-extrabold text-white text-xl uppercase tracking-tight leading-tight">
+                  <h3 className="font-bold text-white text-xl uppercase tracking-tight leading-tight">
                     {member.name}
                   </h3>
                   <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">
@@ -286,7 +286,7 @@ export function Members() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-10">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">
               {valuesTitle}
             </h2>
           </div>
@@ -309,7 +309,7 @@ export function Members() {
                       <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
                     )}
                   </div>
-                  <h3 className="font-extrabold text-white text-base uppercase tracking-tight">{val.title}</h3>
+                  <h3 className="font-bold text-white text-base uppercase tracking-tight">{val.title}</h3>
                   <p className="text-white/50 text-[16px] leading-relaxed">{val.desc}</p>
                 </motion.div>
               );
@@ -323,7 +323,7 @@ export function Members() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h2 className="text-3xl font-bold text-[#002d17] uppercase tracking-tight">
               {teaserTitle}
             </h2>
             <p className="text-[#002d17]/60 mt-3 text-sm font-medium max-w-lg">

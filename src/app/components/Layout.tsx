@@ -220,7 +220,7 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
   const navLinkBase = whiteMode
     ? "text-[#002d17]/70 hover:text-[#002d17]"
     : "text-white/80 hover:text-[#f4aa1f]";
-  const navLinkActive = whiteMode ? "text-[#002d17] font-extrabold" : "text-[#f4aa1f]";
+  const navLinkActive = whiteMode ? "text-[#002d17] font-bold" : "text-[#f4aa1f]";
 
   return (
     <header
@@ -413,7 +413,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
         <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{footer.cta.eyebrow}</p>
-            <h3 className="text-2xl md:text-3xl font-extrabold uppercase tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tight">
               {footer.cta.title}
             </h3>
           </div>

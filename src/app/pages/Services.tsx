@@ -159,7 +159,7 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
             transition={{ duration: 0.4 }}
           >
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-1">{slide.subtitle}</p>
-            <h3 className="text-white font-extrabold text-xl uppercase tracking-tight leading-snug">{slide.title}</h3>
+            <h3 className="text-white font-bold text-xl uppercase tracking-tight leading-snug">{slide.title}</h3>
             <span className="text-white/50 text-xs font-bold uppercase tracking-widest mt-1 block">{slide.duration} thi công</span>
           </motion.div>
         </AnimatePresence>
@@ -321,14 +321,14 @@ export function Services() {
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-white uppercase tracking-tight leading-tight mb-4">
             {renderLines(heroTitle)}
           </h1>
           <p className="text-white/50 text-base font-medium max-w-xl">
             {heroDescription}
           </p>
         </div>
-        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-extrabold text-white/[0.04] uppercase leading-none select-none pointer-events-none">
+        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-bold text-white/[0.04] uppercase leading-none select-none pointer-events-none">
           {heroDecorativeText}
         </div>
       </div>
@@ -364,7 +364,7 @@ export function Services() {
               <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">
                 {featured.subtitle}
               </p>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight mb-5">
+              <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight leading-tight mb-5">
                 {featured.title}
               </h2>
               <p className="text-white/55 text-[16px] leading-relaxed font-medium mb-7">
@@ -437,7 +437,7 @@ export function Services() {
                         />
                       )}
                     </div>
-                    <span className="text-[#002d17]/8 font-extrabold text-5xl leading-none tracking-tight group-hover:text-[#f4aa1f]/15 transition-colors select-none">
+                    <span className="text-[#002d17]/8 font-bold text-5xl leading-none tracking-tight group-hover:text-[#f4aa1f]/15 transition-colors select-none">
                       {service.num}
                     </span>
                   </div>
@@ -446,7 +446,7 @@ export function Services() {
                     <p className="text-[#f4aa1f] font-bold text-[10px] uppercase tracking-widest mb-1.5">
                       {service.subtitle}
                     </p>
-                    <h3 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight leading-snug">
+                    <h3 className="font-bold text-[#002d17] text-xl uppercase tracking-tight leading-snug">
                       {service.title}
                     </h3>
                   </div>
@@ -492,7 +492,7 @@ export function Services() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">
               {processTitle}
             </h2>
           </div>
@@ -506,10 +506,10 @@ export function Services() {
                 transition={{ delay: index * 0.08 }}
                 className="bg-white/5 hover:bg-[#46aa85] transition-colors p-8 flex flex-col gap-3 group rounded-2xl border border-white/5"
               >
-                <span className="text-[#f4aa1f] font-extrabold text-4xl tracking-tight opacity-40 group-hover:opacity-100 transition-opacity">
+                <span className="text-[#f4aa1f] font-bold text-4xl tracking-tight opacity-40 group-hover:opacity-100 transition-opacity">
                   {step.step}
                 </span>
-                <h3 className="font-extrabold text-white uppercase tracking-tight text-base">
+                <h3 className="font-bold text-white uppercase tracking-tight text-base">
                   {step.title}
                 </h3>
                 <p className="text-white/50 text-[16px] leading-relaxed">
@@ -530,7 +530,7 @@ export function Services() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-4">
               <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-              <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight leading-tight mb-4">
                 {renderLines(timelapseTitle)}
               </h2>
               <p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium mb-6">
@@ -561,7 +561,7 @@ export function Services() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="mb-10">
               <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-              <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
                 Dự Án Tiêu Biểu
               </h2>
             </div>
@@ -597,7 +597,7 @@ export function Services() {
                 <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">
                   {featuredProject.location}
                 </p>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight leading-snug mb-4">
                   {featuredProject.title}
                 </h3>
                 <p className="text-white/55 text-[16px] leading-relaxed font-medium mb-7">
@@ -616,7 +616,7 @@ export function Services() {
                       <p className="text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest mb-1">
                         {s.label}
                       </p>
-                      <span className="text-white font-extrabold text-[16px]">
+                      <span className="text-white font-bold text-[16px]">
                         {s.val}
                       </span>
                     </div>
@@ -650,7 +650,7 @@ export function Services() {
       >
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-bold text-[#002d17] uppercase tracking-tight">
               {ctaTitle}
             </h3>
             <p className="text-[#002d17]/60 mt-2 text-[16px] font-medium">

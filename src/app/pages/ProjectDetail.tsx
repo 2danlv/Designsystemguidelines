@@ -210,7 +210,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
   if (!project) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-3xl font-extrabold text-[#002d17] uppercase mb-4">{text("project.not_found", "Project Not Found")}</h2>
+        <h2 className="text-3xl font-bold text-[#002d17] uppercase mb-4">{text("project.not_found", "Project Not Found")}</h2>
         <Link to={sitePath("projects")} className="text-[#f4aa1f] font-bold uppercase tracking-widest border-b-2 border-[#f4aa1f] pb-1">
           {text("project.back", "Back to Projects")}
         </Link>
@@ -261,7 +261,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
                 <span className="flex items-center gap-1.5 text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest">
                   <Icon size={11} /> {spec.label}
                 </span>
-                <span className="text-white font-extrabold text-base leading-tight">{spec.value}</span>
+                <span className="text-white font-bold text-base leading-tight">{spec.value}</span>
               </div>
             );
           })}
@@ -275,7 +275,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
         <div className="lg:col-span-2 flex flex-col gap-8">
           <div>
             <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3 block">{project.category} · {project.year}</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#002d17] uppercase leading-[1.1] mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#002d17] uppercase leading-[1.1] mb-6">
               {project.title}
             </h1>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-8" />
@@ -287,7 +287,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
           {/* Highlights */}
           {project.highlights && (
             <div>
-              <h3 className="font-extrabold text-[#002d17] uppercase tracking-tight mb-4 text-lg">{text("project.highlights", "Điểm Nổi Bật")}</h3>
+              <h3 className="font-bold text-[#002d17] uppercase tracking-tight mb-4 text-lg">{text("project.highlights", "Điểm Nổi Bật")}</h3>
               <div className="grid grid-cols-2 gap-3">
                 {project.highlights.map((hl, i) => (
                   <div key={i} className="bg-[#002d17] text-white px-4 py-3 font-bold text-sm uppercase tracking-wider text-center rounded-xl">
@@ -302,7 +302,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
         {/* Right: renovation items */}
         <div className="flex flex-col gap-6">
           <div className="bg-[#f9f9f7] p-8 rounded-2xl">
-            <h3 className="font-extrabold text-[#002d17] uppercase tracking-tight mb-6 text-lg border-b-2 border-[#f4aa1f] pb-3">
+            <h3 className="font-bold text-[#002d17] uppercase tracking-tight mb-6 text-lg border-b-2 border-[#f4aa1f] pb-3">
               {text("project.construction", "Hạng Mục Thi Công")}
             </h3>
             {project.renovationItems && (
@@ -319,7 +319,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
 
           <div className="bg-[#002d17] p-8 rounded-2xl">
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">{text("project.cta_eyebrow", "Có dự án tương tự?")}</p>
-            <h4 className="text-white font-extrabold text-xl uppercase mb-4">{text("project.cta_title", "Hãy liên hệ với chúng tôi")}</h4>
+            <h4 className="text-white font-bold text-xl uppercase mb-4">{text("project.cta_title", "Hãy liên hệ với chúng tôi")}</h4>
             <Link
               to={sitePath("jobs")}
               className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-5 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors w-full justify-center"
@@ -333,7 +333,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
       {/* Related projects */}
       <div className="bg-[#f9f9f7] border-t border-[#002d17]/10 py-16">
         <div className="max-w-7xl mx-auto px-6">
-          <h3 className="font-extrabold text-[#002d17] uppercase tracking-tight text-2xl mb-10">
+          <h3 className="font-bold text-[#002d17] uppercase tracking-tight text-2xl mb-10">
             {text("project.related", "Dự Án Liên Quan")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -345,7 +345,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
                 </div>
                 <div className="pt-4 pb-3 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
                   <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{rel.category}</span>
-                  <h4 className="font-extrabold text-[#002d17] uppercase text-base mt-1 leading-snug group-hover:text-[#46aa85] transition-colors">
+                  <h4 className="font-bold text-[#002d17] uppercase text-base mt-1 leading-snug group-hover:text-[#46aa85] transition-colors">
                     {rel.title}
                   </h4>
                 </div>

@@ -83,7 +83,7 @@ function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => vo
         <div className="bg-[#002d17] px-6 py-5 flex items-start justify-between gap-4 rounded-t-2xl">
           <div>
             <p className="text-[#f4aa1f] text-xs font-bold uppercase tracking-widest mb-1">{job.department}</p>
-            <h3 className="text-white font-extrabold text-lg uppercase tracking-tight">{job.title}</h3>
+            <h3 className="text-white font-bold text-lg uppercase tracking-tight">{job.title}</h3>
           </div>
           <button onClick={onClose} className="text-white/50 hover:text-[#f4aa1f] mt-1 transition-colors">
             <X size={20} />
@@ -201,7 +201,7 @@ function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onCl
         <div className="bg-[#46aa85] px-6 py-5 flex items-start justify-between gap-4 rounded-t-2xl">
           <div>
             <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{pos.department} - {cmsText(content?.internTypeLabel, "Thuc Tap Sinh")}</p>
-            <h3 className="text-white font-extrabold text-lg uppercase tracking-tight">{pos.title}</h3>
+            <h3 className="text-white font-bold text-lg uppercase tracking-tight">{pos.title}</h3>
           </div>
           <button onClick={onClose} className="text-white/50 hover:text-white mt-1 transition-colors">
             <X size={20} />
@@ -299,7 +299,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
               </div>
 
               {/* Title */}
-              <h3 className="font-extrabold text-[#002d17] text-xl md:text-2xl uppercase tracking-tight leading-snug">
+              <h3 className="font-bold text-[#002d17] text-xl md:text-2xl uppercase tracking-tight leading-snug">
                 {job.title}
               </h3>
 
@@ -365,7 +365,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
               <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
                 {/* Requirements */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
-                  <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
                     <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.requirements", "Yeu Cau")}
                   </h4>
                   <ul className="flex flex-col gap-3">
@@ -380,7 +380,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
 
                 {/* Skills */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
-                  <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
                     <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.skills", "Ky Nang")}
                   </h4>
                   <div className="flex flex-wrap gap-2">
@@ -397,7 +397,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
 
                 {/* Benefits */}
                 <div className="p-6 md:p-8">
-                  <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
                     <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.benefits", "Phuc Loi")}
                   </h4>
                   <ul className="flex flex-col gap-3">
@@ -448,7 +448,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-[#002d17] text-lg uppercase tracking-tight leading-snug">
+                  <h3 className="font-bold text-[#002d17] text-lg uppercase tracking-tight leading-snug">
                     {pos.title}
                   </h3>
                   <p className="text-[#46aa85] text-xs font-bold uppercase tracking-widest mt-0.5">{pos.subtitle}</p>
@@ -495,7 +495,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div className="p-6 border-b md:border-b-0 md:border-r border-[#46aa85]/15">
-                  <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
                     <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.requirements", "Yeu Cau")}
                   </h4>
                   <ul className="flex flex-col gap-3">
@@ -508,7 +508,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                   </ul>
                 </div>
                 <div className="p-6">
-                  <h4 className="font-extrabold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
                     <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.benefits", "Quyen Loi Thuc Tap Sinh")}
                   </h4>
                   <ul className="flex flex-col gap-3">
@@ -596,14 +596,14 @@ export function Jobs() {
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-white uppercase tracking-tight leading-tight mb-4">
             {renderLines(heroTitle)}
           </h1>
           <p className="text-white/70 text-base font-medium max-w-xl">
             {heroDescription}
           </p>
         </div>
-        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-extrabold text-white/[0.04] uppercase leading-none select-none">
+        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-bold text-white/[0.04] uppercase leading-none select-none">
           {heroDecorativeText}
         </div>
       </div>
@@ -628,7 +628,7 @@ export function Jobs() {
                       <Icon size={20} className="text-[#f4aa1f]" />
                     )}
                   </div>
-                  <h3 className="font-extrabold text-[#002d17] uppercase text-[18px] tracking-tight">{perk.title}</h3>
+                  <h3 className="font-bold text-[#002d17] uppercase text-[18px] tracking-tight">{perk.title}</h3>
                   <p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium">{perk.desc}</p>
                 </div>
               );
@@ -643,7 +643,7 @@ export function Jobs() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
-            <h2 className="text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h2 className="text-3xl font-bold text-[#002d17] uppercase tracking-tight">
               {jobsTitle} ({filteredJobs.length})
             </h2>
           </div>
@@ -688,7 +688,7 @@ export function Jobs() {
         <div className="mt-12 bg-[#f9f9f7] border border-[#002d17]/10 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 rounded-2xl">
           <div>
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{spontaneous?.eyebrow || "Khong thay vi tri phu hop?"}</p>
-            <h4 className="font-extrabold text-[#002d17] text-xl uppercase tracking-tight">{spontaneous?.title || "Ung Tuyen Tu Do"}</h4>
+            <h4 className="font-bold text-[#002d17] text-xl uppercase tracking-tight">{spontaneous?.title || "Ung Tuyen Tu Do"}</h4>
             <p className="text-[#002d17]/55 text-sm mt-2 font-medium max-w-md">
               {spontaneous?.description || "Gui ho so cua ban cho chung toi - chung toi luon tim kiem tai nang phu hop voi van hoa Tona."}
             </p>
@@ -716,7 +716,7 @@ export function Jobs() {
                 <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.eyebrow || "Chuong Trinh Thuc Tap"}</span>
               </div>
               <div className="w-12 h-0.5 bg-[#46aa85] mb-4" />
-              <h2 className="text-3xl font-extrabold text-[#002d17] uppercase tracking-tight leading-tight">
+              <h2 className="text-3xl font-bold text-[#002d17] uppercase tracking-tight leading-tight">
                 {renderLines(interns?.title || "Sinh Vien Thuc Tap\nTona Internship Program")}
               </h2>
               <p className="text-[#002d17]/60 text-sm font-medium mt-3 max-w-lg leading-relaxed">
@@ -727,12 +727,12 @@ export function Jobs() {
               <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.seasonLabel || "Tuyen dung 2025 - 2026"}</p>
               <div className="flex gap-4">
                 <div className="flex flex-col">
-                  <span className="text-[#002d17] font-extrabold text-2xl">{interns?.slotsValue || "12"}</span>
+                  <span className="text-[#002d17] font-bold text-2xl">{interns?.slotsValue || "12"}</span>
                   <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.slotsLabel || "chi tieu"}</span>
                 </div>
                 <div className="w-px bg-[#002d17]/10" />
                 <div className="flex flex-col">
-                  <span className="text-[#002d17] font-extrabold text-2xl">{interns?.majorsValue || "3"}</span>
+                  <span className="text-[#002d17] font-bold text-2xl">{interns?.majorsValue || "3"}</span>
                   <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || "chuyen nganh"}</span>
                 </div>
               </div>
@@ -764,7 +764,7 @@ export function Jobs() {
                 <BookOpen size={18} className="text-[#46aa85]" />
               </div>
               <div>
-                <p className="font-extrabold text-[#002d17] text-sm uppercase tracking-tight">{interns?.ctaTitle || "Ky Ket Hop Tac Voi Truong Dai Hoc"}</p>
+                <p className="font-bold text-[#002d17] text-sm uppercase tracking-tight">{interns?.ctaTitle || "Ky Ket Hop Tac Voi Truong Dai Hoc"}</p>
                 <p className="text-[#002d17]/55 text-sm font-medium mt-1 max-w-md">
                   {interns?.ctaDescription || "Tona Corporation hop tac voi nhieu truong ky thuat. Sinh vien co the dang ky qua Phong Quan he Doanh nghiep cua truong hoac lien he truc tiep Tona."}
                 </p>
@@ -785,7 +785,7 @@ export function Jobs() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
-            <h3 className="text-2xl font-extrabold text-white uppercase tracking-tight">
+            <h3 className="text-2xl font-bold text-white uppercase tracking-tight">
               {cultureTeaser?.title || "Trai Nghiem Van Hoa Tona"}
             </h3>
             <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || "Kham pha nhung gi lam nen su khac biet khi lam viec tai Tona."}</p>

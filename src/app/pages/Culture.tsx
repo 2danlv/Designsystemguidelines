@@ -143,14 +143,14 @@ export function Culture() {
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-white uppercase tracking-tight leading-tight mb-4">
             {renderLines(heroTitle)}
           </h1>
           <p className="text-white/50 text-base font-medium max-w-xl mt-4">
             {heroDescription}
           </p>
         </div>
-        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[200px] font-extrabold text-white/5 uppercase leading-none select-none pointer-events-none">
+        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[200px] font-bold text-white/5 uppercase leading-none select-none pointer-events-none">
           {decorativeText}
         </div>
       </div>
@@ -160,7 +160,7 @@ export function Culture() {
         <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-[#002d17]/20">
           {stats.map((item) => (
             <div key={item.label} className="flex flex-col items-center py-2">
-              <span className="font-extrabold text-[#002d17] text-3xl tracking-tight">{item.value}</span>
+              <span className="font-bold text-[#002d17] text-3xl tracking-tight">{item.value}</span>
               <span className="text-[#002d17]/70 font-bold text-xs uppercase tracking-widest mt-1">{item.label}</span>
             </div>
           ))}
@@ -172,7 +172,7 @@ export function Culture() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
               {themesTitle}
             </h2>
             <p className="text-[#002d17]/50 mt-3 text-[16px] font-medium">
@@ -197,7 +197,7 @@ export function Culture() {
                 <div className="flex flex-col md:flex-row md:items-start gap-6 p-8 md:p-10">
                   <div className="shrink-0">
                     <div className="w-16 h-1 mb-3" style={{ backgroundColor: theme.color }} />
-                    <span className={`font-extrabold text-4xl tracking-tight ${theme.active ? "text-white" : "text-[#002d17]/30"}`}>
+                    <span className={`font-bold text-4xl tracking-tight ${theme.active ? "text-white" : "text-[#002d17]/30"}`}>
                       {theme.year}
                     </span>
                     {theme.active && (
@@ -208,7 +208,7 @@ export function Culture() {
                   </div>
 
                   <div className="flex-1">
-                    <h3 className={`font-extrabold text-3xl md:text-4xl uppercase tracking-tight mb-4 ${theme.active ? "text-[#f4aa1f]" : "text-[#002d17]"}`}>
+                    <h3 className={`font-bold text-3xl md:text-4xl uppercase tracking-tight mb-4 ${theme.active ? "text-[#f4aa1f]" : "text-[#002d17]"}`}>
                       {theme.theme}
                     </h3>
                     <p className={`text-[16px] leading-relaxed font-medium mb-6 max-w-xl ${theme.active ? "text-white/70" : "text-[#002d17]/60"}`}>
@@ -224,7 +224,7 @@ export function Culture() {
                     </ul>
                   </div>
                 </div>
-                <div className={`absolute right-6 md:right-10 top-1/2 -translate-y-1/2 text-[80px] md:text-[120px] font-extrabold uppercase leading-none select-none pointer-events-none ${
+                <div className={`absolute right-6 md:right-10 top-1/2 -translate-y-1/2 text-[80px] md:text-[120px] font-bold uppercase leading-none select-none pointer-events-none ${
                   theme.active ? "text-white/5" : "text-[#002d17]/5"
                 }`}>
                   {theme.theme.split(" ")[0]}
@@ -240,7 +240,7 @@ export function Culture() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
               {activitiesTitle}
             </h2>
           </div>
@@ -275,7 +275,7 @@ export function Culture() {
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 pt-5 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors px-4">
-                    <h3 className="font-extrabold text-[#002d17] text-lg uppercase tracking-tight">{activity.title}</h3>
+                    <h3 className="font-bold text-[#002d17] text-lg uppercase tracking-tight">{activity.title}</h3>
                     <p className="text-[#002d17]/60 text-sm leading-relaxed">{activity.desc}</p>
                   </div>
                 </motion.div>
@@ -307,7 +307,7 @@ export function Culture() {
                   </div>
                   <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{socialEyebrow}</span>
                 </div>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight leading-snug mb-3">
+                <h3 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight leading-snug mb-3">
                   {renderLines(socialTitle)}
                 </h3>
                 <p className="text-white/60 text-[16px] font-medium leading-relaxed max-w-lg mb-5">
@@ -334,7 +334,7 @@ export function Culture() {
                 <div className="grid grid-cols-2 gap-3">
                   {socialStats.map((s) => (
                     <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-center">
-                      <span className="font-extrabold text-[#f4aa1f] text-2xl block">{s.value}</span>
+                      <span className="font-bold text-[#f4aa1f] text-2xl block">{s.value}</span>
                       <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold mt-1">{s.label}</p>
                     </div>
                   ))}
@@ -357,7 +357,7 @@ export function Culture() {
           <div>
             <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4 block">{academyEyebrow}</span>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight leading-tight mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight leading-tight mb-6">
               {renderLines(academyTitle)}
             </h2>
             <p className="text-white/60 text-base leading-relaxed font-medium mb-8">
@@ -366,7 +366,7 @@ export function Culture() {
             <div className="grid grid-cols-2 gap-4 mb-8">
               {academyStats.map((item) => (
                 <div key={item.label} className="border border-white/10 p-4 rounded-xl">
-                  <span className="font-extrabold text-[#f4aa1f] text-2xl">{item.value}</span>
+                  <span className="font-bold text-[#f4aa1f] text-2xl">{item.value}</span>
                   <p className="text-white/50 text-xs uppercase tracking-widest font-bold mt-1">{item.label}</p>
                 </div>
               ))}
@@ -387,7 +387,7 @@ export function Culture() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
               {galleryTitle}
             </h2>
           </div>
@@ -414,7 +414,7 @@ export function Culture() {
       <div className="bg-[#f4aa1f] py-14" style={backgroundStyle(colors?.ctaBackground)}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-bold text-[#002d17] uppercase tracking-tight">
               {ctaTitle}
             </h3>
             <p className="text-[#002d17]/60 mt-2 text-sm font-medium">

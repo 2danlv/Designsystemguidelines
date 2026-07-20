@@ -130,7 +130,7 @@ export function Projects() {
           </div>
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-white uppercase tracking-tight leading-tight">
               {renderLines(heroTitle)}
             </h1>
             <p className="text-white/50 font-medium text-base mt-4 max-w-xl">
@@ -144,7 +144,7 @@ export function Projects() {
         <div className="max-w-7xl mx-auto px-6 py-2 md:py-2 grid grid-cols-2 md:grid-cols-4 divide-x divide-[#002d17]/20">
           {stats.map((s) => (
             <div key={s.label} className="flex flex-col items-center py-1">
-              <span className="font-extrabold text-[#002d17] text-3xl tracking-tight">{s.value}</span>
+              <span className="font-bold text-[#002d17] text-3xl tracking-tight">{s.value}</span>
               <span className="text-[#002d17]/70 font-bold text-xs uppercase tracking-widest mt-1">{s.label}</span>
             </div>
           ))}
@@ -225,7 +225,7 @@ export function Projects() {
                 </div>
 
                 <div className="flex flex-col gap-3 pt-5 pb-3 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-                  <h3 className="font-extrabold text-[#002d17] text-[20px] uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
+                  <h3 className="font-bold text-[#002d17] text-[20px] uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
                     {project.title}
                   </h3>
                   <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -260,7 +260,7 @@ export function Projects() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
-            <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight">
               {cta?.title || "Ban co du an tuong tu?"}
             </h3>
             <p className="text-white/50 mt-2 text-sm">{cta?.description || "Hay de Tona Corporation dong hanh cung ban tu ban ve den hoan thien."}</p>

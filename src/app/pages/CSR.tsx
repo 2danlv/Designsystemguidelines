@@ -97,7 +97,7 @@ export function CSR() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
             <div>
               <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-              <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-6">
+              <h1 className="text-5xl md:text-6xl font-bold text-white uppercase tracking-tight leading-tight mb-6">
                 {renderLines(heroTitle)}
               </h1>
               <p className="text-white/60 text-base font-medium leading-relaxed max-w-lg">
@@ -110,7 +110,7 @@ export function CSR() {
                 return (
                   <div key={item.label} className="bg-[#002d17] px-6 py-6 flex flex-col gap-2">
                     <Icon size={18} className="text-[#f4aa1f]" />
-                    <span className="font-extrabold text-[#f4aa1f] text-3xl">{item.val}</span>
+                    <span className="font-bold text-[#f4aa1f] text-3xl">{item.val}</span>
                     <p className="text-white/50 text-xs uppercase tracking-widest font-bold">{item.label}</p>
                   </div>
                 );
@@ -119,7 +119,7 @@ export function CSR() {
           </div>
         </div>
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-[#46aa85]/10 pointer-events-none hidden lg:block" />
-        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-extrabold text-white/[0.03] uppercase leading-none select-none pointer-events-none">
+        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 text-[120px] md:text-[180px] font-bold text-white/[0.03] uppercase leading-none select-none pointer-events-none">
           {cmsPage?.hero?.decorativeText || "CSR"}
         </div>
       </div>
@@ -129,7 +129,7 @@ export function CSR() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-14">
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
               {cmsPage?.programsSection?.title || "Các Chương Trình Trọng Điểm"}
             </h2>
             <p className="text-[#002d17]/50 text-[16px] font-medium mt-3 max-w-xl">
@@ -163,7 +163,7 @@ export function CSR() {
                   <div className={`flex flex-col gap-3 lg:aspect-[4/3] lg:min-h-0 lg:overflow-hidden lg:justify-between ${isEven ? "" : "lg:[direction:ltr]"}`}>
                     <div>
                       <div className="w-10 h-0.5 mb-3" style={{ backgroundColor: prog.color }} />
-                      <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight leading-snug mb-1">
+                      <h3 className="text-2xl md:text-3xl font-bold text-[#002d17] uppercase tracking-tight leading-snug mb-1">
                         {prog.title}
                       </h3>
                       <p className="font-bold text-xs uppercase tracking-widest" style={{ color: prog.color }}>
@@ -181,7 +181,7 @@ export function CSR() {
                     <div className="grid grid-cols-3 gap-3">
                       {prog.stats.map((s) => (
                         <div key={s.label} className="rounded-xl px-3 py-2.5 border border-[#002d17]/10" style={{ backgroundColor: prog.bgColor }}>
-                          <span className="font-extrabold text-[#002d17] text-xl">{s.val}</span>
+                          <span className="font-bold text-[#002d17] text-xl">{s.val}</span>
                           <p className="text-[#002d17]/50 text-[10px] leading-4 uppercase tracking-widest font-bold mt-0.5 line-clamp-2">{s.label}</p>
                         </div>
                       ))}
@@ -216,7 +216,7 @@ export function CSR() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
               <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-              <h3 className="text-2xl md:text-3xl font-extrabold text-[#002d17] uppercase tracking-tight mb-4">
+              <h3 className="text-2xl md:text-3xl font-bold text-[#002d17] uppercase tracking-tight mb-4">
                 {renderLines(cmsPage?.commitment?.title || "Cam Kết Lâu Dài\nVới Cộng Đồng")}
               </h3>
               <p className="text-[#002d17]/60 text-sm leading-relaxed font-medium max-w-lg">
@@ -228,7 +228,7 @@ export function CSR() {
                 <div key={item.title} className="flex gap-4 items-start bg-white rounded-xl p-5 border border-[#002d17]/8">
                   <div className="w-2 h-2 rounded-full bg-[#f4aa1f] mt-1.5 shrink-0" />
                   <div>
-                    <h4 className="font-extrabold text-[#002d17] text-sm uppercase tracking-tight">{item.title}</h4>
+                    <h4 className="font-bold text-[#002d17] text-sm uppercase tracking-tight">{item.title}</h4>
                     <p className="text-[#002d17]/55 text-sm font-medium mt-1">{item.desc}</p>
                   </div>
                 </div>
@@ -243,7 +243,7 @@ export function CSR() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
-            <h3 className="text-2xl font-extrabold text-white uppercase tracking-tight">
+            <h3 className="text-2xl font-bold text-white uppercase tracking-tight">
               {cmsPage?.cta?.title || "Cùng Tona Tạo Ra Sự Khác Biệt"}
             </h3>
             <p className="text-white/50 mt-2 text-sm font-medium">

@@ -250,7 +250,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
     <section id="home-services" className="w-full bg-white py-16 md:py-20">
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="mb-12 md:mb-16">
-          <h2 className="text-[34px] font-black uppercase leading-none tracking-[-0.04em] text-[#002d17] md:text-[42px]">
+          <h2 className="text-[34px] font-bold uppercase leading-none tracking-[-0.04em] text-[#002d17] md:text-[42px]">
             {title || text("home.services.title", "Dịch Vụ Cốt Lõi")}
           </h2>
         </div>
@@ -268,7 +268,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                   }`}
               >
                 {svc.highlight && (
-                  <div className="absolute right-4 top-4 rounded-full bg-[#f4aa1f] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#002d17] md:right-5 md:top-5">
+                  <div className="absolute right-4 top-4 rounded-full bg-[#f4aa1f] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#002d17] md:right-5 md:top-5">
                     Thế Mạnh
                   </div>
                 )}
@@ -289,11 +289,11 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                   />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col pt-0.5 md:pr-8">
-                  <p className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.16em] text-[#f4aa1f]">
+                  <p className="mb-3 text-[14px] font-bold uppercase tracking-[0.16em] text-[#f4aa1f]">
                     {svc.subtitle}
                   </p>
                   <h3
-                    className={`mb-3 text-[21px] font-extrabold leading-tight tracking-[-0.035em] transition-colors md:text-[23px] ${
+                    className={`mb-3 text-[21px] font-bold leading-tight tracking-[-0.035em] transition-colors md:text-[23px] ${
                       svc.highlight ? "text-white" : "text-[#002d17] group-hover:text-[#46aa85]"
                     }`}
                   >
@@ -320,7 +320,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
         <div className="mt-4">
           <Link
             to={sitePath("services")}
-            className="flex min-h-[60px] w-full items-center justify-center gap-4 rounded-[18px] bg-[#f4aa1f] px-6 py-4 text-xs font-extrabold uppercase tracking-[0.18em] text-[#002d17] transition-colors hover:bg-[#002d17] hover:text-[#f4aa1f]"
+            className="flex min-h-[60px] w-full items-center justify-center gap-4 rounded-[18px] bg-[#f4aa1f] px-6 py-4 text-xs font-bold uppercase tracking-[0.18em] text-[#002d17] transition-colors hover:bg-[#002d17] hover:text-[#f4aa1f]"
           >
             {text("home.services.view_all", "Xem Tất Cả Dịch Vụ")} <ArrowRight size={16} />
           </Link>
@@ -340,7 +340,7 @@ function SloganSection({ content }: { content?: HomeCmsData["slogan"] }) {
         <div className="absolute right-0 top-0 w-[45%] h-full bg-gradient-to-l from-[#46aa85]/8 to-transparent pointer-events-none" />
         <div className="absolute left-0 bottom-0 w-48 h-48 border border-[#f4aa1f]/10 rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none" />
         <div className="absolute right-16 top-8 w-24 h-24 border border-[#46aa85]/20 rounded-full pointer-events-none" />
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] md:text-[200px] font-extrabold text-white/[0.03] uppercase leading-none select-none pointer-events-none tracking-tighter">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[120px] md:text-[200px] font-bold text-white/[0.03] uppercase leading-none select-none pointer-events-none tracking-tighter">
           TONA
         </div>
 
@@ -358,7 +358,7 @@ function SloganSection({ content }: { content?: HomeCmsData["slogan"] }) {
                 {content.eyebrow}
               </span>
             </div>
-            <h2 className="flex flex-col font-extrabold text-white uppercase tracking-tight leading-[1.05] text-[48px] md:text-[64px]">
+            <h2 className="flex flex-col font-bold text-white uppercase tracking-tight leading-[1.05] text-[48px] md:text-[64px]">
               <span className="whitespace-pre-line">{content.title}</span>
               <span className="text-[#46aa85]">{content.accentTitle}</span>
             </h2>
@@ -369,7 +369,7 @@ function SloganSection({ content }: { content?: HomeCmsData["slogan"] }) {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4 w-full">
               {stats.map((stat, index) => (
                 <div key={`${stat.label}-${index}`} className="flex flex-col gap-1">
-                  <span className="text-[#f4aa1f] font-extrabold text-2xl md:text-3xl tracking-tight">{stat.value}</span>
+                  <span className="text-[#f4aa1f] font-bold text-2xl md:text-3xl tracking-tight">{stat.value}</span>
                   <span className="text-white/40 font-bold text-[13px] uppercase tracking-widest">{stat.label}</span>
                 </div>
               ))}
@@ -436,7 +436,7 @@ function ProjectsSection({
         <div className="max-w-7xl mx-auto px-6 py-10 flex items-center justify-between">
           <div>
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{label || text("home.projects.label", "Portfolio")}</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight">{title || text("home.projects.title", "Dự Án Nổi Bật")}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">{title || text("home.projects.title", "Dự Án Nổi Bật")}</h2>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev}
@@ -468,7 +468,7 @@ function ProjectsSection({
                     </div>
                   </div>
                   <div className="flex flex-col gap-2 pt-5 pb-2 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-                    <h3 className="font-extrabold text-[#002d17] text-[20px] uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
+                    <h3 className="font-bold text-[#002d17] text-[20px] uppercase tracking-tight leading-snug group-hover:text-[#46aa85] transition-colors">
                       {project.title}
                     </h3>
                     {/* Key info row */}
@@ -520,7 +520,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
         <div className="mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#002d17] uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
               {title || text("home.news.title", "Tin Tức & Hoạt Động")}
             </h2>
           </div>
@@ -546,7 +546,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
             </div>
             <div className="flex flex-col gap-3 pt-6 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
               <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date}</span>
-              <h3 className="font-extrabold text-[#002d17] text-2xl uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors">
+              <h3 className="font-bold text-[#002d17] text-2xl uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors">
                 {featured.title}
               </h3>
               <p className="text-[#002d17]/60 text-[16px] leading-relaxed">{featured.excerpt}</p>
@@ -571,7 +571,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
                 </div>
                 <div className="flex flex-col gap-2 border-b border-[#002d17]/10 pb-4 flex-1 group-hover:border-[#f4aa1f] transition-colors">
                   <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{item.category}</span>
-                  <h4 className="font-extrabold text-[#002d17] text-sm uppercase leading-snug group-hover:text-[#46aa85] transition-colors line-clamp-2">
+                  <h4 className="font-bold text-[#002d17] text-sm uppercase leading-snug group-hover:text-[#46aa85] transition-colors line-clamp-2">
                     {item.title}
                   </h4>
                   <span className="text-[#002d17]/40 text-xs font-medium">{item.date}</span>
@@ -599,7 +599,7 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
-            <h3 className="text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight">
               {content?.title || text("home.partners.title", "Partners & Customers")}
             </h3>
           </div>
@@ -624,7 +624,7 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
               {typeof partner === "string" ? (
                 <img src={partner} alt="" className="object-contain" />
               ) : (
-                <span className="text-white/50 hover:text-white font-extrabold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
+                <span className="text-white/50 hover:text-white font-bold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
                   {partner.name}
                 </span>
               )}
@@ -649,7 +649,7 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
                 <img src={partner} alt="" className="object-contain opacity-80" />
               ) : (
                 <>
-                  <span className="text-white/30 hover:text-white font-extrabold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
+                  <span className="text-white/30 hover:text-white font-bold text-xs md:text-sm uppercase tracking-widest text-center whitespace-pre-line leading-tight px-2 transition-colors">
                     {partner.name}
                   </span>
                   <span className="text-white/20 text-[9px] text-center px-3 tracking-wider hidden md:block">

@@ -98,7 +98,7 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
             <span className="text-white/30 text-xs font-bold uppercase tracking-widest">{article.date}</span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white uppercase tracking-tight leading-tight mb-6 max-w-4xl">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase tracking-tight leading-tight mb-6 max-w-4xl">
             {article.title}
           </h1>
 
@@ -174,7 +174,7 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <span className="text-[#f4aa1f] font-bold text-[10px] uppercase tracking-widest">{item.category}</span>
-                      <h4 className="font-extrabold text-[#002d17] text-xs uppercase leading-snug group-hover:text-[#46aa85] transition-colors line-clamp-2">
+                      <h4 className="font-bold text-[#002d17] text-xs uppercase leading-snug group-hover:text-[#46aa85] transition-colors line-clamp-2">
                         {item.title}
                       </h4>
                       <span className="text-[#002d17]/40 text-[10px] font-medium">{item.date}</span>
@@ -186,7 +186,7 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
 
             <div className="bg-[#002d17] rounded-2xl p-6">
               <div className="w-8 h-0.5 bg-[#f4aa1f] mb-4" />
-              <h4 className="font-extrabold text-white uppercase tracking-tight mb-2">Dự Án Của Bạn?</h4>
+              <h4 className="font-bold text-white uppercase tracking-tight mb-2">Dự Án Của Bạn?</h4>
               <p className="text-white/50 text-sm font-medium mb-5 leading-relaxed">Liên hệ Tona ngay hôm nay để được tư vấn.</p>
               <Link
                 to={sitePath("jobs")}
@@ -204,7 +204,7 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
           <div className="flex items-center justify-between mb-10">
             <div>
               <div className="w-10 h-0.5 bg-[#f4aa1f] mb-3" />
-              <h3 className="text-2xl font-extrabold text-[#002d17] uppercase tracking-tight">Tin Tức Khác</h3>
+              <h3 className="text-2xl font-bold text-[#002d17] uppercase tracking-tight">Tin Tức Khác</h3>
             </div>
             <Link to={sitePath("news")} className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
               Tất Cả <ArrowRight size={12} />
@@ -229,7 +229,7 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
                   </div>
                   <div className="flex flex-col gap-2.5 pt-4 pb-3 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
                     <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{item.date}</span>
-                    <h4 className="font-extrabold text-[#002d17] text-base uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors line-clamp-2">
+                    <h4 className="font-bold text-[#002d17] text-base uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors line-clamp-2">
                       {item.title}
                     </h4>
                     <div className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">

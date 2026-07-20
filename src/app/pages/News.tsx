@@ -87,7 +87,7 @@ export function News() {
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
           <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white uppercase tracking-tight leading-tight mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold text-white uppercase tracking-tight leading-tight mb-4">
             {renderLines(heroTitle)}
           </h1>
           <p className="text-white/50 text-base font-medium max-w-xl">
@@ -120,7 +120,7 @@ export function News() {
 
               <div className="lg:col-span-5 flex flex-col gap-4">
                 <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date}</span>
-                <h2 className="font-extrabold text-[#002d17] text-2xl md:text-3xl uppercase leading-snug tracking-tight">
+                <h2 className="font-bold text-[#002d17] text-2xl md:text-3xl uppercase leading-snug tracking-tight">
                   {featured.title}
                 </h2>
                 <div className="w-12 h-0.5 bg-[#f4aa1f]" />
@@ -220,7 +220,7 @@ export function News() {
 
                   <div className="flex flex-col gap-3 pt-5 pb-4 flex-1 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
                     <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{item.date}</span>
-                    <h3 className="font-extrabold text-[#002d17] text-lg uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors line-clamp-2">
+                    <h3 className="font-bold text-[#002d17] text-lg uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors line-clamp-2">
                       {item.title}
                     </h3>
                     <p className="text-[#002d17]/55 text-sm leading-relaxed font-medium line-clamp-3 flex-1">

@@ -12,7 +12,7 @@ function PageShell({ title, children }: { title: string; children: React.ReactNo
       <section className="bg-[#002d17] text-white">
         <div className="max-w-7xl mx-auto px-6 py-20 md:py-24">
           <p className="text-[#f4aa1f] text-xs font-bold uppercase tracking-widest mb-4">Tona Corporation</p>
-          <h1 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight">{title}</h1>
+          <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-tight">{title}</h1>
         </div>
       </section>
 
