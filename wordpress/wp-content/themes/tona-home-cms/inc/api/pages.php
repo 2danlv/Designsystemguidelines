@@ -7,9 +7,21 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+function tona_cms_home_title_image_value( $post_id ) {
+    // This field used to be injected only on the edit screen. Reading the raw
+    // attachment ID also supports images saved before it joined the JSON group.
+    $attachment_id = get_post_meta( $post_id, 'home_hero_title_image', true );
+
+    if ( ! empty( $attachment_id ) ) {
+        return $attachment_id;
+    }
+
+    return function_exists( 'get_field' ) ? get_field( 'home_hero_title_image', $post_id ) : '';
+}
+
 function tona_cms_home_payload( $page ) {
     $post_id = $page->ID;
-    $title_image = function_exists( 'get_field' ) ? get_field( 'home_hero_title_image', $post_id ) : '';
+    $title_image = tona_cms_home_title_image_value( $post_id );
 
     if ( empty( $title_image ) && function_exists( 'get_field' ) && function_exists( 'pll_get_post' ) ) {
         $current_language = function_exists( 'pll_get_post_language' ) ? pll_get_post_language( $post_id, 'slug' ) : '';
@@ -17,7 +29,7 @@ function tona_cms_home_payload( $page ) {
         $fallback_post_id = (int) pll_get_post( $post_id, $fallback_language );
 
         if ( $fallback_post_id && $fallback_post_id !== (int) $post_id ) {
-            $title_image = get_field( 'home_hero_title_image', $fallback_post_id );
+            $title_image = tona_cms_home_title_image_value( $fallback_post_id );
         }
     }
 
