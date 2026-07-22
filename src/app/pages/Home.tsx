@@ -20,6 +20,7 @@ import {
 import { getCmsIcon } from "../lib/cmsIcons";
 import { useSiteText } from "../context/SiteSettingsContext";
 import { projectDetailPath, sitePath } from "../lib/siteLinks";
+import { VideoBackground } from "../components/VideoBackground";
 
 type HomeService = {
   id: number | string;
@@ -30,20 +31,18 @@ type HomeService = {
   highlight?: boolean;
 };
 
-const DEFAULT_HOME_VIDEO_ID = "wDmNBXfd7K8";
+const DEFAULT_HOME_VIDEO_URL = "/media/kv-background.mp4";
+const DEFAULT_HOME_VIDEO_POSTER = "/media/kv-background-poster.jpg";
 
-function youtubeVideoId(value?: string) {
+function heroVideoUrl(value?: string) {
   const raw = (value || "").trim();
-  if (!raw) return DEFAULT_HOME_VIDEO_ID;
-
-  const match = raw.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
-  return match?.[1] || raw;
+  return /\.(?:mp4|webm)(?:\?.*)?$/i.test(raw) ? raw : DEFAULT_HOME_VIDEO_URL;
 }
 
 // HERO SECTION
 function HeroSection({ content }: { content?: HomeCmsData["hero"] }) {
   const text = useSiteText();
-  const videoId = youtubeVideoId(content?.videoId);
+  const videoUrl = heroVideoUrl(content?.videoId);
   const backgroundColor = content?.backgroundColor || "#001810";
   const ticker = content?.ticker || "BUILDING RIGHT - GREEN CONSTRUCTION - ENERGY";
   const title = content?.title || "Build It";
@@ -72,23 +71,12 @@ function HeroSection({ content }: { content?: HomeCmsData["hero"] }) {
       style={{ backgroundColor }}
     >
     
-          {/* ── YouTube fullscreen background ── */}
+          {/* ── Fullscreen background video ── */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
-            <iframe
-              src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&playlist=${videoId}&rel=0&showinfo=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0`}
+            <VideoBackground
+              src={videoUrl}
               title="Tona Timelapse"
-              allow="autoplay; encrypted-media"
-              style={{
-                position: "absolute",
-                width: "100vw",
-                height: "56.25vw",
-                minHeight: "100vh",
-                minWidth: "177.78vh",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                border: "none",
-              }}
+              poster={DEFAULT_HOME_VIDEO_POSTER}
             />
           </div>
     

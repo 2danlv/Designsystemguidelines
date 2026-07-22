@@ -241,7 +241,7 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
           className="flex items-center shrink-0"
           ariaLabel={logoAlt}
         >
-          <img src={logo} alt={logoAlt} className="h-[41px] w-auto ml-[0px] mr-[20px] my-[0px]" />
+          <img src={logo} alt={logoAlt} className="h-[80px] w-auto ml-[0px] mr-[20px] my-[0px]" />
         </SmartLink>
 
         {/* DESKTOP NAV */}

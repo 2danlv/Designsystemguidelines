@@ -18,6 +18,23 @@ function tona_cms_acf_json_load_paths( $paths ) {
 }
 add_filter( 'acf/settings/load_json', 'tona_cms_acf_json_load_paths' );
 
+/**
+ * Keep KV videos as Media Library upload fields even before updated local JSON
+ * field groups are synced into the WordPress database.
+ */
+function tona_cms_kv_video_upload_field( $field ) {
+    $field['label']         = 'KV Background Video';
+    $field['type']          = 'file';
+    $field['instructions']  = 'Upload a lightweight MP4 or WebM video, or select one from the Media Library.';
+    $field['return_format'] = 'url';
+    $field['library']       = 'all';
+    $field['mime_types']    = 'mp4,webm';
+
+    return $field;
+}
+add_filter( 'acf/load_field/key=field_tona_home_hero_video_id', 'tona_cms_kv_video_upload_field' );
+add_filter( 'acf/load_field/key=field_tona_about_hero_video_id', 'tona_cms_kv_video_upload_field' );
+
 function tona_cms_register_options_pages() {
     if ( ! function_exists( 'acf_add_options_page' ) ) {
         return;

@@ -41,11 +41,11 @@
         },
         {
             "key": "field_tona_home_hero_video_id",
-            "label": "KV YouTube Video ID",
+            "label": "KV Background Video",
             "name": "home_hero_video_id",
             "aria-label": "",
-            "type": "text",
-            "instructions": "Use only the YouTube video ID, not the full URL.",
+            "type": "file",
+            "instructions": "Upload a lightweight MP4 or WebM video, or select one from the Media Library.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -53,11 +53,11 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "Example: wDmNBXfd7K8",
-            "prepend": "",
-            "append": ""
+            "return_format": "url",
+            "library": "all",
+            "min_size": "",
+            "max_size": "",
+            "mime_types": "mp4,webm"
         },
         {
             "key": "field_tona_home_hero_ticker",

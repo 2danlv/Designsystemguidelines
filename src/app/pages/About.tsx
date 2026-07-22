@@ -12,8 +12,10 @@ import { motion } from "motion/react";
 import { fetchCmsPageByTemplate, type AboutCmsData } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
 import { sitePath } from "../lib/siteLinks";
+import { VideoBackground } from "../components/VideoBackground";
 
-const DEFAULT_YOUTUBE_VIDEO_ID = "wDmNBXfd7K8";
+const DEFAULT_HERO_VIDEO_URL = "/media/kv-background.mp4";
+const DEFAULT_HERO_VIDEO_POSTER = "/media/kv-background-poster.jpg";
 
 type StatItem = {
   value: string;
@@ -131,24 +133,9 @@ function splitStatValue(value: string) {
   };
 }
 
-function youtubeVideoId(value: string) {
+function heroVideoUrl(value: string) {
   const trimmed = value.trim();
-
-  if (!trimmed) {
-    return DEFAULT_YOUTUBE_VIDEO_ID;
-  }
-
-  try {
-    const url = new URL(trimmed);
-
-    if (url.hostname.includes("youtu.be")) {
-      return url.pathname.replace(/^\/+/, "") || DEFAULT_YOUTUBE_VIDEO_ID;
-    }
-
-    return url.searchParams.get("v") || url.pathname.split("/").filter(Boolean).pop() || DEFAULT_YOUTUBE_VIDEO_ID;
-  } catch {
-    return trimmed;
-  }
+  return /\.(?:mp4|webm)(?:\?.*)?$/i.test(trimmed) ? trimmed : DEFAULT_HERO_VIDEO_URL;
 }
 
 function quoteWithAccent(quote: string, accent: string) {
@@ -223,7 +210,7 @@ export function About() {
   const colors = cmsPage?.colors;
   const hero = cmsPage?.hero;
   const ceo = cmsPage?.ceo;
-  const heroVideoId = youtubeVideoId(hero?.videoId || "");
+  const heroVideo = heroVideoUrl(hero?.videoId || "");
   const heroEyebrow = hero?.eyebrow || "Tona Corporation - Since 2009";
   const heroTitle = hero?.title || "Ve Tona\nCorporation";
   const heroDescription = hero?.description || "Hon 15 nam kien tao nhung cong trinh vuot chuan, Tona Corporation la lua chon hang dau cua cac tap doan da quoc gia tai Viet Nam.";
@@ -251,22 +238,11 @@ export function About() {
     <div className="w-full bg-white min-h-screen">
       <section className="relative w-full overflow-hidden" style={{ minHeight: "100vh", ...backgroundStyle(colors?.heroBackground) }}>
         <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
-          <iframe
-            src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&controls=0&playlist=${heroVideoId}&rel=0&showinfo=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&fs=0`}
+          <VideoBackground
+            src={heroVideo}
             title="Tona Timelapse"
-            allow="autoplay; encrypted-media"
-            style={{
-              position: "absolute",
-              width: "100vw",
-              height: "56.25vw",
-              minHeight: "100vh",
-              minWidth: "177.78vh",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              border: "none",
-              opacity: 0.52,
-            }}
+            opacity={0.52}
+            poster={DEFAULT_HERO_VIDEO_POSTER}
           />
         </div>
 
