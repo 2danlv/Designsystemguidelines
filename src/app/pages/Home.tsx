@@ -19,7 +19,7 @@ import {
 } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
 import { useSiteText } from "../context/SiteSettingsContext";
-import { projectDetailPath, sitePath } from "../lib/siteLinks";
+import { newsDetailPath, projectDetailPath, sitePath } from "../lib/siteLinks";
 import { VideoBackground } from "../components/VideoBackground";
 
 type HomeService = {
@@ -525,21 +525,23 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
             viewport={{ once: true }}
             className="lg:col-span-7 group cursor-pointer flex flex-col"
           >
-            <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#bcd8cb] rounded-xl">
-              <img src={featured.image} alt={featured.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />
-              <div className="absolute top-3 left-3 bg-[#f4aa1f] text-[#002d17] px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full">
-                {featured.category}
+            <Link to={newsDetailPath(featured.slug)} className="flex flex-1 flex-col">
+              <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#bcd8cb] rounded-xl">
+                <img src={featured.image} alt={featured.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />
+                <div className="absolute top-3 left-3 bg-[#f4aa1f] text-[#002d17] px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full">
+                  {featured.category}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-3 pt-6 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
-              <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date}</span>
-              <h3 className="font-bold text-[#002d17] text-2xl uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors">
-                {featured.title}
-              </h3>
-              <p className="text-[#002d17]/60 text-[16px] leading-relaxed">{featured.excerpt}</p>
-              <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{text("home.news.read_more", "Đọc tiếp")} <ArrowRight size={12} /></span>
-            </div>
+              <div className="flex flex-col gap-3 pt-6 pb-4 border-b-2 border-transparent group-hover:border-[#f4aa1f] transition-colors">
+                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{featured.date}</span>
+                <h3 className="font-bold text-[#002d17] text-2xl uppercase leading-snug tracking-tight group-hover:text-[#46aa85] transition-colors">
+                  {featured.title}
+                </h3>
+                <p className="text-[#002d17]/60 text-[16px] leading-relaxed">{featured.excerpt}</p>
+                <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{text("home.news.read_more", "Đọc tiếp")} <ArrowRight size={12} /></span>
+              </div>
+            </Link>
           </motion.article>
 
           {/* Side list */}
@@ -551,19 +553,21 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group flex gap-4 cursor-pointer"
+                className="group cursor-pointer"
               >
-                <div className="relative shrink-0 w-28 h-20 overflow-hidden bg-[#bcd8cb] rounded-lg">
-                  <img src={item.image} alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                </div>
-                <div className="flex flex-col gap-2 border-b border-[#002d17]/10 pb-4 flex-1 group-hover:border-[#f4aa1f] transition-colors">
-                  <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{item.category}</span>
-                  <h4 className="font-bold text-[#002d17] text-sm uppercase leading-snug group-hover:text-[#46aa85] transition-colors line-clamp-2">
-                    {item.title}
-                  </h4>
-                  <span className="text-[#002d17]/40 text-xs font-medium">{item.date}</span>
-                </div>
+                <Link to={newsDetailPath(item.slug)} className="flex gap-4">
+                  <div className="relative shrink-0 w-28 h-20 overflow-hidden bg-[#bcd8cb] rounded-lg">
+                    <img src={item.image} alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  </div>
+                  <div className="flex flex-col gap-2 border-b border-[#002d17]/10 pb-4 flex-1 group-hover:border-[#f4aa1f] transition-colors">
+                    <span className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">{item.category}</span>
+                    <h4 className="font-bold text-[#002d17] text-sm uppercase leading-snug group-hover:text-[#46aa85] transition-colors line-clamp-2">
+                      {item.title}
+                    </h4>
+                    <span className="text-[#002d17]/40 text-xs font-medium">{item.date}</span>
+                  </div>
+                </Link>
               </motion.article>
             ))}
           </div>

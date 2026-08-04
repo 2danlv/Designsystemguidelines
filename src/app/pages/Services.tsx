@@ -52,6 +52,8 @@ type TimelapseSlide = {
   video: string;
 };
 
+const TIMELAPSE_SLIDE_DURATION_MS = 20_000;
+const TIMELAPSE_PROGRESS_STEPS = 100;
 
 function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
   const [current, setCurrent] = useState(0);
@@ -75,13 +77,13 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
 
     const interval = setInterval(() => {
       setProgress((p) => {
-        if (p >= 100) {
+        if (p >= TIMELAPSE_PROGRESS_STEPS - 1) {
           setCurrent((c) => (c + 1) % items.length);
           return 0;
         }
         return p + 1;
       });
-    }, 50);
+    }, TIMELAPSE_SLIDE_DURATION_MS / TIMELAPSE_PROGRESS_STEPS);
     return () => clearInterval(interval);
   }, [current, items.length, videoReady]);
 
@@ -540,9 +542,8 @@ export function Services() {
                 {timelapseSlides.map((s, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 text-[#002d17]/50 text-[16px] font-bold uppercase tracking-widest"
+                    className="text-[#002d17]/50 text-[16px] font-bold uppercase tracking-widest"
                   >
-                    <span className="w-2 h-2 rounded-full bg-[#f4aa1f] shrink-0" />
                     {s.title}
                   </div>
                 ))}

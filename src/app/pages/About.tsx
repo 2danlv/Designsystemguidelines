@@ -300,14 +300,14 @@ export function About() {
                 <div className="w-5 h-px bg-[#f4aa1f]/50" />
                 <span className="font-light uppercase" style={{ fontSize: "12px", letterSpacing: "0.18em", color: "rgba(244,170,31,0.6)" }}>{ceoEyebrow}</span>
               </div>
-              <div className="select-none pointer-events-none leading-none" style={{ fontSize: "clamp(100px, 12vw, 160px)", color: "rgba(244,170,31,0.13)", fontFamily: "Georgia, 'Times New Roman', serif", lineHeight: 1, marginBottom: "-0.28em" }}>&ldquo;</div>
+              <div className="select-none pointer-events-none leading-none" style={{ fontSize: "clamp(100px, 12vw, 160px)", color: "rgba(244,170,31,0.13)", fontFamily: "'Times New Roman', serif", lineHeight: 1, marginBottom: "-0.28em" }}>&ldquo;</div>
               <blockquote className="flex flex-col gap-6">
-                <p style={{ fontSize: "clamp(17px, 2vw, 26px)", fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", fontWeight: 300, lineHeight: 1.78, color: "rgba(255,255,255,0.9)" }}>
+                <p style={{ fontSize: "clamp(17px, 2vw, 26px)", fontFamily: "'Times New Roman', serif", fontStyle: "italic", fontWeight: 300, lineHeight: 1.78, color: "rgba(255,255,255,0.9)" }}>
                   {quoteWithAccent(ceoQuote, ceoAccent)}
                 </p>
                 <div className="flex flex-col gap-1 pt-1 border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
                   <span className="font-medium uppercase" style={{ fontSize: "14px", color: "rgba(255,255,255,0.82)", letterSpacing: "0.16em" }}>{ceoName}</span>
-                  <span style={{ fontSize: "14px", fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "rgba(255,255,255,0.38)", letterSpacing: "0.04em" }}>{ceoRole}</span>
+                  <span style={{ fontSize: "14px", fontFamily: "'Times New Roman', serif", fontStyle: "italic", color: "rgba(255,255,255,0.38)", letterSpacing: "0.04em" }}>{ceoRole}</span>
                 </div>
               </blockquote>
             </motion.div>
