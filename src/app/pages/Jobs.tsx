@@ -334,14 +334,16 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
               >
                 {text("jobs.apply_now", "Ung Tuyen Ngay")}
               </button>
-              <a
-                href='#'
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
-              >
-                <FileText size={12} /> {text("jobs.view_jd", "Xem JD")}
-              </a>
+              {job.jdUrl?.trim() && (
+                <a
+                  href={job.jdUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
+                >
+                  <FileText size={12} /> {text("jobs.view_jd", "Xem JD")}
+                </a>
+              )}
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"

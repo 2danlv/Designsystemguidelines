@@ -53,6 +53,7 @@ function tona_cms_job_payload( $post ) {
         'level'        => $summary['level'] ?? tona_cms_text_field( $post_id, 'job_level' ),
         'date'         => $summary['date'] ?? tona_cms_text_field( $post_id, 'job_date' ),
         'salary'       => $summary['salary'] ?? tona_cms_text_field( $post_id, 'job_salary' ),
+        'jdUrl'        => tona_cms_text_field( $post_id, 'job_jd_url' ),
         'slots'        => (int) ( $slots ?: 1 ),
         'description'  => tona_cms_text_field( $post_id, 'job_description' ) ?: wp_strip_all_tags( get_the_content( null, false, $post ) ),
         'requirements' => tona_cms_lines_field( $post_id, 'job_requirements' ),

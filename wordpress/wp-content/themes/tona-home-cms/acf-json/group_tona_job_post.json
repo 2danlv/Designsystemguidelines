@@ -110,6 +110,22 @@
                        "placeholder":  ""
                    },
                    {
+                       "key":  "field_tona_job_jd_url",
+                       "label":  "Job Description Link",
+                       "name":  "job_jd_url",
+                       "type":  "url",
+                       "instructions":  "Optional. The Xem JD button is only shown when this URL is entered.",
+                       "required":  0,
+                       "conditional_logic":  false,
+                       "wrapper":  {
+                                       "width":  "",
+                                       "class":  "",
+                                       "id":  ""
+                                   },
+                       "default_value":  "",
+                       "placeholder":  "https://example.com/job-description"
+                   },
+                   {
                        "key":  "field_tona_job_requirements",
                        "label":  "Requirements",
                        "name":  "job_requirements",

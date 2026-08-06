@@ -343,6 +343,7 @@ export type JobPost = {
   level: string;
   date: string;
   salary?: string;
+  jdUrl?: string;
   slots: number;
   description: string;
   requirements: string[];
