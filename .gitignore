@@ -19,6 +19,7 @@ uploads/*
 **/*/uploads/*
 !/assets/*
 .htaccess
+!public/.htaccess
 license.txt
 readme.html
 !index.php

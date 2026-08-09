@@ -134,12 +134,11 @@ Build commands:
 ```bash
 npm run dev
 npm run dev:test
-npm run build:client
 npm run build:test
 npm run build:production
 ```
 
-`build`, `build:production`, and `build:test` also prerender SEO HTML for every WordPress page, project, and news route. `build:client` only compiles the React client. Deploy the entire generated `dist` directory, including its route subdirectories; Facebook and other social crawlers read these HTML files without running React. After deployment, use Facebook Sharing Debugger's **Scrape Again** action to clear Facebook's cached preview.
+The production build copies `public/.htaccess` and `public/seo-render.php` into `dist`. On Apache/PHP hosting, every frontend route passes through this lightweight HTML shell, which reads current SEO fields directly from WordPress before returning the React document. New pages, projects, and news posts therefore do not require a frontend rebuild. Deploy the entire generated `dist` directory and keep the `/wordpress` installation next to it. After changing an existing URL's social metadata, use Facebook Sharing Debugger's **Scrape Again** action to clear Facebook's cache.
 
 8. Manually check key routes:
 

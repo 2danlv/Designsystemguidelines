@@ -1,0 +1,14 @@
+Options -MultiViews
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Keep WordPress, compiled assets, uploaded media, and real files untouched.
+RewriteRule ^(?:wordpress|assets|media)(?:/|$) - [L,NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Render every application route through PHP so crawlers receive live CMS meta.
+RewriteRule ^ seo-render.php [L,QSA]
+</IfModule>
