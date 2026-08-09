@@ -24,3 +24,4 @@ require_once get_stylesheet_directory() . '/inc/post-types/members.php';
 require_once get_stylesheet_directory() . '/inc/post-types/projects.php';
 require_once get_stylesheet_directory() . '/inc/post-types/news.php';
 require_once get_stylesheet_directory() . '/inc/i18n/ui-strings.php';
+require_once get_stylesheet_directory() . '/inc/seo-field.php';
