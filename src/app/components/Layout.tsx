@@ -347,7 +347,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
         {/* Col 1: Brand */}
         <div className="md:col-span-4">
           <div className="mb-6">
-            <img src={footerLogo} alt={footerLogoAlt} className="h-10 w-auto" />
+            <img src={footerLogo} alt={footerLogoAlt} className="h-[80px] w-auto" />
           </div>
           <p className="text-white/60 text-sm leading-relaxed mb-8 max-w-sm">
             {footer.description}
