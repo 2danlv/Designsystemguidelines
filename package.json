@@ -4,9 +4,11 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "build:test": "vite build --mode test",
-    "build:production": "vite build --mode production",
+    "build": "vite build && node scripts/prerender-seo.mjs --mode production",
+    "build:client": "vite build",
+    "build:test": "vite build --mode test && node scripts/prerender-seo.mjs --mode test",
+    "build:production": "vite build --mode production && node scripts/prerender-seo.mjs --mode production",
+    "prerender:seo": "node scripts/prerender-seo.mjs",
     "dev": "vite",
     "dev:test": "vite --mode test"
   },

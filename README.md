@@ -134,9 +134,12 @@ Build commands:
 ```bash
 npm run dev
 npm run dev:test
+npm run build:client
 npm run build:test
 npm run build:production
 ```
+
+`build`, `build:production`, and `build:test` also prerender SEO HTML for every WordPress page, project, and news route. `build:client` only compiles the React client. Deploy the entire generated `dist` directory, including its route subdirectories; Facebook and other social crawlers read these HTML files without running React. After deployment, use Facebook Sharing Debugger's **Scrape Again** action to clear Facebook's cached preview.
 
 8. Manually check key routes:
 

@@ -587,6 +587,7 @@ export type CmsRouteMatch = {
     description?: string;
     keywords?: string;
     canonical?: string;
+    canonicalCustom?: boolean;
     image?: string;
     type?: "article" | "website";
     noindex?: boolean;

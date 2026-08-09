@@ -106,7 +106,10 @@ export function CmsRoute() {
     const fullTitle = isHomePage || !pageTitle || pageTitle === siteTitle
       ? siteTitle
       : siteTitle ? `${pageTitle} | ${siteTitle}` : pageTitle;
-    const canonical = seo?.canonical?.trim();
+    const canonicalSource = seo?.canonicalCustom
+      ? seo.canonical?.trim()
+      : `${window.location.origin}${location.pathname}`;
+    const canonical = canonicalSource ? new URL(canonicalSource, window.location.origin).href : "";
     const robots = [seo?.noindex ? "noindex" : "", seo?.nofollow ? "nofollow" : ""]
       .filter(Boolean)
       .join(", ");
@@ -129,7 +132,7 @@ export function CmsRoute() {
     updateMetaTag("name", "twitter:title", fullTitle);
     updateMetaTag("name", "twitter:description", seo?.description?.trim());
     updateMetaTag("name", "twitter:image", seo?.image?.trim());
-  }, [loaded, routeMatch, settings?.site?.title]);
+  }, [loaded, location.pathname, routeMatch, settings?.site?.title]);
 
   if (legacyVietnameseMatch) {
     const nextPath = legacyVietnameseMatch[1] || "/";

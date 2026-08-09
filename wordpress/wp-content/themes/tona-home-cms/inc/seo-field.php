@@ -333,6 +333,7 @@ function tona_cms_seo_payload( $post ) {
     'description' => $description,
     'keywords'    => $keywords,
     'canonical'   => $canonical ?: $frontend_url,
+    'canonicalCustom' => (bool) $canonical,
     'image'       => $image ? esc_url_raw( $image ) : '',
     'type'        => in_array( $type, [ 'article', 'website' ], true ) ? $type : 'article',
     'noindex'     => (bool) get_post_meta( $post_id, '_seo_noindex', true ),
