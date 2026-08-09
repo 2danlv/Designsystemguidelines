@@ -582,6 +582,16 @@ export type SiteSettings = {
 export type CmsRouteMatch = {
   type: "page" | "project" | "news" | "not_found";
   title?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string;
+    canonical?: string;
+    image?: string;
+    type?: "article" | "website";
+    noindex?: boolean;
+    nofollow?: boolean;
+  };
   template?: string;
   slug?: string;
   page?: {
@@ -728,7 +738,10 @@ export async function fetchCmsSettings(signal?: AbortSignal): Promise<SiteSettin
 
 export async function fetchCmsRoute(path: string, signal?: AbortSignal): Promise<CmsRouteMatch | null> {
   try {
-    const response = await fetch(cmsEndpoint(`/tona/v1/resolve?path=${encodeURIComponent(path)}`), { signal });
+    const response = await fetch(cmsEndpoint(`/tona/v1/resolve?path=${encodeURIComponent(path)}`), {
+      signal,
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       return null;

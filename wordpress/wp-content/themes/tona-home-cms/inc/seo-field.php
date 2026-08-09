@@ -8,13 +8,36 @@
 
 if ( !defined( 'ABSPATH' ) ) exit;
 
+function tona_cms_default_seo_image() {
+  $option_id = 'option';
+  $header_logo = function_exists( 'get_field' ) ? get_field( 'site_header_logo', $option_id ) : '';
+  $footer_logo = function_exists( 'get_field' ) ? get_field( 'site_footer_logo', $option_id ) : '';
+
+  if ( function_exists( 'tona_cms_image_url' ) ) {
+    $header_logo = tona_cms_image_url( $header_logo );
+    $footer_logo = tona_cms_image_url( $footer_logo );
+  }
+
+  if ( $header_logo ) return esc_url_raw( $header_logo );
+  if ( $footer_logo ) return esc_url_raw( $footer_logo );
+
+  $custom_logo_id = (int) get_theme_mod( 'custom_logo' );
+  if ( $custom_logo_id ) {
+    $custom_logo = wp_get_attachment_image_url( $custom_logo_id, 'full' );
+    if ( $custom_logo ) return esc_url_raw( $custom_logo );
+  }
+
+  $site_icon = function_exists( 'get_site_icon_url' ) ? get_site_icon_url( 512 ) : '';
+  return $site_icon ? esc_url_raw( $site_icon ) : '';
+}
+
 class Simple_SEO_Meta_Box
 {
 
   public function __construct() {
     add_action( 'add_meta_boxes', [ $this, 'register_meta_box' ] );
     add_action( 'save_post', [ $this, 'save_meta_box' ] );
-    // add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+    add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
   }
 
   /**
@@ -23,13 +46,17 @@ class Simple_SEO_Meta_Box
   public function register_meta_box() {
 
     $post_types = [
-      'post','page'
+      'post',
+      'page',
+      'tona_project',
+      'tona_news',
+      'tona_job',
     ];
 
     foreach ( $post_types as $post_type ) {
       add_meta_box(
         'simple_seo_meta_box',
-        __( 'SEO', 'simple-seo' ),
+        __( 'SEO & Chia sẻ mạng xã hội', 'simple-seo' ),
         [ $this, 'render_meta_box' ],
         $post_type,
         'normal',
@@ -45,7 +72,8 @@ class Simple_SEO_Meta_Box
 
     wp_nonce_field( 'simple_seo_nonce', 'simple_seo_nonce_field' );
     $og_image_id = get_post_meta($post->ID, '_seo_og_image', true);
-    $og_image_url = $og_image_id ? wp_get_attachment_image_url($og_image_id, 'medium') : '';
+    $default_og_image_url = tona_cms_default_seo_image();
+    $og_image_url = $og_image_id ? wp_get_attachment_image_url($og_image_id, 'medium') : $default_og_image_url;
     $seo_title   = get_post_meta( $post->ID, '_seo_title', true );
     $description = get_post_meta( $post->ID, '_seo_description', true );
     $keywords    = get_post_meta( $post->ID, '_seo_keywords', true );
@@ -68,12 +96,12 @@ class Simple_SEO_Meta_Box
       <label><strong><?php _e( 'Meta description', 'simple-seo' ); ?></strong>
         <span class="seo-count">( <span id="seo-desc-count">0</span> )</span>
       </label>
-      <textarea name="_seo_description" rows="3" class="widefat seo-desc"><?php echo esc_textarea( $description ); ?></textarea>
+      <textarea name="_seo_description" rows="3" class="widefat seo-desc" placeholder="A leading construction and MEP contractor delivering integrated international-standard building solutions from design to operation."><?php echo esc_textarea( $description ); ?></textarea>
     </p>
     <p class="howto">Enter a description for the article. The meta description you enter here will also be used as a snippet for blog cards. If left blank, the text entered for "Excerpt" is used as the meta description.</p>
     <p>
       <label><strong><?php _e( 'Meta keywords', 'simple-seo' ); ?></strong></label>
-      <input type="text" name="_seo_keywords" value="<?php echo esc_attr( $keywords ); ?>" class="widefat">
+      <input type="text" name="_seo_keywords" value="<?php echo esc_attr( $keywords ); ?>" class="widefat" placeholder="tona corporate">
     </p>
     <p class="howto">Enter keywords related to the article, separated by commas. If left blank, keywords will be set automatically from the category name, etc.</p>
     <p>
@@ -87,6 +115,12 @@ class Simple_SEO_Meta_Box
         Remove
       </button>
     </p>
+    <p class="howto">Nếu không chọn ảnh, website tự dùng logo trong Logo &amp; Footer hoặc Site Icon.</p>
+    <?php if ( !$og_image_id && !$default_og_image_url ) : ?>
+      <p class="notice notice-warning inline" style="padding:10px 12px; margin:8px 0;">
+        Chưa có logo mặc định. Hãy tải logo lên tại <strong>Logo &amp; Footer</strong> hoặc cấu hình <strong>Site Icon</strong>.
+      </p>
+    <?php endif; ?>
     <hr>
     <p>
       <label>
@@ -151,6 +185,7 @@ class Simple_SEO_Meta_Box
       jQuery(document).ready(function ($) {
 
       let frame;
+      const defaultOgpImage = <?php echo wp_json_encode( $default_og_image_url ); ?>;
 
       $('#seo_upload_image').on('click', function (e) {
         e.preventDefault();
@@ -182,7 +217,7 @@ class Simple_SEO_Meta_Box
 
       $('#seo_remove_image').on('click', function () {
         $('#seo_og_image').val('');
-        $('#seo_og_preview').attr('src', '');
+        $('#seo_og_preview').attr('src', defaultOgpImage);
       });
 
     });
@@ -197,29 +232,31 @@ class Simple_SEO_Meta_Box
 
     if (
     !isset( $_POST[ 'simple_seo_nonce_field' ] ) ||
-    !wp_verify_nonce( $_POST[ 'simple_seo_nonce_field' ], 'simple_seo_nonce' )
+    !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ 'simple_seo_nonce_field' ] ) ), 'simple_seo_nonce' )
     ) return;
 
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
     if ( !current_user_can( 'edit_post', $post_id ) ) return;
 
-    $fields = [
-      '_seo_title',
-      '_seo_description',
-      '_seo_keywords',
-      '_seo_canonical',
-      '_seo_og_image',
-    ];
+    if ( isset( $_POST['_seo_title'] ) ) {
+      update_post_meta( $post_id, '_seo_title', sanitize_text_field( wp_unslash( $_POST['_seo_title'] ) ) );
+    }
 
-    foreach ( $fields as $field ) {
-      if ( isset( $_POST[ $field ] ) ) {
-        update_post_meta(
-          $post_id,
-          $field,
-          sanitize_text_field( $_POST[ $field ] )
-        );
-      }
+    if ( isset( $_POST['_seo_description'] ) ) {
+      update_post_meta( $post_id, '_seo_description', sanitize_textarea_field( wp_unslash( $_POST['_seo_description'] ) ) );
+    }
+
+    if ( isset( $_POST['_seo_keywords'] ) ) {
+      update_post_meta( $post_id, '_seo_keywords', sanitize_text_field( wp_unslash( $_POST['_seo_keywords'] ) ) );
+    }
+
+    if ( isset( $_POST['_seo_canonical'] ) ) {
+      update_post_meta( $post_id, '_seo_canonical', esc_url_raw( wp_unslash( $_POST['_seo_canonical'] ) ) );
+    }
+
+    if ( isset( $_POST['_seo_og_image'] ) ) {
+      update_post_meta( $post_id, '_seo_og_image', absint( $_POST['_seo_og_image'] ) );
     }
 
     update_post_meta( $post_id, '_seo_noindex', isset( $_POST[ '_seo_noindex' ] ) ? '1' : '' );
@@ -227,8 +264,9 @@ class Simple_SEO_Meta_Box
     if ( isset( $_POST[ '_seo_type' ] ) ) {
       $allowed = [ 'article', 'website' ];
 
-      $value = in_array( $_POST[ '_seo_type' ], $allowed, true )
-        ? $_POST[ '_seo_type' ]
+      $submitted_type = sanitize_key( wp_unslash( $_POST[ '_seo_type' ] ) );
+      $value = in_array( $submitted_type, $allowed, true )
+        ? $submitted_type
         : 'article';
 
       update_post_meta( $post_id, '_seo_type', $value );
@@ -243,17 +281,65 @@ class Simple_SEO_Meta_Box
 
     if ( !in_array( $hook, [ 'post.php', 'post-new.php' ], true ) ) return;
 
-    wp_enqueue_script(
-      'simple-seo-admin',
-      plugin_dir_url( __FILE__ ) . 'assets/seo-admin.js',
-      [],
-      '1.0',
-      true
-    );
+    $screen = get_current_screen();
+    $post_types = [ 'post', 'page', 'tona_project', 'tona_news', 'tona_job' ];
+
+    if ( !$screen || !in_array( $screen->post_type, $post_types, true ) ) return;
+
+    wp_enqueue_media();
   }
 }
 
 new Simple_SEO_Meta_Box();
+
+/**
+ * Return the SEO fields used by the headless frontend.
+ */
+function tona_cms_seo_payload( $post ) {
+  $post = get_post( $post );
+
+  if ( !$post ) {
+    return [];
+  }
+
+  $post_id = (int) $post->ID;
+  $seo_title = trim( (string) get_post_meta( $post_id, '_seo_title', true ) );
+  $description = trim( (string) get_post_meta( $post_id, '_seo_description', true ) );
+  $keywords = trim( (string) get_post_meta( $post_id, '_seo_keywords', true ) );
+  $canonical = trim( (string) get_post_meta( $post_id, '_seo_canonical', true ) );
+  $type = get_post_meta( $post_id, '_seo_type', true );
+  $image_id = (int) get_post_meta( $post_id, '_seo_og_image', true );
+  $image = $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+
+  if ( !$image ) {
+    $image = tona_cms_default_seo_image();
+  }
+
+  if ( !$description ) {
+    $description = 'A leading construction and MEP contractor delivering integrated international-standard building solutions from design to operation.';
+  }
+
+  if ( !$keywords ) {
+    $keywords = 'tona corporate';
+  }
+
+  $permalink = get_permalink( $post );
+  $frontend_url = function_exists( 'tona_cms_frontend_url' )
+    ? tona_cms_frontend_url( $permalink )
+    : $permalink;
+
+  return [
+    'title'       => html_entity_decode( wp_specialchars_decode( $seo_title ?: get_the_title( $post ), ENT_QUOTES ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
+    'description' => $description,
+    'keywords'    => $keywords,
+    'canonical'   => $canonical ?: $frontend_url,
+    'image'       => $image ? esc_url_raw( $image ) : '',
+    'type'        => in_array( $type, [ 'article', 'website' ], true ) ? $type : 'article',
+    'noindex'     => (bool) get_post_meta( $post_id, '_seo_noindex', true ),
+    'nofollow'    => (bool) get_post_meta( $post_id, '_seo_nofollow', true ),
+  ];
+}
+
 function simple_seo_generate_keywords( $post_id ) {
 
   $keywords = [];
@@ -296,14 +382,10 @@ add_action( 'wp_head', function ()
   $og_image_id = get_post_meta($post->ID, '_seo_og_image', true);
   // Fallbacks
   $title = $seo_title ? $seo_title : get_the_title( $post );
-  $desc  = $seo_desc ? $seo_desc : wp_strip_all_tags( get_the_excerpt( $post ) );
+  $desc  = $seo_desc ? $seo_desc : 'A leading construction and MEP contractor delivering integrated international-standard building solutions from design to operation.';
   $url   = $canonical ? $canonical : get_permalink( $post );
-  if ( empty( $desc ) ) {
-    $desc = get_the_excerpt( $post );
-  }
-
   if ( empty( $keywords ) ) {
-    $keywords = simple_seo_generate_keywords( $post->ID );
+    $keywords = 'tona corporate';
   }
 
   $site_name = get_bloginfo( 'name' );
@@ -327,14 +409,11 @@ add_action( 'wp_head', function ()
     $seo_type = 'article';
   }
 
-  // Image (featured image)
-
+  // Use the page OGP image first, then the configured company logo.
   if ($og_image_id) {
     $image = wp_get_attachment_image_url($og_image_id, 'full');
-  } elseif (has_post_thumbnail($post)) {
-    $image = get_the_post_thumbnail_url($post, 'large');
   } else {
-    $image = get_template_directory_uri() . '/assets/img/common/ogp.png';
+    $image = tona_cms_default_seo_image();
   }
   
   echo PHP_EOL . '<!-- SEO Social Meta -->' . PHP_EOL;

@@ -16,6 +16,40 @@ import { Projects } from "../pages/Projects";
 import { Services } from "../pages/Services";
 import { CmsLoading } from "./CmsLoading";
 
+function updateMetaTag(attribute: "name" | "property", key: string, content?: string) {
+  let tag = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
+
+  if (!content) {
+    tag?.remove();
+    return;
+  }
+
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute(attribute, key);
+    document.head.appendChild(tag);
+  }
+
+  tag.content = content;
+}
+
+function updateCanonicalLink(url?: string) {
+  let link = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+  if (!url) {
+    link?.remove();
+    return;
+  }
+
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "canonical";
+    document.head.appendChild(link);
+  }
+
+  link.href = url;
+}
+
 function renderPageByTemplate({ template, routeKey }: { template?: string; routeKey: string }) {
   switch (template) {
     case "tona-home":
@@ -66,15 +100,35 @@ export function CmsRoute() {
     if (!loaded) return;
 
     const siteTitle = settings?.site?.title?.trim() || "";
-    const pageTitle = (routeMatch?.title || routeMatch?.page?.title || "").trim();
+    const seo = routeMatch?.seo;
+    const pageTitle = (seo?.title || routeMatch?.title || routeMatch?.page?.title || "").trim();
     const isHomePage = routeMatch?.template === "tona-home";
+    const fullTitle = isHomePage || !pageTitle || pageTitle === siteTitle
+      ? siteTitle
+      : siteTitle ? `${pageTitle} | ${siteTitle}` : pageTitle;
+    const canonical = seo?.canonical?.trim();
+    const robots = [seo?.noindex ? "noindex" : "", seo?.nofollow ? "nofollow" : ""]
+      .filter(Boolean)
+      .join(", ");
 
-    if (isHomePage || !pageTitle || pageTitle === siteTitle) {
-      document.title = siteTitle;
-      return;
-    }
+    if (fullTitle) document.title = fullTitle;
 
-    document.title = siteTitle ? `${pageTitle} | ${siteTitle}` : pageTitle;
+    updateMetaTag("name", "description", seo?.description?.trim());
+    updateMetaTag("name", "keywords", seo?.keywords?.trim());
+    updateMetaTag("name", "robots", robots);
+    updateCanonicalLink(canonical);
+
+    updateMetaTag("property", "og:title", fullTitle);
+    updateMetaTag("property", "og:description", seo?.description?.trim());
+    updateMetaTag("property", "og:type", seo?.type || (isHomePage ? "website" : "article"));
+    updateMetaTag("property", "og:url", canonical);
+    updateMetaTag("property", "og:image", seo?.image?.trim());
+    updateMetaTag("property", "og:site_name", siteTitle);
+
+    updateMetaTag("name", "twitter:card", seo?.image ? "summary_large_image" : "summary");
+    updateMetaTag("name", "twitter:title", fullTitle);
+    updateMetaTag("name", "twitter:description", seo?.description?.trim());
+    updateMetaTag("name", "twitter:image", seo?.image?.trim());
   }, [loaded, routeMatch, settings?.site?.title]);
 
   if (legacyVietnameseMatch) {

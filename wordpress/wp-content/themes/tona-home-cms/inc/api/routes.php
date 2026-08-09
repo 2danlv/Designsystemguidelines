@@ -86,17 +86,19 @@ function tona_cms_resolve_route_payload( $request ) {
         }
     }
 
+    // Resolve the translated slug first. url_to_postid() can return the default
+    // language page when WordPress lives in a subdirectory and Polylang is active.
     if ( empty( $post_id ) ) {
+        $post_id = tona_cms_resolve_post_type_from_path( $path );
+    }
+
+    if ( ! $post_id ) {
         $post_id = url_to_postid( home_url( $path ) );
     }
 
     if ( ! $post_id ) {
         $path_without_language = preg_replace( '#^/(vi|en)(?=/|$)#', '', $path );
         $post_id = url_to_postid( home_url( $path_without_language ?: '/' ) );
-    }
-
-    if ( ! $post_id ) {
-        $post_id = tona_cms_resolve_post_type_from_path( $path );
     }
 
     if ( ! $post_id ) {
@@ -124,10 +126,13 @@ function tona_cms_resolve_route_payload( $request ) {
         }
     }
 
+    $seo = tona_cms_seo_payload( $post );
+
     if ( 'tona_project' === $post->post_type ) {
         return array(
             'type'         => 'project',
-            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
+            'title'        => $seo['title'],
+            'seo'          => $seo,
             'slug'         => $post->post_name,
             'translations' => $translations,
         );
@@ -136,7 +141,8 @@ function tona_cms_resolve_route_payload( $request ) {
     if ( 'tona_news' === $post->post_type ) {
         return array(
             'type'         => 'news',
-            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
+            'title'        => $seo['title'],
+            'seo'          => $seo,
             'slug'         => $post->post_name,
             'translations' => $translations,
         );
@@ -145,7 +151,8 @@ function tona_cms_resolve_route_payload( $request ) {
     if ( 'tona_job' === $post->post_type ) {
         return array(
             'type'         => 'page',
-            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
+            'title'        => $seo['title'],
+            'seo'          => $seo,
             'template'     => 'tona-jobs',
             'slug'         => $post->post_name,
             'translations' => $translations,
@@ -163,7 +170,8 @@ function tona_cms_resolve_route_payload( $request ) {
 
         $payload = array(
             'type'         => 'page',
-            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
+            'title'        => $seo['title'],
+            'seo'          => $seo,
             'template'     => $template_alias,
             'slug'         => $post->post_name,
             'translations' => $translations,
