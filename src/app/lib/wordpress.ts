@@ -48,9 +48,12 @@ export type AboutCmsData = {
   };
   hero?: {
     breadcrumbLabel?: string;
+    eyebrow?: string;
     title?: string;
     description?: string;
     decorativeText?: string;
+    videoId?: string;
+    bottomLabel?: string;
   };
   stats?: Array<{
     value?: string;

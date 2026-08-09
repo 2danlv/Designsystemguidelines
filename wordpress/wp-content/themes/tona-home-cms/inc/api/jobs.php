@@ -108,7 +108,7 @@ function tona_cms_jobs_page_payload( $page ) {
             array_map(
                 function ( $perk ) {
                     return array(
-                        'icon'      => $perk['icon'] ?? 'TrendingUp',
+                        'icon'      => $perk['icon'] ?? '',
                         'iconImage' => tona_cms_image_url( $perk['icon_image'] ?? '' ),
                         'title'     => $perk['title'] ?? '',
                         'desc'      => $perk['description'] ?? '',
@@ -127,15 +127,15 @@ function tona_cms_jobs_page_payload( $page ) {
             'linkUrl'     => tona_cms_text_field( $post_id, 'jobs_spontaneous_link_url' ),
         ),
         'interns'       => array(
-            'eyebrow'        => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_left', 'jobs_interns_Intro_left' ), 'jobs_interns_eyebrow', 'jobs_interns_eyebrow' ),
-            'title'          => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_left', 'jobs_interns_Intro_left' ), 'jobs_interns_title', 'jobs_interns_title' ),
-            'description'    => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_left', 'jobs_interns_Intro_left' ), 'jobs_interns_description', 'jobs_interns_description' ),
-            'seasonLabel'    => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_season_label', 'jobs_interns_season_label' ),
-            'slotsValue'     => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_slots_value', 'jobs_interns_slots_value' ),
+            'eyebrow'        => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_left', 'jobs_interns_Intro_left' ), 'jobs_interns_eyebrow' ),
+            'title'          => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_left', 'jobs_interns_Intro_left' ), 'jobs_interns_title' ),
+            'description'    => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_left', 'jobs_interns_Intro_left' ), 'jobs_interns_description' ),
+            'seasonLabel'    => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_season_label' ),
+            'slotsValue'     => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_slots_value' ),
             'slotsLabel'     => '',
-            'majorsValue'    => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_majors_value', 'jobs_interns_majors_value' ),
+            'majorsValue'    => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_majors_value' ),
             'majorsLabel'    => '',
-            'note'           => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_note', 'jobs_interns_note' ),
+            'note'           => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_right', 'jobs_interns_Intro_right' ), 'jobs_interns_note' ),
             'ctaTitle'       => tona_cms_text_field( $post_id, 'jobs_interns_cta_title' ),
             'ctaDescription' => tona_cms_text_field( $post_id, 'jobs_interns_cta_description' ),
             'ctaLinkLabel'   => tona_cms_text_field( $post_id, 'jobs_interns_cta_link_label' ),

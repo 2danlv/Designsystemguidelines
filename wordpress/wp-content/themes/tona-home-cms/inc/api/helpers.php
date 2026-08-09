@@ -35,11 +35,7 @@ function tona_cms_text_field( $post_id, $field_name ) {
 
 function tona_cms_localized_text_field( $post_id, $field_name, $language ) {
     if ( 'en' === $language ) {
-        $localized_value = tona_cms_text_field( $post_id, $field_name . '_en' );
-
-        if ( '' !== trim( $localized_value ) ) {
-            return $localized_value;
-        }
+        return tona_cms_text_field( $post_id, $field_name . '_en' );
     }
 
     return tona_cms_text_field( $post_id, $field_name );
@@ -48,17 +44,13 @@ function tona_cms_localized_text_field( $post_id, $field_name, $language ) {
 function tona_cms_localized_link_items_payload( $option_id, $field_name, $language ) {
     if ( 'en' === $language && function_exists( 'get_field' ) ) {
         $localized_items = get_field( $field_name . '_en', $option_id );
-        $localized_payload = tona_cms_link_items_payload( is_array( $localized_items ) ? $localized_items : array() );
-
-        if ( ! empty( $localized_payload ) ) {
-            return $localized_payload;
-        }
+        return tona_cms_link_items_payload( is_array( $localized_items ) ? $localized_items : array() );
     }
 
     return tona_cms_link_items_payload( function_exists( 'get_field' ) ? get_field( $field_name, $option_id ) : array() );
 }
 
-function tona_cms_group_text_field( $post_id, $group_names, $field_name, $fallback_field_name = '' ) {
+function tona_cms_group_text_field( $post_id, $group_names, $field_name ) {
     if ( ! function_exists( 'get_field' ) ) {
         return '';
     }
@@ -71,7 +63,7 @@ function tona_cms_group_text_field( $post_id, $group_names, $field_name, $fallba
         }
     }
 
-    return $fallback_field_name ? tona_cms_text_field( $post_id, $fallback_field_name ) : '';
+    return '';
 }
 
 function tona_cms_lines_field( $post_id, $field_name ) {
@@ -90,7 +82,7 @@ function tona_cms_lines_field( $post_id, $field_name ) {
     );
 }
 
-function tona_cms_repeater_lines_field( $post_id, $field_name, $sub_field_name, $fallback_field_name = '' ) {
+function tona_cms_repeater_lines_field( $post_id, $field_name, $sub_field_name ) {
     $rows = function_exists( 'get_field' ) ? get_field( $field_name, $post_id ) : array();
 
     if ( is_array( $rows ) ) {
@@ -107,26 +99,6 @@ function tona_cms_repeater_lines_field( $post_id, $field_name, $sub_field_name, 
 
         if ( ! empty( $items ) ) {
             return $items;
-        }
-    }
-
-    if ( $fallback_field_name ) {
-        $fallback_items = tona_cms_lines_field( $post_id, $fallback_field_name );
-
-        if ( ! empty( $fallback_items ) ) {
-            return $fallback_items;
-        }
-
-        $raw_value = get_post_meta( $post_id, $fallback_field_name, true );
-
-        if ( is_string( $raw_value ) && '' !== trim( $raw_value ) ) {
-            $lines = preg_split( '/\r\n|\r|\n/', $raw_value );
-
-            return array_values(
-                array_filter(
-                    array_map( 'trim', is_array( $lines ) ? $lines : array() )
-                )
-            );
         }
     }
 

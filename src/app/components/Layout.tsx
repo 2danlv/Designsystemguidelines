@@ -2,87 +2,9 @@ import { Outlet, Link, useLocation } from "react-router";
 import { Menu, X, MapPin, Phone, Mail, Facebook, Linkedin, Youtube, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import type React from "react";
-import tonaLogo from "../../imports/TONA_-_LOGO.png";
 import { fetchCmsRoute, fetchCmsSettings, getCurrentLanguage, localizeUrl, type CmsRouteMatch, type SiteLink, type SiteMenuItem, type SiteSettings } from "../lib/wordpress";
-import { SiteSettingsProvider } from "../context/SiteSettingsContext";
-
-// NAV DATA
-
-const fallbackNavLinks: SiteMenuItem[] = [
-  { label: "HOME", url: "/" },
-  {
-    label: "VỀ TONA",
-    children: [
-      { label: "Giới Thiệu", url: "/gioi-thieu-tona" },
-      { label: "Đội Ngũ", url: "/doi-ngu" },
-      { label: "Cuộc Sống Tona", url: "/cuoc-song-tona" },
-      { label: "Trách Nhiệm Cộng Đồng", url: "/trach-nhiem-cong-dong" },
-    ],
-  },
-  { label: "DỊCH VỤ", url: "/dich-vu" },
-  { label: "DỰ ÁN", url: "/du-an-tona" },
-  { label: "TIN TỨC", url: "/tin-tuc" },
-  { label: "TUYỂN DỤNG", url: "/nghe-nghiep" },
-];
-
-const fallbackNavLinksEn: SiteMenuItem[] = [
-  { label: "HOME", url: "/en" },
-  {
-    label: "ABOUT TONA",
-    children: [
-      { label: "About Tona", url: "/en/about-tona" },
-      { label: "Leadership", url: "/en/leadership" },
-      { label: "Tona Life", url: "/en/tona-life" },
-      { label: "CSR", url: "/en/csr" },
-    ],
-  },
-  { label: "SERVICES", url: "/en/services" },
-  { label: "PROJECTS", url: "/en/projects" },
-  { label: "NEWS", url: "/en/news" },
-  { label: "CAREERS", url: "/en/jobs" },
-];
-
-const fallbackFooter = {
-  cta: {
-    eyebrow: "Bắt đầu dự án của bạn",
-    title: "Hãy kết nối với Tona Corporation",
-    button: "Liên Hệ Ngay",
-    buttonUrl: "/nghe-nghiep",
-  },
-  description: "Nhà thầu xây dựng và MEP hàng đầu, cung cấp giải pháp xây dựng toàn diện đạt chuẩn quốc tế - từ thiết kế đến vận hành.",
-  certifications: ["ISO 9001", "ISO 45001", "ISO 14001"],
-  aboutTitle: "About Tona",
-  aboutLinks: [
-    { label: "Giới Thiệu", url: "/gioi-thieu-tona" },
-    { label: "Đội Ngũ Lãnh Đạo", url: "/doi-ngu" },
-    { label: "Cuộc Sống Tona", url: "/cuoc-song-tona" },
-    { label: "Dịch Vụ", url: "/dich-vu" },
-    { label: "Tuyển Dụng", url: "/nghe-nghiep" },
-  ],
-  projectsTitle: "Dự Án",
-  projectLinks: [
-    { label: "Industrial", url: "/du-an-tona" },
-    { label: "Commercial", url: "/du-an-tona" },
-    { label: "Solar Rooftop", url: "/du-an-tona" },
-    { label: "Hotels & Resorts", url: "/du-an-tona" },
-    { label: "Apartments", url: "/du-an-tona" },
-  ],
-  contactTitle: "Contact",
-  address: "Tòa nhà Tona, 123 Đường Xây Dựng\nQuận 1, TP. Hồ Chí Minh, Việt Nam",
-  phone: "+84 (0)90 123 4567",
-  email: "info@tonacorp.vn",
-  socials: [
-    { platform: "Facebook" as const, url: "" },
-    { platform: "LinkedIn" as const, url: "" },
-    { platform: "YouTube" as const, url: "" },
-  ],
-  copyright: "© {year} Tona Corporation. All Rights Reserved.",
-  legalLinks: [
-    { label: "Privacy Policy", url: "/privacy-policy" },
-    { label: "Terms of Service", url: "/terms-of-service" },
-    { label: "Sitemap", url: "/sitemap" },
-  ],
-};
+import { SiteSettingsProvider, useSiteText } from "../context/SiteSettingsContext";
+import { CmsLoading } from "./CmsLoading";
 
 function normalizeLinkValue(value: unknown) {
   if (typeof value === "string") {
@@ -145,6 +67,7 @@ const normalizePath = (path: string) => {
 };
 
 function Header({ settings }: { settings?: SiteSettings["header"] }) {
+  const text = useSiteText();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -191,11 +114,8 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
   };
 
   const currentLanguage = getCurrentLanguage();
-  const navLinks = settings?.nav?.length ? settings.nav : currentLanguage === "en" ? fallbackNavLinksEn : fallbackNavLinks;
-  const languages = settings?.languages?.length ? settings.languages : [
-    { label: "VI", url: "/" },
-    { label: "EN", url: "/en" },
-  ];
+  const navLinks = settings?.nav || [];
+  const languages = settings?.languages || [];
   const displayLanguages = languages.map((language) => {
     const targetLanguage = language.label?.toLowerCase() === "en" ? "en" : "vi";
     const translatedUrl = routeMatch?.translations?.[targetLanguage];
@@ -206,9 +126,9 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
       language: targetLanguage,
     };
   });
-  const logo = settings?.logo || tonaLogo;
-  const logoAlt = settings?.logoAlt || "Tona Corporation";
-  const homeUrl = settings?.homeUrl || (currentLanguage === "en" ? "/en" : "/");
+  const logo = settings?.logo || "";
+  const logoAlt = settings?.logoAlt || "";
+  const homeUrl = settings?.homeUrl || "";
   const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
   const whiteMode = isHovered && !isScrolled && isHomePage;
   const darkMode = isScrolled || !isHomePage;
@@ -308,7 +228,7 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
                 key={language.language}
                 to={language.url}
                 skipLocalization
-                ariaLabel={`Chuyển sang ${language.label}`}
+                ariaLabel={`${text("common.switch_language")} ${language.label}`}
                 className={`px-2 py-1 transition-colors text-xs rounded-md ${
                   language.language === currentLanguage
                     ? "bg-[#f4aa1f] text-[#002d17] hover:bg-[#f4aa1f]/90"
@@ -326,7 +246,7 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
           <button
             className={`lg:hidden p-1 transition-colors duration-200 ${whiteMode ? "text-[#002d17]" : "text-white"}`}
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            aria-label={text("common.menu_toggle")}
           >
             {mobileOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
@@ -390,21 +310,17 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
 // FOOTER
 
 function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
-  const footer = {
-    ...fallbackFooter,
-    ...settings,
-    cta: { ...fallbackFooter.cta, ...settings?.cta },
-    certifications: settings?.certifications?.length ? settings.certifications : fallbackFooter.certifications,
-    aboutLinks: settings?.aboutLinks?.length ? settings.aboutLinks : fallbackFooter.aboutLinks,
-    projectLinks: settings?.projectLinks?.length ? settings.projectLinks : fallbackFooter.projectLinks,
-    socials: settings?.socials?.length ? settings.socials : fallbackFooter.socials,
-    legalLinks: settings?.legalLinks?.length ? settings.legalLinks : fallbackFooter.legalLinks,
-  };
-  const footerLogo = footer.logo || tonaLogo;
-  const footerLogoAlt = footer.logoAlt || "Tona Corporation";
+  const footer = settings;
+
+  if (!footer) {
+    return null;
+  }
+
+  const footerLogo = footer.logo || "";
+  const footerLogoAlt = footer.logoAlt || "";
   const socialIcons = { Facebook, LinkedIn: Linkedin, YouTube: Youtube };
-  const copyright = (footer.copyright || fallbackFooter.copyright).replace("{year}", String(new Date().getFullYear()));
-  const phoneHref = `tel:${footer.phone.replace(/[^+\d]/g, "")}`;
+  const copyright = (footer.copyright || "").replace("{year}", String(new Date().getFullYear()));
+  const phoneHref = `tel:${(footer.phone || "").replace(/[^+\d]/g, "")}`;
 
   return (
     <footer className="bg-[#002d17] text-white">
@@ -412,16 +328,16 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
       <div className="border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{footer.cta.eyebrow}</p>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{footer.cta?.eyebrow}</p>
             <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tight">
-              {footer.cta.title}
+              {footer.cta?.title}
             </h3>
           </div>
           <SmartLink
-            to={footer.cta.buttonUrl}
+            to={footer.cta?.buttonUrl}
             className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
           >
-            {footer.cta.button}
+            {footer.cta?.button}
           </SmartLink>
         </div>
       </div>
@@ -437,7 +353,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
             {footer.description}
           </p>
           <div className="flex flex-wrap gap-2">
-            {footer.certifications.map((cert) => (
+            {(footer.certifications || []).map((cert) => (
               <span
                 key={cert}
                 className="border border-white/20 text-white/50 text-xs font-bold uppercase tracking-wider px-3 py-1.5"
@@ -452,7 +368,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
         <div className="md:col-span-2">
           <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">{footer.aboutTitle}</h4>
           <ul className="flex flex-col gap-3">
-            {footer.aboutLinks.map((item) => (
+            {(footer.aboutLinks || []).map((item) => (
               <li key={`${item.label}-${itemUrl(item)}`}>
                 <SmartLink
                   to={itemUrl(item)}
@@ -469,7 +385,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
         <div className="md:col-span-2">
           <h4 className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">{footer.projectsTitle}</h4>
           <ul className="flex flex-col gap-3">
-            {footer.projectLinks.map((item) => (
+            {(footer.projectLinks || []).map((item) => (
               <li key={`${item.label}-${itemUrl(item)}`}>
                 <SmartLink
                   to={itemUrl(item)}
@@ -495,20 +411,24 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
             <li className="flex items-center gap-3">
               <Phone size={15} className="text-[#f4aa1f] shrink-0" />
               <a href={phoneHref} className="text-white/60 hover:text-white text-sm transition-colors">
-                {footer.phone}
+                {footer.phone || ""}
               </a>
             </li>
             <li className="flex items-center gap-3">
               <Mail size={15} className="text-[#f4aa1f] shrink-0" />
-              <a href={`mailto:${footer.email}`} className="text-white/60 hover:text-white text-sm transition-colors">
-                {footer.email}
+              <a href={`mailto:${footer.email || ""}`} className="text-white/60 hover:text-white text-sm transition-colors">
+                {footer.email || ""}
               </a>
             </li>
           </ul>
 
           <div className="flex gap-3 mt-8">
-            {footer.socials.map((social) => {
-              const platform = social.platform || "Facebook";
+            {(footer.socials || []).map((social) => {
+              const platform = social.platform;
+
+              if (!platform) {
+                return null;
+              }
               const Icon = socialIcons[platform];
 
               return (
@@ -533,7 +453,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
         <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40 font-medium">
           <span>{copyright}</span>
           <div className="flex gap-5">
-            {footer.legalLinks.map((item) => (
+            {(footer.legalLinks || []).map((item) => (
               <SmartLink
                 key={`${item.label}-${itemUrl(item)}`}
                 to={itemUrl(item)}
@@ -553,6 +473,7 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
 
 export function Layout() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
   const location = useLocation();
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
   const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
@@ -564,7 +485,13 @@ export function Layout() {
   useEffect(() => {
     const controller = new AbortController();
 
-    fetchCmsSettings(controller.signal).then(setSettings);
+    setSettingsLoaded(false);
+    fetchCmsSettings(controller.signal).then((nextSettings) => {
+      if (!controller.signal.aborted) {
+        setSettings(nextSettings);
+        setSettingsLoaded(true);
+      }
+    });
 
     return () => controller.abort();
   }, [language]);
@@ -589,6 +516,14 @@ export function Layout() {
       iconLink.href = siteIcon;
     }
   }, [settings?.site?.title, settings?.site?.icon]);
+
+  if (!settingsLoaded) {
+    return <CmsLoading fullScreen />;
+  }
+
+  if (!settings) {
+    return null;
+  }
 
   return (
     <SiteSettingsProvider settings={settings}>

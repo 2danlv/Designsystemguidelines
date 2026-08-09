@@ -156,31 +156,6 @@ function tona_cms_nav_menu_payload( $location = 'primary' ) {
     }
 
     if ( ! $menu_id ) {
-        $menu_names = array_filter(
-            array(
-                $current_language ? 'Menu ' . strtoupper( $current_language ) : '',
-                'Menu VN',
-            )
-        );
-        $menu = null;
-
-        foreach ( $menu_names as $menu_name ) {
-            $menu = wp_get_nav_menu_object( $menu_name );
-
-            if ( $menu ) {
-                break;
-            }
-        }
-
-        if ( ! $menu ) {
-            $menus = wp_get_nav_menus();
-            $menu = ! empty( $menus[0] ) ? $menus[0] : null;
-        }
-
-        $menu_id = $menu ? (int) $menu->term_id : 0;
-    }
-
-    if ( ! $menu_id ) {
         return array();
     }
 
@@ -247,11 +222,7 @@ function tona_cms_option_link_field( $option_id, $field_name ) {
 
 function tona_cms_localized_option_link_field( $option_id, $field_name, $language ) {
     if ( 'en' === $language ) {
-        $localized_value = tona_cms_option_link_field( $option_id, $field_name . '_en' );
-
-        if ( '' !== $localized_value ) {
-            return $localized_value;
-        }
+        return tona_cms_option_link_field( $option_id, $field_name . '_en' );
     }
 
     return tona_cms_option_link_field( $option_id, $field_name );
@@ -289,11 +260,11 @@ function tona_cms_project_category_from_value( $value ) {
 
 function tona_cms_projects_page_filter_url( $term, $language ) {
     $page = function_exists( 'tona_cms_get_page_by_template' ) ? tona_cms_get_page_by_template( 'tona-projects' ) : null;
-    $base_url = $page ? tona_cms_frontend_url( get_permalink( $page ) ) : ( 'en' === $language ? '/en/projects' : '/du-an-tona' );
+    $base_url = $page ? tona_cms_frontend_url( get_permalink( $page ) ) : '';
     $base_url = rtrim( $base_url ?: '/', '/' );
 
     if ( '' === $base_url ) {
-        $base_url = '/';
+        return '';
     }
 
     return $base_url . '#' . rawurlencode( $term->slug );
@@ -331,11 +302,7 @@ function tona_cms_project_category_link_items_payload( $items, $language ) {
 function tona_cms_localized_project_category_link_items_payload( $option_id, $field_name, $language ) {
     if ( 'en' === $language && function_exists( 'get_field' ) ) {
         $localized_items = get_field( $field_name . '_en', $option_id );
-        $localized_payload = tona_cms_project_category_link_items_payload( is_array( $localized_items ) ? $localized_items : array(), $language );
-
-        if ( ! empty( $localized_payload ) ) {
-            return $localized_payload;
-        }
+        return tona_cms_project_category_link_items_payload( is_array( $localized_items ) ? $localized_items : array(), $language );
     }
 
     return tona_cms_project_category_link_items_payload( function_exists( 'get_field' ) ? get_field( $field_name, $option_id ) : array(), $language );
@@ -411,7 +378,7 @@ function tona_cms_site_settings_payload() {
                             }
 
                             return array(
-                                'platform' => $item['platform'] ?? 'Facebook',
+                                'platform' => $item['platform'] ?? '',
                                 'url'      => $item['url'] ?? '',
                             );
                         },

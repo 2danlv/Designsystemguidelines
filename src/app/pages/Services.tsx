@@ -22,10 +22,12 @@ import {
 } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
 import { projectDetailPath, sitePath } from "../lib/siteLinks";
+import { CmsLoading } from "../components/CmsLoading";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 type ServiceItem = {
   id: number;
-  icon: LucideIcon;
+  icon: LucideIcon | null;
   iconImage?: string;
   num: string;
   tag: string;
@@ -56,6 +58,7 @@ const TIMELAPSE_SLIDE_DURATION_MS = 20_000;
 const TIMELAPSE_PROGRESS_STEPS = 100;
 
 function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
+  const text = useSiteText();
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
   const [videoReady, setVideoReady] = useState(false);
@@ -162,7 +165,7 @@ function TimelapseSlider({ slides }: { slides: TimelapseSlide[] }) {
           >
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-1">{slide.subtitle}</p>
             <h3 className="text-white font-bold text-xl uppercase tracking-tight leading-snug">{slide.title}</h3>
-            <span className="text-white/50 text-xs font-bold uppercase tracking-widest mt-1 block">{slide.duration} thi công</span>
+            <span className="text-white/50 text-xs font-bold uppercase tracking-widest mt-1 block">{slide.duration} {text("services.construction_suffix")}</span>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -205,6 +208,8 @@ function backgroundStyle(color?: string) {
 export function Services() {
   const [cmsPage, setCmsPage] = useState<ServicesCmsData | null>(null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const text = useSiteText();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -215,13 +220,17 @@ export function Services() {
       fetchCmsProjects(controller.signal),
     ])
       .then(([page, projectItems]) => {
-        setCmsPage(page);
-        setCmsProjects(projectItems);
+        if (!controller.signal.aborted) {
+          setCmsPage(page);
+          setCmsProjects(projectItems);
+          setLoaded(true);
+        }
       })
       .catch((error) => {
         if (!(error instanceof DOMException && error.name === "AbortError")) {
           setCmsPage(null);
           setCmsProjects([]);
+          setLoaded(true);
         }
       });
 
@@ -238,18 +247,18 @@ export function Services() {
 
     return sortedSource.map((service, index) => ({
       id: index + 1,
-      icon: getCmsIcon(service.icon, Wrench),
+      icon: getCmsIcon(service.icon),
       iconImage: service.iconImage || "",
       num: service.number || String(index + 1).padStart(2, "0"),
-      tag: service.featured ? "Thế Mạnh Hàng Đầu" : "",
+      tag: service.tag || "",
       title: service.title || "",
       subtitle: service.subtitle || "",
       desc: service.description || "",
       features: service.features || [],
       img: service.image || "",
       featured: Boolean(service.featured),
-      linkLabel: service.linkLabel || "Xem Dự Án",
-      linkUrl: service.linkUrl || sitePath("projects"),
+      linkLabel: service.linkLabel || "",
+      linkUrl: service.linkUrl || "",
     }));
   }, [cmsPage]);
 
@@ -280,22 +289,26 @@ export function Services() {
     }));
   }, [cmsPage]);
 
-  const featured = servicesList.find((service) => service.featured) || servicesList[0];
-  const rest = featured ? servicesList.filter((service) => service.id !== featured.id) : [];
+  const featured = servicesList.find((service) => service.featured);
+  const rest = featured ? servicesList.filter((service) => service.id !== featured.id) : servicesList;
   const projectItems = cmsProjects;
-  const featuredProject = projectItems.find((p) => p.slug === "nha-may-spartronics-viet-nam-2") || projectItems[0];
+  const featuredProject = projectItems[0];
   const colors = cmsPage?.colors;
-  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Dịch Vụ";
-  const heroTitle = cmsPage?.hero?.title || "Dịch Vụ\nCốt Lõi";
-  const heroDescription = cmsPage?.hero?.description || "Tona Corporation cung cấp các giải pháp xây dựng công nghiệp, thương mại và kỹ thuật cao.";
-  const heroDecorativeText = cmsPage?.hero?.decorativeText || "BUILD";
-  const processTitle = cmsPage?.process?.title || "Quy Trình Làm Việc";
-  const timelapseTitle = cmsPage?.timelapse?.title || "Nhìn Lại\nHành Trình\nThi Công";
-  const timelapseDescription = cmsPage?.timelapse?.description || "Những khoảnh khắc đặc biệt được nén lại - từ mảnh đất trống đến công trình hoàn chỉnh. Mỗi timelapse là bằng chứng cho sự chuyên nghiệp và tốc độ triển khai của Tona.";
-  const ctaTitle = cmsPage?.cta?.title || "Sẵn Sàng Bắt Đầu Dự Án?";
-  const ctaDescription = cmsPage?.cta?.description || "Kết nối với Tona để nhận tư vấn giải pháp phù hợp cho công trình của bạn.";
-  const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Liên Hệ Ngay";
-  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "/lien-he";
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "";
+  const heroTitle = cmsPage?.hero?.title || "";
+  const heroDescription = cmsPage?.hero?.description || "";
+  const heroDecorativeText = cmsPage?.hero?.decorativeText || "";
+  const processTitle = cmsPage?.process?.title || "";
+  const timelapseTitle = cmsPage?.timelapse?.title || "";
+  const timelapseDescription = cmsPage?.timelapse?.description || "";
+  const ctaTitle = cmsPage?.cta?.title || "";
+  const ctaDescription = cmsPage?.cta?.description || "";
+  const ctaLinkLabel = cmsPage?.cta?.linkLabel || "";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "";
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -317,7 +330,7 @@ export function Services() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
             <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">
-              Home
+              {text("common.home")}
             </Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
@@ -432,12 +445,12 @@ export function Services() {
                           className="w-5 h-5 object-contain"
                           aria-hidden
                         />
-                      ) : (
+                      ) : Icon ? (
                         <Icon
                           size={18}
                           className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors"
                         />
-                      )}
+                      ) : null}
                     </div>
                     <span className="text-[#002d17]/8 font-bold text-5xl leading-none tracking-tight group-hover:text-[#f4aa1f]/15 transition-colors select-none">
                       {service.num}
@@ -563,7 +576,7 @@ export function Services() {
             <div className="mb-10">
               <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
               <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
-                Dự Án Tiêu Biểu
+                {text("services.featured_project")}
               </h2>
             </div>
 
@@ -606,9 +619,9 @@ export function Services() {
                 </p>
                 <div className="grid grid-cols-3 gap-3 mb-8">
                   {[
-                    { label: "Diện tích", val: featuredProject.area },
-                    { label: "Khách hàng", val: featuredProject.client },
-                    { label: "Năm", val: featuredProject.year },
+                    { label: text("project.spec.area"), val: featuredProject.area },
+                    { label: text("project.spec.client"), val: featuredProject.client },
+                    { label: text("services.project_year"), val: featuredProject.year },
                   ].map((s) => (
                     <div
                       key={s.label}
@@ -627,7 +640,7 @@ export function Services() {
                   to={projectDetailPath(featuredProject.slug)}
                   className="w-fit flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-[16px] hover:bg-white transition-colors rounded-lg"
                 >
-                  Xem Chi Tiết <ArrowRight size={14} />
+                  {text("services.project_detail")} <ArrowRight size={14} />
                 </Link>
               </div>
             </motion.div>
@@ -637,7 +650,7 @@ export function Services() {
                 to={sitePath("projects")}
                 className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors"
               >
-                Xem Tất Cả Dự Án <ArrowRight size={12} />
+                {text("services.projects_all")} <ArrowRight size={12} />
               </Link>
             </div>
           </div>

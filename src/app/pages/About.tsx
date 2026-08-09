@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "../components/LocalizedLink";
 import {
   ArrowRight,
-  Award,
-  CheckCircle2,
   Shield,
-  TrendingUp,
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -13,9 +10,8 @@ import { fetchCmsPageByTemplate, type AboutCmsData } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
 import { sitePath } from "../lib/siteLinks";
 import { VideoBackground } from "../components/VideoBackground";
-
-const DEFAULT_HERO_VIDEO_URL = "/media/kv-background.mp4";
-const DEFAULT_HERO_VIDEO_POSTER = "/media/kv-background-poster.jpg";
+import { CmsLoading } from "../components/CmsLoading";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 type StatItem = {
   value: string;
@@ -23,7 +19,7 @@ type StatItem = {
 };
 
 type CoreValue = {
-  icon: LucideIcon;
+  icon: LucideIcon | null;
   iconImage?: string;
   title: string;
   desc: string;
@@ -40,75 +36,6 @@ type CertificationItem = {
   title: string;
   org: string;
 };
-
-const fallbackStats: StatItem[] = [
-  { value: "500+", label: "Du An Hoan Thanh" },
-  { value: "800+", label: "Nhan Su" },
-  { value: "15+", label: "Nam Kinh Nghiem" },
-  { value: "50+", label: "Doi Tac Quoc Te" },
-];
-
-const fallbackValues: CoreValue[] = [
-  {
-    icon: Shield,
-    title: "An Toan Tren Het",
-    desc: "Zero accident la kim chi nam bat di bat dich. Moi nhan su Tona duoc dao tao bai ban ve an toan lao dong.",
-  },
-  {
-    icon: Award,
-    title: "Chat Luong Khong Thoa Hiep",
-    desc: "Tung chi tiet nho nhat deu duoc kiem soat nghiem ngat. ISO 9001 khong chi la chung chi, do la van hoa.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Hieu Qua & Tien Do",
-    desc: "Ban giao dung han, toi uu chi phi va giu cam ket voi moi doi tac trong tung giai doan trien khai.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "Tinh Trung Thuc",
-    desc: "Minh bach trong bao cao, trung thuc trong quan he, nen tang cua moi hop tac lau dai.",
-  },
-];
-
-const fallbackTimeline: TimelineItem[] = [
-  {
-    year: "2009",
-    title: "Thanh Lap",
-    desc: "Tona Corporation ra doi tai TP.HCM voi doi ngu ky su chuyen ve thi cong ket cau cong nghiep.",
-  },
-  {
-    year: "2013",
-    title: "Mo Rong MEP",
-    desc: "Ra mat bo phan Co Dien chuyen biet, dua Tona tro thanh nha thau EPC toan dien.",
-  },
-  {
-    year: "2017",
-    title: "ISO 9001",
-    desc: "Nhan chung nhan ISO 9001:2015, khang dinh he thong quan ly chat luong dat tieu chuan quoc te.",
-  },
-  {
-    year: "2020",
-    title: "100+ Nhan Su",
-    desc: "Doi ngu vuot moc 100 ky su va chuyen gia, hoan thanh cac du an quoc te dau tien.",
-  },
-  {
-    year: "2023",
-    title: "800+ Nhan Su",
-    desc: "Cot moc 800+ nhan su, 50+ du an song song va mo rong nang luc thi cong tren toan quoc.",
-  },
-  {
-    year: "2025",
-    title: "Beyond Limits",
-    desc: "Buoc vao ky nguyen moi voi Solar, Green Energy, BIM Technology va muc tieu phat trien ben vung.",
-  },
-];
-
-const fallbackCertifications: CertificationItem[] = [
-  { code: "ISO 9001:2015", title: "Quan Ly Chat Luong", org: "Bureau Veritas" },
-  { code: "ISO 45001:2018", title: "An Toan & Suc Khoe", org: "Bureau Veritas" },
-  { code: "ISO 14001:2015", title: "Quan Ly Moi Truong", org: "Bureau Veritas" },
-];
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -134,8 +61,7 @@ function splitStatValue(value: string) {
 }
 
 function heroVideoUrl(value: string) {
-  const trimmed = value.trim();
-  return /\.(?:mp4|webm)(?:\?.*)?$/i.test(trimmed) ? trimmed : DEFAULT_HERO_VIDEO_URL;
+  return value.trim();
 }
 
 function quoteWithAccent(quote: string, accent: string) {
@@ -157,18 +83,25 @@ function quoteWithAccent(quote: string, accent: string) {
 }
 
 export function About() {
+  const text = useSiteText();
   const [cmsPage, setCmsPage] = useState<AboutCmsData | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetchCmsPageByTemplate<AboutCmsData>("tona-about", controller.signal).then(setCmsPage);
+    fetchCmsPageByTemplate<AboutCmsData>("tona-about", controller.signal).then((page) => {
+      if (!controller.signal.aborted) {
+        setCmsPage(page);
+        setLoaded(true);
+      }
+    });
 
     return () => controller.abort();
   }, []);
 
   const stats = useMemo<StatItem[]>(() => {
-    const source = cmsPage?.stats?.length ? cmsPage.stats : fallbackStats;
+    const source = cmsPage?.stats || [];
 
     return source.map((stat) => ({
       value: stat.value || "",
@@ -177,10 +110,10 @@ export function About() {
   }, [cmsPage]);
 
   const coreValues = useMemo<CoreValue[]>(() => {
-    const source = cmsPage?.values?.length ? cmsPage.values : fallbackValues;
+    const source = cmsPage?.values || [];
 
     return source.map((value) => ({
-      icon: typeof value.icon === "string" ? getCmsIcon(value.icon, Shield) : (value.icon as LucideIcon),
+      icon: getCmsIcon(value.icon),
       iconImage: value.iconImage || "",
       title: value.title || "",
       desc: value.desc || "",
@@ -188,7 +121,7 @@ export function About() {
   }, [cmsPage]);
 
   const timeline = useMemo<TimelineItem[]>(() => {
-    const source = cmsPage?.timeline?.length ? cmsPage.timeline : fallbackTimeline;
+    const source = cmsPage?.timeline || [];
 
     return source.map((item) => ({
       year: item.year || "",
@@ -198,7 +131,7 @@ export function About() {
   }, [cmsPage]);
 
   const certifications = useMemo<CertificationItem[]>(() => {
-    const source = cmsPage?.certifications?.length ? cmsPage.certifications : fallbackCertifications;
+    const source = cmsPage?.certifications || [];
 
     return source.map((cert) => ({
       code: cert.code || "",
@@ -211,28 +144,32 @@ export function About() {
   const hero = cmsPage?.hero;
   const ceo = cmsPage?.ceo;
   const heroVideo = heroVideoUrl(hero?.videoId || "");
-  const heroEyebrow = hero?.eyebrow || "Tona Corporation - Since 2009";
-  const heroTitle = hero?.title || "Ve Tona\nCorporation";
-  const heroDescription = hero?.description || "Hon 15 nam kien tao nhung cong trinh vuot chuan, Tona Corporation la lua chon hang dau cua cac tap doan da quoc gia tai Viet Nam.";
-  const heroBottomLabel = hero?.bottomLabel || "Est. 2009 - Hon 15 Nam Dong Hanh";
-  const missionEyebrow = cmsPage?.missionVision?.missionEyebrow || "Su Menh";
-  const missionText = cmsPage?.missionVision?.missionText || "Mang den giai phap xay dung chat luong cao nhat, toi uu hoa chi phi va thoi gian, gop phan phat trien ben vung cho doi tac va cong dong.";
-  const visionEyebrow = cmsPage?.missionVision?.visionEyebrow || "Tam Nhin";
-  const visionText = cmsPage?.missionVision?.visionText || "Tro thanh tong thau xay dung cong nghiep va thuong mai hang dau khu vuc, la su lua chon uu tien cua cac tap doan da quoc gia tai Dong Nam A.";
-  const valuesTitle = cmsPage?.valuesTitle || "Gia Tri Cot Loi";
-  const timelineTitle = cmsPage?.timelineTitle || "Hanh Trinh Phat Trien";
-  const certificationsTitle = cmsPage?.certificationsTitle || "Chung Nhan Quoc Te";
-  const ctaTitle = cmsPage?.cta?.title || "Cung Tona kien tao cong trinh tiep theo";
-  const ctaDescription = cmsPage?.cta?.description || "Tu nha may cong nghe cao den resort 5 sao, chung toi san sang dong hanh.";
-  const primaryLabel = cmsPage?.cta?.primaryLabel || "Xem Du An";
-  const primaryUrl = cmsPage?.cta?.primaryUrl || sitePath("projects");
-  const secondaryLabel = cmsPage?.cta?.secondaryLabel || "Doi Ngu Lanh Dao";
-  const secondaryUrl = cmsPage?.cta?.secondaryUrl || sitePath("members");
-  const ceoEyebrow = ceo?.eyebrow || "Thong Diep Lanh Dao";
-  const ceoQuote = ceo?.quote || "Tona khong chi xay cong trinh, chung toi xay dung long tin. Moi du an la mot cam ket: dung tien do, dung chat luong va tuyet doi an toan.";
-  const ceoAccent = ceo?.accent || "chung toi xay dung long tin";
-  const ceoName = ceo?.name || "Nguyen Binh Phuong";
-  const ceoRole = ceo?.role || "Chief Executive Officer, Tona Corporation";
+  const heroEyebrow = hero?.eyebrow || "";
+  const heroTitle = hero?.title || "";
+  const heroDescription = hero?.description || "";
+  const heroBottomLabel = hero?.bottomLabel || "";
+  const missionEyebrow = cmsPage?.missionVision?.missionEyebrow || "";
+  const missionText = cmsPage?.missionVision?.missionText || "";
+  const visionEyebrow = cmsPage?.missionVision?.visionEyebrow || "";
+  const visionText = cmsPage?.missionVision?.visionText || "";
+  const valuesTitle = cmsPage?.valuesTitle || "";
+  const timelineTitle = cmsPage?.timelineTitle || "";
+  const certificationsTitle = cmsPage?.certificationsTitle || "";
+  const ctaTitle = cmsPage?.cta?.title || "";
+  const ctaDescription = cmsPage?.cta?.description || "";
+  const primaryLabel = cmsPage?.cta?.primaryLabel || "";
+  const primaryUrl = cmsPage?.cta?.primaryUrl || "";
+  const secondaryLabel = cmsPage?.cta?.secondaryLabel || "";
+  const secondaryUrl = cmsPage?.cta?.secondaryUrl || "";
+  const ceoEyebrow = ceo?.eyebrow || "";
+  const ceoQuote = ceo?.quote || "";
+  const ceoAccent = ceo?.accent || "";
+  const ceoName = ceo?.name || "";
+  const ceoRole = ceo?.role || "";
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -240,9 +177,8 @@ export function About() {
         <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
           <VideoBackground
             src={heroVideo}
-            title="Tona Timelapse"
+            title={text("common.video_title")}
             opacity={0.52}
-            poster={DEFAULT_HERO_VIDEO_POSTER}
           />
         </div>
 
@@ -346,7 +282,7 @@ export function About() {
               return (
                 <motion.div key={`${value.title}-${index}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group p-8 bg-white/90 backdrop-blur-sm hover:bg-white transition-colors cursor-pointer border border-white/60 rounded-2xl">
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center mb-5 group-hover:bg-[#f4aa1f] transition-colors rounded-xl">
-                    {value.iconImage ? <img src={value.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden /> : <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />}
+                    {value.iconImage ? <img src={value.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden /> : Icon ? <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" /> : null}
                   </div>
                   <h3 className="font-semibold text-[#002d17] group-hover:text-[#46aa85] uppercase text-base tracking-tight mb-3 transition-colors">{value.title}</h3>
                   <p className="text-[#002d17]/55 text-[16px] leading-relaxed">{value.desc}</p>

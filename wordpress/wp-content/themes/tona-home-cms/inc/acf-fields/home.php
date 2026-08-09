@@ -12,7 +12,7 @@ function tona_cms_home_title_image_field() {
         'field_tona_home_hero_title_image',
         'Hero Title PNG',
         'home_hero_title_image',
-        'Upload the transparent PNG displayed in place of the Build It heading. Leave empty to use the text fallback.'
+        'Upload the transparent PNG displayed in place of the heading. When omitted, the localized Hero Title Text is displayed.'
     );
 
     $field['wrapper']['width'] = '50';
@@ -34,9 +34,9 @@ function tona_cms_home_load_fields( $fields, $parent ) {
 }
 add_filter( 'acf/load_fields', 'tona_cms_home_load_fields', 20, 2 );
 
-function tona_cms_home_title_fallback_field( $field ) {
-    $field['label'] = 'Hero Title Text (Fallback)';
-    $field['instructions'] = 'Used only when no transparent Hero Title PNG has been uploaded.';
+function tona_cms_home_title_text_field( $field ) {
+    $field['label'] = 'Hero Title Text';
+    $field['instructions'] = 'Localized accessible heading text; it is also displayed when no transparent Hero Title PNG is uploaded.';
     return $field;
 }
-add_filter( 'acf/load_field/key=field_tona_home_hero_title', 'tona_cms_home_title_fallback_field', 20 );
+add_filter( 'acf/load_field/key=field_tona_home_hero_title', 'tona_cms_home_title_text_field', 20 );

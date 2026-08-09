@@ -12,9 +12,10 @@ import {
   type JobsCmsData,
 } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 export type PerkItem = {
-  icon: LucideIcon;
+  icon: LucideIcon | null;
   iconImage?: string;
   title: string;
   desc: string;
@@ -34,8 +35,6 @@ export type InternPosition = {
   desc: string;
 };
 
-export const allDepartmentsLabel = "Tất Cả";
-
 function isInternshipJob(job: JobPost) {
   const categoryText = [
     ...(job.categorySlugs || []),
@@ -54,11 +53,11 @@ function internPositionFromJob(job: JobPost): InternPosition {
   return {
     id: String(job.id),
     title: job.title,
-    subtitle: job.type || "Internship",
+    subtitle: job.type || "",
     department: job.department,
     duration: job.level || job.date || "",
     location: job.location,
-    slots: job.slots || 1,
+    slots: job.slots,
     icon: GraduationCap,
     requirements: job.requirements || [],
     benefits: job.benefits || [],
@@ -87,12 +86,16 @@ export type JobsPageViewModel = {
   interns: JobsCmsData["interns"];
   cultureTeaser: JobsCmsData["cultureTeaser"];
   applicationModal: JobsCmsData["applicationModal"];
+  loaded: boolean;
 };
 
 export function useJobsPage({}: UseJobsPageOptions = {}): JobsPageViewModel {
+  const text = useSiteText();
+  const allDepartmentsLabel = text("jobs.all_departments");
   const [activeDept, setActiveDept] = useState(allDepartmentsLabel);
   const [cmsPage, setCmsPage] = useState<JobsCmsData | null>(null);
   const [cmsJobs, setCmsJobs] = useState<JobPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -104,8 +107,11 @@ export function useJobsPage({}: UseJobsPageOptions = {}): JobsPageViewModel {
       pageRequest,
       fetchCmsJobs(controller.signal),
     ]).then(([page, jobPosts]) => {
-      setCmsPage(page);
-      setCmsJobs(jobPosts);
+      if (!controller.signal.aborted) {
+        setCmsPage(page);
+        setCmsJobs(jobPosts);
+        setLoaded(true);
+      }
     });
 
     return () => controller.abort();
@@ -134,7 +140,7 @@ export function useJobsPage({}: UseJobsPageOptions = {}): JobsPageViewModel {
     return cmsPage.perks
       .filter((perk) => perk.title?.trim() || perk.desc?.trim() || perk.iconImage)
       .map((perk) => ({
-        icon: getCmsIcon(perk.icon, TrendingUp),
+        icon: getCmsIcon(perk.icon),
         iconImage: perk.iconImage || "",
         title: perk.title || "",
         desc: perk.desc || "",
@@ -161,17 +167,18 @@ export function useJobsPage({}: UseJobsPageOptions = {}): JobsPageViewModel {
     perks,
     internPositions,
     colors: cmsPage?.colors,
-    breadcrumbLabel: cmsPage?.hero?.breadcrumbLabel || "Tuyển Dụng",
-    heroTitle: cmsPage?.hero?.title || "Gia Nhập\nĐội Ngũ Tona",
-    heroDescription: cmsPage?.hero?.description || "Môi trường làm việc chuyên nghiệp, dự án đỉnh cao, cơ hội thăng tiến rõ ràng - Tona đang tìm kiếm những tài năng cùng chúng tôi kiến tạo công trình thế kỷ.",
-    heroDecorativeText: cmsPage?.hero?.decorativeText || "JOIN",
-    perksEyebrow: cmsPage?.perksEyebrow || "Tại Sao Chọn Tona?",
-    jobsTitle: cmsPage?.jobsTitle || "Vị Trí Đang Tuyển",
-    emptyJobsText: cmsPage?.emptyJobsText || "Không có vị trí nào trong bộ phận này.",
+    breadcrumbLabel: cmsPage?.hero?.breadcrumbLabel || "",
+    heroTitle: cmsPage?.hero?.title || "",
+    heroDescription: cmsPage?.hero?.description || "",
+    heroDecorativeText: cmsPage?.hero?.decorativeText || "",
+    perksEyebrow: cmsPage?.perksEyebrow || "",
+    jobsTitle: cmsPage?.jobsTitle || "",
+    emptyJobsText: cmsPage?.emptyJobsText || "",
     spontaneous: cmsPage?.spontaneous,
     interns: cmsPage?.interns,
     cultureTeaser: cmsPage?.cultureTeaser,
     applicationModal: cmsPage?.applicationModal,
+    loaded,
   };
 }
 

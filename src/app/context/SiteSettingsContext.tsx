@@ -24,5 +24,5 @@ export function useSiteSettings() {
 export function useSiteText() {
   const settings = useSiteSettings();
 
-  return (key: string, fallback: string) => settings?.ui?.[key] || fallback;
+  return (key: string) => settings?.ui?.[key] || "";
 }

@@ -9,7 +9,7 @@
 
   Run `npm run dev` to start the development server.
 
-  For the WordPress CMS integration, set `VITE_WP_API_BASE` to your WordPress REST base URL, for example `http://localhost/wordpress/wp-json`. If it is not set, the React app falls back to `/wp-json`.
+For the WordPress CMS integration, set `VITE_WP_API_BASE` to your WordPress REST base URL, for example `http://localhost/wordpress/wp-json`. If it is not set, the React app uses `/wp-json`.
 
   Vite reads env files at build time. After changing `VITE_WP_API_BASE`, run the matching build command again and upload the new `dist`; changing env files on the server will not change an already built bundle.
 
@@ -27,7 +27,7 @@ Important locations:
 Current conflict-reduction pattern:
 
 - UI files should call a page hook such as `useJobsPage(...)`.
-- Hooks return a stable view model for the UI, for example `heroTitle`, `filteredJobs`, `perks`, `internPositions`, `colors`, and CTA data.
+- Hooks return a stable view model sourced exclusively from WordPress, for example `heroTitle`, `filteredJobs`, `perks`, `internPositions`, `colors`, and CTA data.
 - WordPress-specific details such as page slug, REST endpoint, category logic, ACF mapping, and post filtering should live in `src/app/cms`, not inside page JSX.
 
 Example from `Jobs.tsx`:
@@ -40,11 +40,8 @@ const {
   internPositions,
   heroTitle,
   colors,
-} = useJobsPage({
-  fallbackJobs: fallbackJobs as JobPost[],
-  fallbackPerks,
-  fallbackInternPositions,
-});
+  loaded,
+} = useJobsPage();
 ```
 
 When adding CMS to another page, prefer creating a hook first:

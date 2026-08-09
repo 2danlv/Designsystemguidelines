@@ -4,6 +4,8 @@ import { ChevronRight, Heart, ArrowRight, type LucideIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { fetchCmsPageByTemplate, type CultureCmsData } from "../lib/wordpress";
+import { CmsLoading } from "../components/CmsLoading";
+import { useSiteText } from "../context/SiteSettingsContext";
 import { getCmsIcon } from "../lib/cmsIcons";
 import { sitePath } from "../lib/siteLinks";
 
@@ -26,7 +28,7 @@ type CultureActivity = {
   subtitle: string;
   desc: string;
   image: string;
-  icon: LucideIcon;
+  icon: LucideIcon | null;
   iconImage?: string;
   color: string;
 };
@@ -46,12 +48,19 @@ function renderLines(text: string) {
 }
 
 export function Culture() {
+  const text = useSiteText();
   const [cmsPage, setCmsPage] = useState<CultureCmsData | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetchCmsPageByTemplate<CultureCmsData>("tona-culture", controller.signal).then(setCmsPage);
+    fetchCmsPageByTemplate<CultureCmsData>("tona-culture", controller.signal).then((page) => {
+      if (!controller.signal.aborted) {
+        setCmsPage(page);
+        setLoaded(true);
+      }
+    });
 
     return () => controller.abort();
   }, []);
@@ -80,7 +89,7 @@ export function Culture() {
       subtitle: item.subtitle || "",
       desc: item.description || "",
       image: item.image || "",
-      icon: getCmsIcon(item.icon, Heart),
+      icon: getCmsIcon(item.icon),
       iconImage: item.iconImage || "",
       color: item.color || "#f4aa1f",
     }));
@@ -102,35 +111,39 @@ export function Culture() {
 
   const galleryPhotos = cmsPage?.gallery?.photos || [];
   const colors = cmsPage?.colors;
-  const heroTitle = cmsPage?.hero?.title || "Tona -\nHon Ca\nMot Noi Lam Viec";
-  const heroDescription = cmsPage?.hero?.description || "Tai Tona, moi thanh vien duoc ton trong, gan ket va cung nhau phat trien qua nhung hoat dong van hoa noi bo soi noi va y nghia.";
-  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Cuoc Song Tona";
-  const decorativeText = cmsPage?.hero?.decorativeText || "TONA";
-  const themesTitle = cmsPage?.themesTitle || "Chu De Nam";
-  const themesDescription = cmsPage?.themesDescription || "Moi nam Tona lua chon mot chu de chien luoc, dinh huong tinh than va hanh dong cho toan bo to chuc.";
-  const activitiesTitle = cmsPage?.activitiesTitle || "Hoat Dong Van Hoa";
+  const heroTitle = cmsPage?.hero?.title || "";
+  const heroDescription = cmsPage?.hero?.description || "";
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "";
+  const decorativeText = cmsPage?.hero?.decorativeText || "";
+  const themesTitle = cmsPage?.themesTitle || "";
+  const themesDescription = cmsPage?.themesDescription || "";
+  const activitiesTitle = cmsPage?.activitiesTitle || "";
   const social = cmsPage?.socialResponsibility;
-  const socialEyebrow = social?.eyebrow || "Trách Nhiệm Xã Hội";
-  const socialTitle = social?.title || "CSR & Trách Nhiệm\nCộng Đồng";
-  const socialDescription = social?.description || "Từ Ươm Tết Đón Nắng Xuân đến SolarLab và chương trình thực tập sinh - Tona cam kết đồng hành cùng cộng đồng theo những cách thiết thực và lâu dài.";
+  const socialEyebrow = social?.eyebrow || "";
+  const socialTitle = social?.title || "";
+  const socialDescription = social?.description || "";
   const socialImage = social?.image || "";
   const socialBadges = social?.badges || [];
-  const socialLinkLabel = social?.linkLabel || "Khám Phá CSR";
-  const socialLinkUrl = social?.linkUrl || "/trach-nhiem-cong-dong";
-  const academyEyebrow = cmsPage?.academy?.eyebrow || "Phat Trien Con Nguoi";
-  const academyTitle = cmsPage?.academy?.title || "TONA Academy -\nHoc De Vuon Xa";
-  const academyDescription = cmsPage?.academy?.description || "TONA Academy la chuong trinh dao tao noi bo toan dien, tu ky nang ky thuat chuyen sau den nang luc lanh dao va quan ly du an.";
+  const socialLinkLabel = social?.linkLabel || "";
+  const socialLinkUrl = social?.linkUrl || "";
+  const academyEyebrow = cmsPage?.academy?.eyebrow || "";
+  const academyTitle = cmsPage?.academy?.title || "";
+  const academyDescription = cmsPage?.academy?.description || "";
   const academyImage = cmsPage?.academy?.image || "";
-  const academyLinkLabel = cmsPage?.academy?.linkLabel || "Gia Nhap Tona";
-  const academyLinkUrl = cmsPage?.academy?.linkUrl || sitePath("jobs");
-  const galleryTitle = cmsPage?.gallery?.title || "Khoanh Khac Tona";
-  const ctaTitle = cmsPage?.cta?.title || "Muon tro thanh mot phan cua Tona?";
-  const ctaDescription = cmsPage?.cta?.description || "Chung toi luon tim kiem nhung tai nang chia se cung gia tri va dam me.";
-  const ctaLinkLabel = cmsPage?.cta?.linkLabel || "Xem Co Hoi Nghe Nghiep";
-  const ctaLinkUrl = cmsPage?.cta?.linkUrl || sitePath("jobs");
+  const academyLinkLabel = cmsPage?.academy?.linkLabel || "";
+  const academyLinkUrl = cmsPage?.academy?.linkUrl || "";
+  const galleryTitle = cmsPage?.gallery?.title || "";
+  const ctaTitle = cmsPage?.cta?.title || "";
+  const ctaDescription = cmsPage?.cta?.description || "";
+  const ctaLinkLabel = cmsPage?.cta?.linkLabel || "";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "";
   const regularActivities = activities
     .filter((activity) => !`${activity.title} ${activity.subtitle}`.toLowerCase().includes("csr"))
     .slice(0, 3);
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -138,7 +151,7 @@ export function Culture() {
       <div className="bg-[#002d17] pt-8 pb-20 relative overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">{text("common.home")}</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -268,9 +281,9 @@ export function Culture() {
                     <div className="absolute top-4 left-4 flex items-center gap-2 bg-[#002d17]/70 px-3 py-2 rounded-xl">
                       {activity.iconImage ? (
                         <img src={activity.iconImage} alt="" className="w-4 h-4 object-contain" aria-hidden />
-                      ) : (
+                      ) : Icon ? (
                         <Icon size={16} className="text-[#f4aa1f]" />
-                      )}
+                      ) : null}
                       <span className="text-white font-bold text-xs uppercase tracking-widest">{activity.subtitle}</span>
                     </div>
                   </div>
@@ -377,7 +390,7 @@ export function Culture() {
           </div>
 
           <div className="rounded-xl overflow-hidden">
-            <img src={academyImage} alt="Tona Academy" className="w-full aspect-[4/3] object-cover rounded-xl" />
+            <img src={academyImage} alt={text("culture.academy_image_alt")} className="w-full aspect-[4/3] object-cover rounded-xl" />
           </div>
         </div>
       </section>
@@ -402,7 +415,7 @@ export function Culture() {
                   transition={{ delay: index * 0.08 }}
                   className="overflow-hidden group cursor-pointer"
                 >
-                  <img src={src} alt="Tona Culture" className="w-full h-auto block group-hover:scale-105 transition-transform duration-500 ease-out" />
+                  <img src={src} alt={text("culture.gallery_image_alt")} className="w-full h-auto block group-hover:scale-105 transition-transform duration-500 ease-out" />
                 </motion.div>
               ))}
             </Masonry>

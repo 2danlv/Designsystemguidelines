@@ -5,6 +5,8 @@ import { ArrowLeft, ChevronRight, Tag, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsNews, fetchCmsNewsPost, type NewsPost } from "../lib/wordpress";
 import { newsDetailPath, sitePath } from "../lib/siteLinks";
+import { CmsLoading } from "../components/CmsLoading";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 function normalizeNewsText(value = "") {
   return value
@@ -20,6 +22,7 @@ function normalizeNewsText(value = "") {
 }
 
 export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
+  const text = useSiteText();
   const { slug: routeSlug } = useParams<{ slug: string }>();
   const slug = slugOverride || routeSlug;
   const navigate = useNavigate();
@@ -38,9 +41,11 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
       fetchCmsNewsPost(slug, controller.signal),
       fetchCmsNews(controller.signal),
     ]).then(([article, articles]) => {
-      setCmsArticle(article);
-      setCmsNews(articles);
-      setLoaded(true);
+      if (!controller.signal.aborted) {
+        setCmsArticle(article);
+        setCmsNews(articles);
+        setLoaded(true);
+      }
     });
 
     return () => controller.abort();
@@ -53,17 +58,17 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
     return (
       <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center gap-6">
         <p className="text-[#002d17]/40 font-bold uppercase tracking-widest text-sm">
-          Không tìm thấy bài viết.
+          {text("news.not_found")}
         </p>
         <Link to={sitePath("news")} className="flex items-center gap-2 text-[#f4aa1f] font-bold uppercase tracking-widest text-sm hover:text-[#002d17] transition-colors">
-          <ArrowLeft size={14} /> Quay lại Tin Tức
+          <ArrowLeft size={14} /> {text("news.back")}
         </Link>
       </div>
     );
   }
 
-  if (!article) {
-    return null;
+  if (!loaded) {
+    return <CmsLoading />;
   }
 
   const relatedList = article.related?.length
@@ -82,9 +87,9 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
       <div className="bg-[#002d17] pt-8 pb-0">
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8 flex-wrap">
-            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">{text("common.home")}</Link>
             <ChevronRight size={12} />
-            <Link to={sitePath("news")} className="hover:text-[#f4aa1f] transition-colors">Tin Tức</Link>
+            <Link to={sitePath("news")} className="hover:text-[#f4aa1f] transition-colors">{text("common.news")}</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f] line-clamp-1 max-w-xs">{article.category}</span>
           </div>
@@ -104,10 +109,10 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
 
           <div className="flex items-center gap-3 pb-8 border-b border-white/10">
             <div className="w-8 h-8 rounded-full bg-[#46aa85] flex items-center justify-center text-white font-bold text-xs shrink-0">
-              {(article.author || "T").charAt(0)}
+              {(article.author || "").charAt(0)}
             </div>
             <p className="text-white/70 text-xs font-bold uppercase tracking-widest">
-              {article.author || "Ban Biên Tập Tona"}
+              {article.author || ""}
             </p>
           </div>
         </div>
@@ -158,14 +163,14 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
                 onClick={() => navigate(-1)}
                 className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#002d17] font-bold text-xs uppercase tracking-widest transition-colors"
               >
-                <ArrowLeft size={14} /> Quay lại
+                <ArrowLeft size={14} /> {text("common.back")}
               </button>
             </div>
           </motion.article>
 
           <aside className="lg:col-span-4 flex flex-col gap-6">
             <div className="bg-[#f9f9f7] rounded-2xl p-6">
-              <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">Bài Viết Liên Quan</p>
+              <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-4">{text("news.related")}</p>
               <div className="flex flex-col gap-5">
                 {relatedList.map((item) => (
                   <Link key={item.id} to={newsDetailPath(item.slug)} className="group flex gap-3">
@@ -186,13 +191,13 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
 
             <div className="bg-[#002d17] rounded-2xl p-6">
               <div className="w-8 h-0.5 bg-[#f4aa1f] mb-4" />
-              <h4 className="font-bold text-white uppercase tracking-tight mb-2">Dự Án Của Bạn?</h4>
-              <p className="text-white/50 text-sm font-medium mb-5 leading-relaxed">Liên hệ Tona ngay hôm nay để được tư vấn.</p>
+              <h4 className="font-bold text-white uppercase tracking-tight mb-2">{text("news.cta_title")}</h4>
+              <p className="text-white/50 text-sm font-medium mb-5 leading-relaxed">{text("news.cta_description")}</p>
               <Link
                 to={sitePath("jobs")}
                 className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-4 py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-white transition-colors rounded-lg w-fit"
               >
-                Liên Hệ <ArrowRight size={12} />
+                {text("news.cta_button")} <ArrowRight size={12} />
               </Link>
             </div>
           </aside>
@@ -204,10 +209,10 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
           <div className="flex items-center justify-between mb-10">
             <div>
               <div className="w-10 h-0.5 bg-[#f4aa1f] mb-3" />
-              <h3 className="text-2xl font-bold text-[#002d17] uppercase tracking-tight">Tin Tức Khác</h3>
+              <h3 className="text-2xl font-bold text-[#002d17] uppercase tracking-tight">{text("news.more")}</h3>
             </div>
             <Link to={sitePath("news")} className="flex items-center gap-2 text-[#002d17]/50 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
-              Tất Cả <ArrowRight size={12} />
+              {text("common.all")} <ArrowRight size={12} />
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -233,7 +238,7 @@ export function NewsDetail({ slugOverride }: { slugOverride?: string } = {}) {
                       {item.title}
                     </h4>
                     <div className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest">
-                      Đọc tiếp <ArrowRight size={11} />
+                      {text("news.read_more")} <ArrowRight size={11} />
                     </div>
                   </div>
                 </Link>

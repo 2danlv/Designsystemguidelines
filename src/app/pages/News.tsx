@@ -4,6 +4,8 @@ import { ArrowRight, ChevronRight, Clock, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { fetchCmsNews, fetchCmsPageByTemplate, type NewsCmsData, type NewsPost } from "../lib/wordpress";
 import { newsDetailPath, sitePath } from "../lib/siteLinks";
+import { CmsLoading } from "../components/CmsLoading";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -19,11 +21,13 @@ function backgroundStyle(color?: string) {
 }
 
 export function News() {
+  const text = useSiteText();
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQ, setSearchQ] = useState("");
   const [visibleCount, setVisibleCount] = useState(6);
   const [cmsPage, setCmsPage] = useState<NewsCmsData | null>(null);
   const [cmsNews, setCmsNews] = useState<NewsPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -32,8 +36,11 @@ export function News() {
       fetchCmsPageByTemplate<NewsCmsData>("tona-news", controller.signal),
       fetchCmsNews(controller.signal),
     ]).then(([page, articles]) => {
-      setCmsPage(page);
-      setCmsNews(articles);
+      if (!controller.signal.aborted) {
+        setCmsPage(page);
+        setCmsNews(articles);
+        setLoaded(true);
+      }
     });
 
     return () => controller.abort();
@@ -71,18 +78,22 @@ export function News() {
   const visibleArticles = filtered.slice(0, visibleCount);
   const featured = articles[0];
   const colors = cmsPage?.colors;
-  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Tin Tức";
-  const heroTitle = cmsPage?.hero?.title || "Tin Tức\n& Sự Kiện";
-  const heroDescription = cmsPage?.hero?.description || "Cập nhật mới nhất về dự án, đối tác và các hoạt động nổi bật của Tona Corporation.";
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "";
+  const heroTitle = cmsPage?.hero?.title || "";
+  const heroDescription = cmsPage?.hero?.description || "";
   const listing = cmsPage?.listing;
   const cta = cmsPage?.cta;
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="w-full bg-white min-h-screen">
       <div className="bg-[#002d17] pt-8 pb-20" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">{text("common.home")}</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -100,7 +111,7 @@ export function News() {
         <div className="bg-[#f9f9f7] border-b border-[#002d17]/10">
           <div className="max-w-7xl mx-auto px-6 py-14">
             <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-6">
-              {listing?.featuredLabel || "Tin Nổi Bật"}
+              {listing?.featuredLabel || ""}
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <Link to={newsDetailPath(featured.slug)} className="lg:col-span-7 relative overflow-hidden aspect-[16/9] bg-[#bcd8cb] group cursor-pointer rounded-2xl block">
@@ -131,7 +142,7 @@ export function News() {
                   to={newsDetailPath(featured.slug)}
                   className="mt-2 flex items-center gap-2 bg-[#002d17] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#f4aa1f] hover:text-[#002d17] transition-colors w-fit rounded-lg"
                 >
-                  Đọc Tiếp <ArrowRight size={14} />
+                  {text("news.read_more")} <ArrowRight size={14} />
                 </Link>
               </div>
             </div>
@@ -150,7 +161,7 @@ export function News() {
                   : "border border-[#002d17]/20 text-[#002d17]/60 hover:border-[#002d17] hover:text-[#002d17]"
               }`}
             >
-              Tất Cả
+              {text("common.all")}
             </button>
             {categories.map((cat) => (
               <button
@@ -171,7 +182,7 @@ export function News() {
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#002d17]/30" />
             <input
               type="text"
-              placeholder={listing?.searchPlaceholder || "Tìm kiếm..."}
+              placeholder={listing?.searchPlaceholder || ""}
               value={searchQ}
               onChange={(event) => setSearchQ(event.target.value)}
               className="w-full pl-8 pr-4 py-2 border border-[#002d17]/20 text-[#002d17] text-sm font-medium focus:outline-none focus:border-[#f4aa1f] bg-white placeholder:text-[#002d17]/30 rounded-lg"
@@ -184,7 +195,7 @@ export function News() {
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-[#002d17]/40 font-bold uppercase tracking-widest text-sm">
-              {listing?.emptyText || "Không tìm thấy bài viết phù hợp."}
+              {listing?.emptyText || ""}
             </p>
           </div>
         ) : (
@@ -213,7 +224,7 @@ export function News() {
                     )}
                     {item.id === featured?.id && (
                       <div className="absolute bottom-3 left-3 bg-[#f4aa1f] text-[#002d17] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                        Nổi Bật
+                        {text("news.featured_badge")}
                       </div>
                     )}
                   </div>
@@ -227,7 +238,7 @@ export function News() {
                       {item.excerpt}
                     </p>
                     <div className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">
-                      Đọc tiếp <ArrowRight size={12} />
+                      {text("news.read_more")} <ArrowRight size={12} />
                     </div>
                   </div>
                 </Link>
@@ -243,7 +254,7 @@ export function News() {
               onClick={() => setVisibleCount((count) => count + 3)}
               className="border-2 border-[#002d17] text-[#002d17] px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-white transition-colors rounded-xl"
             >
-              {listing?.loadMoreLabel || "Xem Thêm Tin Tức"}
+              {listing?.loadMoreLabel || ""}
             </button>
           </div>
         )}

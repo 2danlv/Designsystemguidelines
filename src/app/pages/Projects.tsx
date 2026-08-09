@@ -5,6 +5,8 @@ import { motion } from "motion/react";
 import { useLocation, useNavigate } from "react-router";
 import { fetchCmsPageByTemplate, fetchCmsProjects, type ProjectPost, type ProjectsCmsData } from "../lib/wordpress";
 import { projectDetailPath, sitePath } from "../lib/siteLinks";
+import { CmsLoading } from "../components/CmsLoading";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 
 function renderLines(text: string) {
@@ -44,6 +46,8 @@ export function Projects() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [cmsPage, setCmsPage] = useState<ProjectsCmsData | null>(null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const text = useSiteText();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -54,8 +58,11 @@ export function Projects() {
       fetchCmsPageByTemplate<ProjectsCmsData>("tona-projects", controller.signal),
       fetchCmsProjects(controller.signal),
     ]).then(([page, projectPosts]) => {
-      setCmsPage(page);
-      setCmsProjects(projectPosts);
+      if (!controller.signal.aborted) {
+        setCmsPage(page);
+        setCmsProjects(projectPosts);
+        setLoaded(true);
+      }
     });
 
     return () => controller.abort();
@@ -112,19 +119,23 @@ export function Projects() {
       : projectItems.filter((project) => projectCategoryValues(project).includes(activeFilter));
 
   const colors = cmsPage?.colors;
-  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Du An";
-  const heroTitle = cmsPage?.hero?.title || "Du An\nNoi Bat";
-  const heroDescription = cmsPage?.hero?.description || "Tong hop cac cong trinh tieu bieu Tona Corporation da thuc hien.";
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "";
+  const heroTitle = cmsPage?.hero?.title || "";
+  const heroDescription = cmsPage?.hero?.description || "";
   const stats = cmsPage?.stats || [];
-  const allFilterLabel = "Tất Cả";
+  const allFilterLabel = text("projects.all");
   const cta = cmsPage?.cta;
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="w-full bg-white min-h-screen">
       <div className="relative bg-[#002d17] pt-8 pb-16 overflow-hidden" style={backgroundStyle(colors?.heroBackground)}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest">
-            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">{text("common.home")}</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -247,7 +258,7 @@ export function Projects() {
                     </ul>
                   ) : null}
                   <div className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">
-                    Xem chi tiet <ArrowRight size={12} />
+                    {text("projects.detail")} <ArrowRight size={12} />
                   </div>
                 </div>
               </Link>
@@ -261,15 +272,15 @@ export function Projects() {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h3 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight">
-              {cta?.title || "Ban co du an tuong tu?"}
+              {cta?.title || ""}
             </h3>
-            <p className="text-white/50 mt-2 text-sm">{cta?.description || "Hay de Tona Corporation dong hanh cung ban tu ban ve den hoan thien."}</p>
+            <p className="text-white/50 mt-2 text-sm">{cta?.description || ""}</p>
           </div>
           <Link
-            to={cta?.linkUrl || sitePath("jobs")}
+            to={cta?.linkUrl || ""}
             className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
           >
-            {cta?.linkLabel || "Lien He Tu Van"}
+            {cta?.linkLabel || ""}
           </Link>
         </div>
       </div>

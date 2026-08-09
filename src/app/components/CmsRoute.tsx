@@ -13,6 +13,7 @@ import { NewsDetail } from "../pages/NewsDetail";
 import { ProjectDetail } from "../pages/ProjectDetail";
 import { Projects } from "../pages/Projects";
 import { Services } from "../pages/Services";
+import { CmsLoading } from "./CmsLoading";
 
 function renderPageByTemplate({ template, routeKey }: { template?: string; routeKey: string }) {
   switch (template) {
@@ -65,7 +66,7 @@ export function CmsRoute() {
   }
 
   if (!loaded) {
-    return <div className="min-h-[50vh] bg-white" />;
+    return <CmsLoading />;
   }
 
   if (routeMatch?.type === "project" && routeMatch.slug) {

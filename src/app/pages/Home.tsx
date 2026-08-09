@@ -21,22 +21,19 @@ import { getCmsIcon } from "../lib/cmsIcons";
 import { useSiteText } from "../context/SiteSettingsContext";
 import { newsDetailPath, projectDetailPath, sitePath } from "../lib/siteLinks";
 import { VideoBackground } from "../components/VideoBackground";
+import { CmsLoading } from "../components/CmsLoading";
 
 type HomeService = {
   id: number | string;
-  icon: LucideIcon;
+  icon: LucideIcon | null;
   title: string;
   subtitle: string;
   desc: string;
   highlight?: boolean;
 };
 
-const DEFAULT_HOME_VIDEO_URL = "/media/kv-background.mp4";
-const DEFAULT_HOME_VIDEO_POSTER = "/media/kv-background-poster.jpg";
-
 function heroVideoUrl(value?: string) {
-  const raw = (value || "").trim();
-  return /\.(?:mp4|webm)(?:\?.*)?$/i.test(raw) ? raw : DEFAULT_HOME_VIDEO_URL;
+  return (value || "").trim();
 }
 
 // HERO SECTION
@@ -44,14 +41,14 @@ function HeroSection({ content }: { content?: HomeCmsData["hero"] }) {
   const text = useSiteText();
   const videoUrl = heroVideoUrl(content?.videoId);
   const backgroundColor = content?.backgroundColor || "#001810";
-  const ticker = content?.ticker || "BUILDING RIGHT - GREEN CONSTRUCTION - ENERGY";
-  const title = content?.title || "Build It";
+  const ticker = content?.ticker || "";
+  const title = content?.title || "";
   const titleImage = content?.titleImage;
-  const description = content?.description || "Reliable partner in green construction & energy";
-  const primaryLabel = content?.primaryLabel || text("home.hero.primary_label", "Xem Dự Án");
-  const primaryUrl = content?.primaryUrl || sitePath("projects");
-  const secondaryLabel = content?.secondaryLabel || text("home.hero.secondary_label", "Dịch Vụ");
-  const secondaryUrl = content?.secondaryUrl || sitePath("services");
+  const description = content?.description || "";
+  const primaryLabel = content?.primaryLabel || text("home.hero.primary_label");
+  const primaryUrl = content?.primaryUrl || "";
+  const secondaryLabel = content?.secondaryLabel || text("home.hero.secondary_label");
+  const secondaryUrl = content?.secondaryUrl || "";
   const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
@@ -75,8 +72,7 @@ function HeroSection({ content }: { content?: HomeCmsData["hero"] }) {
           <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
             <VideoBackground
               src={videoUrl}
-              title="Tona Timelapse"
-              poster={DEFAULT_HOME_VIDEO_POSTER}
+              title={text("common.video_title")}
             />
           </div>
     
@@ -239,7 +235,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
       <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
         <div className="mb-12 md:mb-16">
           <h2 className="text-[34px] font-bold uppercase leading-none tracking-[-0.04em] text-[#002d17] md:text-[42px]">
-            {title || text("home.services.title", "Dịch Vụ Cốt Lõi")}
+            {title || text("home.services.title")}
           </h2>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-5 md:gap-y-4">
@@ -257,7 +253,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
               >
                 {svc.highlight && (
                   <div className="absolute right-4 top-4 rounded-full bg-[#f4aa1f] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#002d17] md:right-5 md:top-5">
-                    Thế Mạnh
+                    {text("home.services.strength")}
                   </div>
                 )}
                 <div
@@ -268,13 +264,13 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                         : "border-[#f4aa1f] bg-white group-hover:bg-[#f4aa1f]"
                     }`}
                 >
-                  <Icon
+                  {Icon && <Icon
                     size={24}
                     strokeWidth={2.25}
                     className={`transition-colors ${
                       svc.highlight ? "text-[#002d17]" : "text-[#f4aa1f] group-hover:text-[#002d17]"
                     }`}
-                  />
+                  />}
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col pt-0.5 md:pr-8">
                   <p className="mb-3 text-[14px] font-bold uppercase tracking-[0.16em] text-[#f4aa1f]">
@@ -310,7 +306,7 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
             to={sitePath("services")}
             className="flex min-h-[60px] w-full items-center justify-center gap-4 rounded-[18px] bg-[#f4aa1f] px-6 py-4 text-xs font-bold uppercase tracking-[0.18em] text-[#002d17] transition-colors hover:bg-[#002d17] hover:text-[#f4aa1f]"
           >
-            {text("home.services.view_all", "Xem Tất Cả Dịch Vụ")} <ArrowRight size={16} />
+            {text("home.services.view_all")} <ArrowRight size={16} />
           </Link>
         </div>
       </div>
@@ -377,7 +373,7 @@ function normalizeHomeServices(items?: ServicesCmsData["services"]): HomeService
 
   return sortedItems.slice(0, 4).map((item, index) => ({
     id: item.number || item.title || index,
-    icon: getCmsIcon(item.icon, Wrench),
+    icon: getCmsIcon(item.icon),
     title: item.title || "",
     subtitle: item.subtitle || "",
     desc: item.description || "",
@@ -423,8 +419,8 @@ function ProjectsSection({
       <div className="bg-[#002d17]">
         <div className="max-w-7xl mx-auto px-6 py-10 flex items-center justify-between">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{label || text("home.projects.label", "Portfolio")}</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">{title || text("home.projects.title", "Dự Án Nổi Bật")}</h2>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{label || text("home.projects.label")}</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">{title || text("home.projects.title")}</h2>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev}
@@ -436,7 +432,7 @@ function ProjectsSection({
               <ArrowRight size={18} />
             </button>
           <Link to={sitePath("projects")} className="hidden md:flex items-center gap-2 ml-4 text-white/60 hover:text-[#f4aa1f] font-bold text-xs uppercase tracking-widest transition-colors">
-              {text("home.projects.view_all", "Xem tất cả")} <ArrowRight size={14} />
+              {text("home.projects.view_all")} <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -480,7 +476,7 @@ function ProjectsSection({
                       </ul>
                     )}
                     <div className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-2">
-                      Chi tiết dự án <ArrowRight size={12} />
+                      {text("home.projects.detail")} <ArrowRight size={12} />
                     </div>
                   </div>
                 </Link>
@@ -509,11 +505,11 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-6" />
             <h2 className="text-3xl md:text-4xl font-bold text-[#002d17] uppercase tracking-tight">
-              {title || text("home.news.title", "Tin Tức & Hoạt Động")}
+              {title || text("home.news.title")}
             </h2>
           </div>
           <Link to={sitePath("news")} className="shrink-0 flex items-center gap-2 text-[#002d17] font-bold text-xs uppercase tracking-widest hover:text-[#f4aa1f] transition-colors">
-            {text("home.news.view_all", "Xem Tất Cả")} <ArrowRight size={14} />
+            {text("home.news.view_all")} <ArrowRight size={14} />
           </Link>
         </div>
 
@@ -539,7 +535,7 @@ function NewsSection({ items, title }: { items: NewsPost[]; title?: string }) {
                   {featured.title}
                 </h3>
                 <p className="text-[#002d17]/60 text-[16px] leading-relaxed">{featured.excerpt}</p>
-                <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{text("home.news.read_more", "Đọc tiếp")} <ArrowRight size={12} /></span>
+                <span className="flex items-center gap-2 text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{text("home.news.read_more")} <ArrowRight size={12} /></span>
               </div>
             </Link>
           </motion.article>
@@ -592,11 +588,11 @@ function PartnersSection({ content }: { content?: HomeCmsData["partners"] }) {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h3 className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight">
-              {content?.title || text("home.partners.title", "Partners & Customers")}
+              {content?.title || text("home.partners.title")}
             </h3>
           </div>
           <p className="text-white/40 text-sm max-w-xs">
-            {content?.description || "Đối tác tin cậy của các tập đoàn đa quốc gia hàng đầu trong lĩnh vực xây dựng và MEP."}
+            {content?.description || ""}
           </p>
         </div>
       </div>
@@ -663,6 +659,7 @@ export function Home() {
   const [servicesPage, setServicesPage] = useState<ServicesCmsData | null>(null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
   const [cmsNews, setCmsNews] = useState<NewsPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -674,10 +671,13 @@ export function Home() {
       fetchCmsNews(controller.signal),
     ])
       .then(([homeData, servicesData, projectsData, newsData]) => {
-        setCmsPage(homeData);
-        setServicesPage(servicesData);
-        setCmsProjects(projectsData);
-        setCmsNews(newsData);
+        if (!controller.signal.aborted) {
+          setCmsPage(homeData);
+          setServicesPage(servicesData);
+          setCmsProjects(projectsData);
+          setCmsNews(newsData);
+          setLoaded(true);
+        }
       })
       .catch((error) => {
         if (!(error instanceof DOMException && error.name === "AbortError")) {
@@ -685,6 +685,7 @@ export function Home() {
           setServicesPage(null);
           setCmsProjects([]);
           setCmsNews([]);
+          setLoaded(true);
         }
       });
 
@@ -694,6 +695,10 @@ export function Home() {
   const projectItems = cmsProjects;
   const newsItems = cmsNews;
   const homeServices = normalizeHomeServices(servicesPage?.services);
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="flex flex-col w-full bg-white overflow-x-hidden">

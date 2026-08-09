@@ -69,8 +69,8 @@ function tona_cms_project_payload( $post ) {
         'status'          => $summary['status'] ?? tona_cms_text_field( $post_id, 'project_status' ),
         'year'            => $summary['year'] ?? tona_cms_text_field( $post_id, 'project_year' ),
         'duration'        => $summary['duration'] ?? tona_cms_text_field( $post_id, 'project_duration' ),
-        'renovationItems' => tona_cms_repeater_lines_field( $post_id, 'project_renovation_items', 'item', 'project_renovation_items' ),
-        'highlights'      => tona_cms_repeater_lines_field( $post_id, 'project_highlights', 'item', 'project_highlights' ),
+        'renovationItems' => tona_cms_repeater_lines_field( $post_id, 'project_renovation_items', 'item' ),
+        'highlights'      => tona_cms_repeater_lines_field( $post_id, 'project_highlights', 'item' ),
         'leedGold'        => (bool) ( function_exists( 'get_field' ) ? get_field( 'project_leed_gold', $post_id ) : false ),
     );
 }

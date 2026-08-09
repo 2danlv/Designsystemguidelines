@@ -9,6 +9,7 @@ import { submitCmsApplication, type JobPost, type JobsCmsData } from "../lib/wor
 import { useJobsPage, type InternPosition } from "../cms/useJobsPage";
 import { useSiteText } from "../context/SiteSettingsContext";
 import { sitePath } from "../lib/siteLinks";
+import { CmsLoading } from "../components/CmsLoading";
 
 function renderLines(text: string) {
   return text.replace(/\r\n/g, "\n").split("\n").map((line, index, lines) => (
@@ -27,22 +28,23 @@ function isBrokenCmsText(value?: string) {
   return !!value && (/[\uFFFD\u00EF\u00BF]/.test(value) || /\w\?\w/.test(value) || /\?\?/.test(value));
 }
 
-function cmsText(value: string | undefined, fallback: string) {
-  return value && !isBrokenCmsText(value) ? value : fallback;
+function cmsText(value: string | undefined) {
+  return value && !isBrokenCmsText(value) ? value : "";
 }
 
 
 // APPLY MODAL
 function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => void; content?: JobsCmsData["applicationModal"] }) {
+  const text = useSiteText();
   const initialFormData = { name: "", email: "", phone: "", experience: "", message: "" };
   const [formData, setFormData] = useState(initialFormData);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const fields = [
-    { name: "name" as const, label: cmsText(content?.nameLabel, "Ho va Ten *"), type: "text", placeholder: cmsText(content?.namePlaceholder, "Nguyen Van A"), required: true },
-    { name: "email" as const, label: cmsText(content?.emailLabel, "Email *"), type: "email", placeholder: cmsText(content?.emailPlaceholder, "email@example.com"), required: true },
-    { name: "phone" as const, label: cmsText(content?.phoneLabel, "So Dien Thoai *"), type: "tel", placeholder: cmsText(content?.phonePlaceholder, "+84 9xx xxx xxx"), required: true },
-    { name: "experience" as const, label: cmsText(content?.experienceLabel, "Nam Kinh Nghiem"), type: "text", placeholder: cmsText(content?.experiencePlaceholder, "VD: 3 nam"), required: false },
+    { name: "name" as const, label: cmsText(content?.nameLabel), type: "text", placeholder: cmsText(content?.namePlaceholder), required: true },
+    { name: "email" as const, label: cmsText(content?.emailLabel), type: "email", placeholder: cmsText(content?.emailPlaceholder), required: true },
+    { name: "phone" as const, label: cmsText(content?.phoneLabel), type: "tel", placeholder: cmsText(content?.phonePlaceholder), required: true },
+    { name: "experience" as const, label: cmsText(content?.experienceLabel), type: "text", placeholder: cmsText(content?.experiencePlaceholder), required: false },
   ];
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -92,9 +94,7 @@ function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => vo
 
         <form className="p-6 flex flex-col gap-5" onSubmit={handleSubmit}>
           <p className="text-[#002d17]/60 text-sm font-medium leading-relaxed">
-            {content?.description && !isBrokenCmsText(content.description)
-              ? content.description
-              : <>Dien thong tin de ung tuyen vi tri <strong className="text-[#002d17]">{job.title}</strong>. Chung toi se lien he trong vong 3 ngay lam viec.</>}
+            {cmsText(content?.description)}
           </p>
 
           <div className="flex flex-col gap-4">
@@ -112,17 +112,17 @@ function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => vo
               </div>
             ))}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.coverLetterLabel, "Thu Tu Gioi Thieu")}</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.coverLetterLabel)}</label>
               <textarea
                 rows={3}
-                placeholder={cmsText(content?.coverLetterPlaceholder, "Gioi thieu ngan ve ban than va ly do muon gia nhap Tona...")}
+                placeholder={cmsText(content?.coverLetterPlaceholder)}
                 value={formData.message}
                 onChange={(event) => setFormData((current) => ({ ...current, message: event.target.value }))}
                 className="border border-[#002d17]/20 px-4 py-2.5 text-[#002d17] text-sm font-medium focus:outline-none focus:border-[#f4aa1f] placeholder:text-[#002d17]/30 resize-none rounded-lg"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.cvLabel, "CV (PDF/DOCX)")}</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.cvLabel)}</label>
               <div className="border-2 border-dashed border-[#002d17]/20 hover:border-[#f4aa1f] transition-colors p-4 flex flex-col gap-2 rounded-xl">
                 <input
                   type="file"
@@ -131,16 +131,16 @@ function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => vo
                   onChange={(event) => setCvFile(event.target.files?.[0] || null)}
                 />
                 <span className="text-[#002d17]/40 text-sm font-medium">
-                  {cvFile?.name || cmsText(content?.cvHelpText, "Keo tha file hoac click de chon")}
+                  {cvFile?.name || cmsText(content?.cvHelpText)}
                 </span>
               </div>
             </div>
           </div>
 
-          {status === "success" && <p className="text-[#1a6645] text-sm font-bold">Da gui ho so thanh cong.</p>}
-          {status === "error" && <p className="text-red-600 text-sm font-bold">Khong gui duoc ho so. Vui long thu lai.</p>}
+          {status === "success" && <p className="text-[#1a6645] text-sm font-bold">{text("jobs.form.success")}</p>}
+          {status === "error" && <p className="text-red-600 text-sm font-bold">{text("jobs.form.error")}</p>}
           <button disabled={status === "submitting"} className="w-full bg-[#f4aa1f] text-[#002d17] py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors rounded-xl disabled:opacity-60">
-            {status === "submitting" ? "Dang gui..." : cmsText(content?.submitLabel, "Nop Ho So Ung Tuyen")}
+            {status === "submitting" ? text("jobs.form.submitting") : cmsText(content?.submitLabel)}
           </button>
         </form>
       </motion.div>
@@ -150,17 +150,18 @@ function ApplyModal({ job, onClose, content }: { job: JobPost; onClose: () => vo
 
 // INTERN APPLY MODAL
 function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onClose: () => void; content?: JobsCmsData["applicationModal"] }) {
+  const text = useSiteText();
   const initialFormData = { name: "", email: "", phone: "", university: "", major: "", schoolYear: "", startDate: "" };
   const [formData, setFormData] = useState(initialFormData);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const fields = [
-    { name: "name" as const, label: cmsText(content?.nameLabel, "Ho va Ten *"), type: "text", placeholder: cmsText(content?.namePlaceholder, "Nguyen Van A"), required: true },
-    { name: "email" as const, label: cmsText(content?.emailLabel, "Email *"), type: "email", placeholder: cmsText(content?.emailPlaceholder, "email@example.com"), required: true },
-    { name: "phone" as const, label: cmsText(content?.phoneLabel, "So Dien Thoai *"), type: "tel", placeholder: cmsText(content?.phonePlaceholder, "+84 9xx xxx xxx"), required: true },
-    { name: "university" as const, label: cmsText(content?.universityLabel, "Truong Dai Hoc *"), type: "text", placeholder: cmsText(content?.universityPlaceholder, "DH Bach Khoa TP.HCM"), required: true },
-    { name: "major" as const, label: cmsText(content?.majorLabel, "Chuyen Nganh"), type: "text", placeholder: cmsText(content?.majorPlaceholder, "Ky thuat Xay dung"), required: false },
-    { name: "schoolYear" as const, label: cmsText(content?.schoolYearLabel, "Nam Hoc"), type: "text", placeholder: cmsText(content?.schoolYearPlaceholder, "Nam 3"), required: false },
+    { name: "name" as const, label: cmsText(content?.nameLabel), type: "text", placeholder: cmsText(content?.namePlaceholder), required: true },
+    { name: "email" as const, label: cmsText(content?.emailLabel), type: "email", placeholder: cmsText(content?.emailPlaceholder), required: true },
+    { name: "phone" as const, label: cmsText(content?.phoneLabel), type: "tel", placeholder: cmsText(content?.phonePlaceholder), required: true },
+    { name: "university" as const, label: cmsText(content?.universityLabel), type: "text", placeholder: cmsText(content?.universityPlaceholder), required: true },
+    { name: "major" as const, label: cmsText(content?.majorLabel), type: "text", placeholder: cmsText(content?.majorPlaceholder), required: false },
+    { name: "schoolYear" as const, label: cmsText(content?.schoolYearLabel), type: "text", placeholder: cmsText(content?.schoolYearPlaceholder), required: false },
   ];
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -200,7 +201,7 @@ function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onCl
       >
         <div className="bg-[#46aa85] px-6 py-5 flex items-start justify-between gap-4 rounded-t-2xl">
           <div>
-            <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{pos.department} - {cmsText(content?.internTypeLabel, "Thuc Tap Sinh")}</p>
+            <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{pos.department} - {cmsText(content?.internTypeLabel)}</p>
             <h3 className="text-white font-bold text-lg uppercase tracking-tight">{pos.title}</h3>
           </div>
           <button onClick={onClose} className="text-white/50 hover:text-white mt-1 transition-colors">
@@ -209,7 +210,7 @@ function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onCl
         </div>
         <form className="p-6 flex flex-col gap-5" onSubmit={handleSubmit}>
           <p className="text-[#002d17]/60 text-sm font-medium leading-relaxed">
-            {cmsText(content?.internDescription, "Gui thong tin de dang ky thuc tap tai Tona Corporation. Chung toi se lien he trong vong 5 ngay lam viec.")}
+            {cmsText(content?.internDescription)}
           </p>
           <div className="flex flex-col gap-4">
             {fields.map((field) => (
@@ -226,17 +227,17 @@ function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onCl
               </div>
             ))}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.startDateLabel, "Thoi Gian Co The Bat Dau")}</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.startDateLabel)}</label>
               <input
                 type="text"
-                placeholder={cmsText(content?.startDatePlaceholder, "VD: Thang 7/2026")}
+                placeholder={cmsText(content?.startDatePlaceholder)}
                 value={formData.startDate}
                 onChange={(event) => setFormData((current) => ({ ...current, startDate: event.target.value }))}
                 className="border border-[#002d17]/20 px-4 py-2.5 text-[#002d17] text-sm font-medium focus:outline-none focus:border-[#46aa85] placeholder:text-[#002d17]/30 rounded-lg"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.internCvLabel, "CV / Transcript (PDF)")}</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-[#002d17]/60">{cmsText(content?.internCvLabel)}</label>
               <div className="border-2 border-dashed border-[#002d17]/20 hover:border-[#46aa85] transition-colors p-4 flex flex-col gap-2 rounded-xl">
                 <input
                   type="file"
@@ -245,15 +246,15 @@ function InternApplyModal({ pos, onClose, content }: { pos: InternPosition; onCl
                   onChange={(event) => setCvFile(event.target.files?.[0] || null)}
                 />
                 <span className="text-[#002d17]/40 text-sm font-medium">
-                  {cvFile?.name || cmsText(content?.internCvHelpText, "Keo tha file hoac click de chon")}
+                  {cvFile?.name || cmsText(content?.internCvHelpText)}
                 </span>
               </div>
             </div>
           </div>
-          {status === "success" && <p className="text-[#1a6645] text-sm font-bold">Da gui ho so thanh cong.</p>}
-          {status === "error" && <p className="text-red-600 text-sm font-bold">Khong gui duoc ho so. Vui long thu lai.</p>}
+          {status === "success" && <p className="text-[#1a6645] text-sm font-bold">{text("jobs.form.success")}</p>}
+          {status === "error" && <p className="text-red-600 text-sm font-bold">{text("jobs.form.error")}</p>}
           <button disabled={status === "submitting"} className="w-full bg-[#46aa85] text-white py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] transition-colors rounded-xl disabled:opacity-60">
-            {status === "submitting" ? "Dang gui..." : cmsText(content?.internSubmitLabel, "Dang Ky Thuc Tap")}
+            {status === "submitting" ? text("jobs.form.submitting") : cmsText(content?.internSubmitLabel)}
           </button>
         </form>
       </motion.div>
@@ -294,7 +295,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                   {job.level}
                 </span>
                 <span className="bg-white border border-[#f4aa1f] text-[#f4aa1f] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                  {job.slots} {text("jobs.slots_suffix", "vi tri")}
+                  {job.slots} {text("jobs.slots_suffix")}
                 </span>
               </div>
 
@@ -316,7 +317,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 </span>
                 {job.salary && (
                   <span className="flex items-center gap-1.5 text-[#46aa85] text-xs font-bold uppercase tracking-wider">
-                    {text("jobs.salary", "Luong")}: {job.salary}
+                    {text("jobs.salary")}: {job.salary}
                   </span>
                 )}
               </div>
@@ -332,7 +333,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 onClick={() => setApplying(true)}
                 className="bg-[#f4aa1f] cursor-pointer text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] hover:text-[#f4aa1f] transition-colors whitespace-nowrap rounded-lg"
               >
-                {text("jobs.apply_now", "Ung Tuyen Ngay")}
+                {text("jobs.apply_now")}
               </button>
               {job.jdUrl?.trim() && (
                 <a
@@ -341,14 +342,14 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                   rel="noopener noreferrer"
                   className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
                 >
-                  <FileText size={12} /> {text("jobs.view_jd", "Xem JD")}
+                  <FileText size={12} /> {text("jobs.view_jd")}
                 </a>
               )}
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="border cursor-pointer border-[#002d17]/20 text-[#002d17] px-6 py-2.5 font-bold uppercase tracking-widest text-xs hover:border-[#002d17] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
-                {text("jobs.detail", "Chi tiet")} {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                {text("jobs.detail")} {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
             </div>
           </div>
@@ -368,7 +369,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 {/* Requirements */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
                   <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.requirements", "Yeu Cau")}
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.requirements")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {job.requirements.map((req, i) => (
@@ -383,7 +384,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 {/* Skills */}
                 <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#002d17]/10">
                   <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.skills", "Ky Nang")}
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.skills")}
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {job.skills.map((skill, i) => (
@@ -400,7 +401,7 @@ function JobCard({ job, applicationModal }: { job: JobPost; applicationModal?: J
                 {/* Benefits */}
                 <div className="p-6 md:p-8">
                   <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.benefits", "Phuc Loi")}
+                    <span className="w-3 h-0.5 bg-[#f4aa1f]" /> {text("jobs.benefits")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {job.benefits.map((ben, i) => (
@@ -446,7 +447,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                     {pos.department}
                   </span>
                   <span className="bg-[#d5ede5] text-[#1a6645] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                    {pos.slots} {text("jobs.slots_suffix", "chi tieu")}
+                    {pos.slots} {text("jobs.slots_suffix")}
                   </span>
                 </div>
                 <div>
@@ -474,13 +475,13 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                 onClick={() => setApplying(true)}
                 className="bg-[#46aa85] cursor-pointer text-white px-5 py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-[#002d17] transition-colors whitespace-nowrap rounded-lg"
               >
-                {text("jobs.apply_now", "Dang Ky Thuc Tap")}
+                {text("jobs.apply_now")}
               </button>
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="border cursor-pointer border-[#46aa85]/30 text-[#46aa85] px-5 py-2 font-bold uppercase tracking-widest text-xs hover:border-[#46aa85] transition-colors flex items-center gap-2 justify-center rounded-lg"
               >
-                {text("jobs.detail", "Chi tiet")} {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                {text("jobs.detail")} {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
               </button>
             </div>
           </div>
@@ -498,7 +499,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
               <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                 <div className="p-6 border-b md:border-b-0 md:border-r border-[#46aa85]/15">
                   <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.requirements", "Yeu Cau")}
+                    <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.requirements")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {pos.requirements.map((req, i) => (
@@ -511,7 +512,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
                 </div>
                 <div className="p-6">
                   <h4 className="font-bold text-[#002d17] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.benefits", "Quyen Loi Thuc Tap Sinh")}
+                    <span className="w-3 h-0.5 bg-[#46aa85]" /> {text("jobs.benefits")}
                   </h4>
                   <ul className="flex flex-col gap-3">
                     {pos.benefits.map((ben, i) => (
@@ -533,6 +534,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
 
 // MAIN
 export function Jobs() {
+  const text = useSiteText();
   const [openApplication, setOpenApplication] = useState(false);
   const {
     activeDept,
@@ -553,11 +555,12 @@ export function Jobs() {
     interns,
     cultureTeaser,
     applicationModal,
+    loaded,
   } = useJobsPage();
   const openApplicationJob: JobPost = {
     id: "open-application",
-    title: spontaneous?.title || "Ung Tuyen Tu Do",
-    department: spontaneous?.eyebrow || "Open Application",
+    title: spontaneous?.title || "",
+    department: spontaneous?.eyebrow || "",
     location: "",
     type: "Job",
     level: "",
@@ -568,6 +571,10 @@ export function Jobs() {
     skills: [],
     benefits: [],
   };
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -593,7 +600,7 @@ export function Jobs() {
           style={{ backgroundImage: "linear-gradient(#f4aa1f 1px, transparent 1px), linear-gradient(90deg, #f4aa1f 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex items-center gap-2 text-white/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="hover:text-[#f4aa1f] transition-colors">{text("common.home")}</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -626,9 +633,9 @@ export function Jobs() {
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center rounded-xl">
                     {perk.iconImage ? (
                       <img src={perk.iconImage} alt="" className="w-5 h-5 object-contain" aria-hidden="true" />
-                    ) : (
+                    ) : Icon ? (
                       <Icon size={20} className="text-[#f4aa1f]" />
-                    )}
+                    ) : null}
                   </div>
                   <h3 className="font-bold text-[#002d17] uppercase text-[18px] tracking-tight">{perk.title}</h3>
                   <p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium">{perk.desc}</p>
@@ -689,10 +696,10 @@ export function Jobs() {
         {/* Spontaneous */}
         <div className="mt-12 bg-[#f9f9f7] border border-[#002d17]/10 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 rounded-2xl">
           <div>
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{spontaneous?.eyebrow || "Khong thay vi tri phu hop?"}</p>
-            <h4 className="font-bold text-[#002d17] text-xl uppercase tracking-tight">{spontaneous?.title || "Ung Tuyen Tu Do"}</h4>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-2">{spontaneous?.eyebrow || ""}</p>
+            <h4 className="font-bold text-[#002d17] text-xl uppercase tracking-tight">{spontaneous?.title || ""}</h4>
             <p className="text-[#002d17]/55 text-sm mt-2 font-medium max-w-md">
-              {spontaneous?.description || "Gui ho so cua ban cho chung toi - chung toi luon tim kiem tai nang phu hop voi van hoa Tona."}
+              {spontaneous?.description || ""}
             </p>
           </div>
           <button
@@ -700,7 +707,7 @@ export function Jobs() {
             onClick={() => setOpenApplication(true)}
             className="shrink-0 flex items-center gap-2 bg-[#002d17] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#46aa85] transition-colors rounded-lg"
           >
-            {spontaneous?.linkLabel || "Gui CV"} <ArrowRight size={14} />
+            {spontaneous?.linkLabel || ""} <ArrowRight size={14} />
           </button>
         </div>
       </div>
@@ -715,31 +722,31 @@ export function Jobs() {
                 <div className="w-10 h-10 rounded-xl bg-[#46aa85] flex items-center justify-center">
                   <GraduationCap size={20} className="text-white" />
                 </div>
-                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.eyebrow || "Chuong Trinh Thuc Tap"}</span>
+                <span className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.eyebrow || ""}</span>
               </div>
               <div className="w-12 h-0.5 bg-[#46aa85] mb-4" />
               <h2 className="text-3xl font-bold text-[#002d17] uppercase tracking-tight leading-tight">
-                {renderLines(interns?.title || "Sinh Vien Thuc Tap\nTona Internship Program")}
+                {renderLines(interns?.title || "")}
               </h2>
               <p className="text-[#002d17]/60 text-sm font-medium mt-3 max-w-lg leading-relaxed">
-                {interns?.description || "Tona Corporation chao don sinh vien nam 3 - 4 cac nganh ky thuat tham gia chuong trinh thuc tap thuc te tai cong truong va van phong."}
+                {interns?.description || ""}
               </p>
             </div>
             <div className="shrink-0 bg-white rounded-2xl px-6 py-5 border border-[#46aa85]/20 flex flex-col gap-3 min-w-[200px]">
-              <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.seasonLabel || "Tuyen dung 2025 - 2026"}</p>
+              <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.seasonLabel || ""}</p>
               <div className="flex gap-4">
                 <div className="flex flex-col">
-                  <span className="text-[#002d17] font-bold text-2xl">{interns?.slotsValue || "12"}</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.slotsLabel || "chi tieu"}</span>
+                  <span className="text-[#002d17] font-bold text-2xl">{interns?.slotsValue || ""}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.slotsLabel || ""}</span>
                 </div>
                 <div className="w-px bg-[#002d17]/10" />
                 <div className="flex flex-col">
-                  <span className="text-[#002d17] font-bold text-2xl">{interns?.majorsValue || "3"}</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || "chuyen nganh"}</span>
+                  <span className="text-[#002d17] font-bold text-2xl">{interns?.majorsValue || ""}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || ""}</span>
                 </div>
               </div>
               <div className="text-[#002d17]/50 text-xs font-medium leading-relaxed">
-                {interns?.note || "Nhan ho so lien tuc. Phong van rolling."}
+                {interns?.note || ""}
               </div>
             </div>
           </div>
@@ -766,17 +773,17 @@ export function Jobs() {
                 <BookOpen size={18} className="text-[#46aa85]" />
               </div>
               <div>
-                <p className="font-bold text-[#002d17] text-sm uppercase tracking-tight">{interns?.ctaTitle || "Ky Ket Hop Tac Voi Truong Dai Hoc"}</p>
+                <p className="font-bold text-[#002d17] text-sm uppercase tracking-tight">{interns?.ctaTitle || ""}</p>
                 <p className="text-[#002d17]/55 text-sm font-medium mt-1 max-w-md">
-                  {interns?.ctaDescription || "Tona Corporation hop tac voi nhieu truong ky thuat. Sinh vien co the dang ky qua Phong Quan he Doanh nghiep cua truong hoac lien he truc tiep Tona."}
+                  {interns?.ctaDescription || ""}
                 </p>
               </div>
             </div>
             <a
-              href={interns?.ctaLinkUrl || "mailto:internship@tonacorp.vn"}
+              href={interns?.ctaLinkUrl || ""}
               className="shrink-0 flex items-center gap-2 bg-[#46aa85] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#002d17] transition-colors rounded-lg"
             >
-              {interns?.ctaLinkLabel || "Email Thuc Tap"} <ArrowRight size={14} />
+              {interns?.ctaLinkLabel || ""} <ArrowRight size={14} />
             </a>
           </div>
         </div>
@@ -788,15 +795,15 @@ export function Jobs() {
           <div>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-4" />
             <h3 className="text-2xl font-bold text-white uppercase tracking-tight">
-              {cultureTeaser?.title || "Trai Nghiem Van Hoa Tona"}
+              {cultureTeaser?.title || ""}
             </h3>
-            <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || "Kham pha nhung gi lam nen su khac biet khi lam viec tai Tona."}</p>
+            <p className="text-white/50 mt-2 text-sm">{cultureTeaser?.description || ""}</p>
           </div>
           <Link
-            to={cultureTeaser?.linkUrl || sitePath("culture")}
+            to={cultureTeaser?.linkUrl || ""}
             className="shrink-0 flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
           >
-            {cultureTeaser?.linkLabel || "Cuoc Song Tona"} <ArrowRight size={14} />
+            {cultureTeaser?.linkLabel || ""} <ArrowRight size={14} />
           </Link>
         </div>
       </div>

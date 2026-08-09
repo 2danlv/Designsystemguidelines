@@ -10,6 +10,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { fetchCmsProject, fetchCmsProjects, type ProjectPost } from "../lib/wordpress";
 import { projectDetailPath, sitePath } from "../lib/siteLinks";
 import { useSiteText } from "../context/SiteSettingsContext";
+import { CmsLoading } from "../components/CmsLoading";
 
 // ─── LIGHTBOX ────────────────────────────────────────────────────────────────
 function Lightbox({
@@ -61,7 +62,7 @@ function Lightbox({
 
         <button onClick={onClose}
           className="absolute -top-12 right-0 text-white/70 hover:text-[#f4aa1f] transition-colors flex items-center gap-2 font-bold text-xs uppercase tracking-widest">
-          <X size={16} /> {text("project.lightbox.close", "Đóng (ESC)")}
+          <X size={16} /> {text("project.lightbox.close")}
         </button>
 
         <button onClick={prev}
@@ -129,7 +130,7 @@ function ImageGallery({ images }: { images: string[] }) {
                   />
                   <div className="absolute inset-0 bg-[#002d17]/0 group-hover:bg-[#002d17]/20 transition-colors flex items-center justify-center">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-[#f4aa1f] px-4 py-2 font-bold text-[#002d17] text-xs uppercase tracking-widest flex items-center gap-2">
-                      <Maximize2 size={14} /> {text("project.gallery.zoom", "Phóng to")}
+                      <Maximize2 size={14} /> {text("project.gallery.zoom")}
                     </div>
                   </div>
                 </div>
@@ -184,6 +185,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
   const slug = slugOverride || routeSlug;
   const [cmsProject, setCmsProject] = useState<ProjectPost | null>(null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!slug) {
@@ -196,8 +198,11 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
       fetchCmsProject(slug, controller.signal),
       fetchCmsProjects(controller.signal),
     ]).then(([projectPost, projectPosts]) => {
-      setCmsProject(projectPost);
-      setCmsProjects(projectPosts);
+      if (!controller.signal.aborted) {
+        setCmsProject(projectPost);
+        setCmsProjects(projectPosts);
+        setLoaded(true);
+      }
     });
 
     return () => controller.abort();
@@ -207,12 +212,16 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
   const relatedSource = cmsProjects;
   const relatedProjects = relatedSource.filter((p) => p.slug !== slug).slice(0, 3);
 
+  if (!loaded) {
+    return <CmsLoading />;
+  }
+
   if (!project) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-3xl font-bold text-[#002d17] uppercase mb-4">{text("project.not_found", "Project Not Found")}</h2>
+        <h2 className="text-3xl font-bold text-[#002d17] uppercase mb-4">{text("project.not_found")}</h2>
         <Link to={sitePath("projects")} className="text-[#f4aa1f] font-bold uppercase tracking-widest border-b-2 border-[#f4aa1f] pb-1">
-          {text("project.back", "Back to Projects")}
+          {text("project.back")}
         </Link>
       </div>
     );
@@ -229,7 +238,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
       <div className="bg-white border-b border-[#002d17]/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#002d17]/50">
           <Link to={sitePath("projects")} className="hover:text-[#f4aa1f] flex items-center gap-1 transition-colors">
-            <ArrowLeft size={13} /> {text("project.back_all", "Tất Cả Dự Án")}
+            <ArrowLeft size={13} /> {text("project.back_all")}
           </Link>
           <span>/</span>
           <span className="text-[#002d17]">{project.category}</span>
@@ -242,18 +251,18 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
           {(project as any).leedGold && (
             <div className="flex items-center gap-3 pb-4 border-b border-white/20">
               <div className="bg-[#b8860b] text-white px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full flex items-center gap-1.5">
-                ★ {text("project.leed_badge", "LEED Gold Certified")}
+                ★ {text("project.leed_badge")}
               </div>
-              <span className="text-white/70 text-xs font-medium">{text("project.leed_note", "Công trình đạt chứng nhận xanh LEED Gold")}</span>
+              <span className="text-white/70 text-xs font-medium">{text("project.leed_note")}</span>
             </div>
           )}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
           {[
-            { label: text("project.spec.client", "Khách Hàng"), value: project.client, icon: User },
-            { label: text("project.spec.location", "Vị Trí"), value: project.location, icon: MapPin },
-            { label: text("project.spec.area", "Diện Tích"), value: project.area, icon: Maximize2 },
-            { label: text("project.spec.duration", "Thời Gian"), value: project.duration, icon: Calendar },
-            { label: text("project.spec.status", "Trạng Thái"), value: project.status, icon: CheckCircle2 },
+            { label: text("project.spec.client"), value: project.client, icon: User },
+            { label: text("project.spec.location"), value: project.location, icon: MapPin },
+            { label: text("project.spec.area"), value: project.area, icon: Maximize2 },
+            { label: text("project.spec.duration"), value: project.duration, icon: Calendar },
+            { label: text("project.spec.status"), value: project.status, icon: CheckCircle2 },
           ].map((spec) => {
             const Icon = spec.icon;
             return (
@@ -287,7 +296,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
           {/* Highlights */}
           {project.highlights && (
             <div>
-              <h3 className="font-bold text-[#002d17] uppercase tracking-tight mb-4 text-lg">{text("project.highlights", "Điểm Nổi Bật")}</h3>
+              <h3 className="font-bold text-[#002d17] uppercase tracking-tight mb-4 text-lg">{text("project.highlights")}</h3>
               <div className="grid grid-cols-2 gap-3">
                 {project.highlights.map((hl, i) => (
                   <div key={i} className="bg-[#002d17] text-white px-4 py-3 font-bold text-sm uppercase tracking-wider text-center rounded-xl">
@@ -303,7 +312,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
         <div className="flex flex-col gap-6">
           <div className="bg-[#f9f9f7] p-8 rounded-2xl">
             <h3 className="font-bold text-[#002d17] uppercase tracking-tight mb-6 text-lg border-b-2 border-[#f4aa1f] pb-3">
-              {text("project.construction", "Hạng Mục Thi Công")}
+              {text("project.construction")}
             </h3>
             {project.renovationItems && (
               <ul className="flex flex-col gap-4">
@@ -318,13 +327,13 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
           </div>
 
           <div className="bg-[#002d17] p-8 rounded-2xl">
-            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">{text("project.cta_eyebrow", "Có dự án tương tự?")}</p>
-            <h4 className="text-white font-bold text-xl uppercase mb-4">{text("project.cta_title", "Hãy liên hệ với chúng tôi")}</h4>
+            <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mb-3">{text("project.cta_eyebrow")}</p>
+            <h4 className="text-white font-bold text-xl uppercase mb-4">{text("project.cta_title")}</h4>
             <Link
               to={sitePath("jobs")}
               className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-5 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors w-full justify-center"
             >
-              {text("project.cta_button", "Liên Hệ Ngay")} <ArrowRight size={14} />
+              {text("project.cta_button")} <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -334,7 +343,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
       <div className="bg-[#f9f9f7] border-t border-[#002d17]/10 py-16">
         <div className="max-w-7xl mx-auto px-6">
           <h3 className="font-bold text-[#002d17] uppercase tracking-tight text-2xl mb-10">
-            {text("project.related", "Dự Án Liên Quan")}
+            {text("project.related")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {relatedProjects.map((rel) => (

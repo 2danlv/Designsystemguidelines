@@ -51,10 +51,6 @@ export const cmsIconMap: Record<string, LucideIcon> = {
 
 export type CmsIconName = keyof typeof cmsIconMap;
 
-export function getCmsIcon(name: string | undefined | null, fallback: LucideIcon): LucideIcon {
-  if (!name) {
-    return fallback;
-  }
-
-  return cmsIconMap[name] || fallback;
+export function getCmsIcon(name: string | undefined | null): LucideIcon | null {
+  return name ? cmsIconMap[name] || null : null;
 }

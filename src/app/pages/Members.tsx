@@ -14,10 +14,12 @@ import {
   type MembersCmsData,
 } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
+import { CmsLoading } from "../components/CmsLoading";
 import { sitePath } from "../lib/siteLinks";
+import { useSiteText } from "../context/SiteSettingsContext";
 
 type CoreValue = {
-  icon: LucideIcon;
+  icon: LucideIcon | null;
   iconImage?: string;
   title: string;
   desc: string;
@@ -37,6 +39,7 @@ function OptionalBlock({ children, show }: { children: ReactNode; show: boolean 
 }
 
 function LeaderModal({ member, onClose }: { member: MemberPost; onClose: () => void }) {
+  const text = useSiteText();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -65,7 +68,7 @@ function LeaderModal({ member, onClose }: { member: MemberPost; onClose: () => v
               <h2 className="font-bold text-white text-2xl uppercase tracking-tight leading-tight">{member.name}</h2>
               <p className="text-[#f4aa1f] font-bold text-xs uppercase tracking-widest mt-1">{member.role}</p>
               <p className="text-white/50 text-[10px] uppercase tracking-widest">
-                {member.roleEn}{member.since ? ` · Tại Tona từ ${member.since}` : ""}
+                {member.roleEn}{member.since ? ` · ${text("members.since")} ${member.since}` : ""}
               </p>
             </div>
           </div>
@@ -80,7 +83,7 @@ function LeaderModal({ member, onClose }: { member: MemberPost; onClose: () => v
         <div className="p-8 flex flex-col gap-6">
           <OptionalBlock show={Boolean(member.education)}>
             <div className="bg-[#f9f9f7] rounded-xl px-5 py-4">
-              <p className="text-[#f4aa1f] font-bold text-[10px] uppercase tracking-widest mb-1">Học Vấn & Chứng Chỉ</p>
+              <p className="text-[#f4aa1f] font-bold text-[10px] uppercase tracking-widest mb-1">{text("members.education")}</p>
               <p className="text-[#002d17] font-semibold text-sm">{member.education}</p>
             </div>
           </OptionalBlock>
@@ -89,7 +92,7 @@ function LeaderModal({ member, onClose }: { member: MemberPost; onClose: () => v
 
           <OptionalBlock show={Boolean(member.expertise?.length)}>
             <div>
-              <p className="text-[#002d17] font-bold text-xs uppercase tracking-widest mb-3">Chuyên Môn</p>
+              <p className="text-[#002d17] font-bold text-xs uppercase tracking-widest mb-3">{text("members.expertise")}</p>
               <div className="flex flex-wrap gap-2">
                 {member.expertise?.map((item) => (
                   <span key={item} className="bg-[#f0faf6] text-[#1a6645] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
@@ -102,7 +105,7 @@ function LeaderModal({ member, onClose }: { member: MemberPost; onClose: () => v
 
           <OptionalBlock show={Boolean(member.achievements?.length)}>
             <div>
-              <p className="text-[#002d17] font-bold text-xs uppercase tracking-widest mb-3">Thành Tựu Nổi Bật</p>
+              <p className="text-[#002d17] font-bold text-xs uppercase tracking-widest mb-3">{text("members.achievements")}</p>
               <ul className="flex flex-col gap-2.5">
                 {member.achievements?.map((item, index) => (
                   <li key={`${item}-${index}`} className="flex items-start gap-3 text-[#002d17]/70 text-sm font-medium">
@@ -143,9 +146,11 @@ function LeaderModal({ member, onClose }: { member: MemberPost; onClose: () => v
 }
 
 export function Members() {
+  const text = useSiteText();
   const [cmsPage, setCmsPage] = useState<MembersCmsData | null>(null);
   const [cmsMembers, setCmsMembers] = useState<MemberPost[]>([]);
   const [selectedLeader, setSelectedLeader] = useState<MemberPost | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -154,8 +159,11 @@ export function Members() {
       fetchCmsPageByTemplate<MembersCmsData>("tona-members", controller.signal),
       fetchCmsMembers(controller.signal),
     ]).then(([page, members]) => {
-      setCmsPage(page);
-      setCmsMembers(members);
+      if (!controller.signal.aborted) {
+        setCmsPage(page);
+        setCmsMembers(members);
+        setLoaded(true);
+      }
     });
 
     return () => controller.abort();
@@ -167,21 +175,25 @@ export function Members() {
 
   const coreValues = useMemo<CoreValue[]>(() => {
     return (cmsPage?.values || []).map((value) => ({
-      icon: getCmsIcon(value.icon, Shield),
+      icon: getCmsIcon(value.icon),
       iconImage: value.iconImage || "",
       title: value.title || "",
       desc: value.desc || "",
     }));
   }, [cmsPage]);
 
-  const heroTitle = cmsPage?.hero?.title || "Hội Đồng\nQuản Trị";
-  const heroDescription = cmsPage?.hero?.description || "Những con người dẫn dắt Tona Corporation với kinh nghiệm, tầm nhìn và cam kết kiến tạo chuẩn mực mới trong ngành xây dựng Việt Nam.";
-  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "Đội Ngũ Lãnh Đạo";
-  const valuesTitle = cmsPage?.valuesTitle || "Giá Trị Lãnh Đạo";
-  const teaserTitle = cmsPage?.teaser?.title || "800+ Chuyên Gia Tại Tona";
-  const teaserDescription = cmsPage?.teaser?.description || "Phía sau Ban lãnh đạo là đội ngũ kỹ sư, chuyên gia và công nhân lành nghề, những người trực tiếp kiến tạo nên mỗi công trình của Tona.";
-  const teaserLinkLabel = cmsPage?.teaser?.linkLabel || "Khám Phá Cuộc Sống Tona";
-  const teaserLinkUrl = cmsPage?.teaser?.linkUrl || sitePath("culture");
+  const heroTitle = cmsPage?.hero?.title || "";
+  const heroDescription = cmsPage?.hero?.description || "";
+  const breadcrumbLabel = cmsPage?.hero?.breadcrumbLabel || "";
+  const valuesTitle = cmsPage?.valuesTitle || "";
+  const teaserTitle = cmsPage?.teaser?.title || "";
+  const teaserDescription = cmsPage?.teaser?.description || "";
+  const teaserLinkLabel = cmsPage?.teaser?.linkLabel || "";
+  const teaserLinkUrl = cmsPage?.teaser?.linkUrl || "";
+
+  if (!loaded) {
+    return <CmsLoading />;
+  }
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -189,7 +201,7 @@ export function Members() {
       <div className="pt-8 pb-14 bg-[#f9f9f7]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-2 text-[#002d17]/40 text-xs font-bold uppercase tracking-widest mb-8">
-            <Link to={sitePath("home")} className="text-[#002d17]/50 hover:text-[#f4aa1f] transition-colors">Home</Link>
+            <Link to={sitePath("home")} className="text-[#002d17]/50 hover:text-[#f4aa1f] transition-colors">{text("common.home")}</Link>
             <ChevronRight size={12} />
             <span className="text-[#f4aa1f]">{breadcrumbLabel}</span>
           </div>
@@ -242,7 +254,7 @@ export function Members() {
                 {/* View profile on hover */}
                 <div className="absolute inset-0 bg-[#002d17]/0 group-hover:bg-[#002d17]/20 transition-colors flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-[#f4aa1f] text-[#002d17] px-4 py-2 font-bold text-xs uppercase tracking-widest rounded-lg">
-                    Xem Hồ Sơ
+                    {text("members.view_profile")}
                   </div>
                 </div>
                 <a
@@ -305,9 +317,9 @@ export function Members() {
                   <div className="w-12 h-12 border-2 border-[#f4aa1f] flex items-center justify-center group-hover:bg-[#f4aa1f] transition-colors rounded-xl">
                     {val.iconImage ? (
                       <img src={val.iconImage} alt="" className="h-6 w-6 object-contain" />
-                    ) : (
+                    ) : Icon ? (
                       <Icon size={20} className="text-[#f4aa1f] group-hover:text-[#002d17] transition-colors" />
-                    )}
+                    ) : null}
                   </div>
                   <h3 className="font-bold text-white text-base uppercase tracking-tight">{val.title}</h3>
                   <p className="text-white/50 text-[16px] leading-relaxed">{val.desc}</p>
