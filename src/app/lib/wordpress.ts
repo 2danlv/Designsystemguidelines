@@ -581,6 +581,7 @@ export type SiteSettings = {
 
 export type CmsRouteMatch = {
   type: "page" | "project" | "news" | "not_found";
+  title?: string;
   template?: string;
   slug?: string;
   page?: {

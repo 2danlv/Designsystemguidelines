@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router";
+import { useSiteSettings } from "../context/SiteSettingsContext";
 import { fetchCmsRoute, type CmsRouteMatch } from "../lib/wordpress";
 import { About } from "../pages/About";
 import { GenericContentPage } from "../pages/ContentPage";
@@ -42,6 +43,7 @@ function renderPageByTemplate({ template, routeKey }: { template?: string; route
 
 export function CmsRoute() {
   const location = useLocation();
+  const settings = useSiteSettings();
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
   const routeKey = `${location.pathname}${location.search}`;
   const [routeMatch, setRouteMatch] = useState<CmsRouteMatch | null>(null);
@@ -59,6 +61,21 @@ export function CmsRoute() {
 
     return () => controller.abort();
   }, [language, location.pathname, location.search]);
+
+  useEffect(() => {
+    if (!loaded) return;
+
+    const siteTitle = settings?.site?.title?.trim() || "";
+    const pageTitle = (routeMatch?.title || routeMatch?.page?.title || "").trim();
+    const isHomePage = routeMatch?.template === "tona-home";
+
+    if (isHomePage || !pageTitle || pageTitle === siteTitle) {
+      document.title = siteTitle;
+      return;
+    }
+
+    document.title = siteTitle ? `${pageTitle} | ${siteTitle}` : pageTitle;
+  }, [loaded, routeMatch, settings?.site?.title]);
 
   if (legacyVietnameseMatch) {
     const nextPath = legacyVietnameseMatch[1] || "/";

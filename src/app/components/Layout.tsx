@@ -497,12 +497,7 @@ export function Layout() {
   }, [language]);
 
   useEffect(() => {
-    const siteTitle = settings?.site?.title?.trim();
     const siteIcon = settings?.site?.icon?.trim();
-
-    if (siteTitle) {
-      document.title = siteTitle;
-    }
 
     if (siteIcon) {
       let iconLink = document.querySelector<HTMLLinkElement>("link[rel='icon']");
@@ -515,7 +510,7 @@ export function Layout() {
 
       iconLink.href = siteIcon;
     }
-  }, [settings?.site?.title, settings?.site?.icon]);
+  }, [settings?.site?.icon]);
 
   if (!settingsLoaded) {
     return <CmsLoading fullScreen />;

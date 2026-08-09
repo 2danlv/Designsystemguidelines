@@ -127,6 +127,7 @@ function tona_cms_resolve_route_payload( $request ) {
     if ( 'tona_project' === $post->post_type ) {
         return array(
             'type'         => 'project',
+            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
             'slug'         => $post->post_name,
             'translations' => $translations,
         );
@@ -135,6 +136,7 @@ function tona_cms_resolve_route_payload( $request ) {
     if ( 'tona_news' === $post->post_type ) {
         return array(
             'type'         => 'news',
+            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
             'slug'         => $post->post_name,
             'translations' => $translations,
         );
@@ -143,6 +145,7 @@ function tona_cms_resolve_route_payload( $request ) {
     if ( 'tona_job' === $post->post_type ) {
         return array(
             'type'         => 'page',
+            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
             'template'     => 'tona-jobs',
             'slug'         => $post->post_name,
             'translations' => $translations,
@@ -160,6 +163,7 @@ function tona_cms_resolve_route_payload( $request ) {
 
         $payload = array(
             'type'         => 'page',
+            'title'        => tona_cms_decode_text( get_the_title( $post ) ),
             'template'     => $template_alias,
             'slug'         => $post->post_name,
             'translations' => $translations,
