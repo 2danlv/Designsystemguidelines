@@ -278,7 +278,7 @@ export function Projects() {
           </div>
           <Link
             to={cta?.linkUrl || ""}
-            className="shrink-0 bg-[#f4aa1f] text-[#002d17] px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors"
+            className="shrink-0 rounded-lg bg-[#f4aa1f] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[#002d17] transition-colors hover:bg-white"
           >
             {cta?.linkLabel || ""}
           </Link>

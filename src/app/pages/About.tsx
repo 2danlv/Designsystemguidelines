@@ -6,7 +6,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { fetchCmsPageByTemplate, type AboutCmsData } from "../lib/wordpress";
+import { fetchCmsPageByTemplate, getCurrentLanguage, type AboutCmsData } from "../lib/wordpress";
 import { getCmsIcon } from "../lib/cmsIcons";
 import { sitePath } from "../lib/siteLinks";
 import { VideoBackground } from "../components/VideoBackground";
@@ -83,6 +83,7 @@ function quoteWithAccent(quote: string, accent: string) {
 }
 
 export function About() {
+  const language = getCurrentLanguage();
   const text = useSiteText();
   const [cmsPage, setCmsPage] = useState<AboutCmsData | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -316,7 +317,7 @@ export function About() {
             {certifications.map((cert, index) => (
               <div key={`${cert.code}-${index}`} className="bg-white/5 hover:bg-[#46aa85] transition-colors p-7 flex flex-col gap-4 group rounded-2xl border border-white/10">
                 <span className="text-[#f4aa1f] font-semibold text-3xl tracking-tight">{cert.code}</span>
-                <div><h4 className="text-white font-semibold uppercase tracking-tight text-base">{cert.title}</h4><p className="text-white/40 text-[13px] font-bold uppercase tracking-widest mt-1">Cap boi {cert.org}</p></div>
+                <div><h4 className="text-white font-semibold uppercase tracking-tight text-base">{cert.title}</h4><p className="text-white/40 text-[13px] font-bold uppercase tracking-widest mt-1">{language === "en" ? "Issued by" : "Cấp bởi"} {cert.org}</p></div>
               </div>
             ))}
           </div>

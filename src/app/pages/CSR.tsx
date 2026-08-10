@@ -265,13 +265,13 @@ export function CSR() {
           </div>
           <div className="flex gap-4">
             <Link
-              to={cmsPage?.cta?.secondaryUrl || ""}
+              to={cmsPage?.cta?.secondaryUrl || sitePath("culture")}
               className="flex items-center gap-2 border-2 border-white/20 text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:border-[#f4aa1f] hover:text-[#f4aa1f] transition-colors rounded-lg"
             >
               {cmsPage?.cta?.secondaryLabel || ""}
             </Link>
             <Link
-              to={cmsPage?.cta?.primaryUrl || ""}
+              to={cmsPage?.cta?.primaryUrl || sitePath("jobs")}
               className="flex items-center gap-2 bg-[#f4aa1f] text-[#002d17] px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors rounded-lg"
             >
               {cmsPage?.cta?.primaryLabel || ""} <ArrowRight size={14} />

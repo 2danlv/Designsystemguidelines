@@ -5,7 +5,7 @@ import {
   GraduationCap, BookOpen, FileText, ExternalLink
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { submitCmsApplication, type JobPost, type JobsCmsData } from "../lib/wordpress";
+import { getCurrentLanguage, submitCmsApplication, type JobPost, type JobsCmsData } from "../lib/wordpress";
 import { useJobsPage, type InternPosition } from "../cms/useJobsPage";
 import { useSiteText } from "../context/SiteSettingsContext";
 import { sitePath } from "../lib/siteLinks";
@@ -534,6 +534,7 @@ function InternCard({ pos, applicationModal }: { pos: InternPosition; applicatio
 
 // MAIN
 export function Jobs() {
+  const language = getCurrentLanguage();
   const text = useSiteText();
   const [openApplication, setOpenApplication] = useState(false);
   const {
@@ -732,20 +733,22 @@ export function Jobs() {
                 {interns?.description || ""}
               </p>
             </div>
-            <div className="shrink-0 bg-white rounded-2xl px-6 py-5 border border-[#46aa85]/20 flex flex-col gap-3 min-w-[200px]">
+            <div className="h-auto min-w-[200px] shrink-0 rounded-2xl border border-[#46aa85]/20 bg-white px-6 py-5 flex flex-col gap-3">
               <p className="text-[#46aa85] font-bold text-xs uppercase tracking-widest">{interns?.seasonLabel || ""}</p>
               <div className="flex gap-4">
                 <div className="flex flex-col">
                   <span className="text-[#002d17] font-bold text-2xl">{interns?.slotsValue || ""}</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.slotsLabel || ""}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">
+                    {language === "en" ? "Positions" : (interns?.slotsLabel || text("jobs.slots_suffix"))}
+                  </span>
                 </div>
                 <div className="w-px bg-[#002d17]/10" />
                 <div className="flex flex-col">
                   <span className="text-[#002d17] font-bold text-2xl">{interns?.majorsValue || ""}</span>
-                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || ""}</span>
+                  <span className="text-[#002d17]/50 text-xs font-bold uppercase tracking-widest">{interns?.majorsLabel || (language === "en" ? "Majors" : "Chuyên ngành")}</span>
                 </div>
               </div>
-              <div className="text-[#002d17]/50 text-xs font-medium leading-relaxed">
+              <div className="break-words text-xs font-medium leading-relaxed text-[#002d17]/50">
                 {interns?.note || ""}
               </div>
             </div>

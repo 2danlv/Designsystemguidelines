@@ -150,7 +150,7 @@ function tona_cms_projects_page_payload( $page ) {
             'title'       => tona_cms_text_field( $post_id, 'projects_cta_title' ),
             'description' => tona_cms_text_field( $post_id, 'projects_cta_description' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'projects_cta_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'projects_cta_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'projects_cta_link_url', $post_id ) : '' ),
         ),
     );
 }

@@ -125,18 +125,18 @@ export function Culture() {
   const socialImage = social?.image || "";
   const socialBadges = social?.badges || [];
   const socialLinkLabel = social?.linkLabel || "";
-  const socialLinkUrl = social?.linkUrl || "";
+  const socialLinkUrl = social?.linkUrl || sitePath("csr");
   const academyEyebrow = cmsPage?.academy?.eyebrow || "";
   const academyTitle = cmsPage?.academy?.title || "";
   const academyDescription = cmsPage?.academy?.description || "";
   const academyImage = cmsPage?.academy?.image || "";
   const academyLinkLabel = cmsPage?.academy?.linkLabel || "";
-  const academyLinkUrl = cmsPage?.academy?.linkUrl || "";
+  const academyLinkUrl = cmsPage?.academy?.linkUrl || sitePath("jobs");
   const galleryTitle = cmsPage?.gallery?.title || "";
   const ctaTitle = cmsPage?.cta?.title || "";
   const ctaDescription = cmsPage?.cta?.description || "";
   const ctaLinkLabel = cmsPage?.cta?.linkLabel || "";
-  const ctaLinkUrl = cmsPage?.cta?.linkUrl || "";
+  const ctaLinkUrl = cmsPage?.cta?.linkUrl || sitePath("jobs");
   const regularActivities = activities
     .filter((activity) => !`${activity.title} ${activity.subtitle}`.toLowerCase().includes("csr"))
     .slice(0, 3);
@@ -213,11 +213,6 @@ export function Culture() {
                     <span className={`font-bold text-4xl tracking-tight ${theme.active ? "text-white" : "text-[#002d17]/30"}`}>
                       {theme.year}
                     </span>
-                    {theme.active && (
-                      <div className="mt-2 bg-[#f4aa1f] text-[#002d17] text-xs font-bold uppercase tracking-widest px-2 py-0.5 w-fit">
-                        Hien Tai
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex-1">

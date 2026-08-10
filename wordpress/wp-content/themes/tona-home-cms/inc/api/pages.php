@@ -400,7 +400,7 @@ function tona_cms_culture_payload( $page ) {
             'description' => tona_cms_text_field( $post_id, 'culture_social_description' ),
             'image'       => tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'culture_social_image', $post_id ) : '' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'culture_social_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'culture_social_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'culture_social_link_url', $post_id ) : '' ),
             'badges'      => array_values(
                 array_filter(
                     array_map(
@@ -429,7 +429,7 @@ function tona_cms_culture_payload( $page ) {
             'description' => tona_cms_text_field( $post_id, 'culture_academy_description' ),
             'image'       => tona_cms_image_url( function_exists( 'get_field' ) ? get_field( 'culture_academy_image', $post_id ) : '' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'culture_academy_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'culture_academy_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'culture_academy_link_url', $post_id ) : '' ),
             'stats'       => array_values(
                 array_map(
                     function ( $stat ) {
@@ -459,7 +459,7 @@ function tona_cms_culture_payload( $page ) {
             'title'       => tona_cms_text_field( $post_id, 'culture_cta_title' ),
             'description' => tona_cms_text_field( $post_id, 'culture_cta_description' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'culture_cta_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'culture_cta_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'culture_cta_link_url', $post_id ) : '' ),
         ),
     );
 }
@@ -560,9 +560,9 @@ function tona_cms_csr_payload( $page ) {
             'title'          => tona_cms_text_field( $post_id, 'csr_cta_title' ),
             'description'    => tona_cms_text_field( $post_id, 'csr_cta_description' ),
             'primaryLabel'   => tona_cms_text_field( $post_id, 'csr_cta_primary_label' ),
-            'primaryUrl'     => tona_cms_text_field( $post_id, 'csr_cta_primary_url' ),
+            'primaryUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'csr_cta_primary_url', $post_id ) : '' ),
             'secondaryLabel' => tona_cms_text_field( $post_id, 'csr_cta_secondary_label' ),
-            'secondaryUrl'   => tona_cms_text_field( $post_id, 'csr_cta_secondary_url' ),
+            'secondaryUrl'   => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'csr_cta_secondary_url', $post_id ) : '' ),
         ),
     );
 }
