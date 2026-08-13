@@ -114,6 +114,14 @@ $meta = array(
     tona_frontend_meta_tag( 'twitter:title', $title ),
     tona_frontend_meta_tag( 'twitter:description', $description ),
     tona_frontend_meta_tag( 'twitter:image', $image ),
+    '<!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8WTPXZ7TFX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag(\'js\', new Date());
+      gtag(\'config\', \'G-8WTPXZ7TFX\');
+    </script>',
 );
 
 $meta = implode( "\n    ", array_filter( $meta ) );
