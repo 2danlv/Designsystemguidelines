@@ -616,6 +616,42 @@ export function getCurrentLanguage(): SiteLanguage {
   return match ? "en" : "vi";
 }
 
+export function normalizeLinkValue(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  if (typeof value === "number") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const normalized = normalizeLinkValue(item);
+      if (normalized) return normalized;
+    }
+    return "";
+  }
+
+  if (typeof value === "object") {
+    const obj = value as Record<string, unknown>;
+    return (
+      normalizeLinkValue(obj.url) ||
+      normalizeLinkValue(obj.href) ||
+      normalizeLinkValue(obj.link) ||
+      normalizeLinkValue(obj.page_link) ||
+      normalizeLinkValue(obj.permalink) ||
+      ""
+    );
+  }
+
+  return "";
+}
+
 function normalizeWordPressUrl(url: string) {
   if (!/^https?:\/\//i.test(url)) {
     return url;

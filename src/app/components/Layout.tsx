@@ -2,26 +2,9 @@ import { Outlet, Link, useLocation } from "react-router";
 import { Menu, X, MapPin, Phone, Mail, Facebook, Linkedin, Youtube, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import type React from "react";
-import { fetchCmsRoute, fetchCmsSettings, getCurrentLanguage, localizeUrl, type CmsRouteMatch, type SiteLink, type SiteMenuItem, type SiteSettings } from "../lib/wordpress";
+import { fetchCmsRoute, fetchCmsSettings, getCurrentLanguage, localizeUrl, normalizeLinkValue, type CmsRouteMatch, type SiteLink, type SiteMenuItem, type SiteSettings } from "../lib/wordpress";
 import { SiteSettingsProvider, useSiteText } from "../context/SiteSettingsContext";
 import { CmsLoading } from "./CmsLoading";
-
-function normalizeLinkValue(value: unknown) {
-  if (typeof value === "string") {
-    return value;
-  }
-
-  if (Array.isArray(value)) {
-    return normalizeLinkValue(value[0]);
-  }
-
-  if (value && typeof value === "object") {
-    const linkValue = value as { url?: unknown; href?: unknown; link?: unknown; permalink?: unknown };
-    return normalizeLinkValue(linkValue.url || linkValue.href || linkValue.link || linkValue.permalink);
-  }
-
-  return "";
-}
 
 function itemUrl(item: SiteLink | SiteMenuItem) {
   return normalizeLinkValue(item.url || (item as SiteMenuItem & { to?: unknown }).to) || "#";

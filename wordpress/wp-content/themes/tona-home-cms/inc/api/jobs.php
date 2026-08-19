@@ -53,7 +53,7 @@ function tona_cms_job_payload( $post ) {
         'level'        => $summary['level'] ?? tona_cms_text_field( $post_id, 'job_level' ),
         'date'         => $summary['date'] ?? tona_cms_text_field( $post_id, 'job_date' ),
         'salary'       => $summary['salary'] ?? tona_cms_text_field( $post_id, 'job_salary' ),
-        'jdUrl'        => tona_cms_text_field( $post_id, 'job_jd_url' ),
+        'jdUrl'        => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'job_jd_url', $post_id ) : '' ),
         'slots'        => (int) ( $slots ?: 1 ),
         'description'  => tona_cms_text_field( $post_id, 'job_description' ) ?: wp_strip_all_tags( get_the_content( null, false, $post ) ),
         'requirements' => tona_cms_lines_field( $post_id, 'job_requirements' ),
@@ -124,7 +124,7 @@ function tona_cms_jobs_page_payload( $page ) {
             'title'       => tona_cms_text_field( $post_id, 'jobs_spontaneous_title' ),
             'description' => tona_cms_text_field( $post_id, 'jobs_spontaneous_description' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'jobs_spontaneous_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'jobs_spontaneous_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'jobs_spontaneous_link_url', $post_id ) : '' ),
         ),
         'interns'       => array(
             'eyebrow'        => tona_cms_group_text_field( $post_id, array( 'jobs_interns_intro_left', 'jobs_interns_Intro_left' ), 'jobs_interns_eyebrow' ),
@@ -139,13 +139,13 @@ function tona_cms_jobs_page_payload( $page ) {
             'ctaTitle'       => tona_cms_text_field( $post_id, 'jobs_interns_cta_title' ),
             'ctaDescription' => tona_cms_text_field( $post_id, 'jobs_interns_cta_description' ),
             'ctaLinkLabel'   => tona_cms_text_field( $post_id, 'jobs_interns_cta_link_label' ),
-            'ctaLinkUrl'     => tona_cms_text_field( $post_id, 'jobs_interns_cta_link_url' ),
+            'ctaLinkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'jobs_interns_cta_link_url', $post_id ) : '' ),
         ),
         'cultureTeaser' => array(
             'title'       => tona_cms_text_field( $post_id, 'jobs_culture_title' ),
             'description' => tona_cms_text_field( $post_id, 'jobs_culture_description' ),
             'linkLabel'   => tona_cms_text_field( $post_id, 'jobs_culture_link_label' ),
-            'linkUrl'     => tona_cms_text_field( $post_id, 'jobs_culture_link_url' ),
+            'linkUrl'     => tona_cms_link_url_value( function_exists( 'get_field' ) ? get_field( 'jobs_culture_link_url', $post_id ) : '' ),
         ),
         'applicationModal' => array(
             'description'              => tona_cms_text_field( $post_id, 'jobs_apply_description' ),
@@ -178,4 +178,3 @@ function tona_cms_jobs_page_payload( $page ) {
         ),
     );
 }
-

@@ -47,14 +47,82 @@ function tona_cms_menu_items_payload( $items ) {
 }
 
 function tona_cms_link_url_value( $value ) {
+    if ( empty( $value ) && '0' !== $value && 0 !== $value ) {
+        return '';
+    }
+
     if ( is_array( $value ) ) {
-        $value = $value['url'] ?? '';
+        if ( isset( $value['url'] ) ) {
+            $value = $value['url'];
+        } elseif ( ! empty( $value ) && array_values( $value ) === $value ) {
+            $value = reset( $value );
+            if ( is_array( $value ) && isset( $value['url'] ) ) {
+                $value = $value['url'];
+            }
+        }
+    }
+
+    if ( empty( $value ) && '0' !== $value && 0 !== $value ) {
+        return '';
+    }
+
+    $post_id = 0;
+    if ( is_object( $value ) && isset( $value->ID ) ) {
+        $post_id = (int) $value->ID;
+    } elseif ( is_numeric( $value ) ) {
+        $post_id = (int) $value;
+    }
+
+    if ( $post_id > 0 ) {
+        $current_lang = function_exists( 'pll_current_language' ) ? pll_current_language( 'slug' ) : '';
+        if ( $current_lang && function_exists( 'pll_get_post' ) ) {
+            $translated_id = pll_get_post( $post_id, $current_lang );
+            if ( $translated_id ) {
+                $post_id = (int) $translated_id;
+            }
+        }
+
+        $permalink = get_permalink( $post_id );
+        if ( $permalink && ! is_wp_error( $permalink ) ) {
+            $value = $permalink;
+        }
     }
 
     $url = is_string( $value ) ? trim( $value ) : '';
 
     if ( '' === $url ) {
         return '';
+    }
+
+    if ( is_numeric( $url ) ) {
+        $post_id = (int) $url;
+        $current_lang = function_exists( 'pll_current_language' ) ? pll_current_language( 'slug' ) : '';
+        if ( $current_lang && function_exists( 'pll_get_post' ) ) {
+            $translated_id = pll_get_post( $post_id, $current_lang );
+            if ( $translated_id ) {
+                $post_id = (int) $translated_id;
+            }
+        }
+        $permalink = get_permalink( $post_id );
+        if ( $permalink && ! is_wp_error( $permalink ) ) {
+            $url = $permalink;
+        }
+    }
+
+    if ( preg_match( '/^https?:\/\//i', $url ) || 0 === strpos( $url, '/' ) ) {
+        $url_post_id = url_to_postid( $url );
+        if ( $url_post_id > 0 ) {
+            $current_lang = function_exists( 'pll_current_language' ) ? pll_current_language( 'slug' ) : '';
+            if ( $current_lang && function_exists( 'pll_get_post' ) ) {
+                $translated_id = pll_get_post( $url_post_id, $current_lang );
+                if ( $translated_id && $translated_id !== $url_post_id ) {
+                    $permalink = get_permalink( $translated_id );
+                    if ( $permalink && ! is_wp_error( $permalink ) ) {
+                        $url = $permalink;
+                    }
+                }
+            }
+        }
     }
 
     return tona_cms_frontend_url( $url );
@@ -65,6 +133,29 @@ function tona_cms_frontend_url( $url, $menu_item = null ) {
 
     if ( '' === $url || '#' === $url || preg_match( '/^(mailto:|tel:)/i', $url ) ) {
         return $url;
+    }
+
+    $parsed_query = wp_parse_url( $url, PHP_URL_QUERY );
+    $parsed_fragment = wp_parse_url( $url, PHP_URL_FRAGMENT );
+
+    if ( $parsed_query ) {
+        parse_str( $parsed_query, $query_args );
+        if ( ! empty( $query_args['page_id'] ) && is_numeric( $query_args['page_id'] ) ) {
+            $page_id = (int) $query_args['page_id'];
+            $current_lang = function_exists( 'pll_current_language' ) ? pll_current_language( 'slug' ) : '';
+            if ( $current_lang && function_exists( 'pll_get_post' ) ) {
+                $translated_id = pll_get_post( $page_id, $current_lang );
+                if ( $translated_id ) {
+                    $page_id = (int) $translated_id;
+                }
+            }
+            $permalink = get_permalink( $page_id );
+            if ( $permalink && ! is_wp_error( $permalink ) ) {
+                $url = $permalink;
+                $parsed_query = wp_parse_url( $url, PHP_URL_QUERY );
+                $parsed_fragment = wp_parse_url( $url, PHP_URL_FRAGMENT );
+            }
+        }
     }
 
     $home_host = wp_parse_url( home_url(), PHP_URL_HOST );
@@ -118,7 +209,19 @@ function tona_cms_frontend_url( $url, $menu_item = null ) {
         $path = '/';
     }
 
-    return $path;
+    $query_str = '';
+    if ( $parsed_query ) {
+        parse_str( $parsed_query, $q_args );
+        unset( $q_args['page_id'] );
+        $clean_query = http_build_query( $q_args );
+        if ( $clean_query ) {
+            $query_str = '?' . $clean_query;
+        }
+    }
+
+    $fragment_str = $parsed_fragment ? '#' . $parsed_fragment : '';
+
+    return $path . $query_str . $fragment_str;
 }
 
 function tona_cms_apply_rest_language( $request ) {
@@ -200,13 +303,20 @@ function tona_cms_link_items_payload( $items ) {
         array_filter(
             array_map(
                 function ( $item ) {
-                    if ( ! is_array( $item ) ) {
+                    if ( ! is_array( $item ) && ! is_object( $item ) ) {
                         return null;
                     }
 
+                    if ( is_object( $item ) ) {
+                        $item = (array) $item;
+                    }
+
+                    $label = $item['label'] ?? $item['title'] ?? $item['name'] ?? '';
+                    $raw_url = $item['url'] ?? $item['link'] ?? $item['page_link'] ?? $item;
+
                     return array(
-                        'label' => $item['label'] ?? '',
-                        'url'   => tona_cms_link_url_value( $item['url'] ?? '' ),
+                        'label' => tona_cms_decode_text( $label ),
+                        'url'   => tona_cms_link_url_value( $raw_url ),
                     );
                 },
                 is_array( $items ) ? $items : array()
@@ -259,12 +369,10 @@ function tona_cms_project_category_from_value( $value ) {
 }
 
 function tona_cms_projects_page_filter_url( $term, $language ) {
-    $page = function_exists( 'tona_cms_get_page_by_template' ) ? tona_cms_get_page_by_template( 'tona-projects' ) : null;
-    $base_url = $page ? tona_cms_frontend_url( get_permalink( $page ) ) : '';
-    $base_url = rtrim( $base_url ?: '/', '/' );
+    $base_url = 'en' === $language ? '/en/projects' : '/du-an';
 
-    if ( '' === $base_url ) {
-        return '';
+    if ( ! $term instanceof WP_Term ) {
+        return $base_url;
     }
 
     return $base_url . '#' . rawurlencode( $term->slug );
@@ -275,22 +383,29 @@ function tona_cms_project_category_link_items_payload( $items, $language ) {
         array_filter(
             array_map(
                 function ( $item ) use ( $language ) {
-                    if ( ! is_array( $item ) ) {
+                    if ( ! is_array( $item ) && ! is_object( $item ) ) {
                         return null;
+                    }
+
+                    if ( is_object( $item ) ) {
+                        $item = (array) $item;
                     }
 
                     $term = tona_cms_project_category_from_value( $item['category'] ?? null );
 
                     if ( $term ) {
                         return array(
-                            'label' => trim( $item['label'] ?? '' ) ?: tona_cms_decode_text( $term->name ),
+                            'label' => trim( $item['label'] ?? $item['title'] ?? '' ) ?: tona_cms_decode_text( $term->name ),
                             'url'   => tona_cms_projects_page_filter_url( $term, $language ),
                         );
                     }
 
+                    $label = $item['label'] ?? $item['title'] ?? $item['name'] ?? '';
+                    $raw_url = $item['url'] ?? $item['link'] ?? $item['page_link'] ?? $item;
+
                     return array(
-                        'label' => $item['label'] ?? '',
-                        'url'   => tona_cms_link_url_value( $item['url'] ?? '' ),
+                        'label' => tona_cms_decode_text( $label ),
+                        'url'   => tona_cms_link_url_value( $raw_url ),
                     );
                 },
                 is_array( $items ) ? $items : array()
