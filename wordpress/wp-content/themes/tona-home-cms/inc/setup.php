@@ -25,3 +25,27 @@ require_once get_stylesheet_directory() . '/inc/post-types/projects.php';
 require_once get_stylesheet_directory() . '/inc/post-types/news.php';
 require_once get_stylesheet_directory() . '/inc/i18n/ui-strings.php';
 require_once get_stylesheet_directory() . '/inc/seo-field.php';
+add_action( 'admin_print_footer_scripts', function () {
+    ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('a[target="_blank"]').forEach(function (link) {
+            link.removeAttribute('target');
+            const rel = link.getAttribute('rel');
+            if (rel) {
+                const values = rel
+                    .split(/\s+/)
+                    .filter(function (value) {
+                        return value !== 'noopener' && value !== 'noreferrer';
+                    });
+                if (values.length) {
+                    link.setAttribute('rel', values.join(' '));
+                } else {
+                    link.removeAttribute('rel');
+                }
+            }
+        });
+    });
+    </script>
+    <?php
+}, PHP_INT_MAX );
