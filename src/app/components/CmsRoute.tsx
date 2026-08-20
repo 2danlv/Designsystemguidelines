@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router";
+import { useEffect } from "react";
+import { Navigate, useLocation, useOutletContext } from "react-router";
 import { useSiteSettings } from "../context/SiteSettingsContext";
-import { fetchCmsRoute, type CmsRouteMatch } from "../lib/wordpress";
+import type { CmsRouteMatch } from "../lib/wordpress";
 import { About } from "../pages/About";
 import { GenericContentPage } from "../pages/ContentPage";
 import { CSR } from "../pages/CSR";
@@ -80,21 +80,11 @@ export function CmsRoute() {
   const settings = useSiteSettings();
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
   const routeKey = `${location.pathname}${location.search}`;
-  const [routeMatch, setRouteMatch] = useState<CmsRouteMatch | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const { routeMatch, routeLoaded: loaded } = useOutletContext<{
+    routeMatch: CmsRouteMatch | null;
+    routeLoaded: boolean;
+  }>();
   const legacyVietnameseMatch = location.pathname.match(/^\/vi(?=\/|$)(.*)$/);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setLoaded(false);
-    fetchCmsRoute(`${location.pathname}${location.search}`, controller.signal).then((match) => {
-      setRouteMatch(match);
-      setLoaded(true);
-    });
-
-    return () => controller.abort();
-  }, [language, location.pathname, location.search]);
 
   useEffect(() => {
     if (!loaded) return;

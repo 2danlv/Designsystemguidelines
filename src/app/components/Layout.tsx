@@ -49,13 +49,18 @@ const normalizePath = (path: string) => {
   return cleanPath.length > 1 ? cleanPath.replace(/\/+$/, "") : cleanPath;
 };
 
-function Header({ settings }: { settings?: SiteSettings["header"] }) {
+function Header({
+  settings,
+  routeMatch,
+}: {
+  settings?: SiteSettings["header"];
+  routeMatch: CmsRouteMatch | null;
+}) {
   const text = useSiteText();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [routeMatch, setRouteMatch] = useState<CmsRouteMatch | null>(null);
   const location = useLocation();
   const dropdownTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -71,14 +76,6 @@ function Header({ settings }: { settings?: SiteSettings["header"] }) {
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetchCmsRoute(`${location.pathname}${location.search}`, controller.signal).then(setRouteMatch);
-
-    return () => controller.abort();
-  }, [location.pathname, location.search]);
 
   const isCurrent = (path: string) => {
     const currentPath = normalizePath(location.pathname);
@@ -457,6 +454,8 @@ function Footer({ settings }: { settings?: SiteSettings["footer"] }) {
 export function Layout() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [routeMatch, setRouteMatch] = useState<CmsRouteMatch | null>(null);
+  const [routeLoaded, setRouteLoaded] = useState(false);
   const location = useLocation();
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
   const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
@@ -478,6 +477,20 @@ export function Layout() {
 
     return () => controller.abort();
   }, [language]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setRouteLoaded(false);
+    fetchCmsRoute(`${location.pathname}${location.search}`, controller.signal).then((match) => {
+      if (!controller.signal.aborted) {
+        setRouteMatch(match);
+        setRouteLoaded(true);
+      }
+    });
+
+    return () => controller.abort();
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     const siteIcon = settings?.site?.icon?.trim();
@@ -506,9 +519,9 @@ export function Layout() {
   return (
     <SiteSettingsProvider settings={settings}>
       <div className="min-h-screen flex flex-col font-san text-[#002d17] antialiased">
-        <Header settings={settings?.header} />
+        <Header settings={settings?.header} routeMatch={routeMatch} />
         <main className={`flex-1 flex flex-col w-full ${isHomePage ? "" : "pt-[72px]"}`}>
-          <Outlet />
+          <Outlet context={{ routeMatch, routeLoaded }} />
         </main>
         <Footer settings={settings?.footer} />
       </div>
