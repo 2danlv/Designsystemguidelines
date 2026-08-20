@@ -244,11 +244,11 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
             return (
               <div
                 key={svc.id}
-                className={`group relative flex min-h-[208px] cursor-pointer gap-5 rounded-[18px] border p-6 transition-all duration-300 md:gap-7 md:p-10
+                className={`relative flex min-h-[208px] gap-5 rounded-[18px] border p-6 md:gap-7 md:p-10
                   ${
                     svc.highlight
-                      ? "border-[#003f24] bg-[#003f24] hover:bg-[#002d17]"
-                      : "border-[#002d17]/15 bg-white hover:border-[#46aa85]/60 hover:bg-[#f7fcfa]"
+                      ? "border-[#003f24] bg-[#003f24]"
+                      : "border-[#002d17]/15 bg-white"
                   }`}
               >
                 {svc.highlight && (
@@ -257,18 +257,18 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                   </div>
                 )}
                 <div
-                  className={`flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-2xl border-2 transition-colors
+                  className={`flex h-[62px] w-[62px] shrink-0 items-center justify-center rounded-2xl border-2
                     ${
                       svc.highlight
                         ? "border-[#f4aa1f] bg-[#f4aa1f]"
-                        : "border-[#f4aa1f] bg-white group-hover:bg-[#f4aa1f]"
+                        : "border-[#f4aa1f] bg-white"
                     }`}
                 >
                   {Icon && <Icon
                     size={24}
                     strokeWidth={2.25}
-                    className={`transition-colors ${
-                      svc.highlight ? "text-[#002d17]" : "text-[#f4aa1f] group-hover:text-[#002d17]"
+                    className={`${
+                      svc.highlight ? "text-[#002d17]" : "text-[#f4aa1f]"
                     }`}
                   />}
                 </div>
@@ -277,8 +277,8 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                     {svc.subtitle}
                   </p>
                   <h3
-                    className={`mb-3 text-[21px] font-bold leading-tight tracking-[-0.035em] transition-colors md:text-[23px] ${
-                      svc.highlight ? "text-white" : "text-[#002d17] group-hover:text-[#46aa85]"
+                    className={`mb-3 text-[21px] font-bold leading-tight tracking-[-0.035em] md:text-[23px] ${
+                      svc.highlight ? "text-white" : "text-[#002d17]"
                     }`}
                   >
                     {svc.title}
@@ -291,12 +291,6 @@ function ServicesSection({ title, items }: { title?: string; items: HomeService[
                     {svc.desc}
                   </p>
                 </div>
-                <ArrowRight
-                  size={18}
-                  className={`absolute bottom-8 right-7 transition-all duration-300 group-hover:translate-x-1 ${
-                    svc.highlight ? "text-[#f4aa1f]" : "text-[#002d17]/20 group-hover:text-[#f4aa1f]"
-                  }`}
-                />
               </div>
             );
           })}
