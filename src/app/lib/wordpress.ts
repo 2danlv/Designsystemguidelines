@@ -74,6 +74,7 @@ export type AboutCmsData = {
     desc?: string;
   }>;
   timelineTitle?: string;
+  timelineImage?: string;
   timeline?: Array<{
     year?: string;
     title?: string;
@@ -449,6 +450,7 @@ export type ProjectPost = {
   image: string;
   images?: string[];
   description: string;
+  content?: string;
   location: string;
   area: string;
   client: string;

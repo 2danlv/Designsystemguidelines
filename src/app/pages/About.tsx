@@ -155,6 +155,7 @@ export function About() {
   const visionText = cmsPage?.missionVision?.visionText || "";
   const valuesTitle = cmsPage?.valuesTitle || "";
   const timelineTitle = cmsPage?.timelineTitle || "";
+  const timelineImage = cmsPage?.timelineImage || "";
   const certificationsTitle = cmsPage?.certificationsTitle || "";
   const ctaTitle = cmsPage?.cta?.title || "";
   const ctaDescription = cmsPage?.cta?.description || "";
@@ -294,19 +295,32 @@ export function About() {
         </div>
       </section>
 
-      <section className="py-14 bg-[#f9f9f7]" style={backgroundStyle(colors?.timelineBackground)}>
+      <section className={`${timelineImage ? "pt-0 pb-4" : "py-14"} bg-[#f9f9f7]`} style={backgroundStyle(colors?.timelineBackground)}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl md:text-4xl font-semibold text-[#002d17] uppercase tracking-tight">{timelineTitle}</h2></div>
-          <div className="relative flex flex-col gap-0">
-            <div className="absolute left-16 md:left-24 top-0 bottom-0 w-px bg-[#002d17]/10 mx-[54px]" />
-            {timeline.map((item, index) => (
-              <motion.div key={`${item.year}-${index}`} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="flex gap-8 md:gap-12 items-start group py-6 first:pt-0">
-                <div className="shrink-0 w-16 md:w-24 flex flex-col items-end"><span className="font-semibold text-[#002d17]/30 group-hover:text-[#f4aa1f] text-lg md:text-2xl tracking-tight transition-colors">{item.year}</span></div>
-                <div className="shrink-0 w-3 h-3 rounded-full bg-white border-2 border-[#002d17]/30 group-hover:border-[#f4aa1f] group-hover:bg-[#f4aa1f] mt-1.5 transition-colors relative z-10" />
-                <div className="flex-1 pb-6 border-b border-[#002d17]/10 last:border-0"><h3 className="font-semibold text-[#002d17] uppercase tracking-tight text-lg mb-2">{item.title}</h3><p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium">{item.desc}</p></div>
-              </motion.div>
-            ))}
-          </div>
+          {timelineImage ? (
+            <motion.img
+              src={timelineImage}
+              alt={timelineTitle}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="block w-full h-auto rounded-xl"
+            />
+          ) : (
+            <>
+              <div className="mb-10"><div className="w-16 h-1 bg-[#f4aa1f] mb-6" /><h2 className="text-3xl md:text-4xl font-semibold text-[#002d17] uppercase tracking-tight">{timelineTitle}</h2></div>
+              <div className="relative flex flex-col gap-0">
+                <div className="absolute left-16 md:left-24 top-0 bottom-0 w-px bg-[#002d17]/10 mx-[54px]" />
+                {timeline.map((item, index) => (
+                  <motion.div key={`${item.year}-${index}`} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="flex gap-8 md:gap-12 items-start group py-6 first:pt-0">
+                    <div className="shrink-0 w-16 md:w-24 flex flex-col items-end"><span className="font-semibold text-[#002d17]/30 group-hover:text-[#f4aa1f] text-lg md:text-2xl tracking-tight transition-colors">{item.year}</span></div>
+                    <div className="shrink-0 w-3 h-3 rounded-full bg-white border-2 border-[#002d17]/30 group-hover:border-[#f4aa1f] group-hover:bg-[#f4aa1f] mt-1.5 transition-colors relative z-10" />
+                    <div className="flex-1 pb-6 border-b border-[#002d17]/10 last:border-0"><h3 className="font-semibold text-[#002d17] uppercase tracking-tight text-lg mb-2">{item.title}</h3><p className="text-[#002d17]/55 text-[16px] leading-relaxed font-medium">{item.desc}</p></div>
+                  </motion.div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
 

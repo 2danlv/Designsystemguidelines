@@ -82,3 +82,21 @@ function tona_cms_about_hero_right_acf_field( $field ) {
     return $field;
 }
 add_filter( 'acf/load_field/key=field_6a0c95b1227aa', 'tona_cms_about_hero_right_acf_field', 20 );
+
+function tona_cms_register_about_timeline_image_field() {
+    if ( ! function_exists( 'acf_add_local_field' ) ) {
+        return;
+    }
+
+    $field = tona_cms_acf_image_field(
+        'field_tona_about_timeline_image',
+        'Timeline Image',
+        'about_timeline_image',
+        'Select an existing image or upload a new one. When set, this image replaces the Timeline Items content on the About page.'
+    );
+    $field['parent'] = 'group_tona_about_page';
+    $field['menu_order'] = 26;
+
+    acf_add_local_field( $field );
+}
+add_action( 'acf/init', 'tona_cms_register_about_timeline_image_field', 30 );

@@ -288,9 +288,16 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
               {project.title}
             </h1>
             <div className="w-16 h-1 bg-[#f4aa1f] mb-8" />
-            <p className="text-[#002d17]/70 text-base leading-relaxed font-medium mb-6">
-              {project.description}
-            </p>
+            {project.content ? (
+              <div
+                className="project-article-content text-[#002d17]/70 text-base leading-relaxed font-medium mb-6"
+                dangerouslySetInnerHTML={{ __html: project.content }}
+              />
+            ) : project.description ? (
+              <p className="text-[#002d17]/70 text-base leading-relaxed font-medium mb-6">
+                {project.description}
+              </p>
+            ) : null}
           </div>
 
           {/* Highlights */}

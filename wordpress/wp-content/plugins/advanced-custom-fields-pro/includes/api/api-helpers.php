@@ -2909,7 +2909,7 @@ function acf_validate_attachment( $attachment, $field, $context = 'prepare' ) {
 
 		// prepare
 	} elseif ( $context == 'prepare' ) {
-		$use_path       = isset( $attachment['filename'] ) ? $attachment['filename'] : $attachment['url'];
+		$use_path       = acf_maybe_get( $attachment, 'filename', acf_maybe_get( $attachment, 'url', acf_maybe_get( $attachment, 'name', '' ) ) );
 		$file['type']   = pathinfo( $use_path, PATHINFO_EXTENSION );
 		$file['size']   = acf_maybe_get( $attachment, 'filesizeInBytes', 0 );
 		$file['width']  = acf_maybe_get( $attachment, 'width', 0 );
@@ -2918,7 +2918,7 @@ function acf_validate_attachment( $attachment, $field, $context = 'prepare' ) {
 		// custom
 	} else {
 		$file         = array_merge( $file, $attachment );
-		$use_path     = isset( $attachment['filename'] ) ? $attachment['filename'] : $attachment['url'];
+		$use_path     = acf_maybe_get( $attachment, 'filename', acf_maybe_get( $attachment, 'url', acf_maybe_get( $attachment, 'name', '' ) ) );
 		$file['type'] = pathinfo( $use_path, PATHINFO_EXTENSION );
 	}
 

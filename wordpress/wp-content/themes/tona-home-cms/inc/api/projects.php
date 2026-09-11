@@ -38,6 +38,8 @@ function tona_cms_project_payload( $post ) {
 
     $images = $gallery_images;
     $main_image_url = ! empty( $gallery_images ) ? $gallery_images[0] : '';
+    $content = apply_filters( 'the_content', $post->post_content );
+    $description = tona_cms_decode_text( wp_strip_all_tags( $content ) );
 
     $category = ! empty( $terms ) ? $terms[0]->name : '';
     $category_slug = ! empty( $terms ) ? $terms[0]->slug : '';
@@ -62,7 +64,8 @@ function tona_cms_project_payload( $post ) {
         ),
         'image'           => $main_image_url,
         'images'          => $images,
-        'description'     => wp_strip_all_tags( get_the_content( null, false, $post ) ),
+        'description'     => $description,
+        'content'         => $content,
         'location'        => $summary['location'] ?? tona_cms_text_field( $post_id, 'project_location' ),
         'area'            => $summary['area'] ?? tona_cms_text_field( $post_id, 'project_area' ),
         'client'          => $summary['client'] ?? tona_cms_text_field( $post_id, 'project_client' ),

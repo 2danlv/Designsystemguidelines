@@ -212,6 +212,7 @@ function tona_cms_about_payload( $page ) {
 
     $values = function_exists( 'get_field' ) ? get_field( 'about_values', $post_id ) : array();
     $timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline', $post_id ) : array();
+    $timeline_image = function_exists( 'get_field' ) ? get_field( 'about_timeline_image', $post_id ) : '';
     $certifications = function_exists( 'get_field' ) ? get_field( 'about_certifications', $post_id ) : array();
 
     return array(
@@ -266,6 +267,7 @@ function tona_cms_about_payload( $page ) {
             )
         ),
         'timelineTitle' => tona_cms_text_field( $post_id, 'about_timeline_title' ),
+        'timelineImage' => tona_cms_image_url( $timeline_image ) ?: ( get_the_post_thumbnail_url( $post_id, 'full' ) ?: '' ),
         'timeline'      => array_values(
             array_map(
                 function ( $item ) {
