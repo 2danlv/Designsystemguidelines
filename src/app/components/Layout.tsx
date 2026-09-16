@@ -94,22 +94,30 @@ function Header({
   };
 
   const currentLanguage = getCurrentLanguage();
+  const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
   const navLinks = settings?.nav || [];
   const languages = settings?.languages || [];
   const displayLanguages = languages.map((language) => {
     const targetLanguage = language.label?.toLowerCase() === "en" ? "en" : "vi";
     const translatedUrl = routeMatch?.translations?.[targetLanguage];
+    const url = targetLanguage === currentLanguage
+      ? location.pathname
+      : translatedUrl ? localizeUrl(translatedUrl, targetLanguage) : "";
+    const targetHome = targetLanguage === "en" ? "/en" : "/";
+    const available = targetLanguage === currentLanguage || Boolean(
+      url && (isHomePage || normalizePath(url) !== targetHome)
+    );
 
     return {
       ...language,
-      url: localizeUrl(translatedUrl || location.pathname, targetLanguage),
+      url,
+      available,
       language: targetLanguage,
     };
   });
   const logo = settings?.logo || "";
   const logoAlt = settings?.logoAlt || "";
   const homeUrl = settings?.homeUrl || "";
-  const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
   const whiteMode = isHovered && !isScrolled && isHomePage;
   const darkMode = isScrolled || !isHomePage;
   const headerBg = darkMode
@@ -204,21 +212,27 @@ function Header({
           {/* Language */}
           <div className="hidden lg:flex items-center font-bold uppercase overflow-hidden gap-1">
             {displayLanguages.map((language) => (
-              <SmartLink
-                key={language.language}
-                to={language.url}
-                skipLocalization
-                ariaLabel={`${text("common.switch_language")} ${language.label}`}
-                className={`px-2 py-1 transition-colors text-xs rounded-md ${
-                  language.language === currentLanguage
-                    ? "bg-[#f4aa1f] text-[#002d17] hover:bg-[#f4aa1f]/90"
-                    : whiteMode
-                      ? "text-[#002d17]/50 hover:text-[#002d17] hover:bg-[#002d17]/5"
-                      : "text-white/60 hover:text-white hover:bg-[#46aa85]"
-                }`}
-              >
-                {language.label}
-              </SmartLink>
+              language.available ? (
+                <SmartLink
+                  key={language.language}
+                  to={language.url}
+                  skipLocalization
+                  ariaLabel={`${text("common.switch_language")} ${language.label}`}
+                  className={`px-2 py-1 transition-colors text-xs rounded-md ${
+                    language.language === currentLanguage
+                      ? "bg-[#f4aa1f] text-[#002d17] hover:bg-[#f4aa1f]/90"
+                      : whiteMode
+                        ? "text-[#002d17]/50 hover:text-[#002d17] hover:bg-[#002d17]/5"
+                        : "text-white/60 hover:text-white hover:bg-[#46aa85]"
+                  }`}
+                >
+                  {language.label}
+                </SmartLink>
+              ) : (
+                <span key={language.language} aria-disabled="true" className="px-2 py-1 text-xs rounded-md opacity-35 cursor-not-allowed">
+                  {language.label}
+                </span>
+              )
             ))}
           </div>
 
@@ -267,18 +281,24 @@ function Header({
           })}
           <div className="flex gap-2 mt-4">
             {displayLanguages.map((language) => (
-              <SmartLink
-                key={language.language}
-                to={language.url}
-                skipLocalization
-                className={`px-4 py-2 font-bold text-xs uppercase ${
-                  language.language === currentLanguage
-                    ? "bg-[#f4aa1f] text-[#002d17]"
-                    : "border border-white/30 text-white/60"
-                }`}
-              >
-                {language.label}
-              </SmartLink>
+              language.available ? (
+                <SmartLink
+                  key={language.language}
+                  to={language.url}
+                  skipLocalization
+                  className={`px-4 py-2 font-bold text-xs uppercase ${
+                    language.language === currentLanguage
+                      ? "bg-[#f4aa1f] text-[#002d17]"
+                      : "border border-white/30 text-white/60"
+                  }`}
+                >
+                  {language.label}
+                </SmartLink>
+              ) : (
+                <span key={language.language} aria-disabled="true" className="px-4 py-2 font-bold text-xs uppercase border border-white/20 text-white/30 cursor-not-allowed">
+                  {language.label}
+                </span>
+              )
             ))}
           </div>
         </div>
@@ -456,8 +476,11 @@ export function Layout() {
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [routeMatch, setRouteMatch] = useState<CmsRouteMatch | null>(null);
   const [routeLoaded, setRouteLoaded] = useState(false);
+  const [resolvedPath, setResolvedPath] = useState("");
   const location = useLocation();
   const language = location.pathname.startsWith("/en") ? "en" : "vi";
+  const routePath = `${location.pathname}${location.search}`;
+  const activeRouteLoaded = routeLoaded && resolvedPath === routePath;
   const isHomePage = ["/", "/en"].includes(normalizePath(location.pathname));
 
   useEffect(() => {
@@ -482,15 +505,16 @@ export function Layout() {
     const controller = new AbortController();
 
     setRouteLoaded(false);
-    fetchCmsRoute(`${location.pathname}${location.search}`, controller.signal).then((match) => {
+    fetchCmsRoute(routePath, controller.signal).then((match) => {
       if (!controller.signal.aborted) {
         setRouteMatch(match);
+        setResolvedPath(routePath);
         setRouteLoaded(true);
       }
     });
 
     return () => controller.abort();
-  }, [location.pathname, location.search]);
+  }, [routePath]);
 
   useEffect(() => {
     const siteIcon = settings?.site?.icon?.trim();
@@ -519,9 +543,9 @@ export function Layout() {
   return (
     <SiteSettingsProvider settings={settings}>
       <div className="min-h-screen flex flex-col font-san text-[#002d17] antialiased">
-        <Header settings={settings?.header} routeMatch={routeMatch} />
+        <Header settings={settings?.header} routeMatch={activeRouteLoaded ? routeMatch : null} />
         <main className={`flex-1 flex flex-col w-full ${isHomePage ? "" : "pt-[72px]"}`}>
-          <Outlet context={{ routeMatch, routeLoaded }} />
+          <Outlet context={{ routeMatch: activeRouteLoaded ? routeMatch : null, routeLoaded: activeRouteLoaded }} />
         </main>
         <Footer settings={settings?.footer} />
       </div>

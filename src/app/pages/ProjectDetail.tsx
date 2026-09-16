@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import useEmblaCarousel from "embla-carousel-react";
-import { fetchCmsProject, fetchCmsProjects, type ProjectPost } from "../lib/wordpress";
+import { fetchCmsProject, fetchCmsProjects, getCurrentLanguage, type ProjectPost } from "../lib/wordpress";
 import { projectDetailPath, sitePath } from "../lib/siteLinks";
 import { useSiteText } from "../context/SiteSettingsContext";
 import { CmsLoading } from "../components/CmsLoading";
@@ -179,13 +179,13 @@ function ImageGallery({ images }: { images: string[] }) {
 }
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
-export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) {
+export function ProjectDetail({ slugOverride, initialProject }: { slugOverride?: string; initialProject?: ProjectPost } = {}) {
   const text = useSiteText();
   const { slug: routeSlug } = useParams();
   const slug = slugOverride || routeSlug;
-  const [cmsProject, setCmsProject] = useState<ProjectPost | null>(null);
+  const [cmsProject, setCmsProject] = useState<ProjectPost | null>(initialProject ?? null);
   const [cmsProjects, setCmsProjects] = useState<ProjectPost[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(Boolean(initialProject));
 
   useEffect(() => {
     if (!slug) {
@@ -195,7 +195,7 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
     const controller = new AbortController();
 
     Promise.all([
-      fetchCmsProject(slug, controller.signal),
+      initialProject ? Promise.resolve(initialProject) : fetchCmsProject(slug, controller.signal),
       fetchCmsProjects(controller.signal),
     ]).then(([projectPost, projectPosts]) => {
       if (!controller.signal.aborted) {
@@ -206,9 +206,13 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
     });
 
     return () => controller.abort();
-  }, [slug]);
+  }, [slug, initialProject]);
 
   const project = cmsProject;
+  const translatedYearLabel = text("services.project_year");
+  const yearLabel = getCurrentLanguage() === "en" && translatedYearLabel === "Năm"
+    ? "Year"
+    : translatedYearLabel || (getCurrentLanguage() === "en" ? "Year" : "Năm");
   const relatedSource = cmsProjects;
   const relatedProjects = relatedSource.filter((p) => p.slug !== slug).slice(0, 3);
 
@@ -256,11 +260,12 @@ export function ProjectDetail({ slugOverride }: { slugOverride?: string } = {}) 
               <span className="text-white/70 text-xs font-medium">{text("project.leed_note")}</span>
             </div>
           )}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
           {[
             { label: text("project.spec.client"), value: project.client, icon: User },
             { label: text("project.spec.location"), value: project.location, icon: MapPin },
             { label: text("project.spec.area"), value: project.area, icon: Maximize2 },
+            { label: yearLabel, value: project.year, icon: Calendar },
             { label: text("project.spec.duration"), value: project.duration, icon: Calendar },
             { label: text("project.spec.status"), value: project.status, icon: CheckCircle2 },
           ].map((spec) => {

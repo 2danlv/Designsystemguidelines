@@ -57,7 +57,7 @@ function tona_cms_resolve_post_type_from_path( $path ) {
 }
 
 function tona_cms_resolve_route_payload( $request ) {
-    tona_cms_apply_rest_language( $request );
+    $requested_language = tona_cms_apply_rest_language( $request );
 
     $path = trim( (string) $request->get_param( 'path' ) );
     $path = '/' . ltrim( $path, '/' );
@@ -115,13 +115,53 @@ function tona_cms_resolve_route_payload( $request ) {
         );
     }
 
+    // url_to_postid() can resolve the default-language post when translated
+    // projects share a slug. Keep the route tied to the requested language.
+    $post_language = function_exists( 'pll_get_post_language' ) ? pll_get_post_language( $post_id, 'slug' ) : '';
+    if ( 'tona_project' === $post->post_type && in_array( $post_language, array( 'vi', 'en' ), true )
+        && $requested_language !== $post_language ) {
+        $translated_id = function_exists( 'pll_get_post' ) ? (int) pll_get_post( $post_id, $requested_language ) : 0;
+        $translated_post = $translated_id ? get_post( $translated_id ) : null;
+
+        if ( ! $translated_post || 'publish' !== $translated_post->post_status
+            || $translated_post->post_name !== basename( trim( $path, '/' ) ) ) {
+            return array( 'type' => 'not_found' );
+        }
+
+        $post = $translated_post;
+        $post_id = $translated_id;
+    }
+
     $translations = array();
     if ( function_exists( 'pll_get_post' ) ) {
         foreach ( array( 'vi', 'en' ) as $language ) {
             $translated_id = (int) pll_get_post( $post_id, $language );
 
+            // Some imported project translations share a slug without a
+            // Polylang translation link. Resolve only an existing post.
+            if ( ! $translated_id && 'tona_project' === $post->post_type ) {
+                $matching_posts = get_posts(
+                    array(
+                        'post_type'        => 'tona_project',
+                        'post_status'      => 'publish',
+                        'posts_per_page'   => 1,
+                        'name'             => $post->post_name,
+                        'lang'             => $language,
+                        'fields'           => 'ids',
+                        'suppress_filters' => false,
+                    )
+                );
+                $translated_id = ! empty( $matching_posts[0] ) ? (int) $matching_posts[0] : 0;
+            }
+
             if ( $translated_id ) {
-                $translations[ $language ] = tona_cms_frontend_url( get_permalink( $translated_id ) );
+                $translated_post = get_post( $translated_id );
+
+                if ( $translated_post && 'publish' === $translated_post->post_status ) {
+                    $translations[ $language ] = 'tona_project' === $translated_post->post_type
+                        ? ( 'en' === $language ? '/en/project-tona/' : '/du-an-tona/' ) . $translated_post->post_name
+                        : tona_cms_frontend_url( get_permalink( $translated_id ) );
+                }
             }
         }
     }
@@ -134,6 +174,7 @@ function tona_cms_resolve_route_payload( $request ) {
             'title'        => $seo['title'],
             'seo'          => $seo,
             'slug'         => $post->post_name,
+            'project'      => tona_cms_project_payload( $post ),
             'translations' => $translations,
         );
     }

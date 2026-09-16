@@ -134,7 +134,7 @@ export function CmsRoute() {
   }
 
   if (routeMatch?.type === "project" && routeMatch.slug) {
-    return <ProjectDetail key={routeKey} slugOverride={routeMatch.slug} />;
+    return <ProjectDetail key={routeKey} slugOverride={routeMatch.slug} initialProject={routeMatch.project} />;
   }
 
   if (routeMatch?.type === "news" && routeMatch.slug) {

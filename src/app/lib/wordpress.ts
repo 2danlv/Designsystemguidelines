@@ -597,6 +597,7 @@ export type CmsRouteMatch = {
   };
   template?: string;
   slug?: string;
+  project?: ProjectPost;
   page?: {
     title?: string;
     content?: string;
