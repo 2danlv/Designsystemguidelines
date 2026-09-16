@@ -8,6 +8,18 @@
 
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Resolve the effective SEO type.
+ * "default" (or empty) resolves automatically: page => website, single => article.
+ */
+function tona_cms_resolve_seo_type( $seo_type, $post_type ) {
+  if ( $seo_type === 'article' || $seo_type === 'website' ) {
+    return $seo_type;
+  }
+
+  return $post_type === 'page' ? 'website' : 'article';
+}
+
 function tona_cms_default_seo_image() {
   $option_id = 'option';
   $header_logo = function_exists( 'get_field' ) ? get_field( 'site_header_logo', $option_id ) : '';
@@ -82,7 +94,7 @@ class Simple_SEO_Meta_Box
     $canonical   = get_post_meta( $post->ID, '_seo_canonical', true );
     $seo_type    = get_post_meta( $post->ID, '_seo_type', true );
     if ( !$seo_type ) {
-      $seo_type = 'article'; // default
+      $seo_type = 'default';
     }
     ?>
     <p>
@@ -107,7 +119,7 @@ class Simple_SEO_Meta_Box
     <p>
       <label><strong>OGP Image</strong></label><br>
       <input type="hidden" name="_seo_og_image" id="seo_og_image" value="<?php echo esc_attr($og_image_id); ?>">
-      <img id="seo_og_preview"  src="<?php echo esc_url($og_image_url); ?>" style="max-width:100%; height:auto; display:block; margin-bottom:10px;">
+      <img id="seo_og_preview"  src="<?php echo esc_url($og_image_url); ?>" style="max-width:200px; height:auto; display:block; margin-bottom:10px;">
       <button type="button" class="button" id="seo_upload_image">
         Choose Image
       </button>
@@ -139,7 +151,10 @@ class Simple_SEO_Meta_Box
     <p>
       <label for="seo_type"><strong><?php _e( 'SEO Type', 'simple-seo' ); ?></strong></label>
       <select name="_seo_type" id="seo_type">
-        <option value="article" <?php selected( $seo_type, 'article' ); ?>>
+      <option value="default" <?php selected( $seo_type, 'default' ); ?>>
+        default
+      </option>  
+      <option value="article" <?php selected( $seo_type, 'article' ); ?>>
           article
         </option>
         <option value="website" <?php selected( $seo_type, 'website' ); ?>>
@@ -262,12 +277,12 @@ class Simple_SEO_Meta_Box
     update_post_meta( $post_id, '_seo_noindex', isset( $_POST[ '_seo_noindex' ] ) ? '1' : '' );
     update_post_meta( $post_id, '_seo_nofollow', isset( $_POST[ '_seo_nofollow' ] ) ? '1' : '' );
     if ( isset( $_POST[ '_seo_type' ] ) ) {
-      $allowed = [ 'article', 'website' ];
+      $allowed = [ 'default', 'article', 'website' ];
 
       $submitted_type = sanitize_key( wp_unslash( $_POST[ '_seo_type' ] ) );
       $value = in_array( $submitted_type, $allowed, true )
         ? $submitted_type
-        : 'article';
+        : 'default';
 
       update_post_meta( $post_id, '_seo_type', $value );
     }
@@ -335,7 +350,7 @@ function tona_cms_seo_payload( $post ) {
     'canonical'   => $canonical ?: $frontend_url,
     'canonicalCustom' => (bool) $canonical,
     'image'       => $image ? esc_url_raw( $image ) : '',
-    'type'        => in_array( $type, [ 'article', 'website' ], true ) ? $type : 'article',
+    'type'        => tona_cms_resolve_seo_type( $type, $post->post_type ),
     'noindex'     => (bool) get_post_meta( $post_id, '_seo_noindex', true ),
     'nofollow'    => (bool) get_post_meta( $post_id, '_seo_nofollow', true ),
   ];
@@ -406,9 +421,7 @@ add_action( 'wp_head', function ()
     echo '<link rel="canonical" href="' . esc_url( $canonical ) . '">' . PHP_EOL;
   }
 
-  if ( !$seo_type ) {
-    $seo_type = 'article';
-  }
+  $seo_type = tona_cms_resolve_seo_type( $seo_type, $post->post_type );
 
   // Use the page OGP image first, then the configured company logo.
   if ($og_image_id) {
