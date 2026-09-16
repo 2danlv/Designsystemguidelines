@@ -209,10 +209,17 @@ export function ProjectDetail({ slugOverride, initialProject }: { slugOverride?:
   }, [slug, initialProject]);
 
   const project = cmsProject;
+  const isEnglish = getCurrentLanguage() === "en";
   const translatedYearLabel = text("services.project_year");
-  const yearLabel = getCurrentLanguage() === "en" && translatedYearLabel === "Năm"
+  const yearLabel = isEnglish && translatedYearLabel === "Năm"
     ? "Year"
-    : translatedYearLabel || (getCurrentLanguage() === "en" ? "Year" : "Năm");
+    : translatedYearLabel || (isEnglish ? "Year" : "Năm");
+  const translatedDurationLabel = text("project.spec.duration");
+  const durationLabel = isEnglish && (
+    !translatedDurationLabel ||
+    translatedDurationLabel === "Thời Gian" ||
+    translatedDurationLabel.trim().toLowerCase() === yearLabel.trim().toLowerCase()
+  ) ? "Duration" : translatedDurationLabel || "Thời Gian";
   const relatedSource = cmsProjects;
   const relatedProjects = relatedSource.filter((p) => p.slug !== slug).slice(0, 3);
 
@@ -232,6 +239,14 @@ export function ProjectDetail({ slugOverride, initialProject }: { slugOverride?:
   }
 
   const images = project.images || [project.image];
+  const summarySpecs = [
+    { key: "client", label: text("project.spec.client"), value: project.client, icon: User },
+    { key: "location", label: text("project.spec.location"), value: project.location, icon: MapPin },
+    { key: "area", label: text("project.spec.area"), value: project.area, icon: Maximize2 },
+    { key: "year", label: yearLabel, value: project.year, icon: Calendar },
+    { key: "duration", label: durationLabel, value: project.duration, icon: Calendar },
+    { key: "status", label: text("project.spec.status"), value: project.status, icon: CheckCircle2 },
+  ].filter((spec) => String(spec.value ?? "").trim() !== "");
 
   return (
     <div className="w-full bg-white flex flex-col">
@@ -260,18 +275,11 @@ export function ProjectDetail({ slugOverride, initialProject }: { slugOverride?:
               <span className="text-white/70 text-xs font-medium">{text("project.leed_note")}</span>
             </div>
           )}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-          {[
-            { label: text("project.spec.client"), value: project.client, icon: User },
-            { label: text("project.spec.location"), value: project.location, icon: MapPin },
-            { label: text("project.spec.area"), value: project.area, icon: Maximize2 },
-            { label: yearLabel, value: project.year, icon: Calendar },
-            { label: text("project.spec.duration"), value: project.duration, icon: Calendar },
-            { label: text("project.spec.status"), value: project.status, icon: CheckCircle2 },
-          ].map((spec) => {
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-[repeat(auto-fit,minmax(130px,1fr))] gap-6">
+          {summarySpecs.map((spec) => {
             const Icon = spec.icon;
             return (
-              <div key={spec.label} className="flex flex-col gap-1.5">
+              <div key={spec.key} className="flex flex-col gap-1.5">
                 <span className="flex items-center gap-1.5 text-[#f4aa1f] text-[10px] font-bold uppercase tracking-widest">
                   <Icon size={11} /> {spec.label}
                 </span>
